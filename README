@@ -1,14 +1,12 @@
-Debes poner una descripción larga tu software aquí. Leíste bien, de tu software,
-no del paquete. Es decir, aquí no va nada de "aptitude install paquete" en la
-descripción de la instalación, probablemente sea algo como "python setup.py" o
-"make install".
+Instalador Vivo para el proyecto canaima GNU/Linux <http://canaima.softwarelibre.gob.ve>
 
-Una buena estructura sería:
+Realizado por William Cabrera <william@linux.es>
 
-* Introducción: ¿Qué hace tu software? ¿Cómo lo hiciste? ¿Para qué lo hiciste?
-* Datos de autor: Nombre, correo, página web
-* ¿Bajo que licencia está distribuído?
-* ¿Cómo instalarlo?
-* ¿Cómo desinstalarlo?
-* ¿Donde puedo conseguir soporte?
-* ¿Cómo puedo contactar al autor?
+- Dependencias
+	- python-imaging
+	- lshw
+	- parted
+    aptitude install python-imaging lshw parted
+
+- Este programa está distribuido bajo la GPL3 o superior
+- no es necesario instalarlo, solo hay que ejecutar el archivo canaima-instalador.py como root

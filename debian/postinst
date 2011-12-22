@@ -14,28 +14,66 @@
 
 PKG="canaima-instalador"
 
+# Color Verde
+VERDE="\e[1;32m"
+# Color Rojo
+ROJO="\e[1;31m"
+# Color Amarillo
+AMARILLO="\e[1;33m"
+# Negrita
+BOLD="\e[1m"
+# Caracter de fin de línea
+FIN="\e[0m"
+
+function ERROR() {
+echo -e ${ROJO}${1}${FIN}
+}
+
+function ADVERTENCIA() {
+echo -e ${AMARILLO}${1}${FIN}
+}
+
+function EXITO() {
+echo -e ${VERDE}${1}${FIN}
+}
+
 case ${1} in
 
 	configure)
 
-        # Aquí va lo que el paquete debe configurar/crear/borrar después de
-        # instalarse. Lenguaje a usar: BASH.
+	# Para cada usuario en /home/ ...
+	for usuario in /home/*? ; do
 
+		# Obteniendo sólo el nombre del usuario
+		usuario_min=$(basename ${usuario})
+
+		# Y en caso de que el usuario sea un usuario activo (existente en /etc/shadow) ...
+		case  $( grep "${usuario_min}:.*:.*:.*:.*:.*:::" /etc/shadow ) in
+
+			'')
+			# No hace nada si no se encuentra en /etc/shadow
+			;;
+
+			*)
+				ADVERTENCIA 'Instalando Canaima Instalador Vivo para el usuario "'$usuario_min'"'
+				# Copiamos el lanzador de escritorio al escritorio de cada usuario
+				cp /etc/skel/Escritorio/canaima-instalador-vivo.desktop /home/${usuario_min}/Escritorio/
+				# con permisos apropiados
+				chown ${usuario_min}:${usuario_min} /home/${usuario_min}/Escritorio/canaima-bienvenido.desktop
+			;;
+		esac
+	done
 	;;
 
-        abort-upgrade|abort-remove|abort-deconfigure)
+	abort-upgrade|abort-remove|abort-deconfigure)
+	;;
 
-        # Aquí va lo que el paquete debe configurar/crear/borrar en caso
-        # de abortarse la instalación. Lenguaje a usar: BASH.
+	*)
 
-        ;;
+		echo "postinst no reconoce el argumento '"${1}"'" >&2
+		exit 1
 
-        *)
-
-                echo "postinst no reconoce el argumento '"${1}"'" >&2
-                exit 1
-
-        ;;
+	;;
 
 esac
 

@@ -24,7 +24,7 @@ class Main(gtk.Window):
         self.barra = gtk.ProgressBar() # Barra de progreso
         self.barra.set_size_request(530, 30)
         self.fijo.put(self.barra, 10, 40)
-        self.barra.set_pulse_step(0.2)
+        self.barra.set_pulse_step(0.05)
         self.barra.show()
         
         self.lblmensaje = gtk.Label(mensaje) # Etiqueta de mensaje general
@@ -40,14 +40,16 @@ class Main(gtk.Window):
         self.lblaccion.show()
 
     def accion(self, accion): # Agrega el mensaje de acción
-        self.lblaccion.set_text(accion)
+        self.barra.set_text(accion)
     
     def start(self): # Inicia la animación del progress bar
+        self.show()
         thread = threading.Thread(target=self.anim, args=())
         thread.start()
     
     def stop(self): # finaliza la animación del progress bar
         self.hilo = False
+        self.hide()
     
     def close(self, widget=None): # finaliza la animación y cierra la ventana
         self.stop()
