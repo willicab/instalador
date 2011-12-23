@@ -127,12 +127,13 @@ class Main(gtk.Fixed):
         self.hostname()
         os.system('chroot /target dhclient -v')
         os.system('chroot /target aptitude update')
+        os.system('chroot /target aptitude remove canaima-instalador')
         #os.system('chroot /target aptitude install canaima-contrasena -y')
         
-        #os.system('umount /target/dev')
-        #os.system('umount /target/proc')
-        #os.system('umount /target/sys ')
-        #gen.desmontar(self.disco)
+        os.system('umount /target/dev')
+        os.system('umount /target/proc')
+        os.system('umount /target/sys ')
+        gen.desmontar(self.disco)
         os.system('sync > /dev/null')
         self.par.ocultar_barra()
         
