@@ -1,0 +1,4 @@
+#!/bin/sh
+
+cd /usr/share/canaima-instalador
+gksu "python canaima-instalador.py"
