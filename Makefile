@@ -87,6 +87,7 @@ install:
 	# cp -r scripts/interfaz.glade $(DESTDIR)/usr/share/nombre-p/
 	# cp -r scripts/canaima-bienvenido.sh $(DESTDIR)/usr/bin/nombre-p
 
+	install -d $(DESTDIR)/usr/bin
 	install -d $(DESTDIR)/usr/share/canaima-instalador
 	install -d $(DESTDIR)/usr/share/canaima-instalador/data
 	install -d $(DESTDIR)/usr/share/canaima-instalador/data/distribuciones
