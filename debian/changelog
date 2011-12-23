@@ -83,5 +83,7 @@ canaima-instalador (1.0) unstable; urgency=low
     cambios en la botonera
   * [639f5c0] [ canaima-desarrollador ] Los siguientes archivos han sido
     modificados/añadidos: canaima-instalador.py instalacion.py
+  * [227fb51] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: instalacion.py
 
- -- William Abrahan Cabrera Reyes <william@linux.es>  Fri, 23 Dec 2011 15:34:39 -0430
+ -- William Abrahan Cabrera Reyes <william@linux.es>  Fri, 23 Dec 2011 15:36:24 -0430
