@@ -98,8 +98,8 @@ install:
 	install -d $(DESTDIR)/usr/share/canaima-instalador/scripts
 	install -d $(DESTDIR)/etc/skel/Escritorio
 
-	cp src/canaima-instalador.desktop $(DESTDIR)/usr/share/canaima-instalador/
-	cp src/canaima-instalador.desktop $(DESTDIR)/etc/skel/Escritorio/
+	install -m 755 src/canaima-instalador.desktop $(DESTDIR)/usr/share/canaima-instalador/
+	install -m 755 src/canaima-instalador.desktop $(DESTDIR)/etc/skel/Escritorio/
 
 	install -m 755 src/canaima-instalador.py $(DESTDIR)/usr/share/canaima-instalador/canaima-instalador.py
 	install -m 755 src/canaima-instalador $(DESTDIR)/usr/bin/canaima-instalador
