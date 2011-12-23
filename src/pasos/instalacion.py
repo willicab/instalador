@@ -53,7 +53,17 @@ class Main(gtk.Fixed):
         self.thread.start()
 
     def instalar(self):
-        self.par.mostrar_barra()
+        self.visor.hide()
+        self.lbl1.show()
+        self.par.btn_siguiente.set_label('Reiniciar más tarde')
+        self.par.btn_siguiente.set_size_request(150, 30)
+        self.par.botonera.move(frmMain.btn_siguiente, 440, 10)
+        self.par.btn_anterior.set_label('Reiniciar Ahora')
+        self.par.btn_anterior.set_size_request(150, 30)
+        self.par.botonera.move(frmMain.btn_anterior, 280, 10)
+        self.par.btn_cancelar.hide()
+        
+        #self.par.mostrar_barra()
         self.par.info_barra("Creando particiones en el disco duro ...")
         # Comenzando el particionado
         if self.metodo == 'todo':
@@ -148,18 +158,8 @@ class Main(gtk.Fixed):
         print 'sync > /dev/null'
         os.system('sync > /dev/null')
         print 'ocultar barra'
-        self.par.ocultar_barra()
+        #self.par.ocultar_barra()
 
-        self.visor.hide()
-        self.lbl1.show()
-        self.par.btn_siguiente.set_label('Reiniciar más tarde')
-        self.par.btn_siguiente.set_size_request(150, 30)
-        self.par.botonera.move(frmMain.btn_siguiente, 440, 10)
-        self.par.btn_anterior.set_label('Reiniciar Ahora')
-        self.par.btn_anterior.set_size_request(150, 30)
-        self.par.botonera.move(frmMain.btn_anterior, 280, 10)
-        self.par.btn_cancelar.hide()
-        
         #msg = 'Ha culminado la instalación, puede reiniciar ahora el sistema\n'
         #msg = msg + 'o seguir probando canaima y reiniciar más tarde.'
         #label = gtk.Label(msg)

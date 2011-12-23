@@ -197,8 +197,8 @@ class Instalacion():
         desconectar()
         id_siguiente = frmMain.btn_siguiente.connect("clicked", self.siguiente)
         id_anterior = frmMain.btn_anterior.connect("clicked", self.anterior)
-    def siguiente(self, widget=None): pass
-    def anterior(self, widget=None): pass
+    def siguiente(self, widget=None): frmMain.close()
+    def anterior(self, widget=None): os.system('reboot')
         
 def desconectar():
     global id_siguiente, id_anterior
