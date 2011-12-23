@@ -47,7 +47,7 @@ build:
 
 	# Aquí se realizan todos los procedimientos relativos a
 	# generación de archivos que necesitan compilarse.
-	# Por ejemplo, una conversión de imágenes PNG > JPG,
+	# Por ejemplo, una conversión de imágenes PNG > png,
 	# Debe ir aquí. La compilación de binarios C++, debe ir
 	# aquí. Entre otros ejemplos. Todos los programas que
 	# utilices acá, debes incluirlas como dependencias de
@@ -58,7 +58,7 @@ build:
 	# espacio en blanco.
 	#
 	# EJEMPLO:
-	# convert ejemplo.png ejemplo.jpg
+	# convert ejemplo.png ejemplo.png
 
 	@echo "Nada para compilar!"
 
@@ -107,14 +107,13 @@ install:
 	install -m 644 src/data/distribuciones/latam.png $(DESTDIR)/usr/share/canaima-instalador/data/distribuciones/latam.png
 	install -m 644 src/data/preview/carrusel.html $(DESTDIR)/usr/share/canaima-instalador/data/preview/carrusel.html
 	install -m 644 src/data/preview/jquery-1.js $(DESTDIR)/usr/share/canaima-instalador/data/preview/jquery-1.js
-	install -m 644 src/data/preview/image1.jpg $(DESTDIR)/usr/share/canaima-instalador/data/preview/image1.jpg
-	install -m 644 src/data/preview/image2.jpg $(DESTDIR)/usr/share/canaima-instalador/data/preview/image2.jpg
-	install -m 644 src/data/preview/image3.jpg $(DESTDIR)/usr/share/canaima-instalador/data/preview/image3.jpg
-	install -m 644 src/data/preview/image4.jpg $(DESTDIR)/usr/share/canaima-instalador/data/preview/image4.jpg
-	install -m 644 src/data/preview/image5.jpg $(DESTDIR)/usr/share/canaima-instalador/data/preview/image5.jpg
-	install -m 644 src/data/preview/image6.jpg $(DESTDIR)/usr/share/canaima-instalador/data/preview/image6.jpg
-	install -m 644 src/data/preview/image7.jpg $(DESTDIR)/usr/share/canaima-instalador/data/preview/image7.jpg
-	install -m 644 src/data/preview/image8.jpg $(DESTDIR)/usr/share/canaima-instalador/data/preview/image8.jpg
+	install -m 644 src/data/preview/image1.png $(DESTDIR)/usr/share/canaima-instalador/data/preview/image1.png
+	install -m 644 src/data/preview/image2.png $(DESTDIR)/usr/share/canaima-instalador/data/preview/image2.png
+	install -m 644 src/data/preview/image3.png $(DESTDIR)/usr/share/canaima-instalador/data/preview/image3.png
+	install -m 644 src/data/preview/image4.png $(DESTDIR)/usr/share/canaima-instalador/data/preview/image4.png
+	install -m 644 src/data/preview/image5.png $(DESTDIR)/usr/share/canaima-instalador/data/preview/image5.png
+	install -m 644 src/data/preview/image6.png $(DESTDIR)/usr/share/canaima-instalador/data/preview/image6.png
+	install -m 644 src/data/preview/image7.png $(DESTDIR)/usr/share/canaima-instalador/data/preview/image7.png
 	install -m 644 src/pasos/bienvenida.py $(DESTDIR)/usr/share/canaima-instalador/pasos/bienvenida.py
 	install -m 644 src/pasos/info.py $(DESTDIR)/usr/share/canaima-instalador/pasos/info.py
 	install -m 644 src/pasos/__init__.py $(DESTDIR)/usr/share/canaima-instalador/pasos/__init__.py
