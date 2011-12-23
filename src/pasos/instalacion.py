@@ -129,12 +129,17 @@ class Main(gtk.Fixed):
         os.system('chroot /target aptitude update')
         os.system('chroot /target aptitude remove canaima-instalador')
         #os.system('chroot /target aptitude install canaima-contrasena -y')
-        
+        print 'desmontar /target/dev'
         os.system('umount /target/dev')
+        print 'desmontar /target/proc'
         os.system('umount /target/proc')
+        print 'desmontar /target/sys'
         os.system('umount /target/sys ')
-        gen.desmontar(self.disco)
+        print 'desmontar /target'
+        os.system('umount -l /target ')
+        print 'sync > /dev/null'
         os.system('sync > /dev/null')
+        print 'ocultar barra'
         self.par.ocultar_barra()
         
         msg = 'Ha culminado la instalación, puede reiniciar ahora el sistema\n'
