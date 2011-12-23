@@ -19,5 +19,10 @@ canaima-instalador (1.0) unstable; urgency=low
   * [5cb4cd2] [ canaima-desarrollador ] Los siguientes archivos han sido
     modificados/añadidos: canaima-instalador.py banner-app-top.png
     buscar-discos.png es.png wizard.py
+  * [0b582ac] eliminando archivos innecesarios
+  * [90469aa] corrigiendo archivo makefile
+  * [de49fa1] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: canaima-instalador.py banner-app-top.png
+    buscar-discos.png es.png wizard.py
 
- -- William Abrahan Cabrera Reyes <william@linux.es>  Fri, 23 Dec 2011 10:00:38 -0430
+ -- William Abrahan Cabrera Reyes <william@linux.es>  Fri, 23 Dec 2011 10:02:25 -0430
