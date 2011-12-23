@@ -153,6 +153,7 @@ class Main(gtk.Fixed):
             os.system('reboot')
             #self.par.close()
         else:
+            pass
             #self.par.close()
 
     def copiar(self):
