@@ -70,6 +70,7 @@ class Main(gtk.Fixed):
 
     def instalar(self):
         self.par.mostrar_barra()
+        self.par.info_barra("Creando particiones en el disco duro ...")
         # Comenzando el particionado
         if self.metodo == 'todo':
             part_todo = clases.install.particion_todo.Main(self.cfg, self.par)
@@ -173,7 +174,9 @@ class Main(gtk.Fixed):
         print response, gtk.RESPONSE_ACCEPT, gtk.RESPONSE_REJECT, (response == gtk.RESPONSE_ACCEPT)
         if response == gtk.RESPONSE_ACCEPT:
             os.system('reboot')
-        self.par.close()
+            self.par.close()
+        else:
+            self.par.close()
 
     def copiar(self):
         cmd = 'unsquashfs -f -i -d /target /live/image/live/filesystem.squashfs'
