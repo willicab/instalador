@@ -42,7 +42,7 @@ class Main(gtk.Fixed):
         msg = msg + 'o seguir probando canaima y reiniciar más tarde.'
         self.lbl1 = gtk.Label(msg)
         self.lbl1.set_size_request(590, 280)
-        self.put(0, 0)
+        self.put(self.visor, 0, 0)
         #self.lbl1.show()
         
         path = os.path.realpath(os.path.join(os.path.dirname(__file__), 
