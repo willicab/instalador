@@ -14,5 +14,10 @@ canaima-instalador (1.0) unstable; urgency=low
     modificados/añadidos: Makefile
   * [1d3277d] [ canaima-desarrollador ] Los siguientes archivos han sido
     modificados/añadidos: Makefile canaima-instalador.debhelper.log
+  * [a0a2dce] cambios en el makefile
+  * [a574117] corrigiendo el archivo makefile
+  * [5cb4cd2] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: canaima-instalador.py banner-app-top.png
+    buscar-discos.png es.png wizard.py
 
- -- William Abrahan Cabrera Reyes <william@linux.es>  Fri, 23 Dec 2011 09:57:31 -0430
+ -- William Abrahan Cabrera Reyes <william@linux.es>  Fri, 23 Dec 2011 10:00:38 -0430
