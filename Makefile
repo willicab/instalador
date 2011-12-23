@@ -96,6 +96,7 @@ install:
 	install -d $(DESTDIR)/usr/share/canaima-instalador/clases/install
 	install -d $(DESTDIR)/usr/share/canaima-instalador/pasos
 	install -d $(DESTDIR)/usr/share/canaima-instalador/scripts
+	install -d $(DESTDIR)/etc/skel/Escritorio
 
 	cp src/canaima-instalador.desktop $(DESTDIR)/usr/share/canaima-instalador/
 	cp src/canaima-instalador.desktop $(DESTDIR)/etc/skel/Escritorio/
