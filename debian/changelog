@@ -12,5 +12,7 @@ canaima-instalador (1.0) unstable; urgency=low
     modificados/añadidos: rules
   * [d2e0f67] [ canaima-desarrollador ] Los siguientes archivos han sido
     modificados/añadidos: Makefile
+  * [1d3277d] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: Makefile canaima-instalador.debhelper.log
 
- -- William Abrahan Cabrera Reyes <william@linux.es>  Fri, 23 Dec 2011 09:56:07 -0430
+ -- William Abrahan Cabrera Reyes <william@linux.es>  Fri, 23 Dec 2011 09:57:31 -0430
