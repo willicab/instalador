@@ -37,6 +37,14 @@ class Main(gtk.Fixed):
         self.visor.set_size_request(590, 280)
         self.put(self.visor, 0, 0)
         self.visor.show()
+        
+        msg = 'Ha culminado la instalación, puede reiniciar ahora el sistema\n'
+        msg = msg + 'o seguir probando canaima y reiniciar más tarde.'
+        self.lbl1 = gtk.Label(msg)
+        self.lbl1.set_size_request(590, 280)
+        self.put(0, 0)
+        #self.lbl1.show()
+        
         path = os.path.realpath(os.path.join(os.path.dirname(__file__), 
                 '..', 'data', 'preview', 'carrusel.html'))
         self.visor.open(path)        
@@ -142,6 +150,8 @@ class Main(gtk.Fixed):
         print 'ocultar barra'
         self.par.ocultar_barra()
 
+        self.visor.hide()
+        self.lbl1.show()
         frmMain.btn_siguiente.set_label('Reiniciar más tarde')
         frmMain.btn_siguiente.set_size_request(150, 30)
         frmMain.botonera.move(frmMain.btn_siguiente, 440, 10)
