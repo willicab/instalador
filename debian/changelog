@@ -24,5 +24,12 @@ canaima-instalador (1.0) unstable; urgency=low
   * [de49fa1] [ canaima-desarrollador ] Los siguientes archivos han sido
     modificados/añadidos: canaima-instalador.py banner-app-top.png
     buscar-discos.png es.png wizard.py
+  * [f49a127] eliminando archivos innecesarios
+  * [c1d3b01] corrigiendo archivo makefile
+  * [0c5e8c3] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: canaima-instalador.debhelper.log canaima-
+    instalador.py banner-app-top.png buscar-discos.png es.png latam.png
+    us.png carrusel.html image1.jpg image2.jpg image3.jpg image4.jpg
+    image5.jpg image6.jpg image7.jpg image8.jpg jquery-1.js wizard.py
 
- -- William Abrahan Cabrera Reyes <william@linux.es>  Fri, 23 Dec 2011 10:02:25 -0430
+ -- William Abrahan Cabrera Reyes <william@linux.es>  Fri, 23 Dec 2011 10:04:38 -0430
