@@ -87,59 +87,59 @@ install:
 	# cp -r scripts/interfaz.glade $(DESTDIR)/usr/share/nombre-p/
 	# cp -r scripts/canaima-bienvenido.sh $(DESTDIR)/usr/bin/nombre-p
 
-    install -d $(DESTDIR)/usr/share/canaima-instalador
-    install -d $(DESTDIR)/usr/share/canaima-instalador/data
-    install -d $(DESTDIR)/usr/share/canaima-instalador/data/distribuciones
-    install -d $(DESTDIR)/usr/share/canaima-instalador/data/preview
-    install -d $(DESTDIR)/usr/share/canaima-instalador/clases
-    install -d $(DESTDIR)/usr/share/canaima-instalador/clases/install
-    install -d $(DESTDIR)/usr/share/canaima-instalador/pasos
-    install -d $(DESTDIR)/usr/share/canaima-instalador/scripts
+	install -d $(DESTDIR)/usr/share/canaima-instalador
+	install -d $(DESTDIR)/usr/share/canaima-instalador/data
+	install -d $(DESTDIR)/usr/share/canaima-instalador/data/distribuciones
+	install -d $(DESTDIR)/usr/share/canaima-instalador/data/preview
+	install -d $(DESTDIR)/usr/share/canaima-instalador/clases
+	install -d $(DESTDIR)/usr/share/canaima-instalador/clases/install
+	install -d $(DESTDIR)/usr/share/canaima-instalador/pasos
+	install -d $(DESTDIR)/usr/share/canaima-instalador/scripts
 
-    install -m 755 canaima-instalador.py $(DESTDIR)/usr/share/canaima-instalador/canaima-instalador.py
-    install -m 644 wizard.py $(DESTDIR)/usr/share/canaima-instalador/wizard.py
-    install -m 644 data/banner-app-top.png $(DESTDIR)/usr/share/canaima-instalador/data/banner-app-top.png
-    install -m 644 data/buscar-discos.png $(DESTDIR)/usr/share/canaima-instalador/data/buscar-discos.png
-    install -m 644 data/distribuciones/es.png $(DESTDIR)/usr/share/canaima-instalador/data/distribuciones/es.png
-    install -m 644 data/distribuciones/en.png $(DESTDIR)/usr/share/canaima-instalador/data/distribuciones/en.png
-    install -m 644 data/distribuciones/latam.png $(DESTDIR)/usr/share/canaima-instalador/data/distribuciones/latam.png
-    install -m 644 data/preview/carrusel.html $(DESTDIR)/usr/share/canaima-instalador/data/preview/carrusel.html
-    install -m 644 data/preview/jquery-1.js $(DESTDIR)/usr/share/canaima-instalador/data/preview/jquery-1.js
-    install -m 644 data/preview/image1.jpg $(DESTDIR)/usr/share/canaima-instalador/data/preview/image1.jpg
-    install -m 644 data/preview/image2.jpg $(DESTDIR)/usr/share/canaima-instalador/data/preview/image2.jpg
-    install -m 644 data/preview/image3.jpg $(DESTDIR)/usr/share/canaima-instalador/data/preview/image3.jpg
-    install -m 644 data/preview/image4.jpg $(DESTDIR)/usr/share/canaima-instalador/data/preview/image4.jpg
-    install -m 644 data/preview/image5.jpg $(DESTDIR)/usr/share/canaima-instalador/data/preview/image5.jpg
-    install -m 644 data/preview/image6.jpg $(DESTDIR)/usr/share/canaima-instalador/data/preview/image6.jpg
-    install -m 644 data/preview/image7.jpg $(DESTDIR)/usr/share/canaima-instalador/data/preview/image7.jpg
-    install -m 644 data/preview/image8.jpg $(DESTDIR)/usr/share/canaima-instalador/data/preview/image8.jpg
-    install -m 644 data/pasos/bienvenida.py $(DESTDIR)/usr/share/canaima-instalador/data/pasos/bienvenida.py
-    install -m 644 data/pasos/info.py $(DESTDIR)/usr/share/canaima-instalador/data/pasos/info.py
-    install -m 644 data/pasos/__init__.py $(DESTDIR)/usr/share/canaima-instalador/data/pasos/__init__.py
-    install -m 644 data/pasos/instalacion.py $(DESTDIR)/usr/share/canaima-instalador/data/pasos/instalacion.py
-    install -m 644 data/pasos/metodo.py $(DESTDIR)/usr/share/canaima-instalador/data/pasos/metodo.py
-    install -m 644 data/pasos/particion_auto.py $(DESTDIR)/usr/share/canaima-instalador/data/pasos/particion_auto.py
-    install -m 644 data/pasos/particion_todo.py $(DESTDIR)/usr/share/canaima-instalador/data/pasos/particion_todo.py
-    install -m 644 data/pasos/teclado.py $(DESTDIR)/usr/share/canaima-instalador/data/pasos/teclado.py
-    install -m 644 data/pasos/usuario.py $(DESTDIR)/usr/share/canaima-instalador/data/pasos/usuario.py
-    install -m 755 data/scripts/install-grub.sh $(DESTDIR)/usr/share/canaima-instalador/data/scripts/install-grub.sh
-    install -m 755 data/scripts/install-grub-ini.sh $(DESTDIR)/usr/share/canaima-instalador/data/scripts/install-grub-ini.sh
-    install -m 755 data/scripts/make-user.sh $(DESTDIR)/usr/share/canaima-instalador/data/scripts/make-user.sh
-    install -m 644 data/clases/particiones.py $(DESTDIR)/usr/share/canaima-instalador/data/clases/particiones.py
-    install -m 644 data/clases/barra_auto.py $(DESTDIR)/usr/share/canaima-instalador/data/clases/barra_auto.py
-    install -m 644 data/clases/barra_particiones.py $(DESTDIR)/usr/share/canaima-instalador/data/clases/barra_particiones.py
-    install -m 644 data/clases/barra_todo.py $(DESTDIR)/usr/share/canaima-instalador/data/clases/barra_todo.py
-    install -m 644 data/clases/distribuciones.py $(DESTDIR)/usr/share/canaima-instalador/data/clases/distribuciones.py
-    install -m 644 data/clases/general.py $(DESTDIR)/usr/share/canaima-instalador/data/clases/general.py
-    install -m 644 data/clases/get_partitions.py $(DESTDIR)/usr/share/canaima-instalador/data/clases/get_partitions.py
-    install -m 644 data/clases/__init__.py $(DESTDIR)/usr/share/canaima-instalador/data/clases/__init__.py
-    install -m 644 data/clases/leyenda_auto.py $(DESTDIR)/usr/share/canaima-instalador/data/clases/leyenda_auto.py
-    install -m 644 data/clases/leyenda_todo.py $(DESTDIR)/usr/share/canaima-instalador/data/clases/leyenda_todo.py
-    install -m 644 data/clases/install/fstab.py $(DESTDIR)/usr/share/canaima-instalador/clases/install/fstab.py
-    install -m 644 data/clases/install/__init__.py $(DESTDIR)/usr/share/canaima-instalador/clases/install/__init__.py
-    install -m 644 data/clases/install/particion_auto.py $(DESTDIR)/usr/share/canaima-instalador/clases/install/particion_auto.py
-    install -m 644 data/clases/install/particion_todo.py $(DESTDIR)/usr/share/canaima-instalador/clases/install/particion_todo.py
-    
+	install -m 755 canaima-instalador.py $(DESTDIR)/usr/share/canaima-instalador/canaima-instalador.py
+	install -m 644 wizard.py $(DESTDIR)/usr/share/canaima-instalador/wizard.py
+	install -m 644 data/banner-app-top.png $(DESTDIR)/usr/share/canaima-instalador/data/banner-app-top.png
+	install -m 644 data/buscar-discos.png $(DESTDIR)/usr/share/canaima-instalador/data/buscar-discos.png
+	install -m 644 data/distribuciones/es.png $(DESTDIR)/usr/share/canaima-instalador/data/distribuciones/es.png
+	install -m 644 data/distribuciones/en.png $(DESTDIR)/usr/share/canaima-instalador/data/distribuciones/en.png
+	install -m 644 data/distribuciones/latam.png $(DESTDIR)/usr/share/canaima-instalador/data/distribuciones/latam.png
+	install -m 644 data/preview/carrusel.html $(DESTDIR)/usr/share/canaima-instalador/data/preview/carrusel.html
+	install -m 644 data/preview/jquery-1.js $(DESTDIR)/usr/share/canaima-instalador/data/preview/jquery-1.js
+	install -m 644 data/preview/image1.jpg $(DESTDIR)/usr/share/canaima-instalador/data/preview/image1.jpg
+	install -m 644 data/preview/image2.jpg $(DESTDIR)/usr/share/canaima-instalador/data/preview/image2.jpg
+	install -m 644 data/preview/image3.jpg $(DESTDIR)/usr/share/canaima-instalador/data/preview/image3.jpg
+	install -m 644 data/preview/image4.jpg $(DESTDIR)/usr/share/canaima-instalador/data/preview/image4.jpg
+	install -m 644 data/preview/image5.jpg $(DESTDIR)/usr/share/canaima-instalador/data/preview/image5.jpg
+	install -m 644 data/preview/image6.jpg $(DESTDIR)/usr/share/canaima-instalador/data/preview/image6.jpg
+	install -m 644 data/preview/image7.jpg $(DESTDIR)/usr/share/canaima-instalador/data/preview/image7.jpg
+	install -m 644 data/preview/image8.jpg $(DESTDIR)/usr/share/canaima-instalador/data/preview/image8.jpg
+	install -m 644 data/pasos/bienvenida.py $(DESTDIR)/usr/share/canaima-instalador/data/pasos/bienvenida.py
+	install -m 644 data/pasos/info.py $(DESTDIR)/usr/share/canaima-instalador/data/pasos/info.py
+	install -m 644 data/pasos/__init__.py $(DESTDIR)/usr/share/canaima-instalador/data/pasos/__init__.py
+	install -m 644 data/pasos/instalacion.py $(DESTDIR)/usr/share/canaima-instalador/data/pasos/instalacion.py
+	install -m 644 data/pasos/metodo.py $(DESTDIR)/usr/share/canaima-instalador/data/pasos/metodo.py
+	install -m 644 data/pasos/particion_auto.py $(DESTDIR)/usr/share/canaima-instalador/data/pasos/particion_auto.py
+	install -m 644 data/pasos/particion_todo.py $(DESTDIR)/usr/share/canaima-instalador/data/pasos/particion_todo.py
+	install -m 644 data/pasos/teclado.py $(DESTDIR)/usr/share/canaima-instalador/data/pasos/teclado.py
+	install -m 644 data/pasos/usuario.py $(DESTDIR)/usr/share/canaima-instalador/data/pasos/usuario.py
+	install -m 755 data/scripts/install-grub.sh $(DESTDIR)/usr/share/canaima-instalador/data/scripts/install-grub.sh
+	install -m 755 data/scripts/install-grub-ini.sh $(DESTDIR)/usr/share/canaima-instalador/data/scripts/install-grub-ini.sh
+	install -m 755 data/scripts/make-user.sh $(DESTDIR)/usr/share/canaima-instalador/data/scripts/make-user.sh
+	install -m 644 data/clases/particiones.py $(DESTDIR)/usr/share/canaima-instalador/data/clases/particiones.py
+	install -m 644 data/clases/barra_auto.py $(DESTDIR)/usr/share/canaima-instalador/data/clases/barra_auto.py
+	install -m 644 data/clases/barra_particiones.py $(DESTDIR)/usr/share/canaima-instalador/data/clases/barra_particiones.py
+	install -m 644 data/clases/barra_todo.py $(DESTDIR)/usr/share/canaima-instalador/data/clases/barra_todo.py
+	install -m 644 data/clases/distribuciones.py $(DESTDIR)/usr/share/canaima-instalador/data/clases/distribuciones.py
+	install -m 644 data/clases/general.py $(DESTDIR)/usr/share/canaima-instalador/data/clases/general.py
+	install -m 644 data/clases/get_partitions.py $(DESTDIR)/usr/share/canaima-instalador/data/clases/get_partitions.py
+	install -m 644 data/clases/__init__.py $(DESTDIR)/usr/share/canaima-instalador/data/clases/__init__.py
+	install -m 644 data/clases/leyenda_auto.py $(DESTDIR)/usr/share/canaima-instalador/data/clases/leyenda_auto.py
+	install -m 644 data/clases/leyenda_todo.py $(DESTDIR)/usr/share/canaima-instalador/data/clases/leyenda_todo.py
+	install -m 644 data/clases/install/fstab.py $(DESTDIR)/usr/share/canaima-instalador/clases/install/fstab.py
+	install -m 644 data/clases/install/__init__.py $(DESTDIR)/usr/share/canaima-instalador/clases/install/__init__.py
+	install -m 644 data/clases/install/particion_auto.py $(DESTDIR)/usr/share/canaima-instalador/clases/install/particion_auto.py
+	install -m 644 data/clases/install/particion_todo.py $(DESTDIR)/usr/share/canaima-instalador/clases/install/particion_todo.py
+	
 uninstall:
 
 # Aquí se deshace lo que se hizo en el install, borrando exactamente lo que
