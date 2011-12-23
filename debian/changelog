@@ -87,5 +87,8 @@ canaima-instalador (1.0) unstable; urgency=low
     modificados/añadidos: instalacion.py
   * [d2b78bf] [ canaima-desarrollador ] Los siguientes archivos han sido
     modificados/añadidos: Makefile canaima-instalador-vivo.desktop
+  * [8ab5944] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: canaima-instalador.debhelper.log canaima-
+    instalador.desktop
 
- -- William Abrahan Cabrera Reyes <william@linux.es>  Fri, 23 Dec 2011 15:42:05 -0430
+ -- William Abrahan Cabrera Reyes <william@linux.es>  Fri, 23 Dec 2011 15:43:18 -0430
