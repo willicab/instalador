@@ -11,30 +11,6 @@ import threading
 import commands
 import webkit
 
-class Barra(gtk.ProgressBar):
-    hilo = True
-    def __init__(self):
-        gtk.ProgressBar.__init__(self)
-        
-    def accion(self, accion): # Agrega el mensaje de acción
-        self.set_text(accion)
-    
-    def start(self): # Inicia la animación del progress bar
-        self.show()
-        thread = threading.Thread(target=self.anim, args=())
-        thread.start()
-    
-    def stop(self): # finaliza la animación del progress bar
-        self.hilo = False
-        self.accion("LISTO")
-        #self.hide()
-    
-    def anim(self): # Genera la animación en el progress bar
-        import time
-        while self.hilo == True:
-            self.pulse()
-            time.sleep(0.1)
-
 class Main(gtk.Fixed):
     root1 = '20GB'
     root2 = '3GB'
@@ -159,6 +135,7 @@ class Main(gtk.Fixed):
         #gen.desmontar(self.disco)
         os.system('sync > /dev/null')
         self.par.ocultar_barra()
+        
         msg = 'Ha culminado la instalación, puede reiniciar ahora el sistema\n'
         msg = msg + 'o seguir probando canaima y reiniciar más tarde.'
         label = gtk.Label(msg)
@@ -174,9 +151,9 @@ class Main(gtk.Fixed):
         print response, gtk.RESPONSE_ACCEPT, gtk.RESPONSE_REJECT, (response == gtk.RESPONSE_ACCEPT)
         if response == gtk.RESPONSE_ACCEPT:
             os.system('reboot')
-            self.par.close()
+            #self.par.close()
         else:
-            self.par.close()
+            #self.par.close()
 
     def copiar(self):
         cmd = 'unsquashfs -f -i -d /target /live/image/live/filesystem.squashfs'
