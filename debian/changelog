@@ -31,5 +31,13 @@ canaima-instalador (1.0) unstable; urgency=low
     instalador.py banner-app-top.png buscar-discos.png es.png latam.png
     us.png carrusel.html image1.jpg image2.jpg image3.jpg image4.jpg
     image5.jpg image6.jpg image7.jpg image8.jpg jquery-1.js wizard.py
+  * [f33b8ec] eliminando archivos innecesarios
+  * [a1c5722] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: canaima-instalador.py banner-app-top.png
+    buscar-discos.png es.png latam.png us.png carrusel.html image1.jpg
+    image2.jpg image3.jpg image4.jpg image5.jpg image6.jpg image7.jpg
+    image8.jpg jquery-1.js __init__.py bienvenida.py info.py
+    instalacion.py metodo.py particion_auto.py particion_todo.py
+    teclado.py usuario.py wizard.py
 
- -- William Abrahan Cabrera Reyes <william@linux.es>  Fri, 23 Dec 2011 10:04:38 -0430
+ -- William Abrahan Cabrera Reyes <william@linux.es>  Fri, 23 Dec 2011 10:10:32 -0430
