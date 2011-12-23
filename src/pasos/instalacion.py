@@ -127,7 +127,7 @@ class Main(gtk.Fixed):
         self.hostname()
         os.system('chroot /target dhclient -v')
         os.system('chroot /target aptitude update')
-        os.system('chroot /target aptitude remove canaima-instalador')
+        #os.system('chroot /target aptitude remove canaima-instalador')
         #os.system('chroot /target aptitude install canaima-contrasena -y')
         print 'desmontar /target/dev'
         os.system('umount /target/dev')
@@ -141,26 +141,34 @@ class Main(gtk.Fixed):
         os.system('sync > /dev/null')
         print 'ocultar barra'
         self.par.ocultar_barra()
+
+        frmMain.btn_siguiente.set_label('Reiniciar más tarde')
+        frmMain.btn_siguiente.set_size_request(150, 30)
+        frmMain.botonera.move(frmMain.btn_siguiente, 440, 10)
+        frmMain.btn_anterior.set_label('Reiniciar Ahora')
+        frmMain.btn_anterior.set_size_request(150, 30)
+        frmMain.botonera.move(frmMain.btn_anterior, 280, 10)
+        frmMain.btn_cancelar.hide()
         
-        msg = 'Ha culminado la instalación, puede reiniciar ahora el sistema\n'
-        msg = msg + 'o seguir probando canaima y reiniciar más tarde.'
-        label = gtk.Label(msg)
-        dialog = gtk.Dialog("Reiniciar el sistema",
-                        None,
-                        gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
-                        ("Reiniciar ahora", gtk.RESPONSE_ACCEPT,
-                         "Reiniciar más tarde", gtk.RESPONSE_REJECT))
-        dialog.vbox.pack_start(label)
-        label.show()
-        response = dialog.run()
-        dialog.destroy()
-        print response, gtk.RESPONSE_ACCEPT, gtk.RESPONSE_REJECT, (response == gtk.RESPONSE_ACCEPT)
-        if response == gtk.RESPONSE_ACCEPT:
-            os.system('reboot')
-            #self.par.close()
-        else:
-            pass
-            #self.par.close()
+        #msg = 'Ha culminado la instalación, puede reiniciar ahora el sistema\n'
+        #msg = msg + 'o seguir probando canaima y reiniciar más tarde.'
+        #label = gtk.Label(msg)
+        #dialog = gtk.Dialog("Reiniciar el sistema",
+        #                None,
+        #                gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
+        #                ("Reiniciar ahora", gtk.RESPONSE_ACCEPT,
+        #                 "Reiniciar más tarde", gtk.RESPONSE_REJECT))
+        #dialog.vbox.pack_start(label)
+        #label.show()
+        #response = dialog.run()
+        #dialog.destroy()
+        #print response, gtk.RESPONSE_ACCEPT, gtk.RESPONSE_REJECT, (response == gtk.RESPONSE_ACCEPT)
+        #if response == gtk.RESPONSE_ACCEPT:
+        #    os.system('reboot')
+        #    #self.par.close()
+        #else:
+        #    pass
+        #    #self.par.close()
 
     def copiar(self):
         cmd = 'unsquashfs -f -i -d /target /live/image/live/filesystem.squashfs'
