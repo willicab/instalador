@@ -90,5 +90,7 @@ canaima-instalador (1.0) unstable; urgency=low
   * [8ab5944] [ canaima-desarrollador ] Los siguientes archivos han sido
     modificados/añadidos: canaima-instalador.debhelper.log canaima-
     instalador.desktop
+  * [1f76d01] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos:
 
- -- William Abrahan Cabrera Reyes <william@linux.es>  Fri, 23 Dec 2011 15:43:18 -0430
+ -- William Abrahan Cabrera Reyes <william@linux.es>  Fri, 23 Dec 2011 15:43:48 -0430
