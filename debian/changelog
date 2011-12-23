@@ -49,5 +49,9 @@ canaima-instalador (1.0) unstable; urgency=low
     image5.jpg image6.jpg image7.jpg image8.jpg jquery-1.js __init__.py
     bienvenida.py info.py instalacion.py metodo.py particion_auto.py
     particion_todo.py teclado.py usuario.py wizard.py canaima-instalador
+  * [d24c8bd] eliminando archivos innecesarios
+  * [838518f] corrigiendo arhcivo makefile
+  * [e881f60] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: canaima-instalador.py
 
- -- William Abrahan Cabrera Reyes <william@linux.es>  Fri, 23 Dec 2011 10:18:15 -0430
+ -- William Abrahan Cabrera Reyes <william@linux.es>  Fri, 23 Dec 2011 10:21:22 -0430
