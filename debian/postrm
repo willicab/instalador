@@ -55,7 +55,7 @@ case ${1} in
 
 			*)
 				ADVERTENCIA 'Removiendo Instalador Vivo para el usuario "'$usuario_min'"'
-				[ -e /home/${usuario_min}/Escritorio/canaima-instalador-vivo.desktop ] && rm /home/${usuario_min}/Escritorio/canaima-instalador-vivo.desktop
+				[ -e /home/${usuario_min}/Escritorio/canaima-instalador.desktop ] && rm /home/${usuario_min}/Escritorio/canaima-instalador-vivo.desktop
 			;;
 		esac
 	done
