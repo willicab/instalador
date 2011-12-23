@@ -113,32 +113,32 @@ install:
 	install -m 644 src/data/preview/image6.jpg $(DESTDIR)/usr/share/canaima-instalador/data/preview/image6.jpg
 	install -m 644 src/data/preview/image7.jpg $(DESTDIR)/usr/share/canaima-instalador/data/preview/image7.jpg
 	install -m 644 src/data/preview/image8.jpg $(DESTDIR)/usr/share/canaima-instalador/data/preview/image8.jpg
-	install -m 644 src/data/pasos/bienvenida.py $(DESTDIR)/usr/share/canaima-instalador/data/pasos/bienvenida.py
-	install -m 644 src/data/pasos/info.py $(DESTDIR)/usr/share/canaima-instalador/data/pasos/info.py
-	install -m 644 src/data/pasos/__init__.py $(DESTDIR)/usr/share/canaima-instalador/data/pasos/__init__.py
-	install -m 644 src/data/pasos/instalacion.py $(DESTDIR)/usr/share/canaima-instalador/data/pasos/instalacion.py
-	install -m 644 src/data/pasos/metodo.py $(DESTDIR)/usr/share/canaima-instalador/data/pasos/metodo.py
-	install -m 644 src/data/pasos/particion_auto.py $(DESTDIR)/usr/share/canaima-instalador/data/pasos/particion_auto.py
-	install -m 644 src/data/pasos/particion_todo.py $(DESTDIR)/usr/share/canaima-instalador/data/pasos/particion_todo.py
-	install -m 644 src/data/pasos/teclado.py $(DESTDIR)/usr/share/canaima-instalador/data/pasos/teclado.py
-	install -m 644 src/data/pasos/usuario.py $(DESTDIR)/usr/share/canaima-instalador/data/pasos/usuario.py
-	install -m 755 data/scripts/install-grub.sh $(DESTDIR)/usr/share/canaima-instalador/data/scripts/install-grub.sh
-	install -m 755 data/scripts/install-grub-ini.sh $(DESTDIR)/usr/share/canaima-instalador/data/scripts/install-grub-ini.sh
-	install -m 755 data/scripts/make-user.sh $(DESTDIR)/usr/share/canaima-instalador/data/scripts/make-user.sh
-	install -m 644 src/data/clases/particiones.py $(DESTDIR)/usr/share/canaima-instalador/data/clases/particiones.py
-	install -m 644 src/data/clases/barra_auto.py $(DESTDIR)/usr/share/canaima-instalador/data/clases/barra_auto.py
-	install -m 644 src/data/clases/barra_particiones.py $(DESTDIR)/usr/share/canaima-instalador/data/clases/barra_particiones.py
-	install -m 644 src/data/clases/barra_todo.py $(DESTDIR)/usr/share/canaima-instalador/data/clases/barra_todo.py
-	install -m 644 src/data/clases/distribuciones.py $(DESTDIR)/usr/share/canaima-instalador/data/clases/distribuciones.py
-	install -m 644 src/data/clases/general.py $(DESTDIR)/usr/share/canaima-instalador/data/clases/general.py
-	install -m 644 src/data/clases/get_partitions.py $(DESTDIR)/usr/share/canaima-instalador/data/clases/get_partitions.py
-	install -m 644 src/data/clases/__init__.py $(DESTDIR)/usr/share/canaima-instalador/data/clases/__init__.py
-	install -m 644 src/data/clases/leyenda_auto.py $(DESTDIR)/usr/share/canaima-instalador/data/clases/leyenda_auto.py
-	install -m 644 src/data/clases/leyenda_todo.py $(DESTDIR)/usr/share/canaima-instalador/data/clases/leyenda_todo.py
-	install -m 644 src/data/clases/install/fstab.py $(DESTDIR)/usr/share/canaima-instalador/clases/install/fstab.py
-	install -m 644 src/data/clases/install/__init__.py $(DESTDIR)/usr/share/canaima-instalador/clases/install/__init__.py
-	install -m 644 src/data/clases/install/particion_auto.py $(DESTDIR)/usr/share/canaima-instalador/clases/install/particion_auto.py
-	install -m 644 src/data/clases/install/particion_todo.py $(DESTDIR)/usr/share/canaima-instalador/clases/install/particion_todo.py
+	install -m 644 src/pasos/bienvenida.py $(DESTDIR)/usr/share/canaima-instalador/pasos/bienvenida.py
+	install -m 644 src/pasos/info.py $(DESTDIR)/usr/share/canaima-instalador/pasos/info.py
+	install -m 644 src/pasos/__init__.py $(DESTDIR)/usr/share/canaima-instalador/pasos/__init__.py
+	install -m 644 src/pasos/instalacion.py $(DESTDIR)/usr/share/canaima-instalador/pasos/instalacion.py
+	install -m 644 src/pasos/metodo.py $(DESTDIR)/usr/share/canaima-instalador/pasos/metodo.py
+	install -m 644 src/pasos/particion_auto.py $(DESTDIR)/usr/share/canaima-instalador/pasos/particion_auto.py
+	install -m 644 src/pasos/particion_todo.py $(DESTDIR)/usr/share/canaima-instalador/pasos/particion_todo.py
+	install -m 644 src/pasos/teclado.py $(DESTDIR)/usr/share/canaima-instalador/pasos/teclado.py
+	install -m 644 src/pasos/usuario.py $(DESTDIR)/usr/share/canaima-instalador/pasos/usuario.py
+	install -m 755 src/scripts/install-grub.sh $(DESTDIR)/usr/share/canaima-instalador/data/scripts/install-grub.sh
+	install -m 755 src/scripts/install-grub-ini.sh $(DESTDIR)/usr/share/canaima-instalador/data/scripts/install-grub-ini.sh
+	install -m 755 src/scripts/make-user.sh $(DESTDIR)/usr/share/canaima-instalador/data/scripts/make-user.sh
+	install -m 644 src/clases/particiones.py $(DESTDIR)/usr/share/canaima-instalador/clases/particiones.py
+	install -m 644 src/clases/barra_auto.py $(DESTDIR)/usr/share/canaima-instalador/clases/barra_auto.py
+	install -m 644 src/clases/barra_particiones.py $(DESTDIR)/usr/share/canaima-instalador/clases/barra_particiones.py
+	install -m 644 src/clases/barra_todo.py $(DESTDIR)/usr/share/canaima-instalador/clases/barra_todo.py
+	install -m 644 src/clases/distribuciones.py $(DESTDIR)/usr/share/canaima-instalador/clases/distribuciones.py
+	install -m 644 src/clases/general.py $(DESTDIR)/usr/share/canaima-instalador/clases/general.py
+	install -m 644 src/clases/get_partitions.py $(DESTDIR)/usr/share/canaima-instalador/clases/get_partitions.py
+	install -m 644 src/clases/__init__.py $(DESTDIR)/usr/share/canaima-instalador/clases/__init__.py
+	install -m 644 src/clases/leyenda_auto.py $(DESTDIR)/usr/share/canaima-instalador/clases/leyenda_auto.py
+	install -m 644 src/clases/leyenda_todo.py $(DESTDIR)/usr/share/canaima-instalador/clases/leyenda_todo.py
+	install -m 644 src/clases/install/fstab.py $(DESTDIR)/usr/share/canaima-instalador/clases/install/fstab.py
+	install -m 644 src/clases/install/__init__.py $(DESTDIR)/usr/share/canaima-instalador/clases/install/__init__.py
+	install -m 644 src/clases/install/particion_auto.py $(DESTDIR)/usr/share/canaima-instalador/clases/install/particion_auto.py
+	install -m 644 src/clases/install/particion_todo.py $(DESTDIR)/usr/share/canaima-instalador/clases/install/particion_todo.py
 	
 uninstall:
 
