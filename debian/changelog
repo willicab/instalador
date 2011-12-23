@@ -65,5 +65,13 @@ canaima-instalador (1.0) unstable; urgency=low
     modificados/añadidos: instalacion.py
   * [e83a312] [ canaima-desarrollador ] Los siguientes archivos han sido
     modificados/añadidos: instalacion.py
+  * [995c67d] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: canaima-instalador.py barra_auto.pyc
+    barra_particiones.pyc barra_todo.pyc distribuciones.pyc general.pyc
+    __init__.pyc fstab.pyc particion_auto.pyc particion_todo.pyc
+    leyenda_auto.pyc leyenda_todo.pyc particiones.pyc image1.jpg.png
+    final.py info.pyc instalacion.py instalacion.pyc metodo.pyc
+    particion_auto.pyc particion_todo.pyc teclado.pyc usuario.pyc
+    install-grub.sh wizard.pyc
 
- -- William Abrahan Cabrera Reyes <william@linux.es>  Fri, 23 Dec 2011 14:05:44 -0430
+ -- William Abrahan Cabrera Reyes <william@linux.es>  Fri, 23 Dec 2011 14:35:56 -0430
