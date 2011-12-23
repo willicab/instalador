@@ -94,5 +94,7 @@ canaima-instalador (1.0) unstable; urgency=low
     modificados/añadidos:
   * [5a4be15] [ canaima-desarrollador ] Los siguientes archivos han sido
     modificados/añadidos: Makefile canaima-instalador.desktop
+  * [7e332db] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos:
 
- -- William Abrahan Cabrera Reyes <william@linux.es>  Fri, 23 Dec 2011 15:44:51 -0430
+ -- William Abrahan Cabrera Reyes <william@linux.es>  Fri, 23 Dec 2011 15:45:15 -0430
