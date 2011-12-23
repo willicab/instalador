@@ -185,8 +185,7 @@ class Info():
         desconectar()
         id_siguiente = frmMain.btn_siguiente.connect("clicked", self.siguiente)
         id_anterior = frmMain.btn_anterior.connect("clicked", self.anterior)
-    def siguiente(self, widget=None): 
-        Instalacion()
+    def siguiente(self, widget=None): Instalacion()
     def anterior(self, widget=None): Usuario()
 
 class Instalacion():
@@ -196,25 +195,6 @@ class Instalacion():
             frmMain.agregar('Instalacion', instalacion.Main(cfg, frmMain))
         frmMain.mostrar('Instalacion')
         desconectar()
-        id_siguiente = frmMain.btn_siguiente.connect("clicked", self.siguiente)
-        id_anterior = frmMain.btn_anterior.connect("clicked", self.anterior)
-    def siguiente(self, widget=None): pass
-    def anterior(self, widget=None): pass
-
-class Final():
-    def __init__(self):
-        global id_siguiente, id_anterior, cfg
-        if frmMain.indice(frmMain.nombres, 'Final') == -1:
-            frmMain.agregar('Final', instalacion.Main(cfg, frmMain))
-        frmMain.mostrar('Final')
-        desconectar()
-        frmMain.btn_siguiente.set_label('Reiniciar más tarde')
-        frmMain.btn_siguiente.set_size_request(150, 30)
-        frmMain.botonera.move(frmMain.btn_siguiente, 440, 10)
-        frmMain.btn_anterior.set_label('Reiniciar Ahora')
-        frmMain.btn_anterior.set_size_request(150, 30)
-        frmMain.botonera.move(frmMain.btn_anterior, 280, 10)
-        frmMain.btn_cancelar.hide()
         id_siguiente = frmMain.btn_siguiente.connect("clicked", self.siguiente)
         id_anterior = frmMain.btn_anterior.connect("clicked", self.anterior)
     def siguiente(self, widget=None): pass

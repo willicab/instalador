@@ -152,13 +152,13 @@ class Main(gtk.Fixed):
 
         self.visor.hide()
         self.lbl1.show()
-        frmMain.btn_siguiente.set_label('Reiniciar más tarde')
-        frmMain.btn_siguiente.set_size_request(150, 30)
-        frmMain.botonera.move(frmMain.btn_siguiente, 440, 10)
-        frmMain.btn_anterior.set_label('Reiniciar Ahora')
-        frmMain.btn_anterior.set_size_request(150, 30)
-        frmMain.botonera.move(frmMain.btn_anterior, 280, 10)
-        frmMain.btn_cancelar.hide()
+        self.par.btn_siguiente.set_label('Reiniciar más tarde')
+        self.par.btn_siguiente.set_size_request(150, 30)
+        self.par.botonera.move(frmMain.btn_siguiente, 440, 10)
+        self.par.btn_anterior.set_label('Reiniciar Ahora')
+        self.par.btn_anterior.set_size_request(150, 30)
+        self.par.botonera.move(frmMain.btn_anterior, 280, 10)
+        self.par.btn_cancelar.hide()
         
         #msg = 'Ha culminado la instalación, puede reiniciar ahora el sistema\n'
         #msg = msg + 'o seguir probando canaima y reiniciar más tarde.'
