@@ -59,5 +59,7 @@ canaima-instalador (1.0) unstable; urgency=low
   * [d7030e4] Corregido el carrusel y el mensaje final del instalador
   * [29761f1] [ canaima-desarrollador ] Los siguientes archivos han sido
     modificados/añadidos: instalacion.py
+  * [85f3785] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: instalacion.py
 
- -- William Abrahan Cabrera Reyes <william@linux.es>  Fri, 23 Dec 2011 13:12:05 -0430
+ -- William Abrahan Cabrera Reyes <william@linux.es>  Fri, 23 Dec 2011 13:24:33 -0430
