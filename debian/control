@@ -1,8 +1,7 @@
 Source: canaima-instalador
-Section: unknown
+Section: admin
 Priority: extra
 Maintainer: William Cabrera <william@linux.es>
-Uploaders: William Cabrera <william@linux.es>
 Build-Depends: cdbs, debhelper (>= 7.0.50~)
 Standards-Version: 3.9.1
 #Homepage: http://canaima.softwarelibre.gob.ve/
@@ -11,7 +10,8 @@ Standards-Version: 3.9.1
 
 Package: canaima-instalador
 Architecture: all
-Depends: ${shlibs:Depends}, ${misc:Depends}, python-imaging, lshw, parted
+Version: 1.0
+Depends: ${shlibs:Depends}, ${misc:Depends}, ${python:Depends}, python-imaging, lshw, parted
 Description: Instalador en vivo para medios instalables de Canaima GNU/Linux
  Este paquete prentende ser un instalador que pueda usarse en cualquier sabor
  de Canaima GNU/Linux
