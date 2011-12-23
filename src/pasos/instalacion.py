@@ -90,7 +90,8 @@ class Main(gtk.Fixed):
         self.particiones_montadas = self.salida [0]
         self.particion_boot = self.salida [1]
         # Copiando los archivos
-        self.par.info_barra("Copiando los archivos al disco")
+        self.par.info_barra("Instalando Canaima GNU/Linux ...")
+        self.par.accion('Copiando los archivos al disco')
         self.copiar()
         fstab = clases.install.fstab.Main(self.particiones_montadas)
         fstab.crear_archivo()
