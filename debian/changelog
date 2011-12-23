@@ -39,5 +39,15 @@ canaima-instalador (1.0) unstable; urgency=low
     image8.jpg jquery-1.js __init__.py bienvenida.py info.py
     instalacion.py metodo.py particion_auto.py particion_todo.py
     teclado.py usuario.py wizard.py
+  * [c52d85c] eliminando archivos innecesarios
+  * [9e6c92f] corrigiendo errores de dependencias de modulos y
+    modificando el makefile
+  * [f3d3f61] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: canaima-instalador.debhelper.log canaima-
+    instalador.py banner-app-top.png buscar-discos.png es.png latam.png
+    us.png carrusel.html image1.jpg image2.jpg image3.jpg image4.jpg
+    image5.jpg image6.jpg image7.jpg image8.jpg jquery-1.js __init__.py
+    bienvenida.py info.py instalacion.py metodo.py particion_auto.py
+    particion_todo.py teclado.py usuario.py wizard.py canaima-instalador
 
- -- William Abrahan Cabrera Reyes <william@linux.es>  Fri, 23 Dec 2011 10:10:32 -0430
+ -- William Abrahan Cabrera Reyes <william@linux.es>  Fri, 23 Dec 2011 10:18:15 -0430
