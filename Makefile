@@ -101,7 +101,7 @@ install:
 	install -m 644 src/data/banner-app-top.png $(DESTDIR)/usr/share/canaima-instalador/data/banner-app-top.png
 	install -m 644 src/data/buscar-discos.png $(DESTDIR)/usr/share/canaima-instalador/data/buscar-discos.png
 	install -m 644 src/data/distribuciones/es.png $(DESTDIR)/usr/share/canaima-instalador/data/distribuciones/es.png
-	install -m 644 src/data/distribuciones/en.png $(DESTDIR)/usr/share/canaima-instalador/data/distribuciones/us.png
+	install -m 644 src/data/distribuciones/us.png $(DESTDIR)/usr/share/canaima-instalador/data/distribuciones/us.png
 	install -m 644 src/data/distribuciones/latam.png $(DESTDIR)/usr/share/canaima-instalador/data/distribuciones/latam.png
 	install -m 644 src/data/preview/carrusel.html $(DESTDIR)/usr/share/canaima-instalador/data/preview/carrusel.html
 	install -m 644 src/data/preview/jquery-1.js $(DESTDIR)/usr/share/canaima-instalador/data/preview/jquery-1.js
