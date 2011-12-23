@@ -100,5 +100,7 @@ canaima-instalador (1.0) unstable; urgency=low
     modificados/añadidos: instalacion.py
   * [bb45031] [ canaima-desarrollador ] Los siguientes archivos han sido
     modificados/añadidos: Makefile postinst
+  * [1546b9d] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: postrm
 
- -- William Abrahan Cabrera Reyes <william@linux.es>  Fri, 23 Dec 2011 16:14:29 -0430
+ -- William Abrahan Cabrera Reyes <william@linux.es>  Fri, 23 Dec 2011 16:16:42 -0430
