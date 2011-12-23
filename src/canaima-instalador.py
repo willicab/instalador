@@ -16,6 +16,7 @@ import clases.particiones
 import clases.general as gen
 #import mensaje
 import threading
+import os
 
 gtk.gdk.threads_init()
 

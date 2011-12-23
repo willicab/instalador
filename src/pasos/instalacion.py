@@ -40,10 +40,10 @@ class Main(gtk.Fixed):
         
         msg = 'Ha culminado la instalación, puede reiniciar ahora el sistema\n'
         msg = msg + 'o seguir probando canaima y reiniciar más tarde.'
-        self.lbl1 = gtk.Label(msg)
-        self.lbl1.set_size_request(590, 280)
-        self.put(self.visor, 0, 0)
-        #self.lbl1.show()
+        self.lblInfo = gtk.Label(msg)
+        self.lblInfo1.set_size_request(590, 280)
+        self.put(self.lblInfo, 0, 0)
+        #self.lblInfo.show()
         
         path = os.path.realpath(os.path.join(os.path.dirname(__file__), 
                 '..', 'data', 'preview', 'carrusel.html'))
@@ -54,13 +54,13 @@ class Main(gtk.Fixed):
 
     def instalar(self):
         self.visor.hide()
-        self.lbl1.show()
+        self.lblInfo.show()
         self.par.btn_siguiente.set_label('Reiniciar más tarde')
         self.par.btn_siguiente.set_size_request(150, 30)
-        self.par.botonera.move(frmMain.btn_siguiente, 440, 10)
+        self.par.botonera.move(self.par.btn_siguiente, 440, 10)
         self.par.btn_anterior.set_label('Reiniciar Ahora')
         self.par.btn_anterior.set_size_request(150, 30)
-        self.par.botonera.move(frmMain.btn_anterior, 280, 10)
+        self.par.botonera.move(self.par.btn_anterior, 280, 10)
         self.par.btn_cancelar.hide()
         
         #self.par.mostrar_barra()
