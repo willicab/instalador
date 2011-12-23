@@ -1,5 +1,14 @@
 canaima-instalador (1.0) unstable; urgency=low
 
+  [ William Abrahan Cabrera Reyes ]
   * Versión inicial de canaima-instalador para Canaima GNU/Linux
 
- -- William Abrahan Cabrera Reyes <william@linux.es>  Tue, 15 Nov 2011 13:01:29 -0430
+  [ William Cabrera ]
+  * [9afc96e] Cambios importantes en particionado, copia y post-
+    instalación
+
+  [ William Abrahan Cabrera Reyes ]
+  * [da5659f] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: rules
+
+ -- William Abrahan Cabrera Reyes <william@linux.es>  Fri, 23 Dec 2011 09:42:19 -0430
