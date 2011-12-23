@@ -77,5 +77,7 @@ canaima-instalador (1.0) unstable; urgency=low
     modificados/añadidos: instalacion.py
   * [64b7736] [ canaima-desarrollador ] Los siguientes archivos han sido
     modificados/añadidos: canaima-instalador.py instalacion.py
+  * [c6a6680] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: instalacion.py
 
- -- William Abrahan Cabrera Reyes <william@linux.es>  Fri, 23 Dec 2011 15:02:34 -0430
+ -- William Abrahan Cabrera Reyes <william@linux.es>  Fri, 23 Dec 2011 15:06:54 -0430
