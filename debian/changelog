@@ -73,5 +73,7 @@ canaima-instalador (1.0) unstable; urgency=low
     final.py info.pyc instalacion.py instalacion.pyc metodo.pyc
     particion_auto.pyc particion_todo.pyc teclado.pyc usuario.pyc
     install-grub.sh wizard.pyc
+  * [52dd946] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: instalacion.py
 
- -- William Abrahan Cabrera Reyes <william@linux.es>  Fri, 23 Dec 2011 14:35:56 -0430
+ -- William Abrahan Cabrera Reyes <william@linux.es>  Fri, 23 Dec 2011 14:40:06 -0430
