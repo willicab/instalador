@@ -97,6 +97,7 @@ install:
 	install -d $(DESTDIR)/usr/share/canaima-instalador/scripts
 
 	install -m 755 src/canaima-instalador.py $(DESTDIR)/usr/share/canaima-instalador/canaima-instalador.py
+	install -m 755 src/canaima-instalador $(DESTDIR)/usr/bin/canaima-instalador
 	install -m 644 src/wizard.py $(DESTDIR)/usr/share/canaima-instalador/wizard.py
 	install -m 644 src/data/banner-app-top.png $(DESTDIR)/usr/share/canaima-instalador/data/banner-app-top.png
 	install -m 644 src/data/buscar-discos.png $(DESTDIR)/usr/share/canaima-instalador/data/buscar-discos.png
@@ -122,9 +123,9 @@ install:
 	install -m 644 src/pasos/particion_todo.py $(DESTDIR)/usr/share/canaima-instalador/pasos/particion_todo.py
 	install -m 644 src/pasos/teclado.py $(DESTDIR)/usr/share/canaima-instalador/pasos/teclado.py
 	install -m 644 src/pasos/usuario.py $(DESTDIR)/usr/share/canaima-instalador/pasos/usuario.py
-	install -m 755 src/scripts/install-grub.sh $(DESTDIR)/usr/share/canaima-instalador/data/scripts/install-grub.sh
-	install -m 755 src/scripts/install-grub-ini.sh $(DESTDIR)/usr/share/canaima-instalador/data/scripts/install-grub-ini.sh
-	install -m 755 src/scripts/make-user.sh $(DESTDIR)/usr/share/canaima-instalador/data/scripts/make-user.sh
+	install -m 755 src/scripts/install-grub.sh $(DESTDIR)/usr/share/canaima-instalador/scripts/install-grub.sh
+	install -m 755 src/scripts/install-grub-ini.sh $(DESTDIR)/usr/share/canaima-instalador/scripts/install-grub-ini.sh
+	install -m 755 src/scripts/make-user.sh $(DESTDIR)/usr/share/canaima-instalador/scripts/make-user.sh
 	install -m 644 src/clases/particiones.py $(DESTDIR)/usr/share/canaima-instalador/clases/particiones.py
 	install -m 644 src/clases/barra_auto.py $(DESTDIR)/usr/share/canaima-instalador/clases/barra_auto.py
 	install -m 644 src/clases/barra_particiones.py $(DESTDIR)/usr/share/canaima-instalador/clases/barra_particiones.py

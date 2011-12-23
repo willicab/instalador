@@ -8,7 +8,7 @@ import clases.particiones
 import clases.general
 import clases.barra_auto as widget
 import clases.leyenda_auto as leyenda
-import mensaje
+#import mensaje
 
 class Main(gtk.Fixed):
     # Valores para las particiones

@@ -9,12 +9,12 @@ pygtk.require('2.0')
 import gtk
 import Image
 from pasos import bienvenida, teclado, metodo, particion_auto, particion_todo, \
-    accion, instalacion, usuario, info
+    instalacion, usuario, info
 import wizard
 import commands
 import clases.particiones
 import clases.general as gen
-import mensaje
+#import mensaje
 import threading
 
 gtk.gdk.threads_init()

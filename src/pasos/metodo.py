@@ -11,7 +11,7 @@ import clases.particiones
 import clases.general as gen
 import clases.barra_particiones as barra
 import threading
-import mensaje
+#import mensaje
 
 class Main(gtk.Fixed):
     disco = ''

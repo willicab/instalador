@@ -5,7 +5,7 @@ import clases.particiones
 import clases.general as gen
 import clases.barra_todo as barra
 import clases.leyenda_todo as leyenda
-import mensaje
+#import mensaje
 import commands
 
 class Main(gtk.Fixed):
