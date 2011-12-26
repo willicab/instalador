@@ -107,5 +107,7 @@ canaima-instalador (1.0) unstable; urgency=low
   * [4ffcc56] [ canaima-desarrollador ] Los siguientes archivos han sido
     modificados/añadidos: control postinst postrm canaima-
     instalador.desktop fstab.py carrusel.html
+  * [f767daa] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: Makefile metodo.py
 
- -- William Abrahan Cabrera Reyes <william@linux.es>  Mon, 26 Dec 2011 09:25:30 -0430
+ -- William Abrahan Cabrera Reyes <william@linux.es>  Mon, 26 Dec 2011 11:30:53 -0430
