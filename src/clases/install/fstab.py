@@ -17,9 +17,10 @@ class Main():
     
     def obtener_cdroms(self):
         salida = commands.getstatusoutput('echo $(head -3 /proc/sys/dev/cdrom/info | tail -1 | cut -f 3-)')
+        lista = salida[1].split()
         print 'obtener_cdroms {0}'.format(salida)
         if salida[0] != 0: return False
-        return salida[1].split()
+        return lista
     
     def obtener_fs(self, particion):
         salida = commands.getstatusoutput("/sbin/blkid {0} | awk '{1}'".format(particion, '{print $2 \" \"$3}'))
