@@ -56,10 +56,16 @@ class Main(gtk.Fixed):
         
         # Listar Discos
         for disco in self.discos:
-            self.cmb_discos.append_text('{0} ({1})'.format( \
-                disco['description'], \
-                disco['size'].split('(')[1][:-1]
-            ))
+            try:
+                self.cmb_discos.append_text('{0} ({1})'.format( \
+                    disco['description'], \
+                    disco['size'].split('(')[1][:-1]
+                ))
+            except:
+                self.cmb_discos.append_text('{0} ({1})'.format( \
+                    disco['description'], \
+                    '?'
+                ))
         self.cmb_discos.set_active(0)
         self.seleccionar_disco()
         self.cmb_discos.connect("changed", self.seleccionar_disco)
