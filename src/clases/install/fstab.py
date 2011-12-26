@@ -69,9 +69,10 @@ class Main():
             num = num + 1
             self.out =  self.out + entry + '\n'
         print self.out
-        archivo = open('/target/etc/fstab', 'w')
-        archivo.write(self.out)
-        archivo.close()
+        os.system('echo {0} > /target/etc/fstab'.format(self.out))
+        #archivo = open('/target/etc/fstab', 'w')
+        #archivo.write(self.out)
+        #archivo.close()
 
 if __name__ == "__main__":
     m = Main({'/dev/sda1':'/target/boot', '/dev/sda5':'/target', '/dev/sda6':'/target/usr', '/dev/sda7':'/target/home'})

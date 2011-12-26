@@ -59,7 +59,7 @@ case ${1} in
 				# Copiamos el lanzador de escritorio al escritorio de cada usuario
 				cp /etc/skel/Escritorio/canaima-instalador.desktop /home/${usuario_min}/Escritorio/
 				# con permisos apropiados
-				chown ${usuario_min}:${usuario_min} /home/${usuario_min}/Escritorio/canaima-bienvenido.desktop
+				chown ${usuario_min}:${usuario_min} /home/${usuario_min}/Escritorio/canaima-instalador.desktop
 			;;
 		esac
 	done

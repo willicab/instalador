@@ -11,7 +11,7 @@ Standards-Version: 3.9.1
 Package: canaima-instalador
 Architecture: all
 Version: 1.0
-Depends: ${shlibs:Depends}, ${misc:Depends}, ${python:Depends}, python-imaging, lshw, parted
+Depends: ${shlibs:Depends}, ${misc:Depends}, ${python:Depends}, python-imaging, lshw, parted, squashfs-tools, python-gtk2, python-cairo
 Description: Instalador en vivo para medios instalables de Canaima GNU/Linux
  Este paquete prentende ser un instalador que pueda usarse en cualquier sabor
  de Canaima GNU/Linux

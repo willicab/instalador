@@ -1,8 +1,6 @@
-#!/usr/bin/env xdg-open
-
 [Desktop Entry]
 Name=Instalar Canaima GNU/Linux
-Name[es_VE]=canaima-instalador-v.desktop
+Name[es_VE]=Instalar Canaima GNU/Linux
 GenericName=Instalar Canaima GNU/Linux
 GenericName[es_VE]=Instalar Canaima GNU/Linux
 Comment=Instalador de Canaima GNU/Linux
