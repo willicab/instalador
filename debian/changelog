@@ -113,5 +113,7 @@ canaima-instalador (1.0) unstable; urgency=low
     modificados/añadidos: metodo.py
   * [6398bfb] [ canaima-desarrollador ] Los siguientes archivos han sido
     modificados/añadidos: fstab.py metodo.py
+  * [cffc7b6] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: fstab.py instalacion.py
 
- -- William Abrahan Cabrera Reyes <william@linux.es>  Mon, 26 Dec 2011 12:42:10 -0430
+ -- William Abrahan Cabrera Reyes <william@linux.es>  Mon, 26 Dec 2011 15:31:13 -0430
