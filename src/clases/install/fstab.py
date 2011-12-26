@@ -18,8 +18,8 @@ class Main():
     def obtener_cdroms(self):
         salida = commands.getstatusoutput('echo $(head -3 /proc/sys/dev/cdrom/info | tail -1 | cut -f 3-)')
         lista = salida[1].split()
-        print 'obtener_cdroms {0}'.format(salida)
-        if salida[0] != 0: return False
+        print 'obtener_cdroms {0} - {1}'.format(salida, lista)
+        if salida[1][0] != 'head:': return False
         return lista
     
     def obtener_fs(self, particion):
