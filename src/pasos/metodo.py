@@ -45,7 +45,6 @@ class Main(gtk.Fixed):
         self.par.mostrar_barra()
         self.par.info_barra('Buscando discos en el computador')
         self.discos = self.part.lista_discos()
-        print 'discos: {0}'.format(self.discos)
 
         txt_info = "Escoja el disco donde quiere instalar el sistema:"
         self.lbl1 = gtk.Label(txt_info)
@@ -62,10 +61,7 @@ class Main(gtk.Fixed):
                     disco['size'].split('(')[1][:-1]
                 ))
             except:
-                self.cmb_discos.append_text('{0} ({1})'.format( \
-                    disco['description'], \
-                    '?'
-                ))
+                pass
         self.cmb_discos.set_active(0)
         self.seleccionar_disco()
         self.cmb_discos.connect("changed", self.seleccionar_disco)

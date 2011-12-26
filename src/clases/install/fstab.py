@@ -17,6 +17,8 @@ class Main():
     
     def obtener_cdroms(self):
         salida = commands.getstatusoutput('echo $(head -3 /proc/sys/dev/cdrom/info | tail -1 | cut -f 3-)')
+        print 'obtener_cdroms {0}'.format(salida)
+        if salida[0] != 0: return False
         return salida[1].split()
     
     def obtener_fs(self, particion):
@@ -63,11 +65,12 @@ class Main():
                 self.out =  self.out + entry_fs + '\n'
         cdroms = self.obtener_cdroms()
         num = 0
-        for cd in cdroms:
-            entry = '/dev/{0}\t/media/cdrom{1}\tudf,iso9660\tro,user,noauto\t0 0'.format(cd, num)
-            os.system('mkdir -p /target/media/cdrom{0}'.format(num))
-            num = num + 1
-            self.out =  self.out + entry + '\n'
+        if cdroms != False:
+            for cd in cdroms:
+                entry = '/dev/{0}\t/media/cdrom{1}\tudf,iso9660\tro,user,noauto\t0 0'.format(cd, num)
+                os.system('mkdir -p /target/media/cdrom{0}'.format(num))
+                num = num + 1
+                self.out =  self.out + entry + '\n'
         print self.out
         os.system('echo {0} > /target/etc/fstab'.format(self.out))
         #archivo = open('/target/etc/fstab', 'w')
