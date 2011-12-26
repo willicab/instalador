@@ -109,5 +109,7 @@ canaima-instalador (1.0) unstable; urgency=low
     instalador.desktop fstab.py carrusel.html
   * [f767daa] [ canaima-desarrollador ] Los siguientes archivos han sido
     modificados/añadidos: Makefile metodo.py
+  * [caff1d2] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: metodo.py
 
- -- William Abrahan Cabrera Reyes <william@linux.es>  Mon, 26 Dec 2011 11:30:53 -0430
+ -- William Abrahan Cabrera Reyes <william@linux.es>  Mon, 26 Dec 2011 11:33:49 -0430
