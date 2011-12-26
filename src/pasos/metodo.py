@@ -42,14 +42,10 @@ class Main(gtk.Fixed):
         thread.start()
         
     def Iniciar(self):
-        #m = mensaje.Main('Canaima Instalador', 'Listando los discos ...')
-        #m.start()
         self.par.mostrar_barra()
         self.par.info_barra('Buscando discos en el computador')
         self.discos = self.part.lista_discos()
-        self.par.ocultar_barra()
-        self.img_distribucion.hide()
-        #m.stop()
+        print 'discos: {0}'.format(self.discos)
 
         txt_info = "Escoja el disco donde quiere instalar el sistema:"
         self.lbl1 = gtk.Label(txt_info)
@@ -101,6 +97,9 @@ class Main(gtk.Fixed):
         self.put(self.lbl_info, 0, 185)
         self.lbl_info.show()    
         self.establecer_metodo()
+
+        self.par.ocultar_barra()
+        self.img_distribucion.hide()
     
     def lista_metodos(self):
         '''
