@@ -111,5 +111,7 @@ canaima-instalador (1.0) unstable; urgency=low
     modificados/añadidos: Makefile metodo.py
   * [caff1d2] [ canaima-desarrollador ] Los siguientes archivos han sido
     modificados/añadidos: metodo.py
+  * [6398bfb] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: fstab.py metodo.py
 
- -- William Abrahan Cabrera Reyes <william@linux.es>  Mon, 26 Dec 2011 11:33:49 -0430
+ -- William Abrahan Cabrera Reyes <william@linux.es>  Mon, 26 Dec 2011 12:42:10 -0430
