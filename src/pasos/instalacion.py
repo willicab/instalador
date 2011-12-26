@@ -170,16 +170,9 @@ class Main(gtk.Fixed):
 
     def interfaces(self):
         eth = commands.getstatusoutput('ifconfig -a | grep eth')[1].split()[0]
-        sal = '# This file describes the network interfaces available on your '
-        sal = sal + ' system\n# and how to activate them. For more information,' 
-        sal = sal + 'see interfaces(5).\n\n# The loopback network interface\n'
-        sal = sal + 'auto lo\niface lo inet loopback\n\n'
-        sal = sal + '# The primary network interface\n'
-        sal = sal + 'auto	{0}'.format(eth)
-        sal = sal + 'iface {0} inet dhcp'.format(eth)
         des = '/target/etc/network/interfaces'
-        os.system('echo {0} > {1}'.format(sal, des))
-        os.system('cat {0}'.format(des))
+        os.system('echo auto {0} > {1}'.format(eth, des))
+        os.system('echo iface {0} inet dhcp >> {1}'.format(eth, des))
     
     def hostname(self):
         cmd = 'echo "{0}" > /target/etc/hostname'.format(self.maquina)
