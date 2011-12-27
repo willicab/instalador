@@ -11,8 +11,8 @@ class Main():
         os.system('echo {0} >> /target/etc/fstab'.format( \
             'proc\t/proc\tproc\tdefaults\t0 0\n'))
         os.system('echo {0} >> /target/etc/fstab'.format( \
-            'sys\t/sys\tsysfs\tdefaults\t0 0\n'
-        
+            'sys\t/sys\tsysfs\tdefaults\t0 0\n'))
+            
     def obtener_particiones(self):
         salida = commands.getstatusoutput('echo $(ls /dev/[sh]d[a_z]?*)')
         #print 'obtener_particiones: ' + salida

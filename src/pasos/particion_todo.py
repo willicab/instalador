@@ -5,14 +5,12 @@ import clases.particiones
 import clases.general as gen
 import clases.barra_todo as barra
 import clases.leyenda_todo as leyenda
-#import mensaje
-import commands
 
 class Main(gtk.Fixed):
-    root1 = '20GB'
-    root2 = '3GB'
-    usr = '18GB'
-    boot = '256MB'
+    #root1 = '20GB'
+    #root2 = '3GB'
+    #usr = '18GB'
+    #boot = '256MB'
     ini = ''
     fin = ''
     disco = ''
@@ -27,7 +25,6 @@ class Main(gtk.Fixed):
         self.swap = gen.ram() if int(gen.ram()) >= 1048576 else int(gen.ram()) * 2
         self.ini = int(float(self.ini.replace(',', '.')))
         self.metodo = 'particion_1'
-        #print self.disco, self.ini, self.fin, self.swap, self.metodo
         cfg = (self.disco, self.ini, self.fin, self.swap, self.metodo)
         
         txt_info = "Seleccione tipo de instalación que desea realizar"

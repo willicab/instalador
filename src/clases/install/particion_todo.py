@@ -6,9 +6,9 @@ import clases.particiones
 import clases.general as gen
 
 class Main():
-    root_p2 = '20GB'
-    root_p3 = '3GB'
-    usr = '18GB'
+    #root_p2 = '20GB'
+    #root_p3 = '3GB'
+    #usr = '18GB'
     boot = '256MB'
     part = clases.particiones.Main()
     particiones_montadas = {}
@@ -17,6 +17,11 @@ class Main():
     def __init__(self, cfg, parent):
         self.disco = cfg['disco']
         self.par = parent
+        self.lista = self.part.lista_particiones(self.disco)
+        self.root_p2 = gen.part_root1(self.total)
+        self.root_p3 = gen.part_root1(self.total)
+        self.usr = gen.part_root1(self.total)
+        
 
     def particion_1(self):
         particion_boot = ''

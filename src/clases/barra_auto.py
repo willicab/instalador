@@ -21,7 +21,6 @@ class Barra(gtk.DrawingArea):
         self.par = parent
         self.cur = ((total - minimo) - usado) / 2
         self.par.cur_value = self.cur
-        #self.par.on_changed()
         self.set_events(gtk.gdk.POINTER_MOTION_MASK |
                       gtk.gdk.POINTER_MOTION_HINT_MASK |
                       gtk.gdk.BUTTON_PRESS_MASK |
@@ -48,22 +47,14 @@ class Barra(gtk.DrawingArea):
             cursor = gtk.gdk.Cursor(gtk.gdk.LEFT_PTR)    #esto crea un cursor que mostrara un lápiz
             self.window.set_cursor(cursor)           #se lo asignamos a nuestro dibujable            
         if self.presionado == True:
-            #print 'posicion:', event.x, event.y
             x = (event.x * self.total) / self.w
             if x >= self.total - self.minimo: x = self.total - self.minimo
             if x <= self.usado + self.libre : x = self.usado + self.libre
-            #if gen.hum(x)[-2:] == 'GB':
-            #    self.cur = (float(gen.hum(x)[:-2]) * 1024) * 1024
-            #elif gen.hum(x)[-2:] == 'MB':
-            #    self.cur = (float(gen.hum(x)[:-2]) * 1024)
             self.cur = x
-            #print 'Draw: ', self.cur,  gen.hum(self.cur)
             self.expose(self, event)
             self.par.on_changed()
 
     def expose(self, widget, event):
-        #self.window.clear()
-        #self.par.on_changed()
         cr = widget.window.cairo_create()
         cr.set_line_width(0.8)
 
@@ -75,11 +66,8 @@ class Barra(gtk.DrawingArea):
         self.w = self.get_size_request()[0]
         self.h = self.get_size_request()[1]
         ancho = self.w
-        alto = self.h # - 16
+        alto = self.h
 
-        #establece posicion actual     
-        #self.cur = self.par.get_cur_value()
-        
         w_usado = (int(self.usado) * ancho) / int(self.total)
         x_minimo = ((int(self.total) - int(self.minimo)) * ancho) / int(self.total)
         w_minimo = (int(self.minimo) * ancho) / int(self.total)
@@ -100,7 +88,6 @@ class Barra(gtk.DrawingArea):
         linear.add_color_stop_rgb(0.3, 0.5, 0.5, 0.2)
         linear.add_color_stop_rgb(0.7, 0.8, 0.8, 0.4)
         cr.set_source(linear)
-        #cr.set_source_rgb(0.8, 0.8, 0.4)
         cr.rectangle(0, 0, w_usado, alto)
         cr.fill()
 
@@ -110,7 +97,6 @@ class Barra(gtk.DrawingArea):
         linear.add_color_stop_rgb(0.3, 0.7, 0.7, 0.3)
         linear.add_color_stop_rgb(0.7, 1.0, 1.0, 0.7)
         cr.set_source(linear)
-        #cr.set_source_rgb(1.0, 1.0, 0.8)
         cr.rectangle(w_usado, 0, w_libre, alto)
         cr.fill()
 
@@ -129,7 +115,6 @@ class Barra(gtk.DrawingArea):
         linear.add_color_stop_rgb(0.3, 0.3, 0.7, 0.3)
         linear.add_color_stop_rgb(0.7, 0.7, 1.0, 0.7)
         cr.set_source(linear)
-        #cr.set_source_rgb(0.8, 1.0, 0.8)
         cr.rectangle(x_particion, 0, w_particion, alto)
         cr.fill()
 

@@ -2,6 +2,14 @@
 
 import commands
 
+root1_min = '2.5GB'
+root1_max = '18GB'
+root2_min = '512MB'
+root2_max = '3GB'
+usr_min = '2GB'
+usr_max = '15GB'
+minimo = '5GB'
+
 def kb(num):
     if type(num) == int or type(num) == float : return float(num)
     unidad = num[-2:]
@@ -37,7 +45,7 @@ def redondear(w, dec=0):
 def hum(valor):
     if valor <= 1024.0: return '{0}kB'.format(redondear(valor, 2))
     if valor <= 1048576.0: return '{0}MB'.format(redondear(valor / 1024, 2))
-    if valor <= 1073741824.0: return '{0}GB'.format(redondear(valor / 1024 / 1024, 2))
+    if valor<=1073741824.0: return '{0}GB'.format(redondear(valor/1024/1024,2))
     return valor
     #if valor <= 1099511627776: return '{0} MB'.format(valor / 1024 / 1024)
 
@@ -54,6 +62,30 @@ def montados(disco=''):
         elif disco == m.split(' ')[0][:-1]:
             p.append(m.split(' ')[2])
     return p         
+
+def part_root1(total):
+    root = ((total) * kb(root1_min)) / kb(minimo)
+    if root < kb(root1_min): 
+        root = kb(root1_min)
+    if root > kb(root1_max): 
+        root = kb(root1_max)
+    return root
+
+def part_root2(total):
+    root = ((total) * kb(root2_min)) / kb(minimo)
+    if root < kb(root2_min): 
+        root = kb(root2_min)
+    if root > kb(root2_max): 
+        root = kb(root2_max)
+    return root
+
+def part_usr(total):
+    usr = ((total) * kb(usr_min)) / kb(minimo)
+    if usr < kb(usr_min): 
+        usr = kb(usr_min)
+    if usr > kb(usr_max): 
+        usr = kb(usr_max)
+    return usr
 
 def desmontar(disco):
     m = montados(disco)
@@ -77,4 +109,5 @@ def montar(particiones):
             salida = commands.getstatusoutput(cmd)
             #print cmd, salida
             if salida[0] == 0: del part[p]
+
 

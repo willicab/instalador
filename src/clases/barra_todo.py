@@ -5,10 +5,14 @@ import cairo
 import clases.general as gen
 
 class Main(gtk.DrawingArea):
-    root1 = '20GB'
-    root2 = '3GB'
-    usr = '18GB'
-    boot = '256MB'
+#    root1_min = '2.5GB'
+#    root1_max = '18GB'
+#    root2_min = '512MB'
+#    root2_max = '3GB'
+#    usr_min = '2GB'
+#    usr_max = '15GB'
+    boot = '128MB'
+#    _min = '5GB'
 #    root1 = '2GB'
 #    root2 = '307.2MB'
 #    usr = '1843.2MB'
@@ -26,6 +30,26 @@ class Main(gtk.DrawingArea):
         self.swap = int(float(cfg[3]))
         self.metodo = cfg[4]
         self.total = int(self.fin - self.ini)
+        self.root1 = gen.part_root1(self.total)
+        self.root2 = gen.part_root1(self.total)
+        self.usr = gen.part_root1(self.total)
+#        self.root1 = ((self.total) * gen.kb(self.root1_min)) / gen.kb(self._min)
+#        if self.root1 < gen.kb(self.root1_min): 
+#            self.root1 = gen.kb(self.root1_min)
+#        if self.root1 > gen.kb(self.root1_max): 
+#            self.root1 = gen.kb(self.root1_max)
+
+#        self.root2 = ((self.total) * gen.kb(self.root1_min)) / gen.kb(self._min)
+#        if self.root2 < gen.kb(self.root2_min): 
+#            self.root2 = gen.kb(self.root2_min)
+#        if self.root2 > gen.kb(self.root2_max): 
+#            self.root2 = gen.kb(self.root2_max)
+
+#        self.usr = ((self.total) * gen.kb(self.usr_min)) / gen.kb(self._min)
+#        if self.usr < gen.kb(self.usr_min): 
+#            self.usr = gen.kb(self.usr_min)
+#        if self.usr > gen.kb(self.usr_max): 
+#            self.usr = gen.kb(self.usr_max)
     
     def cambiar(self, metodo):
         self.metodo = metodo
