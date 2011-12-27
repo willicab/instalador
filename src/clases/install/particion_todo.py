@@ -18,9 +18,9 @@ class Main():
         self.disco = cfg['disco']
         self.par = parent
         self.lista = self.part.lista_particiones(self.disco)
-        self.root_p2 = gen.part_root1(self.total)
-        self.root_p3 = gen.part_root1(self.total)
-        self.usr = gen.part_root1(self.total)
+        #self.root_p2 = gen.part_root1(self.total)
+        #self.root_p3 = gen.part_root1(self.total)
+        #self.usr = gen.part_root1(self.total)
         
 
     def particion_1(self):
