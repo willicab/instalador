@@ -5,7 +5,7 @@ pygtk.require('2.0')
 import gtk
 import commands
 import clases.particiones
-import clases.general
+import clases.general as gen
 import clases.barra_auto as widget
 import clases.leyenda_auto as leyenda
 #import mensaje
@@ -13,11 +13,11 @@ import clases.leyenda_auto as leyenda
 class Main(gtk.Fixed):
     # Valores para las particiones
     # swap = ''
-    root1 = '2GB'
-    root2 = '500MB'
-    boot = '512MB'
-    usr  = '1GB'
-    burning = None
+    #root1 = '2GB'
+    #root2 = '500MB'
+    #boot = '512MB'
+    #usr  = '1GB'
+    #burning = None
     metodo = "particion_1"
     part = clases.particiones.Main()
     gen = clases.general
@@ -56,9 +56,9 @@ class Main(gtk.Fixed):
         
         # Barra
         total = int(p[3][:-2])
-        usado = self.gen.kb(p[7])
-        minimo = self.gen.kb(self.minimo)
-        libre = self.gen.kb(self.libre)
+        usado = gen.kb(p[7])
+        minimo = gen.kb(self.minimo)
+        libre = gen.kb(self.libre)
         self.swap = self.hay_swap()
 
         self.cur_value = ((total - minimo) - usado) / 2
@@ -74,7 +74,7 @@ class Main(gtk.Fixed):
 
         # Etiqueta Información Espacio Usado
         msg = 'Espacio Usado en la partición'
-        self.lbl_usado = gtk.Label('{0} ({1})'.format(msg, self.gen.hum(usado)))
+        self.lbl_usado = gtk.Label('{0} ({1})'.format(msg, gen.hum(usado)))
         self.lbl_usado.set_size_request(590, 20)
         self.lbl_usado.set_alignment(0, 0)
         self.put(self.lbl_usado, 22, 90)
@@ -96,7 +96,7 @@ class Main(gtk.Fixed):
 
         # Etiqueta Información Espacio mínimo
         msg = 'Espacio mínimo requerido para instalar Canaima GNU/Linux'
-        self.lbl_minimo = gtk.Label('{0} ({1})'.format(msg, self.gen.hum(self.minimo)))
+        self.lbl_minimo = gtk.Label('{0} ({1})'.format(msg, gen.hum(self.minimo)))
         self.lbl_minimo.set_size_request(590, 20)
         self.lbl_minimo.set_alignment(0, 0)
         self.put(self.lbl_minimo, 22, 165)
@@ -142,7 +142,7 @@ class Main(gtk.Fixed):
     def on_changed(self, widget=None):
         self.cur_value = int(self.barra.cur) #widget.get_value()
         if self.barra != None : self.barra.queue_draw()
-        #print 'Changed: ', self.cur_value, self.gen.hum(self.cur_value)
+        #print 'Changed: ', self.cur_value, gen.hum(self.cur_value)
         
     def get_cur_value(self):
         return self.cur_value

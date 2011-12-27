@@ -64,7 +64,7 @@ def montados(disco=''):
     return p         
 
 def part_root1(total):
-    root = ((total) * kb(root1_min)) / kb(minimo)
+    root = (kb(total) * kb(root1_min)) / kb(minimo)
     if root < kb(root1_min): 
         root = kb(root1_min)
     if root > kb(root1_max): 
@@ -72,7 +72,7 @@ def part_root1(total):
     return root
 
 def part_root2(total):
-    root = ((total) * kb(root2_min)) / kb(minimo)
+    root = (kb(total) * kb(root2_min)) / kb(minimo)
     if root < kb(root2_min): 
         root = kb(root2_min)
     if root > kb(root2_max): 
@@ -80,7 +80,7 @@ def part_root2(total):
     return root
 
 def part_usr(total):
-    usr = ((total) * kb(usr_min)) / kb(minimo)
+    usr = (kb(total) * kb(usr_min)) / kb(minimo)
     if usr < kb(usr_min): 
         usr = kb(usr_min)
     if usr > kb(usr_max): 

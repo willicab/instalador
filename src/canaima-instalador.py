@@ -7,15 +7,15 @@
 import pygtk
 pygtk.require('2.0')
 import gtk
-import Image
+#import Image
 from pasos import bienvenida, teclado, metodo, particion_auto, particion_todo, \
     instalacion, usuario, info
 import wizard
-import commands
-import clases.particiones
+#import commands
+#import clases.particiones
 import clases.general as gen
 #import mensaje
-import threading
+#import threading
 import os
 
 gtk.gdk.threads_init()
@@ -55,9 +55,9 @@ class Teclado():
         frmMain.btn_anterior.set_sensitive(True)
         
     def siguiente(self, widget=None): 
-	frmTeclado = frmMain.formulario('Teclado')
-	cfg['teclado'] = frmTeclado.distribucion
-	Metodo()
+        frmTeclado = frmMain.formulario('Teclado')
+        cfg['teclado'] = frmTeclado.distribucion
+        Metodo()
     def anterior(self, widget=None): Bienvenida()
     
 class Metodo():
@@ -169,13 +169,13 @@ class Usuario():
             PartAuto(cfg['particion'])
             
     def msg_error(self, mensaje):
-            dialog = gtk.MessageDialog(frmMain,
-                     gtk.DIALOG_MODAL,
-                     gtk.MESSAGE_ERROR,
-                     gtk.BUTTONS_OK,
-                     mensaje)
-            response = dialog.run()
-            dialog.destroy()
+        dialog = gtk.MessageDialog(frmMain,
+             gtk.DIALOG_MODAL,
+             gtk.MESSAGE_ERROR,
+             gtk.BUTTONS_OK,
+             mensaje)
+        response = dialog.run()
+        dialog.destroy()
     
 class Info():
     def __init__(self):

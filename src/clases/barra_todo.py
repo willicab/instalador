@@ -30,9 +30,9 @@ class Main(gtk.DrawingArea):
         self.swap = int(float(cfg[3]))
         self.metodo = cfg[4]
         self.total = int(self.fin - self.ini)
-        self.root1 = gen.part_root1(self.total)
-        self.root2 = gen.part_root1(self.total)
-        self.usr = gen.part_root1(self.total)
+        self.root1 = gen.hum(gen.part_root1(self.total))
+        self.root2 = gen.hum(gen.part_root2(self.total))
+        self.usr = gen.hum(gen.part_root1(self.total))
 #        self.root1 = ((self.total) * gen.kb(self.root1_min)) / gen.kb(self._min)
 #        if self.root1 < gen.kb(self.root1_min): 
 #            self.root1 = gen.kb(self.root1_min)
