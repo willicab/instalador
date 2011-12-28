@@ -128,4 +128,4 @@ canaima-instalador (1.0-1) stable; urgency=low
   * [de71e37] Removiendo residuos de scripts de python precompilados
     (*.pyc)
 
- -- Luis Alejandro Martínez Faneyth <martinez.faneyth@gmail.com>  Wed, 28 Dec 2011 14:50:42 -0430
+ -- Luis Alejandro Martínez Faneyth <martinez.faneyth@gmail.com>  Wed, 28 Dec 2011 14:53:49 -0430
