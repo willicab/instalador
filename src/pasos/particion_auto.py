@@ -24,7 +24,7 @@ class Main(gtk.Fixed):
     particion = ''
     particiones = []
     libre = []
-    minimo = '6GB'
+    minimo = '5GB'
     libre = '150MB'
     w = []
     cfg = {}

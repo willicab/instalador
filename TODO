@@ -1,6 +1,5 @@
 - Particionado Manual
 - Instalación OEM
-- Separar la busqueda de discos de la clase de paso (Resuelto)
-- Hacer que sea ejecutado como un usuario normal
+- Separar la busqueda de discos de la clase de paso
 - hacer que la barra de progreso en el proceso de instalación sea incremental
-- calcular el tamaño minimo y el máximo de cada partición
+- calcular el tamaño minimo y el máximo de cada partición (Resuelto)
