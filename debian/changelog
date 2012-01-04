@@ -1,4 +1,4 @@
-canaima-instalador (1.0) unstable; urgency=low
+canaima-instalador (1.0-1) stable; urgency=low
 
   [ William Abrahan Cabrera Reyes ]
   * Versión inicial de canaima-instalador para Canaima GNU/Linux
@@ -119,5 +119,13 @@ canaima-instalador (1.0) unstable; urgency=low
     modificados/añadidos: fstab.py
   * [d699131] [ canaima-desarrollador ] Los siguientes archivos han sido
     modificados/añadidos: fstab.py instalacion.py
+  * [ebec64a] Corrigiendo error en la clase fstab y preparando las
+    funciones para calculo del tamaño de las particiones
+  * [553a962] corregido error con variable inexistente
+  * [a544b2c] Calculo de particiones para instalacion de todo el disco
 
- -- William Abrahan Cabrera Reyes <william@linux.es>  Mon, 26 Dec 2011 16:50:43 -0430
+  [ Luis Alejandro Martínez Faneyth ]
+  * [de71e37] Removiendo residuos de scripts de python precompilados
+    (*.pyc)
+
+ -- Luis Alejandro Martínez Faneyth <martinez.faneyth@gmail.com>  Wed, 28 Dec 2011 14:53:49 -0430

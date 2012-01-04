@@ -25,7 +25,7 @@ class Main(gtk.Fixed):
     cmb_discos = gtk.combo_box_new_text()
     cmb_metodo = gtk.combo_box_new_text()
     barra_part = gtk.DrawingArea()
-    minimo = '3GB'
+    minimo = '5GB'
     part = clases.particiones.Main()
     cfg = {}
     def __init__(self, parent):
@@ -110,11 +110,18 @@ class Main(gtk.Fixed):
         '''
         self.metodos = {}
         self.cmb_metodo.get_model().clear()
+        i = 0
         for p in self.particiones:
             if (gen.h2kb(p[8])) >= (gen.h2kb(self.minimo)) and (p[5] == 'ntfs' 
                 or p[5] == 'fat32'):
                 msg = 'Instalar Canaima en {0} ({1} libres)'
                 self.metodos[p[0]] = msg.format(p[0], p[8])
+            total_part = gen.h2kb(p[2]) - gen.h2kb(p[1])
+            if (total_part) >= gen.h2kb(self.minimo) : \
+                and p[5] == 'Free Space':
+                msg = 'Instalar Canaima en espacio sin particionar ({0} libres)'
+                self.metodos['vacio-{0}-{1}'.format(p[1], p[2])] = msg.format(gen.hum(total_part))
+                i += 1
         self.metodos['todo'] = ('Usar todo el disco duro')
         #self.metodos['manual'] = ('Particionado Manual')
         for l1, l2 in self.metodos.items():
@@ -128,6 +135,7 @@ class Main(gtk.Fixed):
         if a < 0:
             return None
         metodo = [k for k, v in self.metodos.iteritems() if v == m[a][0]][0]
+        print metodo, metodo[0:5], metodo.split('-')[1], metodo.split('-')[2]
         self.cfg['metodo'] = metodo
         self.metodo = metodo
         if self.metodo == 'todo':
@@ -135,6 +143,12 @@ class Main(gtk.Fixed):
             msg = msg + 'los datos en el disco que ha\nseleccionado, Este '
             msg = msg + 'borrado no se hará hasta que confirme que realmente '
             msg = msg + 'quiere hacer los\ncambios.'
+        if self.metodo[0:5] == 'vacio':
+            self.ini = gen.h2kb(self.metodo.split('-')[1])
+            self.fin = gen.h2kb(self.metodo.split('-')[2])
+            msg = 'Si escoge esta opción se instalará el sistema en la '
+            msg = msg + 'partición sin usar que mide {0}'
+            msg = msg.format(gen.hum(self.fin - self.ini))
         else:
             msg = 'Si escoge esta opción se redimensionará la partición {0} '
             msg = msg + 'para realizar la instalación.'.format(self.metodo)

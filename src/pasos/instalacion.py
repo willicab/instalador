@@ -83,49 +83,44 @@ class Main(gtk.Fixed):
                 self.salida = part_auto.particion_3()
         self.particiones_montadas = self.salida [0]
         self.particion_boot = self.salida [1]
+# Aumenta la Barra 10
         # Copiando los archivos
         self.par.info_barra("Instalando Canaima GNU/Linux ...")
         self.par.accion('Copiando los archivos al disco')
         self.copiar()
+# Aumenta la Barra 30
         fstab = clases.install.fstab.Main(self.particiones_montadas)
         fstab.crear_archivo()
+# Aumenta la Barra 40
         self.par.accion('Copiando archivos group y etc')
         os.system('cp /etc/passwd /etc/group /target/etc')
         os.system('mount -o bind /dev /target/dev')
         os.system('mount -o bind /proc /target/proc')
         os.system('mount -o bind /sys /target/sys')
         os.system('mkdir -p /target/boot/burg')
+# Aumenta la Barra 50
         self.par.accion('instalando burg')
         script = os.path.realpath(os.path.join(os.path.dirname(__file__), 
                 '..', 'scripts', 'install-grub-ini.sh'))
-                
-        print 'termina install-grub-ini****************************************'
         os.system('echo "0" > /proc/sys/kernel/printk')
         os.system('chmod +x {0}'.format(script))
         os.system('sh {0} {1}'.format(script, self.particion_boot))
         cmd = "burg-install --force --root-directory=/target {0}"
         os.system(cmd.format(self.disco))
-        
-        print 'termina burg-install********************************************'
         uname_r = commands.getstatusoutput('echo $(uname -r)')[1]
         vmlinuz = 'vmlinuz-' + uname_r 
         initrd = 'initrd.img-'  + uname_r
-        print "vmlinuz {0} | initrd {1}".format(vmlinuz, initrd)
-
         script = os.path.realpath(os.path.join(os.path.dirname(__file__), 
                 '..', 'scripts', 'install-grub.sh'))
         os.system('chmod +x {0}'.format(script))
         os.system('sh {0} /target {1} '.format(script, self.disco))
-
         os.system('echo "6" > /proc/sys/kernel/printk')
-
-        print 'Generando initrd************************************************'
+# Aumenta la Barra 70
         self.par.accion('Generando initrd')
         os.system('rm -f /target/boot/{0}'.format(initrd))
         os.system('chroot /target /usr/sbin/mkinitramfs -o /boot/{0} {1}'. \
             format(initrd, uname_r))
-
-        print 'Creando Usuario Root********************************************'
+# Aumenta la Barra 80
         self.par.accion('Creando usuarios')
         script = os.path.realpath(os.path.join(os.path.dirname(__file__), 
                 '..', 'scripts', 'make-user.sh'))
@@ -133,17 +128,17 @@ class Main(gtk.Fixed):
             format(script, self.passroot))
         os.system('sh {0} "{1}" "{2}" "/target" "{3}"'. \
             format(script, self.usuario, self.passuser, self.nombre))
-
+# Aumenta la Barra 90
         self.par.accion('Ejecutando últimas configuraciones')
         os.system('rm -f /target/etc/mtab')
         os.system('touch /target/etc/mtab')
-
         os.system('cp -f /.dirs/image/etc/inittab /target/etc/inittab')
         os.system('chroot /target install-keymap {0}'.format(self.teclado))
         self.interfaces()
         self.hostname()
         os.system('chroot /target dhclient -v')
         os.system('chroot /target aptitude update')
+# Aumenta la Barra 100
         #os.system('chroot /target aptitude remove canaima-instalador')
         #os.system('chroot /target aptitude install canaima-contrasena -y')
         os.system('umount -l /target/dev')

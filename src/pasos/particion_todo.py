@@ -7,26 +7,40 @@ import clases.barra_todo as barra
 import clases.leyenda_todo as leyenda
 
 class Main(gtk.Fixed):
-    #root1 = '20GB'
-    #root2 = '3GB'
-    #usr = '18GB'
-    #boot = '256MB'
     ini = ''
     fin = ''
     disco = ''
     swap = ''
     cfg = None
     part = clases.particiones.Main()
+    barra = None
+    button = None
     
-    def __init__(self, disco):
-        gtk.Fixed.__init__(self)
+    def iniciar(self, disco, ini=0, fin=0):
         self.disco = disco
-        self.set_limite()
+        if ini == 0 and fin == 0:
+            self.set_limite()
+        else:
+            self.ini = ini
+            self.fin = fin
         self.swap = gen.ram() if int(gen.ram()) >= 1048576 else int(gen.ram()) * 2
-        self.ini = int(float(self.ini.replace(',', '.')))
+        self.ini = int(float(str(self.ini).replace(',', '.')))
         self.metodo = 'particion_1'
-        cfg = (self.disco, self.ini, self.fin, self.swap, self.metodo)
+        self.conf = (self.disco, self.ini, self.fin, self.swap, self.metodo)
+
+        self.barra = None
+        self.barra = barra.Main(self.conf)
+        self.barra.set_size_request(590, 60)
+        self.barra.show()
+        self.put(self.barra, 0, 25)
+        if self.button != None:
+            self.button.set_active(True)
+
+    
+    def __init__(self, disco, ini=0, fin=0):
+        gtk.Fixed.__init__(self)
         
+        self.iniciar(disco, ini, fin)
         txt_info = "Seleccione tipo de instalación que desea realizar"
         self.lbl1 = gtk.Label(txt_info)
         self.lbl1.set_size_request(590, 20)
@@ -39,28 +53,23 @@ class Main(gtk.Fixed):
         self.put(self.leyenda, 310, 90)
         self.leyenda.show()
 
-        self.barra = barra.Main(cfg)
-        self.barra.set_size_request(590, 60)
-        self.barra.show()
-        self.put(self.barra, 0, 25)
-
         # Opciones
-        button = gtk.RadioButton(None, 
+        self.button = gtk.RadioButton(None, 
             "Realizar la instalación en una sola partición")
-        button.connect("toggled", self.RadioButton_on_changed, "particion_1")
-        button.set_size_request(300, 20)
-        button.set_active(True)
-        self.put(button, 0, 90)
-        button.show()
+        self.button.connect("toggled", self.RadioButton_on_changed, "particion_1")
+        self.button.set_size_request(300, 20)
+        self.button.set_active(True)
+        self.put(self.button, 0, 90)
+        self.button.show()
 
-        button = gtk.RadioButton(button, 
+        button = gtk.RadioButton(self.button, 
             "Separar la partición /home (Recomendado)")
         button.connect("toggled", self.RadioButton_on_changed, "particion_2")
         button.set_size_request(300, 20)
         self.put(button, 0, 110)
         button.show()
 
-        button = gtk.RadioButton(button, 
+        button = gtk.RadioButton(self.button, 
             "Separar las particiones /home, /usr y /boot")
         button.connect("toggled", self.RadioButton_on_changed, "particion_3")
         button.set_size_request(300, 20)

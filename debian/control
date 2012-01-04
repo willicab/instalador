@@ -1,16 +1,16 @@
 Source: canaima-instalador
 Section: admin
 Priority: extra
-Maintainer: William Cabrera <william@linux.es>
-Build-Depends: cdbs, debhelper (>= 7.0.50~)
+Maintainer: Equipo de Desarrollo de Canaima GNU/Linux <desarrolladores@canaima.softwarelibre.gob.ve>
+Uploaders: William Cabrera <william@linux.es>
+Build-Depends: debhelper (>= 7.0.50~)
 Standards-Version: 3.9.1
-#Homepage: http://canaima.softwarelibre.gob.ve/
-#Vcs-Git: git://gitorious.org/canaima-gnu-linux/canaima-instalador.git
-#Vcs-Browser: git://gitorious.org/canaima-gnu-linux/canaima-instalador.git
+Homepage: http://canaima.softwarelibre.gob.ve/
+Vcs-Git: git://gitorious.org/canaima-gnu-linux/canaima-instalador.git
+Vcs-Browser: http://gitorious.org/canaima-gnu-linux/canaima-instalador/trees/master
 
 Package: canaima-instalador
 Architecture: all
-Version: 1.0
 Depends: ${shlibs:Depends}, ${misc:Depends}, ${python:Depends}, python-imaging, lshw, parted, squashfs-tools, python-gtk2, python-cairo
 Description: Instalador en vivo para medios instalables de Canaima GNU/Linux
  Este paquete prentende ser un instalador que pueda usarse en cualquier sabor

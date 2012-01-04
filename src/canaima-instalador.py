@@ -103,6 +103,12 @@ class Metodo():
         elif frm_metodo.metodo == 'todo':
             CFG['disco'] = frm_metodo.disco
             PartTodo(CFG['disco'])
+        elif frm_metodo.metodo[0:5] == 'vacio':
+            CFG['metodo'] = frm_metodo.metodo[0:5]
+            CFG['disco'] = frm_metodo.disco
+            CFG['inicio'] = frm_metodo.ini
+            CFG['fin'] = frm_metodo.fin
+            PartTodo(CFG['disco'], CFG['inicio'], CFG['fin'])
         else:
             CFG['particion'] = frm_metodo.metodo
             PartAuto(frm_metodo.metodo)
@@ -114,7 +120,7 @@ class Metodo():
 
 class PartAuto():
     '''
-        Inicia el paso que redimenciona la partición
+        Inicia el paso que redimensiona la partición
     '''
     def __init__(self, particion):
         global ID_SIGUIENTE, ID_ANTERIOR, CFG
@@ -149,20 +155,21 @@ class PartTodo():
     '''
         Inicia el paso que particiona el disco
     '''
-    def __init__(self, disco):
+    def __init__(self, disco, ini, fin):
         global ID_SIGUIENTE, ID_ANTERIOR, CFG
         self.disco = disco
-        if FRM_MAIN.indice(FRM_MAIN.nombres, 'ParticionTodo') == -1:
-            FRM_MAIN.agregar('ParticionTodo', particion_todo.Main(disco))
-        FRM_MAIN.mostrar('ParticionTodo')
+        if FRM_MAIN.indice(FRM_MAIN.nombres, 'PartTodo') == -1:
+            FRM_MAIN.agregar('PartTodo', particion_todo.Main(disco, ini, fin))
+        FRM_MAIN.mostrar('PartTodo')
         desconectar()
         ID_SIGUIENTE = FRM_MAIN.btn_siguiente.connect("clicked", self.siguiente)
         ID_ANTERIOR = FRM_MAIN.btn_anterior.connect("clicked", self.anterior)
+        FRM_MAIN.formulario('PartTodo').iniciar(disco, ini, fin)
     def siguiente(self, widget = None):
         '''
             Función para el evento del botón siguiente
         '''
-        frm_part_todo = FRM_MAIN.formulario('ParticionTodo')
+        frm_part_todo = FRM_MAIN.formulario('PartTodo')
         CFG['inicio'] = frm_part_todo.ini
         CFG['fin'] = frm_part_todo.fin
         CFG['tipo'] = frm_part_todo.metodo
@@ -221,8 +228,8 @@ class Usuario():
         '''
             Función para el evento del botón anterior
         '''
-        if CFG['metodo'] == 'todo':
-            PartTodo(CFG['disco'])
+        if CFG['metodo'] == 'todo' or CFG['metodo'] == 'vacio':
+            PartTodo(CFG['disco'], CFG['inicio'], CFG['fin'])
         else:
             PartAuto(CFG['particion'])
 

@@ -124,9 +124,9 @@ class Main(gtk.DrawingArea):
             x_home = x_usr + w_usr + 1
             
             linear = cairo.LinearGradient(0, 0, 0, alto)
-            linear.add_color_stop_rgb(0, 0.3, 0.3, 0)
-            linear.add_color_stop_rgb(0.3, 0.5, 0.5, 0.2)
-            linear.add_color_stop_rgb(0.7, 0.8, 0.8, 0.4)
+            linear.add_color_stop_rgb(0, 0.0, 0.0, 0.05)
+            linear.add_color_stop_rgb(0.3, 0.0, 0.1, 0.2)
+            linear.add_color_stop_rgb(0.7, 0.2, 0.3, 0.4)
             cr.set_source(linear)
             cr.rectangle(x_boot, 0, w_boot, alto)
             cr.fill()

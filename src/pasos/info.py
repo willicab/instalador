@@ -24,7 +24,7 @@ class Main(gtk.Fixed):
             msg = msg + "Realizar la instalación en una sola partición"
         elif cfg['tipo'] == 'particion_2':
             msg = msg + "Separar la partición /home"
-        elif cfg['tipo'] == 'particion_2':
+        elif cfg['tipo'] == 'particion_3':
             msg = msg + "Separar las particiones /home, /usr y /boot"
         self.lbl1 = gtk.Label(msg)
         self.lbl1.set_size_request(590, 30)
@@ -41,6 +41,8 @@ class Main(gtk.Fixed):
             self.lbl1.set_alignment(0, 0)
             self.lbl1.show()
             altura = altura - inc
+        elif cfg['metodo'] == 'vacio':
+            pass
         else:
             msg = "partición a usar: {0}".format(cfg['particion'])
             self.lbl1 = gtk.Label(msg)
