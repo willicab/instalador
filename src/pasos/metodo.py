@@ -117,7 +117,7 @@ class Main(gtk.Fixed):
                 msg = 'Instalar Canaima en {0} ({1} libres)'
                 self.metodos[p[0]] = msg.format(p[0], p[8])
             total_part = gen.h2kb(p[2]) - gen.h2kb(p[1])
-            if (total_part) >= gen.h2kb(self.minimo) : \
+            if (total_part) >= gen.h2kb(self.minimo) \
                 and p[5] == 'Free Space':
                 msg = 'Instalar Canaima en espacio sin particionar ({0} libres)'
                 self.metodos['vacio-{0}-{1}'.format(p[1], p[2])] = msg.format(gen.hum(total_part))
@@ -135,7 +135,6 @@ class Main(gtk.Fixed):
         if a < 0:
             return None
         metodo = [k for k, v in self.metodos.iteritems() if v == m[a][0]][0]
-        print metodo, metodo[0:5], metodo.split('-')[1], metodo.split('-')[2]
         self.cfg['metodo'] = metodo
         self.metodo = metodo
         if self.metodo == 'todo':
