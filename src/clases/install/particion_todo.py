@@ -21,6 +21,14 @@ class Main():
         self.root_p2 = gen.hum(gen.part_root1(self.lista[0][9]))
         self.root_p3 = gen.hum(gen.part_root2(self.lista[0][9]))
         self.usr = gen.hum(gen.part_root1(self.lista[0][9]))
+        try:
+            self.ini = cfg['inicio']
+        except:
+            self.ini = 0
+        try:
+            self.fin = cfg['fin']
+        except:
+            self.fin = 0
         
 
     def particion_1(self):
@@ -28,16 +36,20 @@ class Main():
         self.par.accion('Eliminando Particiones')
         gen.desmontar(self.disco)     # Desmonta todas las particiones del disco              
         p = self.part.lista_particiones(self.disco)
-        ini = 1049                          # Inicio de la partición
-        fin = gen.kb(p[0][9])               # Fin de la partición
-        for s in p: 
-            num = s[10]
-            if s[4].find('swap') > -1:
-                cmd = 'swapoff '.format(s[0])
-                print cmd, commands.getstatusoutput(cmd)
-            if num != '':
-                cmd = 'parted -s {0} rm {1}'.format(self.disco, num)
-                print cmd, commands.getstatusoutput(cmd)
+        if self.ini == 0 and self.fin == 0:
+            ini = 1049                          # Inicio de la partición
+            fin = gen.kb(p[0][9])               # Fin de la partición
+            for s in p: 
+                num = s[10]
+                if s[4].find('swap') > -1:
+                    cmd = 'swapoff '.format(s[0])
+                    print cmd, commands.getstatusoutput(cmd)
+                if num != '':
+                    cmd = 'parted -s {0} rm {1}'.format(self.disco, num)
+                    print cmd, commands.getstatusoutput(cmd)
+        else:
+            ini = self.ini                      # Inicio de la partición
+            fin = self.fin                      # Fin de la partición
         disco = self.disco                  # Ruta del disco
         ram = int(gen.ram())                # Cantidad de Ram
         swap = (ram * 2) if ram < 1048576 else ram #tamaño de la swap
@@ -82,16 +94,20 @@ class Main():
         self.par.accion('Eliminando Particiones')
         gen.desmontar(self.disco)  # Desmonta todas las particiones del disco              
         p = self.part.lista_particiones(self.disco)
-        for s in p: 
-            num = s[10]
-            if s[4].find('swap') > -1:
-                cmd = 'swapoff '.format(s[0])
-                print cmd, commands.getstatusoutput(cmd)
-            if num != '':
-                cmd = 'parted -s {0} rm {1}'.format(self.disco, num)
-                print cmd, commands.getstatusoutput(cmd)
-        ini = 1049                            # Inicio de la partición
-        fin = int(gen.kb(p[0][9]))            # Fin de la partición
+        if self.ini == 0 and self.fin == 0:
+            ini = 1049                          # Inicio de la partición
+            fin = gen.kb(p[0][9])               # Fin de la partición
+            for s in p: 
+                num = s[10]
+                if s[4].find('swap') > -1:
+                    cmd = 'swapoff '.format(s[0])
+                    print cmd, commands.getstatusoutput(cmd)
+                if num != '':
+                    cmd = 'parted -s {0} rm {1}'.format(self.disco, num)
+                    print cmd, commands.getstatusoutput(cmd)
+        else:
+            ini = self.ini                      # Inicio de la partición
+            fin = self.fin                      # Fin de la partición
         disco = self.disco                    # Ruta del disco
         ram = int(gen.ram())                  # Cantidad de Ram
         swap = (ram * 2) if ram < 1048576 else ram #tamaño de la swap
@@ -147,16 +163,20 @@ class Main():
         self.par.accion('Eliminando Particiones')
         gen.desmontar(self.disco)  # Desmonta todas las particiones del disco              
         p = self.part.lista_particiones(self.disco)
-        for s in p: 
-            num = s[10]
-            if s[4].find('swap') > -1:
-                cmd = 'swapoff '.format(s[0])
-                print cmd, commands.getstatusoutput(cmd)
-            if num != '':
-                cmd = 'parted -s {0} rm {1}'.format(self.disco, num)
-                print cmd, commands.getstatusoutput(cmd)
-        ini = 1049                          # Inicio de la partición
-        fin = int(gen.kb(p[0][9]))          # Fin de la partición
+        if self.ini == 0 and self.fin == 0:
+            ini = 1049                          # Inicio de la partición
+            fin = gen.kb(p[0][9])               # Fin de la partición
+            for s in p: 
+                num = s[10]
+                if s[4].find('swap') > -1:
+                    cmd = 'swapoff '.format(s[0])
+                    print cmd, commands.getstatusoutput(cmd)
+                if num != '':
+                    cmd = 'parted -s {0} rm {1}'.format(self.disco, num)
+                    print cmd, commands.getstatusoutput(cmd)
+        else:
+            ini = self.ini                      # Inicio de la partición
+            fin = self.fin                      # Fin de la partición
         disco = self.disco                  # Ruta del disco
         ram = int(gen.ram())                # Cantidad de Ram
         swap = (ram * 2) if ram < 1048576 else ram #tamaño de la swap
