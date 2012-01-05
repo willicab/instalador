@@ -137,7 +137,7 @@ class Main(gtk.Fixed):
         metodo = [k for k, v in self.metodos.iteritems() if v == m[a][0]][0]
         self.cfg['metodo'] = metodo
         self.metodo = metodo
-        if self.metodo == 'todo':
+        if self.metodo == 'todo' or self.metodo == 'vacio':
             msg = 'Si escoge esta opción tenga en cuenta que se borrarán todos '
             msg = msg + 'los datos en el disco que ha\nseleccionado, Este '
             msg = msg + 'borrado no se hará hasta que confirme que realmente '

@@ -65,7 +65,7 @@ class Main(gtk.Fixed):
         
         self.par.info_barra("Creando particiones en el disco duro ...")
         # Comenzando el particionado
-        if self.metodo == 'todo':
+        if self.metodo == 'todo' or self.metodo == 'vacio':
             part_todo = clases.install.particion_todo.Main(self.cfg, self.par)
             if self.tipo == 'particion_1':
                 self.salida = part_todo.particion_1()
