@@ -1,3 +1,10 @@
+canaima-instalador (1.0-3) stable; urgency=low
+
+  * [8016885] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: canaima-instalador.py
+
+ -- William Abrahan Cabrera Reyes <william@linux.es>  Thu, 05 Jan 2012 17:37:28 -0430
+
 canaima-instalador (1.0-2) stable; urgency=low
 
   [ William Abrahan Cabrera Reyes ]
