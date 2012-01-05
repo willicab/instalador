@@ -1,3 +1,20 @@
+canaima-instalador (1.0-2) stable; urgency=low
+
+  * [2332842] Eliminando archivos innecesarios
+  * [ef86bf2] Corregido error en el módulo metodo.py
+  * [aabaa78] Corregido error al intentar instalar desde un espacio sin
+    particionar
+  * [bf3396a] Corregido error que eliminaba las particiones cuando se
+    usaba la opción de instalar en el espacio sin particionar
+  * [f96baa1] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: __init__.pyc barra_auto.pyc
+    barra_particiones.pyc distribuciones.pyc __init__.pyc
+    leyenda_auto.pyc leyenda_todo.pyc particiones.pyc lista.py
+    __init__.pyc bienvenida.pyc info.pyc instalacion.pyc metodo.py
+    metodo.pyc particion_todo.pyc teclado.pyc usuario.pyc
+
+ -- William Abrahan Cabrera Reyes <william@linux.es>  Thu, 05 Jan 2012 15:41:40 -0430
+
 canaima-instalador (1.0-1) stable; urgency=low
 
   [ William Abrahan Cabrera Reyes ]
