@@ -1,5 +1,6 @@
 canaima-instalador (1.0-2) stable; urgency=low
 
+  [ William Abrahan Cabrera Reyes ]
   * [2332842] Eliminando archivos innecesarios
   * [ef86bf2] Corregido error en el módulo metodo.py
   * [aabaa78] Corregido error al intentar instalar desde un espacio sin
@@ -13,7 +14,16 @@ canaima-instalador (1.0-2) stable; urgency=low
     __init__.pyc bienvenida.pyc info.pyc instalacion.pyc metodo.py
     metodo.pyc particion_todo.pyc teclado.pyc usuario.pyc
 
- -- William Abrahan Cabrera Reyes <william@linux.es>  Thu, 05 Jan 2012 15:41:40 -0430
+  [ root ]
+  * [565699f] Corregido error que impedía instalar con la opción de usar
+    todo el disco
+
+  [ William Abrahan Cabrera Reyes ]
+  * [94620f2] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: barra_todo.pyc general.pyc fstab.pyc
+    particion_auto.pyc particion_todo.pyc particion_auto.pyc wizard.pyc
+
+ -- William Abrahan Cabrera Reyes <william@linux.es>  Thu, 05 Jan 2012 17:17:07 -0430
 
 canaima-instalador (1.0-1) stable; urgency=low
 
