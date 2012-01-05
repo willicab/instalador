@@ -13,7 +13,7 @@ import wizard
 import clases.general as gen
 import os
 
-gtk.gdk.threads_init()
+gtk.gdk.threads_init() 
 
 ID_SIGUIENTE, ID_ANTERIOR = -1, -1
 BANNER = 'data/banner-app-top.png'
