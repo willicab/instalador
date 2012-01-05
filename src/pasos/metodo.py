@@ -6,7 +6,7 @@
 import pygtk
 pygtk.require('2.0')
 import gtk
-import commands
+#import commands
 import clases.particiones
 import clases.general as gen
 import clases.barra_particiones as barra
