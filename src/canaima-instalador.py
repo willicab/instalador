@@ -102,7 +102,7 @@ class Metodo():
             pass # Aun no desarrollado
         elif frm_metodo.metodo == 'todo':
             CFG['disco'] = frm_metodo.disco
-            PartTodo(CFG['disco'])
+            PartTodo(CFG['disco'], 0, 0)
         elif frm_metodo.metodo[0:5] == 'vacio':
             CFG['metodo'] = frm_metodo.metodo[0:5]
             CFG['disco'] = frm_metodo.disco
