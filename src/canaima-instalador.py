@@ -43,7 +43,7 @@ class Bienvenida():
 
     def siguiente(self, widget = None):
         '''
-            Función para el evento del botón siguiente
+            Función para el evento del boton siguiente
         '''
         Teclado()
     def anterior(self, widget = None):
