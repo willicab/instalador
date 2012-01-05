@@ -94,7 +94,7 @@ class Metodo():
 
     def siguiente(self, widget = None):
         '''
-            Función para el evento del botón siguiente
+            Funcion para el evento del botón siguiente
         '''
         frm_metodo = FRM_MAIN.formulario('Metodo')
         CFG['metodo'] = frm_metodo.metodo
