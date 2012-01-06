@@ -14,13 +14,14 @@ class Main():
     particiones_montadas = {}
     particiones_montadas2 = {}
 
-    def __init__(self, cfg, parent):
+    def __init__(self, cfg, parent, vacio=False):
         self.disco = cfg['disco']
         self.par = parent
         self.lista = self.part.lista_particiones(self.disco)
         self.root_p2 = gen.hum(gen.part_root1(self.lista[0][9]))
         self.root_p3 = gen.hum(gen.part_root2(self.lista[0][9]))
         self.usr = gen.hum(gen.part_root1(self.lista[0][9]))
+        self.vacio = vacio
         try:
             self.ini = cfg['inicio']
         except:
@@ -36,9 +37,8 @@ class Main():
         self.par.accion('Eliminando Particiones')
         gen.desmontar(self.disco)     # Desmonta todas las particiones del disco              
         p = self.part.lista_particiones(self.disco)
-        if self.ini == 0 and self.fin == 0:
-            ini = 1049                          # Inicio de la partición
-            fin = gen.kb(p[0][9])               # Fin de la partición
+        print self.ini, self.fin
+        if self.vacio == False:
             for s in p: 
                 num = s[10]
                 if s[4].find('swap') > -1:
@@ -47,17 +47,19 @@ class Main():
                 if num != '':
                     cmd = 'parted -s {0} rm {1}'.format(self.disco, num)
                     print cmd, commands.getstatusoutput(cmd)
+            ini = 1049                      # Inicio de la partición
+            fin = gen.kb(p[0][9])           # Fin de la partición
         else:
-            ini = self.ini                      # Inicio de la partición
-            fin = self.fin                      # Fin de la partición
+            ini = float(self.ini)           # Inicio de la partición
+            fin = float(self.fin)           # Fin de la partición
         disco = self.disco                  # Ruta del disco
         ram = int(gen.ram())                # Cantidad de Ram
         swap = (ram * 2) if ram < 1048576 else ram #tamaño de la swap
-        ini_ext = fin - swap                # Inicio de la partición Extendida
-        fin_ext  = fin                      # Fin de la partición Extendida
+        fin_ext  = int(fin)                 # Fin de la partición Extendida
+        ini_ext = fin_ext - swap            # Inicio de la partición Extendida
         ini_swap = ini_ext + 32             # Inicio de la partición Swap
         fin_swap = fin_ext                  # Fin de la partición Swap
-        ini_root = ini                      # Inicio de la particion Root
+        ini_root = int(ini)                 # Inicio de la particion Root
         fin_root = ini_ext                  # Fin de la partición Root
 
         self.par.accion('Creando Particiones')
@@ -94,7 +96,7 @@ class Main():
         self.par.accion('Eliminando Particiones')
         gen.desmontar(self.disco)  # Desmonta todas las particiones del disco              
         p = self.part.lista_particiones(self.disco)
-        if self.ini == 0 and self.fin == 0:
+        if self.vacio == False:
             ini = 1049                          # Inicio de la partición
             fin = gen.kb(p[0][9])               # Fin de la partición
             for s in p: 
@@ -106,12 +108,12 @@ class Main():
                     cmd = 'parted -s {0} rm {1}'.format(self.disco, num)
                     print cmd, commands.getstatusoutput(cmd)
         else:
-            ini = self.ini                      # Inicio de la partición
-            fin = self.fin                      # Fin de la partición
+            ini = float(self.ini)             # Inicio de la partición
+            fin = float(self.fin)             # Fin de la partición
         disco = self.disco                    # Ruta del disco
         ram = int(gen.ram())                  # Cantidad de Ram
         swap = (ram * 2) if ram < 1048576 else ram #tamaño de la swap
-        ini_root = ini                        # Inicio de la particion Root
+        ini_root = int(ini)                   # Inicio de la particion Root
         fin_root = ini_root + int(gen.kb(self.root_p2))#Fin de la partición Root
         ini_ext = (int(fin_root) + 32)        # Inicio de la partición Extendida
         fin_ext  = (int(fin))                 # Fin de la partición Extendida
@@ -163,7 +165,7 @@ class Main():
         self.par.accion('Eliminando Particiones')
         gen.desmontar(self.disco)  # Desmonta todas las particiones del disco              
         p = self.part.lista_particiones(self.disco)
-        if self.ini == 0 and self.fin == 0:
+        if self.vacio == False:
             ini = 1049                          # Inicio de la partición
             fin = gen.kb(p[0][9])               # Fin de la partición
             for s in p: 
@@ -175,12 +177,12 @@ class Main():
                     cmd = 'parted -s {0} rm {1}'.format(self.disco, num)
                     print cmd, commands.getstatusoutput(cmd)
         else:
-            ini = self.ini                      # Inicio de la partición
-            fin = self.fin                      # Fin de la partición
+            ini = float(self.ini)           # Inicio de la partición
+            fin = float(self.fin)           # Fin de la partición
         disco = self.disco                  # Ruta del disco
         ram = int(gen.ram())                # Cantidad de Ram
         swap = (ram * 2) if ram < 1048576 else ram #tamaño de la swap
-        ini_boot = ini                      # Inicio de la particion Boot
+        ini_boot = int(ini)                 # Inicio de la particion Boot
         fin_boot = int(ini_boot + gen.kb(self.boot)) # Fin de la particion Boot
         ini_ext = int(fin_boot) + 32        # Inicio de la partición Extendida
         fin_ext  = int(fin)                 # Fin de la partición Extendida

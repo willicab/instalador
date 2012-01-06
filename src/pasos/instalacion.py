@@ -5,8 +5,8 @@ import gtk
 import clases.particiones
 import clases.general as gen
 import clases.install.fstab
-import clases.install.particion_todo
-import clases.install.particion_auto
+import clases.install.particion_todo as particion_todo
+import clases.install.particion_auto as particion_auto
 import threading
 import commands
 import webkit
@@ -65,8 +65,16 @@ class Main(gtk.Fixed):
         
         self.par.info_barra("Creando particiones en el disco duro ...")
         # Comenzando el particionado
-        if self.metodo == 'todo' or self.metodo == 'vacio':
-            part_todo = clases.install.particion_todo.Main(self.cfg, self.par)
+        if self.metodo == 'todo':
+            part_todo = particion_todo.Main(self.cfg, self.par, False)
+            if self.tipo == 'particion_1':
+                self.salida = part_todo.particion_1()
+            if self.tipo == 'particion_2':
+                self.salida = part_todo.particion_2()
+            if self.tipo == 'particion_3':
+                self.salida = part_todo.particion_3()
+        elif self.metodo == 'vacio':
+            part_todo = particion_todo.Main(self.cfg, self.par, True)
             if self.tipo == 'particion_1':
                 self.salida = part_todo.particion_1()
             if self.tipo == 'particion_2':
@@ -74,7 +82,7 @@ class Main(gtk.Fixed):
             if self.tipo == 'particion_3':
                 self.salida = part_todo.particion_3()
         else:
-            part_auto = clases.install.particion_auto.Main(self.cfg, self.par)
+            part_auto = particion_auto.Main(self.cfg, self.par)
             if self.tipo == 'particion_1':
                 self.salida = part_auto.particion_1()
             if self.tipo == 'particion_2':
