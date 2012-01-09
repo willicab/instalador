@@ -1,0 +1,11 @@
+include AUTHORS
+include canaima-instalador.desktop
+include COPYING
+include ez_setup.py
+include LICENSE
+include Makefile
+include THANKS
+include TODO
+include canaima/instalador/data/distribuciones/*
+include canaima/instalador/data/preview/*
+include canaima/instalador/data/*

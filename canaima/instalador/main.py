@@ -20,6 +20,10 @@ BANNER = 'data/banner-app-top.png'
 FRM_MAIN = wizard.Wizard(600, 407, "Canaima Instalador", BANNER)
 CFG = {}
 
+class Instalador:
+    def __init__(self):
+        print 'Hola mundo'
+    
 def inicio():
     '''
         Inicia la aplicación
