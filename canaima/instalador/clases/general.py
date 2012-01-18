@@ -2,13 +2,13 @@
 
 import commands
 
-root1_min = '2.5GB'
-root1_max = '18GB'
-root2_min = '512MB'
-root2_max = '3GB'
-usr_min = '2GB'
-usr_max = '15GB'
-minimo = '5GB'
+ROOT1_MIN = '2.5GB'
+ROOT1_MAX = '18GB'
+ROOT2_MIN = '512MB'
+ROOT2_MAX = '3GB'
+USR_MIN = '2GB'
+USR_MAX = '15GB'
+MINIMO = '5GB'
 
 def kb(num):
     if type(num) == int or type(num) == float : return float(num)
@@ -64,27 +64,27 @@ def montados(disco=''):
     return p         
 
 def part_root1(total):
-    root = (kb(total) * kb(root1_min)) / kb(minimo)
-    if root < kb(root1_min): 
-        root = kb(root1_min)
-    if root > kb(root1_max): 
-        root = kb(root1_max)
+    root = (kb(total) * kb(ROOT1_MIN)) / kb(MINIMO)
+    if root < kb(ROOT1_MIN): 
+        root = kb(ROOT1_MIN)
+    if root > kb(ROOT1_MAX): 
+        root = kb(ROOT1_MAX)
     return root
 
 def part_root2(total):
-    root = (kb(total) * kb(root2_min)) / kb(minimo)
-    if root < kb(root2_min): 
-        root = kb(root2_min)
-    if root > kb(root2_max): 
-        root = kb(root2_max)
+    root = (kb(total) * kb(ROOT2_MIN)) / kb(MINIMO)
+    if root < kb(ROOT2_MIN): 
+        root = kb(ROOT2_MIN)
+    if root > kb(ROOT2_MAX): 
+        root = kb(ROOT2_MAX)
     return root
 
 def part_usr(total):
-    usr = (kb(total) * kb(usr_min)) / kb(minimo)
-    if usr < kb(usr_min): 
-        usr = kb(usr_min)
-    if usr > kb(usr_max): 
-        usr = kb(usr_max)
+    usr = (kb(total) * kb(USR_MIN)) / kb(MINIMO)
+    if usr < kb(USR_MIN): 
+        usr = kb(USR_MIN)
+    if usr > kb(USR_MAX): 
+        usr = kb(USR_MAX)
     return usr
 
 def desmontar(disco):
