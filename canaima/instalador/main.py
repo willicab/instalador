@@ -7,13 +7,26 @@
 
 import gtk
 import pygtk
+import logging
+
+from optparse import OptionParser
+
+from clases import general
+
 pygtk.require('2.0')
+
+LOG_LEVELS = {
+    'debug': logging.DEBUG,
+    'info': logging.INFO,
+    'warning': logging.WARNING,
+    'error': logging.ERROR,
+    'critical': logging.CRITICAL
+}
 
 '''
 from pasos import bienvenida, teclado, metodo, particion_auto, particion_todo, \
     instalacion, usuario, info
 import wizard
-import clases.general as gen
 import os
 '''
 gtk.gdk.threads_init() 
@@ -27,7 +40,25 @@ CFG = {}
 
 class Instalador:
     def __init__(self):
-        print 'Hola mundo'
+        parser = OptionParser()
+        parser.add_option('--log-level', dest='log_level',
+            help='seleccione el nivel de log deseado. Opciones: %s' % LOG_LEVELS.keys(),
+            default='debug')
+        
+        (options, args) = parser.parse_args()
+        
+        if options.log_level:
+            if LOG_LEVELS.has_key(options.log_level):
+                print "Nivel de log: %s" % options.log_level
+                logging.basicConfig(level=LOG_LEVELS[options.log_level])
+            else:
+                print "Nivel de log inválido. 'debug' seleccionado por defecto"
+                logging.basicConfig(level=LOG_LEVELS['debug'])
+        self.log = logging.getLogger('Particionador')
+        
+        # Calculamos la RAM una sola vez
+        self.ram = general.ram()
+        
         
     def main_loop(self):
         gtk.main()
