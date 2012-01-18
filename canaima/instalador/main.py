@@ -5,15 +5,14 @@
 # Autor: William Cabrera, Wil Alvarez
 # Fecha: 11/10/2011
 
-import gtk
-import pygtk
+import os
 import logging
 
 from optparse import OptionParser
 
-from clases import general
-
-pygtk.require('2.0')
+# Imports propios
+from canaima.instalador.lib import general
+from canaima.instalador.ui.asistente import Asistente
 
 LOG_LEVELS = {
     'debug': logging.DEBUG,
@@ -29,14 +28,15 @@ from pasos import bienvenida, teclado, metodo, particion_auto, particion_todo, \
 import wizard
 import os
 '''
-gtk.gdk.threads_init() 
 
-'''
+from canaima.instalador.pasos import bienvenida
+from canaima.instalador.wizard import Wizard
 ID_SIGUIENTE, ID_ANTERIOR = -1, -1
-BANNER = 'data/banner-app-top.png'
-FRM_MAIN = wizard.Wizard(600, 407, "Canaima Instalador", BANNER)
+BANNER = os.path.join(os.path.dirname(__file__), 'data', 'banner-app-top.png')
+print BANNER
+FRM_MAIN = Wizard(600, 407, "Canaima Instalador", BANNER)
 CFG = {}
-'''
+
 
 class Instalador:
     def __init__(self):
@@ -54,15 +54,16 @@ class Instalador:
             else:
                 print "Nivel de log inválido. 'debug' seleccionado por defecto"
                 logging.basicConfig(level=LOG_LEVELS['debug'])
-        self.log = logging.getLogger('Particionador')
+        self.log = logging.getLogger('Instalador')
         
         # Calculamos la RAM una sola vez
         self.ram = general.ram()
+        self.log.debug('RAM disponible: %s' % self.ram)
+        self.asistente = Asistente()
+        #Bienvenida()
+        #FRM_MAIN.show()
+        #gtk.main()
         
-        
-    def main_loop(self):
-        gtk.main()
-    
 def inicio():
     '''
         Inicia la aplicación

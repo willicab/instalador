@@ -148,7 +148,7 @@ class Wizard(gtk.Window):
         self.barra.add(self.progreso)
         self.progreso.set_pulse_step(0.05)
         self.progreso.show()
-
+        self.show_all()
     def mostrar_barra(self):
         '''
             Muestra la barra de progreso y oculta la botonera
