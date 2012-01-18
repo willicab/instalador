@@ -1,28 +1,36 @@
 #!/usr/bin/env python
 #-*- coding: UTF-8 -*-
+
 '''Script inicial'''
-# Autor: William Cabrera
+# Autor: William Cabrera, Wil Alvarez
 # Fecha: 11/10/2011
 
+import gtk
 import pygtk
 pygtk.require('2.0')
-import gtk
+
+'''
 from pasos import bienvenida, teclado, metodo, particion_auto, particion_todo, \
     instalacion, usuario, info
 import wizard
 import clases.general as gen
 import os
-
+'''
 gtk.gdk.threads_init() 
 
+'''
 ID_SIGUIENTE, ID_ANTERIOR = -1, -1
 BANNER = 'data/banner-app-top.png'
 FRM_MAIN = wizard.Wizard(600, 407, "Canaima Instalador", BANNER)
 CFG = {}
+'''
 
 class Instalador:
     def __init__(self):
         print 'Hola mundo'
+        
+    def main_loop(self):
+        gtk.main()
     
 def inicio():
     '''
@@ -315,5 +323,4 @@ def main():
     return 0
 
 if __name__ == "__main__":
-    inicio()
-    main()
+    instalador = Instalador()
