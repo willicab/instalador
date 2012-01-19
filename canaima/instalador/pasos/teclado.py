@@ -8,7 +8,8 @@ pygtk.require('2.0')
 import gtk
 import os
 import getpass
-import clases.distribuciones as distribuciones
+#import clases.distribuciones as distribuciones
+from canaima.instalador.clases import distribuciones
 import webkit
 
 class Main(gtk.Fixed):

@@ -28,8 +28,8 @@ from pasos import bienvenida, teclado, metodo, particion_auto, particion_todo, \
 import wizard
 import os
 '''
-
-from canaima.instalador.pasos import bienvenida
+import gtk
+from canaima.instalador.pasos import bienvenida, teclado
 from canaima.instalador.wizard import Wizard
 ID_SIGUIENTE, ID_ANTERIOR = -1, -1
 BANNER = os.path.join(os.path.dirname(__file__), 'data', 'banner-app-top.png')
@@ -58,9 +58,11 @@ class Instalador:
         
         # Calculamos la RAM una sola vez
         self.ram = general.ram()
+        self.mapa_teclado = None
         self.log.debug('RAM disponible: %s' % self.ram)
         self.asistente = Asistente()
         #Bienvenida()
+        #Teclado()
         #FRM_MAIN.show()
         #gtk.main()
         

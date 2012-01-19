@@ -11,6 +11,7 @@ import pygtk
 
 pygtk.require('2.0')
 
+from canaima.instalador.ui.teclado import Teclado
 from canaima.instalador.ui.bienvenida import Bienvenida
 
 class Asistente(gtk.Window):
@@ -22,7 +23,6 @@ class Asistente(gtk.Window):
         img_dir = os.path.join(os.path.dirname(__file__), '..', 'data')
         img_icon= os.path.realpath(os.path.join(img_dir, 'canaima.png'))
         img_banner = os.path.realpath(os.path.join(img_dir, 'banner-app-top.png'))
-        print img_icon, img_banner
         
         # Opciones de ventana
         self.set_title('Canaima Instalador')
@@ -31,15 +31,16 @@ class Asistente(gtk.Window):
         self.set_resizable(False)
         self.set_icon(gtk.gdk.pixbuf_new_from_file(img_icon))
         self.set_position(gtk.WIN_POS_CENTER_ALWAYS)
-        self.connect('delete-event', self.__close)
+        self.connect('delete-event', self.__cerrar)
         
         pix = gtk.gdk.pixbuf_new_from_file(img_banner)
         banner = gtk.Image()
         banner.set_from_pixbuf(pix)
         del pix
         
-        self.container = gtk.VBox(False)
+        self.widget = None
         self.content = None
+        self.container = gtk.VBox(False)
         
         self.btn_back = gtk.Button(stock=gtk.STOCK_GO_BACK)
         self.btn_back.connect('clicked', self.__anterior)
@@ -68,9 +69,9 @@ class Asistente(gtk.Window):
             self.show_all()
             gtk.main()
         except KeyboardInterrupt:
-            self.__close()
+            self.__cerrar()
     
-    def __close(self, widget=None, event=None):
+    def __cerrar(self, widget=None, event=None):
         gtk.main_quit()
         sys.exit(0)
     
@@ -78,6 +79,9 @@ class Asistente(gtk.Window):
         pass
     
     def __siguiente(self, widget):
+        if self.paso == 1:
+            self.mapa_teclado = self.widget.mapa_teclado()
+        
         self.paso += 1
         self.mostrar()
     
@@ -87,20 +91,18 @@ class Asistente(gtk.Window):
             self.paso = 0
         self.mostrar()
     
-    def selector(self, partition):
-        pass
-    
     def mostrar(self):
         if self.content is not None:
             self.container.remove(self.content)
         
-        vbox = gtk.VBox(False)
-        
         if self.paso == 0:
             vbox = Bienvenida()
             self.btn_back.set_sensitive(False)
+        elif self.paso == 1:
+            vbox = Teclado()
+            self.btn_back.set_sensitive(True)
         
-        self.content = gtk.HBox(False)
+        self.content = gtk.VBox(False)
         self.content.pack_start(vbox, True, True)
         self.container.pack_start(self.content, True, True)
         self.show_all()
