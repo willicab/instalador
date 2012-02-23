@@ -103,6 +103,7 @@ class Main(gtk.Fixed):
         self.par.accion('Copiando archivos group y etc')
         os.system('cp /etc/passwd /etc/group /target/etc')
         os.system('mount -o bind /dev /target/dev')
+        os.system('mount -o bind /dev/pts /target/dev/pts')
         os.system('mount -o bind /proc /target/proc')
         os.system('mount -o bind /sys /target/sys')
         os.system('mkdir -p /target/boot/burg')
