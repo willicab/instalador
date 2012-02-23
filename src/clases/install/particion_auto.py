@@ -22,9 +22,9 @@ class Main():
         self.fin = cfg['fin']
         self.nuevo_fin = cfg['nuevo_fin']
         self.total = int(gen.kb(self.fin)) - int(gen.kb(self.nuevo_fin))
-        self.root_p2 = gen.hum(gen.part_root1(self.self.total))
-        self.root_p3 = gen.hum(gen.part_root2(self.self.total))
-        self.usr = gen.hum(gen.part_root1(self.self.total))
+        self.root_p2 = gen.hum(gen.part_root1(self.total))
+        self.root_p3 = gen.hum(gen.part_root2(self.total))
+        self.usr = gen.hum(gen.part_root1(self.total))
         self.swap = cfg['swap']
         self.fs = cfg['fs']
         self.par = parent

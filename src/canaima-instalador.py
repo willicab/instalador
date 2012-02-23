@@ -111,6 +111,7 @@ class Metodo():
             PartTodo(CFG['disco'], CFG['inicio'], CFG['fin'])
         else:
             CFG['particion'] = frm_metodo.metodo
+            CFG['disco'] = ''
             PartAuto(frm_metodo.metodo)
     def anterior(self, widget = None):
         '''
