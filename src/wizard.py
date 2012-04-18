@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 #-*- coding: UTF-8 -*-
-'''Script para probar la clase'''
 # Autor: William Cabrera
 # Fecha: 11/10/2011
 
@@ -67,6 +66,7 @@ class Wizard(gtk.Window):
         #Creo la ventana
         gtk.Window.__init__(self, gtk.WINDOW_TOPLEVEL)
         gtk.Window.set_position(self, gtk.WIN_POS_CENTER_ALWAYS)
+        self.set_icon_from_file('data/canaima.png')
         self.titulo = titulo
         self.set_title(titulo)
         self.set_size_request(ancho, alto)

@@ -124,14 +124,21 @@ class Main(gtk.Fixed):
         button.set_size_request(590, 20)
         self.put(button, 0, 230)
         button.show()
+
+        button = gtk.RadioButton(button, 
+            "Particionar Manualmente")
+        button.connect("toggled", self.RadioButton_on_changed, "particion_4")
+        button.set_size_request(590, 20)
+        self.put(button, 0, 250)
+        button.show()
         
         if self.swap != False:
             # Etiqueta Información Swap
             msg = 'Se usará la partición Swap Existente'
             self.lbl_usado = gtk.Label('{0}'.format(msg))
             self.lbl_usado.set_size_request(590, 20)
-            self.lbl_usado.set_alignment(0, 0)
-            self.put(self.lbl_usado, 0, 250)
+            self.lbl_usado.set_alignment(1, 0)
+            self.put(self.lbl_usado, 0, 265)
             self.lbl_usado.show()
 
     def RadioButton_on_changed(self, widget, data=None):

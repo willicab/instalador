@@ -110,4 +110,10 @@ def montar(particiones):
             #print cmd, salida
             if salida[0] == 0: del part[p]
 
-
+# Muesta el texto seleccionado del combobox
+def get_active_text(combobox):
+    model = combobox.get_model()
+    active = combobox.get_active()
+    if active < 0:
+        return None
+    return model[active][0]

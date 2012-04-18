@@ -113,7 +113,7 @@ class Main(gtk.Fixed):
         i = 0
         for p in self.particiones:
             if (gen.h2kb(p[8])) >= (gen.h2kb(self.minimo)) and (p[5] == 'ntfs' 
-                or p[5] == 'fat32'):
+                or p[5] == 'fat32' or p[5] == 'ext3'):
                 msg = 'Instalar Canaima en {0} ({1} libres)'
                 self.metodos[p[0]] = msg.format(p[0], p[8])
             total_part = gen.h2kb(p[2]) - gen.h2kb(p[1])

@@ -43,7 +43,7 @@ class Main():
 
     def lista_particiones(self, disco, p=''):
         '''
-            Crea una lista de particiones disponibles en un disco dado, incluyendo
+            Crea una lista de particiones disponibles en un disco dado
         '''
         particiones = []
         libres = []
@@ -55,16 +55,18 @@ class Main():
         for a in salida:
             if a.find('Disk') == 0:
                 total = a.split(':')[1][1:]
+                #print cmd, total
             if Leer == True:
-                num = a[Number:Start].strip().replace(',', '.')    # número de la partición
-                ini = a[Start:End].strip().replace(',', '.')   # inicio
-                fin = a[End:Size].strip().replace(',', '.')  # fin
-                tam = a[Size:Type].strip().replace(',', '.')  # tamaño
-                tipo = a[Type:File].strip().replace(',', '.') # tipo de partición
-                fs = a[File:Flags].strip().replace(',', '.')   # sistema de archivos de la partición
-                if fs == '' : fs = 'none'
-                flags = a[Flags:].strip().replace(',', '.')  # banderas
-                part = disco + num      # partición
+                num = a[Number:Start].strip().replace(',', '.') # número de la partición
+                ini = a[Start:End].strip().replace(',', '.')    # inicio
+                fin = a[End:Size].strip().replace(',', '.')     # fin
+                tam = a[Size:Type].strip().replace(',', '.')    # tamaño
+                tipo = a[Type:File].strip().replace(',', '.')   # tipo de partición
+                fs = a[File:Flags].strip().replace(',', '.')    # sistema de archivos de la partición
+                if fs == '' : 
+                    fs = 'none'
+                flags = a[Flags:].strip().replace(',', '.')     # banderas
+                part = disco + num                              # partición
                 # Espacios usado y libre
                 
                 if fs.find('swap') == -1 and num != '' and tipo != 'extended':
@@ -100,7 +102,8 @@ class Main():
                             total,  #9
                             num,    #10
                             ])
-                #print part, ini, fin, tam, tipo, fs, flags, usado, libre, total, num
+                #print part, ini, fin, tam, tipo, fs, flags, usado, libre, \
+                #    total, num
             if a.startswith('Number'):
                 Number = a.find('Number')
                 Start = a.find('Start')

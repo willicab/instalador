@@ -8,7 +8,7 @@ import pygtk
 pygtk.require('2.0')
 import gtk
 from pasos import bienvenida, teclado, metodo, particion_auto, particion_todo, \
-    instalacion, usuario, info
+    particion_manual, instalacion, usuario, info
 import wizard
 import clases.general as gen
 import os
@@ -99,6 +99,8 @@ class Metodo():
         frm_metodo = FRM_MAIN.formulario('Metodo')
         CFG['metodo'] = frm_metodo.metodo
         if frm_metodo.metodo == 'manual':
+        #    CFG['disco'] = frm_metodo.disco
+        #    PartManual(CFG['disco'])
             pass # Aun no desarrollado
         elif frm_metodo.metodo == 'todo':
             CFG['disco'] = frm_metodo.disco
@@ -144,7 +146,11 @@ class PartAuto():
         CFG['tipo'] = frm_part_auto.metodo
         CFG['swap'] = frm_part_auto.swap
         CFG['fs'] = frm_part_auto.fs
-        Usuario()
+        if CFG['tipo'] == 'particion_4':
+            data = [CFG]
+            PartManual(data)
+        else:
+            Usuario()
         #Info()
     def anterior(self, widget = None):
         '''
@@ -176,6 +182,33 @@ class PartTodo():
         CFG['tipo'] = frm_part_todo.metodo
         Usuario()
         #Info()
+    def anterior(self, widget = None):
+        '''
+            Función para el evento del botón anterior
+        '''
+        Metodo()
+
+class PartManual():
+    '''
+        Inicia el paso que particiona el disco
+    '''
+    def __init__(self, data):
+        global ID_SIGUIENTE, ID_ANTERIOR, CFG
+        if FRM_MAIN.indice(FRM_MAIN.nombres, 'PartManual') == -1:
+            FRM_MAIN.agregar('PartManual', particion_manual.Main(data))
+        frm_manual = FRM_MAIN.formulario('PartManual')
+        FRM_MAIN.mostrar('PartManual')
+        #frm_manual.actualizar(disco)
+        desconectar()
+        ID_SIGUIENTE = FRM_MAIN.btn_siguiente.connect("clicked", self.siguiente)
+        ID_ANTERIOR = FRM_MAIN.btn_anterior.connect("clicked", self.anterior)
+    def siguiente(self, widget = None):
+        '''
+            Función para el evento del botón siguiente
+        '''
+        frm_part_manual = FRM_MAIN.formulario('PartManual')
+        CFG['lista_manual'] = frm_part_manual.lista
+        Usuario()
     def anterior(self, widget = None):
         '''
             Función para el evento del botón anterior
