@@ -4,7 +4,7 @@ import pygtk
 pygtk.require('2.0')
 import gtk
 import clases.general as gen
-import clases.montaje as frm_montaje
+
 class Main(gtk.Dialog):
     inicio = 0
     fin = 0
