@@ -104,10 +104,12 @@ def montar(particiones):
     part = particiones
     while len(part) > 0:
         for p, d in part.items():
-            commands.getstatusoutput('mkdir {0}'.format(d))
+            cmd = 'mkdir {0}'.format(d)
+            print cmd
+            commands.getstatusoutput(cmd)
             cmd = 'mount {0} {1}'.format(p, d)
+            print cmd
             salida = commands.getstatusoutput(cmd)
-            #print cmd, salida
             if salida[0] == 0: del part[p]
 
 # Muesta el texto seleccionado del combobox

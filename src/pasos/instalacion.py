@@ -73,6 +73,8 @@ class Main(gtk.Fixed):
                 self.salida = part_todo.particion_2()
             if self.tipo == 'particion_3':
                 self.salida = part_todo.particion_3()
+            if self.tipo == 'particion_4':
+                self.salida = part_todo.particion_4()
         elif self.metodo == 'vacio':
             part_todo = particion_todo.Main(self.cfg, self.par, True)
             if self.tipo == 'particion_1':
@@ -81,6 +83,8 @@ class Main(gtk.Fixed):
                 self.salida = part_todo.particion_2()
             if self.tipo == 'particion_3':
                 self.salida = part_todo.particion_3()
+            if self.tipo == 'particion_4':
+                self.salida = part_todo.particion_4()
         else:
             part_auto = particion_auto.Main(self.cfg, self.par)
             if self.tipo == 'particion_1':
@@ -89,8 +93,11 @@ class Main(gtk.Fixed):
                 self.salida = part_auto.particion_2()
             if self.tipo == 'particion_3':
                 self.salida = part_auto.particion_3()
-        self.particiones_montadas = self.salida [0]
-        self.particion_boot = self.salida [1]
+            if self.tipo == 'particion_4':
+                self.salida = part_auto.particion_4()
+        print self.salida
+        self.particiones_montadas = self.salida[0]
+        self.particion_boot = self.salida[1]
 # Aumenta la Barra 10
         # Copiando los archivos
         self.par.info_barra("Instalando Canaima GNU/Linux ...")

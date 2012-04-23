@@ -15,6 +15,7 @@ class Main(gtk.Fixed):
     ini = 0             #Inicio de la partición
     fin = 0             #Fin de la partición
     lista = []          #Lista de las particiones hechas
+    primarias = 0       #Cuenta la cantidad de particiones primarias
     # Si se crea una partición extendida se usarán las siguientes variables
     bext = False        #Si se crea la partición extendida será True
     ext_ini = 0         #El inicio de la partición extendida
@@ -24,8 +25,18 @@ class Main(gtk.Fixed):
         data = data[0]
         self.disco = data['disco'] if data['disco'] != '' \
                      else data['particion'][:-1]
-        self.ini = data['nuevo_fin']
-        self.fin = data['fin']
+        
+        if data['metodo'] != 'todo' and data['metodo'] != 'vacio' :
+            self.ini = data['nuevo_fin']
+        else:
+            self.ini = 1049                          # Inicio de la partición
+        self.fin = int(float(data['fin']))
+        print data['metodo'], self.ini, self.fin
+        
+        for p in self.part.lista_particiones(self.disco):
+            print p[4]
+            if p[4] == 'primary':
+                self.primarias = self.primarias + 1
         
         self.tabla = clases.tabla_particiones.TablaParticiones()
         #self.tabla.set_doble_click(self.activar_tabla);
@@ -70,6 +81,19 @@ class Main(gtk.Fixed):
         assert isinstance(data, list) or isinstance(data, tuple)
         for fila in data:
             self.tabla.agregar_fila(fila)
+        print fila
+        if len(data) == 1 and fila[1] == 'Espacio Libre':
+            self.btn_deshacer.set_sensitive(False)
+        else:
+            self.btn_deshacer.set_sensitive(True)
+        if self.bext == False  and self.primarias == 4:
+            self.btn_nueva.set_sensitive(False)
+        elif fila[1] != 'Espacio Libre' and fila[1] != 'Espacio Libre Extendida':
+            self.btn_nueva.set_sensitive(False)
+        else:
+            self.btn_nueva.set_sensitive(True)
+        
+        #print self.primarias
 
     def particion_nueva(self, widget=None):
         win = part_nueva.Main(self)
@@ -87,7 +111,10 @@ class Main(gtk.Fixed):
                 if self.lista[-1][1] == 'Extendida' or self.lista[-1][1] == 'Lógica':
                     self.bext = True
                     print "estableciendo bext a true"
-        
+        #print self.lista[-1][1]
+        if self.lista[-1][1] == 'Primaria' or self.lista[-1][1] == 'Extendida':
+            self.primarias = self.primarias - 1
+        #print self.bext, self.lista
         #Si bext = True entonces
         if self.bext == True:
             # calculo el tamaño de la particion libre extendida
@@ -95,7 +122,7 @@ class Main(gtk.Fixed):
             fin = int(self.ext_fin)
             print "Inicio-Fin:", inicio, fin
             tamano = gen.hum(fin - inicio)
-            if inicio != fin:
+            if inicio != fin or self.lista[-1][1] == 'Extendida':
                 particion = [self.disco,        #Dispositivo
                              'Espacio Libre Extendida',#Formato
                              '',                #Tipo

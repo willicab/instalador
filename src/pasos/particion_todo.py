@@ -76,6 +76,13 @@ class Main(gtk.Fixed):
         self.put(button, 0, 130)
         button.show()
 
+        button = gtk.RadioButton(self.button, 
+            "Particionado Manual")
+        button.connect("toggled", self.RadioButton_on_changed, "particion_4")
+        button.set_size_request(300, 20)
+        self.put(button, 0, 150)
+        button.show()
+
         # Etiqueta Información Espacio Usado
         msg = 'Partición Swap'
         self.lbl_usado = gtk.Label('{0}'.format(msg))

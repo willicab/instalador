@@ -180,7 +180,11 @@ class PartTodo():
         CFG['inicio'] = frm_part_todo.ini
         CFG['fin'] = frm_part_todo.fin
         CFG['tipo'] = frm_part_todo.metodo
-        Usuario()
+        if CFG['tipo'] == 'particion_4':
+            data = [CFG]
+            PartManual(data)
+        else:
+            Usuario()
         #Info()
     def anterior(self, widget = None):
         '''

@@ -4,7 +4,7 @@ import os
 import commands
 import clases.particiones
 import clases.general as gen
-
+import clases.install.particion_manual as particion_manual
 class Main():
     root_p2 = '20GB'
     root_p3 = '3GB'
@@ -13,8 +13,8 @@ class Main():
     part = clases.particiones.Main()
     particiones_montadas = {}
     particiones_montadas2 = {}
-
     def __init__(self, cfg, parent):
+        self.part_manual = particion_manual.Main(cfg, parent)
         self.particion = cfg['particion']
         self.disco = self.particion[:-1]
         self.num = self.particion[-1:]
@@ -296,3 +296,6 @@ class Main():
         gen.montar(self.particiones_montadas)
         return [self.particiones_montadas2, particion_boot]
 
+    def particion_4(self):
+        salida = self.part_manual.auto()
+        return salida

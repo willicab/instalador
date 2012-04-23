@@ -5,7 +5,7 @@ pygtk.require('2.0')
 import gtk
 import clases.general as gen
 
-class Main(gtk.Dialog):
+class Main(gtk.Dialog): 
     inicio = 0
     fin = 0
     def __init__(self, padre):
@@ -76,6 +76,7 @@ class Main(gtk.Dialog):
             self.cmb_tipo.append_text('Lógica')
             self.cmb_tipo.set_sensitive(False)
         else:
+            #if self.padre.primarias < 4:
             self.cmb_tipo.append_text('Primaria')
             self.cmb_tipo.append_text('Extendida')
         self.cmb_tipo.set_active(0)
@@ -168,6 +169,7 @@ class Main(gtk.Dialog):
                              inicio,            #inicio
                              fin]               #fin
                 self.padre.lista.append(particion)
+                self.padre.primarias = self.padre.primarias + 1
             # Si la partición nueva es Extendida
             elif tipo == 'Extendida':
                 # Calculo el tamaño
@@ -199,6 +201,7 @@ class Main(gtk.Dialog):
                              inicio,                                #inicio
                              fin]                                   #fin
                 self.padre.lista.append(particion)
+                self.padre.primarias = self.padre.primarias + 1
             # Si la partición nueva es Lógica
             elif tipo == 'Lógica':
                 # Calculo el tamaño
@@ -243,14 +246,15 @@ class Main(gtk.Dialog):
             # si bext == True entonces se usará ext_fin como fin
             if self.padre.bext == True: 
                 fin = self.padre.ext_fin
-            print 'Inicio:', inicio, 'fin:', fin, "self.fin", int(self.fin)
+            #print 'Inicio:', inicio, 'fin:', fin, "self.fin", int(self.fin)
             # Si fin == self.fin entonces 
             if fin == int(gen.kb(self.padre.fin)):
+                pass
                 # No se crea elemento espacio libre
-                print "No crea la elemento espacio libre"
+                #print "No crea la elemento espacio libre"
             # Si no
             else:
-                print "Crea elemento espacio libre"
+                #print "Crea elemento espacio libre"
                 # se calcula el tamaño de la partición libre
                 inicio = fin
                 fin = int(gen.kb(self.padre.fin))
