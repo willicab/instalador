@@ -30,7 +30,7 @@ class Main(gtk.Fixed):
             self.ini = data['nuevo_fin']
         else:
             self.ini = 1049                          # Inicio de la partición
-        self.fin = int(float(data['fin']))
+        self.fin = data['fin']
         print data['metodo'], self.ini, self.fin
         
         for p in self.part.lista_particiones(self.disco):
