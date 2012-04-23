@@ -44,7 +44,9 @@ class Main():
     def todo(self, vacio):
         p = self.part.lista_particiones(self.disco)
         self.ini = 1049                          # Inicio de la partición
-        self.fin = int(float(self.cfg['fin']))
+        if self.cfg['fin'][-2:] != 'kB':
+            self.cfg['fin'] = self.cfg['fin'] + 'kB'
+        self.fin = int(float(gen.kb(self.cfg['fin'])))
         gen.desmontar(self.disco)
         if vacio == False:
             for s in p: 
