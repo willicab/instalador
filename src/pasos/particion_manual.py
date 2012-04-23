@@ -30,6 +30,8 @@ class Main(gtk.Fixed):
             self.ini = data['nuevo_fin']
         else:
             self.ini = 1049                          # Inicio de la partición
+        if data['fin'][-2:] != 'kB':
+            data['fin'] = data['fin'] + 'kB'
         self.fin = data['fin']
         print data['metodo'], self.ini, self.fin
         

@@ -9,6 +9,7 @@ class Main():
     part = clases.particiones.Main()
     particiones_montadas = {}
     particiones_montadas2 = {}
+    boot = False
     def __init__(self, cfg, parent):
         self.cfg = cfg
         self.metodo = cfg['metodo']
@@ -128,5 +129,7 @@ class Main():
                         os.system('swapon {0}'.format(inicios[0]))
                     cmd = cmd + str(inicios[0])
                     commands.getstatusoutput(cmd)
+                    if part[2] == '/boot' or (part[2] == '/' and self.boot == False):
+                        self.boot = inicios[0]
         gen.montar(self.particiones_montadas)
-        return [self.particiones_montadas2, '']
+        return [self.particiones_montadas2, self.boot]
