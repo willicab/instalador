@@ -213,12 +213,26 @@ class PartManual():
         frm_part_manual = FRM_MAIN.formulario('PartManual')
         CFG['lista_manual'] = frm_part_manual.lista
         CFG['disco'] = frm_part_manual.disco
+        if frm_part_manual.raiz == False:
+            self.msg_error("Debe existir una partición raiz (/)")
+            return
         Usuario()
     def anterior(self, widget = None):
         '''
             Función para el evento del botón anterior
         '''
         Metodo()
+    def msg_error(self, mensaje):
+        '''
+            Función que muestra el mensaje de error
+        '''
+        dialog = gtk.MessageDialog(FRM_MAIN,
+             gtk.DIALOG_MODAL,
+             gtk.MESSAGE_ERROR,
+             gtk.BUTTONS_OK,
+             mensaje)
+        response = dialog.run()
+        dialog.destroy()
 
 class Usuario():
     '''

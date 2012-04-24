@@ -114,7 +114,6 @@ class Main():
                 str(int(float(inicios[1][:-2].replace(',', '.'))) - 1)]
             for part in particion:
                 cmd = ''
-		print part, inicio
                 if str(part[1]) in inicio:
                     if part[0] == 'ext4':
                         cmd = 'mkfs.ext4 '

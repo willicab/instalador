@@ -16,6 +16,7 @@ class Main(gtk.Fixed):
     fin = 0             #Fin de la partición
     lista = []          #Lista de las particiones hechas
     primarias = 0       #Cuenta la cantidad de particiones primarias
+    raiz = False
     # Si se crea una partición extendida se usarán las siguientes variables
     bext = False        #Si se crea la partición extendida será True
     ext_ini = 0         #El inicio de la partición extendida
@@ -82,13 +83,14 @@ class Main(gtk.Fixed):
             self.primarias = 0
         else:
             for p in self.part.lista_particiones(self.disco):
-                print p[4]
                 if p[4] == 'primary':
                     self.primarias = self.primarias + 1
         self.tabla.liststore.clear()
         assert isinstance(data, list) or isinstance(data, tuple)
         for fila in data:
             self.tabla.agregar_fila(fila)
+            if fila[3] == '/':
+                self.raiz = True
             if fila[1] == 'Primaria' or fila[1] == 'Extendida':
                 self.primarias = self.primarias + 1
         print 'Particiones Primarias: ' + str(self.primarias)
@@ -114,6 +116,8 @@ class Main(gtk.Fixed):
             if self.lista[-1][1] == 'Espacio Libre Extendida':
                 self.lista.pop() # Elimino la particion libre extendida, de existir
             self.bext = False
+            if self.lista[-1][3] == '/':
+                self.raiz = False
             self.lista.pop()
             if len(self.lista)>0:
                 if self.lista[-1][1] == 'Extendida' or self.lista[-1][1] == 'Lógica':
