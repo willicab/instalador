@@ -13,17 +13,23 @@ class Main():
     def __init__(self, cfg, parent):
         self.cfg = cfg
         self.metodo = cfg['metodo']
-        self.disco = cfg['disco']
-        self.lista = cfg['lista_manual']
-        self.particion = cfg['particion']
-        self.disco = self.particion[:-1]
-        self.num = int(self.particion[-1:])
-        self.ini = int(gen.kb(cfg['inicio']))
-        self.fin = int(gen.kb(cfg['fin']))
-        if cfg['metodo'] != 'todo' and cfg['metodo'] != 'vacio' :
-            self.nuevo_fin = int(gen.kb(cfg['nuevo_fin']))
-        print self.nuevo_fin, cfg['nuevo_fin']
-        self.fs = cfg['fs']
+        self.tipo = cfg['tipo']
+        if (self.metodo == 'todo' or self.metodo == 'vacio') and \
+           self.tipo == 'particion_4':
+            self.disco = cfg['disco']
+            self.lista = cfg['lista_manual']
+        else:
+            self.particion = cfg['particion']
+            self.disco = self.particion[:-1]
+            self.num = int(self.particion[-1:])
+            self.ini = int(gen.kb(cfg['inicio']))
+            self.fin = int(gen.kb(cfg['fin']))
+            
+            print 'Disco: ', cfg['disco']
+            if cfg['metodo'] != 'todo' and cfg['metodo'] != 'vacio' :
+                self.nuevo_fin = int(gen.kb(cfg['nuevo_fin']))
+            print self.nuevo_fin, cfg['nuevo_fin']
+            self.fs = cfg['fs']
 
     def auto(self):
         self.redimensionar(self.particion,
