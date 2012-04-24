@@ -23,13 +23,13 @@ class Main(gtk.Fixed):
     def __init__(self, data):
         gtk.Fixed.__init__(self)
         data = data[0]
+        self.data = data
         self.disco = data['disco'] if data['disco'] != '' \
                      else data['particion'][:-1]
         if data['metodo'] != 'todo' and data['metodo'] != 'vacio' :
             self.ini = data['nuevo_fin']
         else:
             self.ini = 1049                          # Inicio de la partición
-        print data['fin'][-2:]
         if data['fin'][-2:] != 'kB':
             data['fin'] = data['fin'] + 'kB'
         self.fin = int(float(gen.kb(gen.hum(data['fin']))))
@@ -37,14 +37,6 @@ class Main(gtk.Fixed):
         if data['fin'][-2:] != 'kB':
             data['fin'] = data['fin'] + 'kB'
         self.fin = data['fin']
-        print data['metodo'], self.ini, self.fin
-        if data['metodo'] == 'todo':
-            self.primarias = 0
-        else:
-            for p in self.part.lista_particiones(self.disco):
-                print p[4]
-                if p[4] == 'primary':
-                    self.primarias = self.primarias + 1
         
         self.tabla = clases.tabla_particiones.TablaParticiones()
         #self.tabla.set_doble_click(self.activar_tabla);
@@ -86,12 +78,20 @@ class Main(gtk.Fixed):
         self.llenar_tabla(self.lista)
 
     def llenar_tabla(self, data=None):
+        if self.data['metodo'] == 'todo':
+            self.primarias = 0
+        else:
+            for p in self.part.lista_particiones(self.disco):
+                print p[4]
+                if p[4] == 'primary':
+                    self.primarias = self.primarias + 1
         self.tabla.liststore.clear()
         assert isinstance(data, list) or isinstance(data, tuple)
         for fila in data:
-            print fila
             self.tabla.agregar_fila(fila)
-        print fila
+            if fila[1] == 'Primaria' or fila[1] == 'Extendida':
+                self.primarias = self.primarias + 1
+        print 'Particiones Primarias: ' + str(self.primarias)
         if len(data) == 1 and fila[1] == 'Espacio Libre':
             self.btn_deshacer.set_sensitive(False)
         else:
@@ -102,8 +102,6 @@ class Main(gtk.Fixed):
             self.btn_nueva.set_sensitive(False)
         else:
             self.btn_nueva.set_sensitive(True)
-        
-        #print self.primarias
 
     def particion_nueva(self, widget=None):
         win = part_nueva.Main(self)
@@ -111,23 +109,18 @@ class Main(gtk.Fixed):
     def deshacer(self, widget=None):
         
         if self.lista[-1][1] == 'Espacio Libre':
-            print '1', self.lista
             self.lista.pop() # Elimino la particion libre, de existir
         if len(self.lista)>0:
             if self.lista[-1][1] == 'Espacio Libre Extendida':
-                print '2', self.lista
                 self.lista.pop() # Elimino la particion libre extendida, de existir
             self.bext = False
-            print '3', self.lista
             self.lista.pop()
             if len(self.lista)>0:
                 if self.lista[-1][1] == 'Extendida' or self.lista[-1][1] == 'Lógica':
                     self.bext = True
                     print "estableciendo bext a true"
-        print '4', self.lista
-        if len(self.lista)>0:
-            if self.lista[-1][1] == 'Primaria' or self.lista[-1][1] == 'Extendida':
-                self.primarias = self.primarias - 1
+        #if len(self.lista)>0:
+        #    if self.lista[-1][1] == 'Primaria' or self.lista[-1][1] == 'Extendida':
         #print self.bext, self.lista
         #Si bext = True entonces
         if self.bext == True:

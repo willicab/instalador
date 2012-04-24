@@ -131,6 +131,7 @@ class Main(gtk.Dialog):
         self.entrada.set_text('/')
         self.entrada.set_size_request(200, 30)
         self.cont.put(self.entrada, 145, 125)
+        self.entrada.connect("changed", self.validar_punto)
 
         response = self.run()
         
@@ -144,7 +145,7 @@ class Main(gtk.Dialog):
             if formato == 'linux-swap':
                 montaje = 'Ninguno'
             if montaje == 'Escoger manualmente':
-                montaje = self.entrada.get_text()
+                montaje = self.entrada.get_text().strip()
             
             if self.padre.lista[-1][1] == 'Espacio Libre':
                 self.padre.lista.pop()
@@ -303,8 +304,10 @@ class Main(gtk.Dialog):
         montaje = gen.get_active_text(self.cmb_montaje)
         if montaje == 'Escoger manualmente':
             self.entrada.show()
+            self.validar_punto()
         else:
             self.entrada.hide()
+            self.set_response_sensitive(gtk.RESPONSE_OK, True)
     
     def agregar(self, punto):
         data = self.padre.lista
@@ -315,3 +318,15 @@ class Main(gtk.Dialog):
                 aparece = True
         if aparece == False:
             self.cmb_montaje.append_text(punto)
+            
+    def validar_punto(self, widget=None):
+        data = self.padre.lista
+        aparece = False
+        assert isinstance(data, list) or isinstance(data, tuple)
+        for fila in data:
+            if fila[3] == self.entrada.get_text().strip():
+                aparece = True
+        if aparece == False:
+            self.set_response_sensitive(gtk.RESPONSE_OK, True)
+        else:
+            self.set_response_sensitive(gtk.RESPONSE_OK, False)
