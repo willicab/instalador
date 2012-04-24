@@ -11,7 +11,7 @@ Vcs-Browser: http://gitorious.org/canaima-gnu-linux/canaima-instalador/trees/mas
 
 Package: canaima-instalador
 Architecture: all
-Depends: ${shlibs:Depends}, ${misc:Depends}, ${python:Depends}, python-imaging, lshw, parted, squashfs-tools, python-gtk2, python-cairo
+Depends: ${shlibs:Depends}, ${misc:Depends}, ${python:Depends}, python-imaging, lshw, parted, squashfs-tools, python-gtk2, python-cairo, reiserfsprogs
 Description: Instalador en vivo para medios instalables de Canaima GNU/Linux
  Este paquete prentende ser un instalador que pueda usarse en cualquier sabor
  de Canaima GNU/Linux
