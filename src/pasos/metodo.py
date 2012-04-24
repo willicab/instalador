@@ -142,15 +142,15 @@ class Main(gtk.Fixed):
             msg = msg + 'los datos en el disco que ha\nseleccionado, Este '
             msg = msg + 'borrado no se hará hasta que confirme que realmente '
             msg = msg + 'quiere hacer los\ncambios.'
-        if self.metodo[0:5] == 'vacio':
+        elif self.metodo[0:5] == 'vacio':
             self.ini = gen.h2kb(self.metodo.split('-')[1])
             self.fin = gen.h2kb(self.metodo.split('-')[2])
             msg = 'Si escoge esta opción se instalará el sistema en la '
             msg = msg + 'partición sin usar que mide {0}'
             msg = msg.format(gen.hum(self.fin - self.ini))
         else:
-            msg = 'Si escoge esta opción se redimensionará la partición {0} '
-            msg = msg + 'para realizar la instalación.'.format(self.metodo)
+            msg = 'Si escoge esta opción se redimensionará la partición '
+            msg = msg + '{0} para realizar la instalación.'.format(self.metodo)
         self.lbl_info.set_text(msg)
 
     def seleccionar_disco(self, widget=None):   
