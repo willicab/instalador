@@ -12,6 +12,8 @@ DEVICE=$2
 
 chroot ${MOUNTPOINT}/ mkdir -p /root/debs/
 
+cp /root/libsvga1_1%3a1.4.3-29_i386.deb ${MOUNTPOINT}/root/debs/
+cp /root/libx86-1_1.1+ds1-6_i386.deb ${MOUNTPOINT}/root/debs/
 cp /live/image/pool/main/libs/libsdl1.2/libsdl1.2*.deb ${MOUNTPOINT}/root/debs/
 cp /live/image/pool/main/g/gettext/gettext-base*.deb ${MOUNTPOINT}/root/debs/
 cp /live/image/pool/main/b/burg/burg*.deb ${MOUNTPOINT}/root/debs/
@@ -22,6 +24,8 @@ echo "" >> ${MOUNTPOINT}/root/instalar-debs.sh
 echo "echo \"burg-pc burg/linux_cmdline string\" | debconf-set-selections" >> ${MOUNTPOINT}/root/instalar-debs.sh
 echo "echo \"burg-pc burg/linux_cmdline_default string quiet splash vga=791\" | debconf-set-selections" >> ${MOUNTPOINT}/root/instalar-debs.sh
 echo "echo \"burg-pc burg-pc/install_devices multiselect ${DEVICE}\" | debconf-set-selections" >> ${MOUNTPOINT}/root/instalar-debs.sh
+echo "DEBIAN_FRONTEND=noninteractive dpkg -i /root/debs/libx86-1*.deb" >> ${MOUNTPOINT}/root/instalar-debs.sh
+echo "DEBIAN_FRONTEND=noninteractive dpkg -i /root/debs/libsvga1*.deb" >> ${MOUNTPOINT}/root/instalar-debs.sh
 echo "DEBIAN_FRONTEND=noninteractive dpkg -i /root/debs/libsdl1.2*.deb" >> ${MOUNTPOINT}/root/instalar-debs.sh
 echo "DEBIAN_FRONTEND=noninteractive dpkg -i /root/debs/gettext-base*.deb" >> ${MOUNTPOINT}/root/instalar-debs.sh
 echo "DEBIAN_FRONTEND=noninteractive dpkg -i /root/debs/burg-themes-common*.deb" >> ${MOUNTPOINT}/root/instalar-debs.sh

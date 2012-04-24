@@ -65,12 +65,12 @@ class Main():
         if fs == 'ntfs': # Redimensiono la particion si es NTFS
             cmd = 'echo y | ntfsresize -P --force {0} -s {1}k'.\
                 format(particion, fin_win)
-            commands.getstatusoutput(cmd)
+            print cmd, commands.getstatusoutput(cmd)
             cmd = 'parted -s {0} rm {1}'.format(disco, num)
-            commands.getstatusoutput(cmd)
+            print cmd, commands.getstatusoutput(cmd)
             cmd = 'parted -s {0} mkpart primary NTFS {1}k {2}k'.\
                 format(disco, ini_win, fin_win + ini_win)
-            commands.getstatusoutput(cmd)
+            print cmd, commands.getstatusoutput(cmd)
         elif fs == 'fat32' or fs == 'ext3': # Redimensiono la partición si es FAT32 o EXT3
             cmd = 'parted -s {0} resize {1} {2}k {3}k'.\
                 format(disco, num, ini_win, fin_win + ini_win)
@@ -141,16 +141,16 @@ class Main():
         if fs == 'ntfs': # Redimensiono la particion si es NTFS
             cmd = 'echo y | ntfsresize -P --force {0} -s {1}k'.\
                 format(particion, fin_win)
-            commands.getstatusoutput(cmd)
+            print cmd, commands.getstatusoutput(cmd)
             cmd = 'parted -s {0} rm {1}'.format(disco, num)
-            commands.getstatusoutput(cmd)
+            print cmd, commands.getstatusoutput(cmd)
             cmd = 'parted -s {0} mkpart primary NTFS {1}k {2}k'.\
                 format(disco, ini_win, fin_win + ini_win)
-            commands.getstatusoutput(cmd)
+            print cmd, commands.getstatusoutput(cmd)
         elif fs == 'fat32': # Redimensiono la partición si es FAT32
             cmd = 'parted -s {0} resize {1} {2}k {3}k'.\
                 format(disco, num, ini_win, fin_win + ini_win)
-            commands.getstatusoutput(cmd)
+            print cmd, commands.getstatusoutput(cmd)
 
         self.par.accion('Creando Particiones')
         self.part.particionar(disco, 'primary', 'ext4', ini_root, fin_root)
@@ -228,16 +228,16 @@ class Main():
         if fs == 'ntfs': # Redimensiono la particion si es NTFS
             cmd = 'echo y | ntfsresize -P --force {0} -s {1}k'.\
                 format(particion, fin_win)
-            commands.getstatusoutput(cmd)
+            print cmd, commands.getstatusoutput(cmd)
             cmd = 'parted -s {0} rm {1}'.format(disco, num)
-            commands.getstatusoutput(cmd)
+            print cmd, commands.getstatusoutput(cmd)
             cmd = 'parted -s {0} mkpart primary NTFS {1}k {2}k'.\
                 format(disco, ini_win, fin_win + ini_win)
-            commands.getstatusoutput(cmd)
+            print cmd, commands.getstatusoutput(cmd)
         elif fs == 'fat32': # Redimensiono la partición si es FAT32
             cmd = 'parted -s {0} resize {1} {2}k {3}k'.\
                 format(disco, num, ini_win, fin_win + ini_win)
-            commands.getstatusoutput(cmd)
+            print cmd, commands.getstatusoutput(cmd)
         self.par.accion('Creando Particiones')
 
         self.part.particionar(disco, 'primary', 'ext4', ini_boot, fin_boot)

@@ -212,6 +212,7 @@ class PartManual():
         '''
         frm_part_manual = FRM_MAIN.formulario('PartManual')
         CFG['lista_manual'] = frm_part_manual.lista
+        CFG['disco'] = frm_part_manual.disco
         Usuario()
     def anterior(self, widget = None):
         '''

@@ -95,7 +95,7 @@ class Main(gtk.Fixed):
                 self.salida = part_auto.particion_3()
             if self.tipo == 'particion_4':
                 self.salida = part_auto.particion_4()
-        print self.salida
+        print '-----Salida: ', self.salida
         self.particiones_montadas = self.salida[0]
         self.particion_boot = self.salida[1]
 # Aumenta la Barra 10
@@ -120,9 +120,11 @@ class Main(gtk.Fixed):
                 '..', 'scripts', 'install-grub-ini.sh'))
         os.system('echo "0" > /proc/sys/kernel/printk')
         os.system('chmod +x {0}'.format(script))
+        print '-----Script: ', 'sh {0} {1}'.format(script, self.particion_boot)
         os.system('sh {0} {1}'.format(script, self.particion_boot))
-        cmd = "burg-install --force --root-directory=/target {0}"
-        os.system(cmd.format(self.disco))
+        cmd = "burg-install --force --root-directory=/target {0}".format(self.disco)
+        print '-----Burg Install: ' + cmd
+        os.system(cmd)
         uname_r = commands.getstatusoutput('echo $(uname -r)')[1]
         vmlinuz = 'vmlinuz-' + uname_r 
         initrd = 'initrd.img-'  + uname_r

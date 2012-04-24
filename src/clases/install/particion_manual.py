@@ -9,13 +9,16 @@ class Main():
     part = clases.particiones.Main()
     particiones_montadas = {}
     particiones_montadas2 = {}
+    boot = False
     def __init__(self, cfg, parent):
         self.cfg = cfg
         self.metodo = cfg['metodo']
         self.lista = cfg['lista_manual']
         if self.metodo == 'todo':
             self.disco = cfg['disco']
+            self.lista = cfg['lista_manual']
         elif self.metodo == 'vacio':
+            self.lista = cfg['lista_manual']
             pass
         else:
             self.particion = cfg['particion']
@@ -43,7 +46,9 @@ class Main():
     def todo(self, vacio):
         p = self.part.lista_particiones(self.disco)
         self.ini = 1049                          # Inicio de la partición
-        self.fin = int(float(self.cfg['fin']))
+        if self.cfg['fin'][-2:] != 'kB':
+            self.cfg['fin'] = self.cfg['fin'] + 'kB'
+        self.fin = int(float(gen.kb(self.cfg['fin'])))
         gen.desmontar(self.disco)
         if vacio == False:
             for s in p: 
@@ -63,18 +68,18 @@ class Main():
         os.system('umount -l {0}'.format(particion))
         if fs == 'ntfs': # Redimensiono la particion si es NTFS
             cmd = 'echo y | ntfsresize -P --force {0} -s {1}k'.\
-                format(particion, fin_win)
-            commands.getstatusoutput(cmd)
+                format(particion, fin_win - ini_win)
+            print cmd, commands.getstatusoutput(cmd)
             cmd = 'parted -s {0} rm {1}'.format(disco, num)
-            commands.getstatusoutput(cmd)
+            print cmd, commands.getstatusoutput(cmd)
             cmd = 'parted -s {0} mkpart primary NTFS {1}k {2}k'.\
                 format(disco, ini_win, fin_win)
-            commands.getstatusoutput(cmd)
+            print cmd, commands.getstatusoutput(cmd)
         elif fs == 'fat32': # Redimensiono la partición si es FAT32 o EXT3
             cmd = 'parted -s {0} resize {1} {2}k {3}k'.\
                 format(disco, num, ini_win, fin_win)
-            print cmd
-            commands.getstatusoutput(cmd)
+            
+            print cmd, commands.getstatusoutput(cmd)
             #commands.getstatusoutput(cmd)
     
     def particionar(self):
@@ -99,18 +104,18 @@ class Main():
                           fila[5] + suma,
                           fila[6]
                    )
-            print cmd
-            commands.getstatusoutput(cmd)
+            print cmd, commands.getstatusoutput(cmd)
         particiones = self.part.lista_particiones(disco)
         for inicios in particiones: 
         # vuelvo a listar las particiones para buscar el nombre de cada
         # particion creada
-            inicio = inicios[1][:-2] #, \
-                #str(int(float(s[1][:-2].replace(',', '.'))) + 1), \
-                #str(int(float(s[1][:-2].replace(',', '.'))) - 1)]
+            inicio = [inicios[1][:-2] , \
+                str(int(float(inicios[1][:-2].replace(',', '.'))) + 1), \
+                str(int(float(inicios[1][:-2].replace(',', '.'))) - 1)]
             for part in particion:
                 cmd = ''
-                if inicio in str(part[1]):
+		print part, inicio
+                if str(part[1]) in inicio:
                     if part[0] == 'ext4':
                         cmd = 'mkfs.ext4 '
                         self.particiones_montadas[inicios[0]] = '/target/' +part[2]
@@ -127,6 +132,8 @@ class Main():
                         cmd = 'mkswap '
                         os.system('swapon {0}'.format(inicios[0]))
                     cmd = cmd + str(inicios[0])
-                    commands.getstatusoutput(cmd)
+                    print '---', cmd, commands.getstatusoutput(cmd)
+                    if part[2] == '/boot' or (part[2] == '/' and self.boot == False):
+                        self.boot = inicios[0]
         gen.montar(self.particiones_montadas)
-        return [self.particiones_montadas2, '']
+        return [self.particiones_montadas2, self.boot]
