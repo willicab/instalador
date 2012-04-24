@@ -98,6 +98,8 @@ class Main(gtk.Fixed):
         print '-----Salida: ', self.salida
         self.particiones_montadas = self.salida[0]
         self.particion_boot = self.salida[1]
+        if self.disco == '':
+            self.disco = self.particion_boot[:-1]
 # Aumenta la Barra 10
         # Copiando los archivos
         self.par.info_barra("Instalando Canaima GNU/Linux ...")
