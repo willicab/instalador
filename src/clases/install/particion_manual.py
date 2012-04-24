@@ -132,7 +132,11 @@ class Main():
                         cmd = 'mkswap '
                         os.system('swapon {0}'.format(inicios[0]))
                     cmd = cmd + str(inicios[0])
+<<<<<<< HEAD
                     print '---', cmd, commands.getstatusoutput(cmd)
+=======
+                    commands.getstatusoutput(cmd)
+>>>>>>> d1c045e5eaa863a69a0d21933234305ac45e0a36
                     if part[2] == '/boot' or (part[2] == '/' and self.boot == False):
                         self.boot = inicios[0]
         gen.montar(self.particiones_montadas)
