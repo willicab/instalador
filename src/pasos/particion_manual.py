@@ -17,14 +17,16 @@ class Main(gtk.Fixed):
     lista = []          #Lista de las particiones hechas
     primarias = 0       #Cuenta la cantidad de particiones primarias
     raiz = False
+    tabla = None
     # Si se crea una partición extendida se usarán las siguientes variables
     bext = False        #Si se crea la partición extendida será True
     ext_ini = 0         #El inicio de la partición extendida
     ext_fin = 0         #El fin de la partición extendida
-    def __init__(self, data):
-        gtk.Fixed.__init__(self)
+
+    def iniciar(self, data):
         data = data[0]
         self.data = data
+        self.lista = []
         self.disco = data['disco'] if data['disco'] != '' \
                      else data['particion'][:-1]
         if data['metodo'] != 'todo' and data['metodo'] != 'vacio' :
@@ -38,6 +40,41 @@ class Main(gtk.Fixed):
         if data['fin'][-2:] != 'kB':
             data['fin'] = data['fin'] + 'kB'
         self.fin = data['fin']
+        
+        if self.tabla != None:
+            tamano = gen.hum(gen.kb(self.fin) - gen.kb(self.ini))
+            inicio = self.ini
+            fin = gen.kb(self.fin)
+            libre = [self.disco,          #Dispositivo
+                     'Espacio Libre', #Tipo
+                     '',                        #Formato
+                     '',                        #Punto de montaje
+                     tamano,                    #Tamaño
+                     inicio,                    #inicio
+                     fin]                       #fin
+            print "3 ", inicio, fin, tamano
+            self.lista.append(libre)
+
+            self.llenar_tabla(self.lista)
+    
+    def __init__(self, data):
+        gtk.Fixed.__init__(self)
+        self.iniciar(data)
+        data = data[0]
+#        self.data = data
+#        self.disco = data['disco'] if data['disco'] != '' \
+#                     else data['particion'][:-1]
+#        if data['metodo'] != 'todo' and data['metodo'] != 'vacio' :
+#            self.ini = data['nuevo_fin']
+#        else:
+#            self.ini = 1049                          # Inicio de la partición
+#        if data['fin'][-2:] != 'kB':
+#            data['fin'] = data['fin'] + 'kB'
+#        self.fin = int(float(gen.kb(gen.hum(data['fin']))))
+#        float(gen.kb(gen.hum(data['fin']))), int(float(gen.kb(gen.hum(data['fin']))))
+#        if data['fin'][-2:] != 'kB':
+#            data['fin'] = data['fin'] + 'kB'
+#        self.fin = data['fin']
         
         self.tabla = clases.tabla_particiones.TablaParticiones()
         #self.tabla.set_doble_click(self.activar_tabla);

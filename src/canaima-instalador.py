@@ -203,6 +203,7 @@ class PartManual():
         if FRM_MAIN.indice(FRM_MAIN.nombres, 'PartManual') == -1:
             FRM_MAIN.agregar('PartManual', particion_manual.Main(data))
         frm_manual = FRM_MAIN.formulario('PartManual')
+        frm_manual.iniciar(data)
         FRM_MAIN.mostrar('PartManual')
         #frm_manual.actualizar(disco)
         desconectar()
