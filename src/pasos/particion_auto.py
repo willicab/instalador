@@ -28,24 +28,26 @@ class Main(gtk.Fixed):
     libre = '150MB'
     w = []
     cfg = {}
+    barra = None
     def __init__(self, particion):
         gtk.Fixed.__init__(self)
 
-        self.particion = particion
-        self.disco = particion[:-1]
-        self.num = particion[-1:]
+        self.inicio(particion)
+#        self.particion = particion
+#        self.disco = particion[:-1]
+#        self.num = particion[-1:]
 
-        self.cfg['particion'] = particion
-        self.cfg['disco'] = self.disco
-        self.cfg['num'] = self.num
+#        self.cfg['particion'] = particion
+#        self.cfg['disco'] = self.disco
+#        self.cfg['num'] = self.num
 
-        p = self.part.lista_particiones(self.disco, self.particion)[0]
-        self.particiones = self.part.lista_particiones(self.disco)
-        self.ini = p[1]
-        self.fin = p[2]
-        self.fs = p[5]
-        self.cfg['ini'] = self.ini
-        self.cfg['fin'] = self.fin
+#        p = self.part.lista_particiones(self.disco, self.particion)[0]
+#        self.particiones = self.part.lista_particiones(self.disco)
+#        self.ini = p[1]
+#        self.fin = p[2]
+#        self.fs = p[5]
+#        self.cfg['ini'] = self.ini
+#        self.cfg['fin'] = self.fin
 
         txt_info = "Seleccione el tamaño que desea usar para la instalación"
         self.lbl1 = gtk.Label(txt_info)
@@ -55,14 +57,13 @@ class Main(gtk.Fixed):
         self.lbl1.show()
         
         # Barra
-        total = int(p[3][:-2])
-        usado = gen.kb(p[7])
+        total = int(self.p[3][:-2])
+        usado = gen.kb(self.p[7])
         minimo = gen.kb(self.minimo)
         libre = gen.kb(self.libre)
         self.swap = self.hay_swap()
-
-        self.cur_value = ((total - minimo) - usado) / 2
-        self.barra = widget.Barra(self, total, usado, libre, minimo, particion, self.swap)
+        
+        self.barra = widget.Barra(self, total, usado, libre, minimo, particion, self.cur_value)
         self.barra.set_size_request(590, 60)
         self.barra.show()
         self.put(self.barra, 0, 25)
@@ -141,6 +142,32 @@ class Main(gtk.Fixed):
             self.put(self.lbl_usado, 0, 265)
             self.lbl_usado.show()
 
+    def inicio(self, particion):
+        self.particion = particion
+        self.disco = particion[:-1]
+        self.num = particion[-1:]
+
+        self.cfg['particion'] = particion
+        self.cfg['disco'] = self.disco
+        self.cfg['num'] = self.num
+
+        self.p = self.part.lista_particiones(self.disco, self.particion)[0]
+        self.particiones = self.part.lista_particiones(self.disco)
+        self.ini = self.p[1]
+        self.fin = self.p[2]
+        self.fs = self.p[5]
+        self.cfg['ini'] = self.ini
+        self.cfg['fin'] = self.fin
+        
+        total = int(self.p[3][:-2])
+        usado = gen.kb(self.p[7])
+        minimo = gen.kb(self.minimo)
+        libre = gen.kb(self.libre)
+        
+        self.cur_value = usado + ((total - minimo - usado) / 2)
+        if self.barra != None:
+            self.barra.inicio(self, total, usado, libre, minimo, self.particion, self.cur_value)
+    
     def RadioButton_on_changed(self, widget, data=None):
         if widget.get_active() == True:
             self.cfg['metodo'] = data
@@ -158,27 +185,3 @@ class Main(gtk.Fixed):
         for p in self.particiones:
             if p[5].find('swap') != -1 : return True
         return False
-        
-
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        

@@ -11,16 +11,9 @@ class Barra(gtk.DrawingArea):
     cur = 0
     w = 0
     h = 0
-    def __init__(self, parent, total, usado, libre, minimo, particion, swap = False):
+    def __init__(self, parent, total, usado, libre, minimo, particion, cur_value):
         super(Barra, self).__init__()
-        self.total = total
-        self.usado = usado
-        self.minimo = minimo
-        self.libre = libre
-        self.particion = particion
-        self.par = parent
-        self.cur = ((total - minimo) - usado) / 2
-        self.par.cur_value = self.cur
+        self.inicio(parent, total, usado, libre, minimo, particion, cur_value)
         self.set_events(gtk.gdk.POINTER_MOTION_MASK |
                       gtk.gdk.POINTER_MOTION_HINT_MASK |
                       gtk.gdk.BUTTON_PRESS_MASK |
@@ -30,6 +23,17 @@ class Barra(gtk.DrawingArea):
         self.connect("button-release-event", self.release)
         self.connect("motion-notify-event", self.draw_cursor)
 
+    def inicio(self, parent, total, usado, libre, minimo, particion, cur_value):
+        self.total = total
+        self.usado = usado
+        self.minimo = minimo
+        self.libre = libre
+        self.particion = particion
+        self.par = parent
+        self.cur = cur_value #usado + (((total - minimo) - usado) / 2)
+        #self.par.cur_value = self.cur
+        print self.usado, self.cur, self.minimo
+    
     def press(self, widget, event):
         if event.x >= self.pos[0] and event.x <= self.pos[2] and \
             event.y >= self.pos[1] and event.y <= self.pos[3]:

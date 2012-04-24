@@ -129,6 +129,8 @@ class PartAuto():
         global ID_SIGUIENTE, ID_ANTERIOR, CFG
         if FRM_MAIN.indice(FRM_MAIN.nombres, 'ParticionAuto') == -1:
             FRM_MAIN.agregar('ParticionAuto', particion_auto.Main(particion))
+        frm_part_auto = FRM_MAIN.formulario('ParticionAuto')
+        frm_part_auto.inicio(particion)
         FRM_MAIN.mostrar('ParticionAuto')
         desconectar()
         ID_SIGUIENTE = FRM_MAIN.btn_siguiente.connect("clicked", self.siguiente)
