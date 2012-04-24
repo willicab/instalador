@@ -33,12 +33,12 @@ class Main(gtk.Fixed):
             self.ini = data['nuevo_fin']
         else:
             self.ini = 1049                          # Inicio de la partición
-        if data['fin'][-2:] != 'kB':
-            data['fin'] = data['fin'] + 'kB'
+        if str(data['fin'])[-2:] != 'kB':
+            data['fin'] = str(data['fin']) + 'kB'
         self.fin = int(float(gen.kb(gen.hum(data['fin']))))
         float(gen.kb(gen.hum(data['fin']))), int(float(gen.kb(gen.hum(data['fin']))))
-        if data['fin'][-2:] != 'kB':
-            data['fin'] = data['fin'] + 'kB'
+        if str(data['fin'])[-2:] != 'kB':
+            data['fin'] = str(data['fin']) + 'kB'
         self.fin = data['fin']
         
         if self.tabla != None:
