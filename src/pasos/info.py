@@ -26,6 +26,8 @@ class Main(gtk.Fixed):
             msg = msg + "Separar la partición /home"
         elif cfg['tipo'] == 'particion_3':
             msg = msg + "Separar las particiones /home, /usr y /boot"
+        elif cfg['tipo'] == 'particion_3':
+            msg = msg + "Particionado manual"
         self.lbl1 = gtk.Label(msg)
         self.lbl1.set_size_request(590, 30)
         self.put(self.lbl1, 0, altura)
