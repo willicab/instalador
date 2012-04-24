@@ -96,8 +96,8 @@ class Main(gtk.Dialog):
         self.cmb_fs.append_text('ext3')
         self.cmb_fs.append_text('ext4')
         self.cmb_fs.append_text('linux-swap')
-        self.cmb_fs.append_text('xfs')
-        self.cmb_fs.append_text('ntfs')
+        #self.cmb_fs.append_text('xfs')
+        #self.cmb_fs.append_text('ntfs')
         self.cmb_fs.set_active(2)
         self.cmb_fs.connect("changed", self.cmb_fs_on_changed)
         self.cmb_fs.show()
@@ -112,16 +112,16 @@ class Main(gtk.Dialog):
         self.cmb_montaje = gtk.combo_box_new_text()
         self.cmb_montaje.set_size_request(200, 30)
         self.cont.put(self.cmb_montaje, 145, 95)
+        self.agregar('/')
+        self.agregar('/boot')
+        self.agregar('/home')
+        self.agregar('/tmp')
+        self.agregar('/usr')
+        self.agregar('/var')
+        self.agregar('/srv')
+        self.agregar('/opt')
+        self.agregar('/usr/local')
         self.cmb_montaje.append_text('Ninguno')
-        self.cmb_montaje.append_text('/')
-        self.cmb_montaje.append_text('/boot')
-        self.cmb_montaje.append_text('/home')
-        self.cmb_montaje.append_text('/tmp')
-        self.cmb_montaje.append_text('/usr')
-        self.cmb_montaje.append_text('/var')
-        self.cmb_montaje.append_text('/srv')
-        self.cmb_montaje.append_text('/opt')
-        self.cmb_montaje.append_text('/usr/local')
         self.cmb_montaje.append_text('Escoger manualmente')
         self.cmb_montaje.set_active(0)
         self.cmb_montaje.connect("changed", self.cmb_montaje_on_changed)
@@ -305,3 +305,13 @@ class Main(gtk.Dialog):
             self.entrada.show()
         else:
             self.entrada.hide()
+    
+    def agregar(self, punto):
+        data = self.padre.lista
+        aparece = False
+        assert isinstance(data, list) or isinstance(data, tuple)
+        for fila in data:
+            if fila[3] == punto:
+                aparece = True
+        if aparece == False:
+            self.cmb_montaje.append_text(punto)

@@ -25,24 +25,19 @@ class Main(gtk.Fixed):
         data = data[0]
         self.disco = data['disco'] if data['disco'] != '' \
                      else data['particion'][:-1]
-        print self.disco, data['disco'], data['particion'][:-1]
         if data['metodo'] != 'todo' and data['metodo'] != 'vacio' :
             self.ini = data['nuevo_fin']
         else:
             self.ini = 1049                          # Inicio de la partición
-<<<<<<< HEAD
         print data['fin'][-2:]
         if data['fin'][-2:] != 'kB':
             data['fin'] = data['fin'] + 'kB'
         self.fin = int(float(gen.kb(gen.hum(data['fin']))))
         float(gen.kb(gen.hum(data['fin']))), int(float(gen.kb(gen.hum(data['fin']))))
-=======
         if data['fin'][-2:] != 'kB':
             data['fin'] = data['fin'] + 'kB'
         self.fin = data['fin']
         print data['metodo'], self.ini, self.fin
->>>>>>> d1c045e5eaa863a69a0d21933234305ac45e0a36
-        
         if data['metodo'] == 'todo':
             self.primarias = 0
         else:
@@ -77,7 +72,7 @@ class Main(gtk.Fixed):
         
         tamano = gen.hum(gen.kb(self.fin) - gen.kb(self.ini))
         inicio = self.ini
-        fin = self.fin
+        fin = gen.kb(self.fin)
         libre = [self.disco,          #Dispositivo
                  'Espacio Libre', #Tipo
                  '',                        #Formato
@@ -94,6 +89,7 @@ class Main(gtk.Fixed):
         self.tabla.liststore.clear()
         assert isinstance(data, list) or isinstance(data, tuple)
         for fila in data:
+            print fila
             self.tabla.agregar_fila(fila)
         print fila
         if len(data) == 1 and fila[1] == 'Espacio Libre':
