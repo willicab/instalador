@@ -15,7 +15,6 @@ class Main():
     particiones_montadas2 = {}
 
     def __init__(self, cfg, parent, vacio=False):
-        self.part_manual = particion_manual.Main(cfg, parent)
         self.disco = cfg['disco']
         self.par = parent
         self.lista = self.part.lista_particiones(self.disco)
@@ -252,5 +251,6 @@ class Main():
         return [self.particiones_montadas2, particion_boot]
 
     def particion_4(self):
+        self.part_manual = particion_manual.Main(cfg, parent)
         salida = self.part_manual.todo(self.vacio)
         return salida

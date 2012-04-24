@@ -13,14 +13,9 @@ class Main():
     def __init__(self, cfg, parent):
         self.cfg = cfg
         self.metodo = cfg['metodo']
-        self.lista = cfg['lista_manual']
-        if self.metodo == 'todo':
+        if self.metodo == 'particion_4':
             self.disco = cfg['disco']
             self.lista = cfg['lista_manual']
-        elif self.metodo == 'vacio':
-            self.lista = cfg['lista_manual']
-            self.disco = cfg['disco']
-            pass
         else:
             self.particion = cfg['particion']
             self.disco = self.particion[:-1]
