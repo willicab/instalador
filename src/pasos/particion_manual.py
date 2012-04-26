@@ -103,13 +103,13 @@ class Main(gtk.Fixed):
         tamano = gen.hum(gen.kb(self.fin) - gen.kb(self.ini))
         inicio = self.ini
         fin = gen.kb(self.fin)
-        libre = [self.disco,          #Dispositivo
-                 'Espacio Libre', #Tipo
-                 '',                        #Formato
-                 '',                        #Punto de montaje
-                 tamano,                    #Tamaño
-                 inicio,                    #inicio
-                 fin]                       #fin
+        libre = [self.disco,                # 0 Dispositivo
+                 'Espacio Libre',           # 1 Tipo
+                 '',                        # 2 Formato
+                 '',                        # 3 Punto de montaje
+                 tamano,                    # 4 Tamaño
+                 inicio,                    # 5 inicio
+                 fin]                       # 6 fin
         print "3 ", inicio, fin, tamano
         self.lista.append(libre)
 
@@ -146,58 +146,69 @@ class Main(gtk.Fixed):
         win = part_nueva.Main(self)
 
     def deshacer(self, widget=None):
-        
+        if self.lista[0][1] == 'Espacio Libre':
+            return False
         if self.lista[-1][1] == 'Espacio Libre':
-            self.lista.pop() # Elimino la particion libre, de existir
-        if len(self.lista)>0:
-            if self.lista[-1][1] == 'Espacio Libre Extendida':
-                self.lista.pop() # Elimino la particion libre extendida, de existir
-            self.bext = False
-            if self.lista[-1][3] == '/':
-                self.raiz = False
             self.lista.pop()
-            if len(self.lista)>0:
-                if self.lista[-1][1] == 'Extendida' or self.lista[-1][1] == 'Lógica':
-                    self.bext = True
-                    print "estableciendo bext a true"
-        #if len(self.lista)>0:
-        #    if self.lista[-1][1] == 'Primaria' or self.lista[-1][1] == 'Extendida':
-        #print self.bext, self.lista
-        #Si bext = True entonces
-        if self.bext == True:
-            # calculo el tamaño de la particion libre extendida
-            inicio = int(self.lista[-1][-1])
-            fin = int(self.ext_fin)
-            print "Inicio-Fin:", inicio, fin
-            tamano = gen.hum(fin - inicio)
-            if inicio != fin or self.lista[-1][1] == 'Extendida':
-                particion = [self.disco,        #Dispositivo
-                             'Espacio Libre Extendida',#Formato
-                             '',                #Tipo
-                             '',                #Punto de montaje
-                             tamano,                #Tamaño
-                             inicio,            #inicio
-                             fin]               #fin
-                self.lista.append(particion)
-                print "Creado Espacio Libre Extendida"
-        
-        # calculo el tamaño de la particion libre
-        if len(self.lista)==0:
-            inicio = int(gen.kb(self.ini))
+        if self.lista[-1][1] == 'Espacio Libre Extendida':
+            self.lista.pop()
+        if self.lista[-1][1] == 'Lógica':
+            self.bext = True
         else:
-            inicio = int(self.lista[-1][-1])
-        fin = int(gen.kb(self.fin))
-        tamano = gen.hum(fin - inicio)
-        if inicio != fin:
+            self.bext = False
+        
+        tipo = self.lista[-1][1]
+        fin = self.lista[-1][6]
+        
+        self.lista.pop()
+        
+        print tipo
+        
+        if tipo == 'Extendida':
+            inicio = self.ext_ini
+            fin = self.ext_fin
+        elif tipo == 'Lógica' and self.bext == True:
+            if self.lista[-1][1] == 'Extendida':
+                inicio = self.lista[-1][5]
+            else:
+                inicio = self.lista[-1][6]
+            fin = self.ext_fin
+        elif tipo == 'Primaria':
+            try:
+                inicio = self.lista[-1][6]
+            except:
+                inicio = gen.kb(self.ini)
+            fin = gen.kb(self.fin)
+        
+        print inicio, fin, self.fin, self.bext
+        
+        if self.bext == True:
+            tamano = gen.hum(fin - inicio)
+            particion = [self.disco,                #Dispositivo
+                         'Espacio Libre Extendida', #Formato
+                         '',                        #Tipo
+                         '',                        #Punto de montaje
+                         tamano,                    #Tamaño
+                         inicio,                    #inicio
+                         fin]                       #fin
+            self.lista.append(particion)
+        
+        
+        if fin != self.fin:
+            try:
+                inicio = self.lista[-1][6]
+            except:
+                inicio = gen.kb(self.ini)
+            fin = gen.kb(self.fin)
+            tamano = gen.hum(fin - inicio)
             particion = [self.disco,        #Dispositivo
-                         'Espacio Libre',   #Formato
+                         'Espacio Libre',#Formato
                          '',                #Tipo
                          '',                #Punto de montaje
                          tamano,                #Tamaño
                          inicio,            #inicio
                          fin]               #fin
             self.lista.append(particion)
-            print "Creado Espacio Libre"
         
         self.llenar_tabla(self.lista)
-        print "cantidad de elementos: ", len(self.lista), self.lista
+
