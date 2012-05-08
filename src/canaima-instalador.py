@@ -261,6 +261,7 @@ class Usuario():
         CFG['passuser'] = frm_usuario_root.txt_passuser.get_text()
         CFG['passuser2'] = frm_usuario_root.txt_passuser2.get_text()
         CFG['maquina'] = frm_usuario_root.txt_maquina.get_text()
+        CFG['oem'] = frm_usuario_root.chkoem.get_active()
         if CFG['passroot'].strip() == '':
             self.msg_error("Debe escribir una contraseña para root")
             return

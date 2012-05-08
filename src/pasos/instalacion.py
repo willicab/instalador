@@ -32,6 +32,7 @@ class Main(gtk.Fixed):
         self.usuario = cfg['usuario']
         self.passuser = cfg['passuser']
         self.maquina = cfg['maquina']
+        self.oem = cfg['oem']
 
         self.visor = webkit.WebView()
         self.visor.set_size_request(590, 280)
@@ -141,13 +142,17 @@ class Main(gtk.Fixed):
         os.system('chroot /target /usr/sbin/mkinitramfs -o /boot/{0} {1}'. \
             format(initrd, uname_r))
 # Aumenta la Barra 80
-        self.par.accion('Creando usuarios')
-        script = os.path.realpath(os.path.join(os.path.dirname(__file__), 
-                '..', 'scripts', 'make-user.sh'))
-        os.system('sh {0} "root" "{1}" "/target"'. \
-            format(script, self.passroot))
-        os.system('sh {0} "{1}" "{2}" "/target" "{3}"'. \
-            format(script, self.usuario, self.passuser, self.nombre))
+        if self.oem == True:
+            self.par.accion('Creando usuarios')
+            script = os.path.realpath(os.path.join(os.path.dirname(__file__), 
+                    '..', 'scripts', 'make-user.sh'))
+            os.system('sh {0} "root" "{1}" "/target"'. \
+                format(script, self.passroot))
+            os.system('sh {0} "{1}" "{2}" "/target" "{3}"'. \
+                format(script, self.usuario, self.passuser, self.nombre))
+        else:
+            os.system('aptitude purge canaima-instalador --assume-yes')
+        
 # Aumenta la Barra 90
         self.par.accion('Ejecutando últimas configuraciones')
         os.system('rm -f /target/etc/mtab')

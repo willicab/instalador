@@ -121,12 +121,11 @@ class Main(gtk.Fixed):
         self.put(self.txt_maquina, 150, 235)
         self.txt_maquina.show()
 
-        button = gtk.RadioButton(None, 
-           "Instalación OEM (Ignora esta configuración y la realiza al inicio)")
-        #button.connect("toggled", self.RadioButton_on_changed, "particion_2")
-        button.set_size_request(590, 25)
-        self.put(button, 0, 260)
-        #button.show()
+        self.chkoem = gtk.CheckButton("Instalación OEM (Ignora esta configuración y la realiza al inicio)")
+        self.chkoem.connect("toggled", self.CheckButton_on_changed)
+        self.chkoem.set_size_request(590, 25)
+        self.put(self.chkoem, 0, 260)
+        self.chkoem.show()
 
         msg = 'Necesita definir una contraseña para el superusuario (root), la '
         msg = msg + 'cuenta de administración del\nsistema, Un usuario malicioso'
@@ -144,3 +143,6 @@ class Main(gtk.Fixed):
         self.put(self.lbl1, 0, 30 )
         #self.lbl1.show()
 
+    def CheckButton_on_changed(self, widget=None):
+        print self.chkoem.get_active()
+        
