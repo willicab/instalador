@@ -16,8 +16,12 @@ canaima-instalador (1.0-5) stable; urgency=low
     modificados/añadidos: Makefile postrm preinst canaima-oem Default
   * [34a9a5f] [ canaima-desarrollador ] Los siguientes archivos han sido
     modificados/añadidos: postrm preinst
+  * [81bf84e] Error resuelto: Aunque se seleccionara la opción de
+    instalación oem aun intentaba validar los campos
+  * [2dbec13] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: Makefile
 
- -- William Abrahan Cabrera Reyes <william@linux.es>  Wed, 09 May 2012 13:55:26 -0430
+ -- William Abrahan Cabrera Reyes <william@linux.es>  Wed, 09 May 2012 15:15:46 -0430
 
 canaima-instalador (1.0-4) stable; urgency=low
 
