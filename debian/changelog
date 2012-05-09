@@ -22,8 +22,10 @@ canaima-instalador (1.0-5) stable; urgency=low
     modificados/añadidos: Makefile
   * [ee0d805] [ canaima-desarrollador ] Los siguientes archivos han sido
     modificados/añadidos: Makefile
+  * [8099b94] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: Makefile
 
- -- William Abrahan Cabrera Reyes <william@linux.es>  Wed, 09 May 2012 15:40:18 -0430
+ -- William Abrahan Cabrera Reyes <william@linux.es>  Wed, 09 May 2012 15:41:57 -0430
 
 canaima-instalador (1.0-4) stable; urgency=low
 
