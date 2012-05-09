@@ -31,7 +31,7 @@ function remove_divert {
     if [ -f /etc/gdm3/Init/Default ];
     then
         ADVERTENCIA 'Eliminando Divert'
-        ddpkg-divert --package ${PKG} --rename --remove /etc/gdm3/Init/Default
+        dpkg-divert --package ${PKG} --rename --remove /etc/gdm3/Init/Default
     fi
 }
 
