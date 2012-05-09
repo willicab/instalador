@@ -54,8 +54,12 @@ canaima-instalador (1.0-3) stable; urgency=low
     estaba definido Agregados nuevos paquetes en el makefile
   * [71f895c] [ canaima-desarrollador ] Los siguientes archivos han sido
     modificados/añadidos: rules
+  * [ec12490] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: Makefile canaima-instalador.debhelper.log
+    canaima-instalador.desktop canaima-instalador canaima-oem canaima-
+    instalador.py wizard.py
 
- -- William Abrahan Cabrera Reyes <william@linux.es>  Wed, 09 May 2012 03:19:29 -0430
+ -- William Abrahan Cabrera Reyes <william@linux.es>  Wed, 09 May 2012 03:21:39 -0430
 
 canaima-instalador (1.0-2) stable; urgency=low
 
