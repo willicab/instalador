@@ -262,24 +262,25 @@ class Usuario():
         CFG['passuser2'] = frm_usuario_root.txt_passuser2.get_text()
         CFG['maquina'] = frm_usuario_root.txt_maquina.get_text()
         CFG['oem'] = frm_usuario_root.chkoem.get_active()
-        if CFG['passroot'].strip() == '':
-            self.msg_error("Debe escribir una contraseña para root")
-            return
-        elif CFG['passroot'] != CFG['passroot2']:
-            self.msg_error("Las contraseñas de root no coinciden")
-            return
-        if CFG['nombre'].strip() == '':
-            self.msg_error("Debe escribir un nombre")
-            return
-        if CFG['usuario'].strip() == '':
-            self.msg_error("Debe escribir un nombre de usuario")
-            return
-        if CFG['passuser'].strip() == '':
-            self.msg_error("Debe escribir una contraseña para el usuario")
-            return
-        elif CFG['passuser'] != CFG['passuser2']:
-            self.msg_error("Las contraseñas del usuario no coinciden")
-            return
+        if CFG['oem'] == False:
+            if CFG['passroot'].strip() == '':
+                self.msg_error("Debe escribir una contraseña para root")
+                return
+            elif CFG['passroot'] != CFG['passroot2']:
+                self.msg_error("Las contraseñas de root no coinciden")
+                return
+            if CFG['nombre'].strip() == '':
+                self.msg_error("Debe escribir un nombre")
+                return
+            if CFG['usuario'].strip() == '':
+                self.msg_error("Debe escribir un nombre de usuario")
+                return
+            if CFG['passuser'].strip() == '':
+                self.msg_error("Debe escribir una contraseña para el usuario")
+                return
+            elif CFG['passuser'] != CFG['passuser2']:
+                self.msg_error("Las contraseñas del usuario no coinciden")
+                return
         Info()
     def anterior(self, widget = None):
         '''
