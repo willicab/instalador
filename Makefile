@@ -152,6 +152,11 @@ install:
 	install -m 644 src/clases/install/particion_todo.py $(DESTDIR)/usr/share/canaima-instalador/clases/install/particion_todo.py
 	
 uninstall:
+	rm -rf $(DESTDIR)/usr/bin/canaima-instalador
+	rm -rf $(DESTDIR)/usr/bin/canaima-oem
+	rm -rf $(DESTDIR)/usr/share/canaima-instalador
+	rm -rf $(DESTDIR)/etc/skel/Escritorio/canaima-instalador.desktop
+	rm -rf $(DESTDIR)/etc/gdm3/Init/Default
 
 # Aquí se deshace lo que se hizo en el install, borrando exactamente lo que
 # se creó en el install
