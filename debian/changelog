@@ -26,8 +26,10 @@ canaima-instalador (1.0-5) stable; urgency=low
     modificados/añadidos: Makefile
   * [7bcedfb] [ canaima-desarrollador ] Los siguientes archivos han sido
     modificados/añadidos: Makefile
+  * [a3a058a] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: oem.py usuario.py
 
- -- William Abrahan Cabrera Reyes <william@linux.es>  Wed, 09 May 2012 15:45:09 -0430
+ -- William Abrahan Cabrera Reyes <william@linux.es>  Wed, 09 May 2012 16:14:41 -0430
 
 canaima-instalador (1.0-4) stable; urgency=low
 
