@@ -52,8 +52,8 @@ case ${1} in
 
 	purge|remove|upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
 	# Para cada usuario en /home/ ...
-	remove_divert
 	for usuario in /home/*? ; do
+    	remove_divert
 
 		# Obteniendo sólo el nombre del usuario
 		usuario_min=$(basename ${usuario})
