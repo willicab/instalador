@@ -138,6 +138,7 @@ install:
 	install -m 644 src/clases/tabla_particiones.py $(DESTDIR)/usr/share/canaima-instalador/clases/tabla_particiones.py
 	install -m 644 src/clases/particion_nueva.py $(DESTDIR)/usr/share/canaima-instalador/clases/particion_nueva.py
 	install -m 644 src/clases/particiones.py $(DESTDIR)/usr/share/canaima-instalador/clases/particiones.py
+	install -m 644 src/clases/barra_manual.py $(DESTDIR)/usr/share/canaima-instalador/clases/barra_manual.py
 	install -m 644 src/clases/barra_auto.py $(DESTDIR)/usr/share/canaima-instalador/clases/barra_auto.py
 	install -m 644 src/clases/barra_particiones.py $(DESTDIR)/usr/share/canaima-instalador/clases/barra_particiones.py
 	install -m 644 src/clases/barra_todo.py $(DESTDIR)/usr/share/canaima-instalador/clases/barra_todo.py
