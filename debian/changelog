@@ -12,8 +12,10 @@ canaima-instalador (1.0-5) stable; urgency=low
     modificados/añadidos: postrm
   * [315cf0f] [ canaima-desarrollador ] Los siguientes archivos han sido
     modificados/añadidos: Makefile
+  * [d10e266] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: Makefile postrm preinst canaima-oem Default
 
- -- William Abrahan Cabrera Reyes <william@linux.es>  Wed, 09 May 2012 13:16:22 -0430
+ -- William Abrahan Cabrera Reyes <william@linux.es>  Wed, 09 May 2012 13:41:26 -0430
 
 canaima-instalador (1.0-4) stable; urgency=low
 
