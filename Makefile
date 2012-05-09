@@ -108,6 +108,7 @@ install:
 	install -m 644 src/oem/oem.py $(DESTDIR)/usr/share/canaima-instalador/oem/oem.py
 	install -m 644 src/oem/usuario.html $(DESTDIR)/usr/share/canaima-instalador/oem/usuario.html
 	#install -m 755 src/oem/Default $(DESTDIR)/etc/gdm3/Init/Default
+	install -m 644 src/data/wait.gif $(DESTDIR)/usr/share/canaima-instalador/data/wait.gif
 	install -m 644 src/data/canaima.png $(DESTDIR)/usr/share/canaima-instalador/data/canaima.png
 	install -m 644 src/data/banner-app-top.png $(DESTDIR)/usr/share/canaima-instalador/data/banner-app-top.png
 	install -m 644 src/data/buscar-discos.png $(DESTDIR)/usr/share/canaima-instalador/data/buscar-discos.png

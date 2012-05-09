@@ -6,15 +6,26 @@
         <meta name="Robots" content="index,follow">
         <style type="text/css">
             body {
-                background-color: #ece9d8;
+                background-color: #000;
                 margin: 0;
                 padding: 0;
             }
             #cuerpo {
-                background: url('../data/logo-grande.png') center no-repeat;
+                background: #ece9d8 url('../data/logo-grande.png') center no-repeat;
                 width: 600px;
                 height: 480px;
                 border: 0px solid black;
+                border-radius:13px;
+                -moz-border-radius:13px;
+                -webkit-border-radius:13px;
+            }
+            #banner {
+                -webkit-border-top-left-radius: 13px;
+                -webkit-border-top-right-radius: 13px;
+                -moz-border-radius-topleft: 13px;
+                -moz-border-radius-topright: 13px;
+                border-top-left-radius: 13px;
+                border-top-right-radius: 13px;            
             }
             .msgbox {
                 position:absolute;
@@ -134,7 +145,7 @@
     </head>
     <body>
         <div id="cuerpo">
-            <img src="../data/banner-app-top.png" alt="banner" title="banner" /> 
+            <img id="banner" src="../data/banner-app-top.png" alt="banner" title="banner" /> 
             <form action="" method="post">
                 <p>
                     <label for="nombre">Nombre</label>
