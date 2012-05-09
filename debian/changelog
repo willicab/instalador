@@ -1,9 +1,16 @@
+canaima-instalador (1.0-5) stable; urgency=low
+
+  * [3b9a5a6] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: install-grub.sh
+
+ -- William Abrahan Cabrera Reyes <william@linux.es>  Wed, 09 May 2012 03:25:19 -0430
+
 canaima-instalador (1.0-4) stable; urgency=low
 
   * [3b9a5a6] [ canaima-desarrollador ] Los siguientes archivos han sido
     modificados/añadidos: install-grub.sh
 
- -- William Abrahan Cabrera Reyes <william@linux.es>  Wed, 09 May 2012 03:26:58 -0430
+ -- William Abrahan Cabrera Reyes <william@linux.es>  Wed, 09 May 2012 03:25:18 -0430
 
 canaima-instalador (1.0-3) stable; urgency=low
 
@@ -79,8 +86,6 @@ canaima-instalador (1.0-3) stable; urgency=low
     instalador.py oem.py usuario.html wizard.py
   * [805adb2] [ canaima-desarrollador ] Los siguientes archivos han sido
     modificados/añadidos:
-  * [3b9a5a6] [ canaima-desarrollador ] Los siguientes archivos han sido
-    modificados/añadidos: install-grub.sh
 
  -- William Abrahan Cabrera Reyes <william@linux.es>  Wed, 09 May 2012 03:25:17 -0430
 
