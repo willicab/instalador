@@ -98,6 +98,7 @@ install:
 	install -d $(DESTDIR)/usr/share/canaima-instalador/pasos
 	install -d $(DESTDIR)/usr/share/canaima-instalador/scripts
 	install -d $(DESTDIR)/etc/skel/Escritorio
+	install -d $(DESTDIR)/etc/gdm3/Init
 
 	install -m 755 src/canaima-instalador.desktop $(DESTDIR)/etc/skel/Escritorio/canaima-instalador.desktop
 	install -m 755 src/canaima-instalador.py $(DESTDIR)/usr/share/canaima-instalador/canaima-instalador.py
