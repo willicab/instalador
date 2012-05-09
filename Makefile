@@ -127,6 +127,7 @@ install:
 	install -m 644 src/pasos/__init__.py $(DESTDIR)/usr/share/canaima-instalador/pasos/__init__.py
 	install -m 644 src/pasos/instalacion.py $(DESTDIR)/usr/share/canaima-instalador/pasos/instalacion.py
 	install -m 644 src/pasos/metodo.py $(DESTDIR)/usr/share/canaima-instalador/pasos/metodo.py
+	install -m 644 src/pasos/particion_manual.py $(DESTDIR)/usr/share/canaima-instalador/pasos/particion_manual.py
 	install -m 644 src/pasos/particion_auto.py $(DESTDIR)/usr/share/canaima-instalador/pasos/particion_auto.py
 	install -m 644 src/pasos/particion_todo.py $(DESTDIR)/usr/share/canaima-instalador/pasos/particion_todo.py
 	install -m 644 src/pasos/teclado.py $(DESTDIR)/usr/share/canaima-instalador/pasos/teclado.py
