@@ -8,8 +8,10 @@ canaima-instalador (1.0-5) stable; urgency=low
     modificados/añadidos: postrm preinst
   * [0a1f383] [ canaima-desarrollador ] Los siguientes archivos han sido
     modificados/añadidos: postrm
+  * [18a9a3a] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: postrm
 
- -- William Abrahan Cabrera Reyes <william@linux.es>  Wed, 09 May 2012 11:53:27 -0430
+ -- William Abrahan Cabrera Reyes <william@linux.es>  Wed, 09 May 2012 11:57:55 -0430
 
 canaima-instalador (1.0-4) stable; urgency=low
 
