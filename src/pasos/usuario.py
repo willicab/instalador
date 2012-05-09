@@ -144,7 +144,7 @@ class Main(gtk.Fixed):
         #self.lbl1.show()
 
     def CheckButton_on_changed(self, widget=None):
-        active = self.chkoem.get_active()
+        active = not self.chkoem.get_active()
         self.txt_passroot.set_sensitive(active)
         self.txt_passroot2.set_sensitive(active)
         self.txt_nombre.set_sensitive(active)
