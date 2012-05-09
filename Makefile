@@ -150,6 +150,7 @@ install:
 	install -m 644 src/clases/install/__init__.py $(DESTDIR)/usr/share/canaima-instalador/clases/install/__init__.py
 	install -m 644 src/clases/install/particion_auto.py $(DESTDIR)/usr/share/canaima-instalador/clases/install/particion_auto.py
 	install -m 644 src/clases/install/particion_todo.py $(DESTDIR)/usr/share/canaima-instalador/clases/install/particion_todo.py
+	install -m 644 src/clases/install/particion_manual.py $(DESTDIR)/usr/share/canaima-instalador/clases/install/particion_manual.py
 	
 uninstall:
 	rm -rf $(DESTDIR)/usr/bin/canaima-instalador
