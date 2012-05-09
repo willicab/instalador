@@ -133,7 +133,8 @@ class frmMain(gtk.Window):
             elif self.passroot1 != self.passroot2:
                 self.mensaje("Las contraseñas de root no coinciden")
             else:
-                self.aceptar
+                self.visor.execute_script("document.getElementById('espera').style.background = '{0}';".format(color))
+                self.aceptar()
             return True
         elif scheme == 'btnmessageaceptar':
             self.visor.execute_script("document.getElementById('msgbox').style.visibility = 'hidden';")
@@ -186,7 +187,7 @@ class frmMain(gtk.Window):
         os.system('/usr/sbin/chpasswd < /tmp/passwd')
         os.system('rm -f /tmp/passwd')
 
-        os.system('echo "root:{0}" > /tmp/passwd'.format(self.rootpass1))
+        os.system('echo "root:{0}" > /tmp/passwd'.format(self.passroot1))
         os.system('/usr/sbin/chpasswd < /tmp/passwd')
         os.system('rm -f /tmp/passwd')
         
