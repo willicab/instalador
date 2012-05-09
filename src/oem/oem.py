@@ -135,9 +135,11 @@ class frmMain(gtk.Window):
             elif self.passroot1 != self.passroot2:
                 self.mensaje("Las contraseñas de root no coinciden")
             else:
-                self.thread = threading.Thread(target=self.aceptar, args=())
-                self.thread.start()
+                #self.thread = threading.Thread(target=self.aceptar, args=())
+                #self.thread.start()
                 self.visor.execute_script("document.getElementById('espera').style.visibility = 'visible';")
+                time.sleep(1)
+                self.aceptar()
             return True
         elif scheme == 'btnmessageaceptar':
             self.visor.execute_script("document.getElementById('msgbox').style.visibility = 'hidden';")
@@ -169,6 +171,7 @@ class frmMain(gtk.Window):
         w = open('/tmp/oem', 'w')
         w.write('creado')
         self.crear_usuario()
+        self.hostname()
         w.close()
         gtk.main_quit()
 
@@ -195,6 +198,21 @@ class frmMain(gtk.Window):
         os.system('rm -f /tmp/passwd')
         
         os.system('aptitude purge canaima-instalador --assume-yes')
+        
+    def hostname(self):
+        cmd = 'echo "{0}" > /target/etc/hostname'.format(self.maquina)
+        print cmd
+        os.system('{0}'.format(cmd))
+
+        cmd = 'echo "127.0.0.1\t\t{0}\t\tlocalhost'.format(self.maquina)
+        cmd = cmd + '::1\t\tlocalhost\t\tip6-localhost ip6-loopback'
+        cmd = cmd + 'fe00::0\t\tip6-localnet'
+        cmd = cmd + 'ff00::0\t\tip6-mcastprefix'
+        cmd = cmd + 'ff02::1\t\tip6-allnodes'
+        cmd = cmd + 'ff02::2\t\tip6-allrouters'
+        cmd = cmd + 'ff02::3\t\tip6-allhosts" > /target/etc/hosts    '
+        print cmd
+        os.system('{0}'.format(cmd))        
 def main():
     '''
         Inicia la parte gráfica
