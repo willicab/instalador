@@ -1,13 +1,13 @@
 #!/bin/sh
 
 # Si no existe el archivo se crea y se agrega el texto oem
-archivo="/etc/oem"
+archivo="/tmp/oem"
 salida="nada"
 
 if [ -e "$archivo" ]; then
     salida=`cat $archivo 2>&1`
 else
-    echo "oem" > "/etc/oem"
+    echo "oem" > "$archivo"
     salida=`cat $archivo 2>&1`
 fi
 

@@ -156,13 +156,13 @@ class frmMain(gtk.Window):
         return strenght
         
     def mantenimiento(self, widget=None):
-        w = open('/etc/oem', 'w')
+        w = open('/tmp/oem', 'w')
         w.write('mantenimiento')
         w.close()
         gtk.main_quit()
 
     def aceptar(self, widget=None):
-        w = open('/etc/oem', 'w')
+        w = open('/tmp/oem', 'w')
         w.write('creado')
         self.crear_usuario()
         w.close()
