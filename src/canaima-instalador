@@ -1,4 +1,4 @@
 #!/bin/sh
 
 cd /usr/share/canaima-instalador
-gksu "python oem.py"
+gksu "python canaima-instalador.py"

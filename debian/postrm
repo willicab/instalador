@@ -25,6 +25,16 @@ BOLD="\e[1m"
 # Caracter de fin de línea
 FIN="\e[0m"
 
+PKG="canaima-instalador"
+
+function remove_divert {
+    if [ -f /etc/gdm3/Init/Default ];
+    then
+        dpkg-divert --package ${PKG} --rename \
+        --remove --divert /etc/gdm3/Init/Default.real  /etc/gdm3/Init/Default
+    fi
+}
+
 function ERROR() {
 echo -e ${ROJO}${1}${FIN}
 }
@@ -37,10 +47,12 @@ function EXITO() {
 echo -e ${VERDE}${1}${FIN}
 }
 
+
 case ${1} in
 
 	purge|remove|upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
 	# Para cada usuario en /home/ ...
+	remove_divert
 	for usuario in /home/*? ; do
 
 		# Obteniendo sólo el nombre del usuario

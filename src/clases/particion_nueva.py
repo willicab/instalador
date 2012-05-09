@@ -28,8 +28,6 @@ class Main(gtk.Dialog):
             self.inicio = gen.kb(self.padre.ext_ini)
             self.fin = gen.kb(self.padre.ext_fin)
         
-        print self.inicio, self.fin
-        
         # Contenedor General
         self.cont = gtk.Fixed()
         self.cont.show()

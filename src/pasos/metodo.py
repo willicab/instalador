@@ -6,12 +6,11 @@
 import pygtk
 pygtk.require('2.0')
 import gtk
-#import commands
 import clases.particiones
 import clases.general as gen
 import clases.barra_particiones as barra
 import threading
-#import mensaje
+import os
 
 class Main(gtk.Fixed):
     disco = ''
@@ -41,10 +40,12 @@ class Main(gtk.Fixed):
         thread = threading.Thread(target=self.Iniciar, args=())
         thread.start()
         
+        #self.Iniciar()
+        
     def Iniciar(self):
         self.par.mostrar_barra()
         self.par.info_barra('Buscando discos en el computador')
-        self.discos = self.part.lista_discos()
+        
 
         txt_info = "Escoja el disco donde quiere instalar el sistema:"
         self.lbl1 = gtk.Label(txt_info)
@@ -53,15 +54,27 @@ class Main(gtk.Fixed):
         self.put(self.lbl1, 0, 0)
         self.lbl1.show()
         
+        self.discos = self.part.lista_discos()
+        borrados = []
         # Listar Discos
         for disco in self.discos:
             try:
+                particiones = self.part.lista_particiones(disco["logical name"])
+                print disco["logical name"], len(particiones)
+                #if len(particiones) > 0:
+                print "agregando ", disco["logical name"]
                 self.cmb_discos.append_text('{0} ({1})'.format( \
                     disco['description'], \
                     disco['size'].split('(')[1][:-1]
                 ))
+#                else:
+#                    print "borrando ", disco["logical name"]
+#                    borrados.append(disco)
+#                    print "Iniciando"
             except:
                 pass
+        #for borrado in borrados:
+        #    self.discos.remove(borrado)
         self.cmb_discos.set_active(0)
         self.seleccionar_disco()
         self.cmb_discos.connect("changed", self.seleccionar_disco)
@@ -157,13 +170,89 @@ class Main(gtk.Fixed):
         self.disco = self.discos[self.cmb_discos.get_active()]['logical name']
         #print self.disco
         self.particiones = self.part.lista_particiones(self.disco)
-        self.total = self.particiones[0][9]
-        try:
-            self.barra_part.expose()
-        except:
-            pass
-        self.cfg['particion'] = self.particiones[0]
-        self.cfg['disco'] = self.disco
-        self.lista_metodos()
-        self.establecer_metodo()
+        if len(self.particiones) == 0:
+            res = MessageBox(self, self.par, self.disco)
+        else:
+            self.total = self.particiones[0][9]
+            try:
+                self.barra_part.expose()
+            except:
+                pass
+            self.cfg['particion'] = self.particiones[0]
+            self.cfg['disco'] = self.disco
+            self.lista_metodos()
+            self.establecer_metodo()
+            self.barra_part.show()
+            self.cmb_metodo.show()
+            self.lbl_info.show()
 
+class MessageBox(gtk.MessageDialog):
+    def __init__(self, padre, parent, disco):
+        self.padre = padre
+        self.disco = disco
+        msg = "El disco {0} necesita una tabla de particiones para\n"
+        msg = msg + "la instalación. El tipo de tabla de particiones\n"
+        msg = msg + "recomendada es msdos.\n\nSí presiona cancelar no\n"
+        msg = msg + "podrá usar este disco para realizar la instalación."
+        msg = msg.format(self.disco)
+        gtk.MessageDialog.__init__(self, parent, gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT, gtk.MESSAGE_INFO, gtk.BUTTONS_OK_CANCEL, msg)
+        self.connect('response', self._handle_clicked)
+        #self.add_button("Cancelar", gtk.RESPONSE_CANCEL)
+        #self.set_default_response(gtk.RESPONSE_OK)
+        self.set_title("Disco {0} sin tabla de particiones".format(self.disco))
+        #self.set_size_request(400, 200)
+        #self.set_resizable(0)
+        #self.set_border_width(0)
+        # Contenedor General
+        self.cont = gtk.Fixed()
+        self.cont.show()
+        self.vbox.pack_start(self.cont)
+        
+        #Sistema de Archivos
+        self.hbox = gtk.HBox()
+        self.vbox.pack_start(self.hbox)
+        self.lbl = gtk.Label('Tipo de tabla de particiones: ')
+        self.lbl.set_alignment(0, 0.5)
+        self.lbl.show()
+        self.hbox.pack_start(self.lbl, False)
+        self.cmb_label = gtk.combo_box_new_text()
+        self.cmb_label.set_size_request(100, 30)
+        self.hbox.pack_start(self.cmb_label)
+        self.cmb_label.append_text('msdos (recomendada)')
+        self.cmb_label.append_text('aix')
+        self.cmb_label.append_text('amiga')
+        self.cmb_label.append_text('bsd')
+        self.cmb_label.append_text('dvh')
+        self.cmb_label.append_text('gpt')
+        self.cmb_label.append_text('mac')
+        self.cmb_label.append_text('pc98')
+        self.cmb_label.append_text('sun')
+        self.cmb_label.append_text('loop')
+        self.cmb_label.set_active(0)
+        self.cmb_label.show()
+        
+        response = self.show_all()
+        #self.run()
+        #self.destroy()
+    def _handle_clicked(self, *args):
+        # -5 = OK
+        # -6 = CANCEL
+        if args[1] == -5:
+            cmd = 'parted {0} mklabel {1}'.format(self.disco, gen.get_active_text(self.cmb_label).split(' ')[0])
+            os.system(cmd)
+            print cmd
+            self.padre.seleccionar_disco()
+            self.padre.barra_part.show()
+            self.padre.cmb_metodo.show()
+            self.padre.lbl_info.show()
+            
+        else:
+            self.padre.barra_part.hide()
+            self.padre.cmb_metodo.hide()
+            self.padre.lbl_info.hide()
+        self.destroy()
+        
+        #self.connect('response', self.handle_clicked)
+        
+        #def handle_clicked(self, widget=None):
+        #    self.destroy()

@@ -146,11 +146,18 @@ class Main(gtk.Fixed):
             self.par.accion('Creando usuarios')
             script = os.path.realpath(os.path.join(os.path.dirname(__file__), 
                     '..', 'scripts', 'make-user.sh'))
+            os.system('sh {0} "root" "root" "/target"'. \
+                format(script))
+            os.system('sh {0} "canaima" "canaima" "/target" "Mantenimiento"'. \
+                format(script))
+        else:
+            self.par.accion('Creando usuarios')
+            script = os.path.realpath(os.path.join(os.path.dirname(__file__), 
+                    '..', 'scripts', 'make-user.sh'))
             os.system('sh {0} "root" "{1}" "/target"'. \
                 format(script, self.passroot))
             os.system('sh {0} "{1}" "{2}" "/target" "{3}"'. \
                 format(script, self.usuario, self.passuser, self.nombre))
-        else:
             os.system('aptitude purge canaima-instalador --assume-yes')
         
 # Aumenta la Barra 90

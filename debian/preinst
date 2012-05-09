@@ -14,19 +14,27 @@
 
 PKG="canaima-instalador"
 
+function remove_divert {
+    if [ -f /etc/gdm3/Init/Default ];
+    then
+        dpkg-divert --package ${PKG} --rename \
+        --remove --divert /etc/gdm3/Init/Default.real  /etc/gdm3/Init/Default
+    fi
+}
 case ${1} in
 
 	install|upgrade)
-
+        dpkg-divert --package ${PKG} --add --rename \
+        --divert /etc/gdm3/Init/Default.real /etc/gdm3/Init/Default
 	# Aquí va lo que el paquete debe configurar/crear/borrar antes de
 	# instalarse. Lenguaje a usar: BASH.
 
 	;;
 
-        abort-upgrade)
-
-        # Aquí va lo que el paquete debe configurar/crear/borrar si se
-        # aborta el proceso de actualizar un paquete a una versión superior.
+    abort-upgrade)
+        remove_divert
+    # Aquí va lo que el paquete debe configurar/crear/borrar si se
+    # aborta el proceso de actualizar un paquete a una versión superior.
 	# Lenguaje a usar: BASH.
 
         ;;
