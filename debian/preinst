@@ -17,13 +17,15 @@ PKG="canaima-instalador"
 function remove_divert {
     if [ -f /etc/gdm3/Init/Default ];
     then
-        dpkg-divert --package ${PKG} --rename --remove /etc/gdm3/Init/Default
+        #dpkg-divert --package ${PKG} --rename --remove /etc/gdm3/Init/Default
+        sed  -i  's#/usr/bin/canaima-oem\n\nexit 0#exit 0#g' /etc/gdm3/Init/Default
     fi
 }
 case ${1} in
 
 	install|upgrade)
-        dpkg-divert --package ${PKG} --divert /etc/gdm3/Init/Default.real --rename /etc/gdm3/Init/Default
+        #dpkg-divert --package ${PKG} --divert /etc/gdm3/Init/Default.real --rename /etc/gdm3/Init/Default
+        sed  -i  's#exit 0#/usr/bin/canaima-oem\n\nexit 0#g' /etc/gdm3/Init/Default
 	# Aquí va lo que el paquete debe configurar/crear/borrar antes de
 	# instalarse. Lenguaje a usar: BASH.
 

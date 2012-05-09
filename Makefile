@@ -107,7 +107,7 @@ install:
 	install -m 644 src/wizard.py $(DESTDIR)/usr/share/canaima-instalador/wizard.py
 	install -m 644 src/oem/oem.py $(DESTDIR)/usr/share/canaima-instalador/oem/oem.py
 	install -m 644 src/oem/usuario.html $(DESTDIR)/usr/share/canaima-instalador/oem/usuario.html
-	install -m 755 src/oem/Default $(DESTDIR)/etc/gdm3/Init/Default
+	#install -m 755 src/oem/Default $(DESTDIR)/etc/gdm3/Init/Default
 	install -m 644 src/data/banner-app-top.png $(DESTDIR)/usr/share/canaima-instalador/data/banner-app-top.png
 	install -m 644 src/data/buscar-discos.png $(DESTDIR)/usr/share/canaima-instalador/data/buscar-discos.png
 	install -m 644 src/data/distribuciones/es.png $(DESTDIR)/usr/share/canaima-instalador/data/distribuciones/es.png
@@ -156,7 +156,7 @@ uninstall:
 	rm -rf $(DESTDIR)/usr/bin/canaima-oem
 	rm -rf $(DESTDIR)/usr/share/canaima-instalador
 	rm -rf $(DESTDIR)/etc/skel/Escritorio/canaima-instalador.desktop
-	rm -rf $(DESTDIR)/etc/gdm3/Init/Default
+	#rm -rf $(DESTDIR)/etc/gdm3/Init/Default
 
 # Aquí se deshace lo que se hizo en el install, borrando exactamente lo que
 # se creó en el install

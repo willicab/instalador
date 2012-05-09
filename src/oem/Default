@@ -75,33 +75,6 @@ if [ "x$SETXKBMAP" != "x" ] ; then
   fi
 fi
 
-# Si no existe el archivo se crea y se agrega el texto oem
-archivo="/etc/oem"
-salida="nada"
-
-if [ -e "$archivo" ]; then
-    salida=`cat $archivo 2>&1`
-else
-    echo "oem" > "/etc/oem"
-    salida=`cat $archivo 2>&1`
-fi
-
-if [ $salida = "oem" ]; then
-    gdm-stop
-    DISPLAY=:1
-    export DISPLAY
-    /usr/bin/Xorg :1 &
-    /usr/bin/metacity --display=:1 &
-
-    /usr/bin/canaima-oem
-
-    /usr/bin/killall -9 metacity
-    sleep 2
-    /usr/bin/killall -9 Xorg
-    /etc/init.d/gdm3 restart
-elif [ $salida = "mantenimiento" ]; then
-    echo "oem" > "$archivo"
-fi
-
+/usr/bin/canaima-oem
 
 exit 0
