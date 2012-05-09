@@ -8,6 +8,7 @@ import webkit
 import os
 import re
 import time
+import threading
 
 SEGURIDAD = {
     0: '#f00',
@@ -134,9 +135,9 @@ class frmMain(gtk.Window):
             elif self.passroot1 != self.passroot2:
                 self.mensaje("Las contraseñas de root no coinciden")
             else:
+                self.thread = threading.Thread(target=self.aceptar, args=())
+                self.thread.start()
                 self.visor.execute_script("document.getElementById('espera').style.visibility = 'visible';")
-                time.sleep(1)
-                self.aceptar()
             return True
         elif scheme == 'btnmessageaceptar':
             self.visor.execute_script("document.getElementById('msgbox').style.visibility = 'hidden';")
