@@ -7,6 +7,7 @@ import gtk
 import webkit
 import os
 import re
+import time
 
 SEGURIDAD = {
     0: '#f00',
@@ -133,7 +134,8 @@ class frmMain(gtk.Window):
             elif self.passroot1 != self.passroot2:
                 self.mensaje("Las contraseñas de root no coinciden")
             else:
-                self.visor.execute_script("document.getElementById('espera').style.background = '{0}';".format(color))
+                self.visor.execute_script("document.getElementById('espera').style.visibility = 'visible';")
+                time.sleep(1)
                 self.aceptar()
             return True
         elif scheme == 'btnmessageaceptar':
