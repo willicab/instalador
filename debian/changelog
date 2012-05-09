@@ -32,8 +32,10 @@ canaima-instalador (1.0-5) stable; urgency=low
     modificados/añadidos: usuario.py
   * [5128490] [ canaima-desarrollador ] Los siguientes archivos han sido
     modificados/añadidos: canaima-oem oem.py
+  * [3ee011b] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: preinst wait.gif oem.py usuario.html
 
- -- William Abrahan Cabrera Reyes <william@linux.es>  Wed, 09 May 2012 16:46:22 -0430
+ -- William Abrahan Cabrera Reyes <william@linux.es>  Wed, 09 May 2012 17:37:22 -0430
 
 canaima-instalador (1.0-4) stable; urgency=low
 
