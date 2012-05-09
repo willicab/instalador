@@ -2,8 +2,60 @@ canaima-instalador (1.0-3) stable; urgency=low
 
   * [8016885] [ canaima-desarrollador ] Los siguientes archivos han sido
     modificados/añadidos: canaima-instalador.py
+  * [560b6b0] Corregido error con la opción instalar todo
+  * [99572ed] Corrección bugs relacionado a la instalacion automática
+  * [f17530b] Añadido punto de montaje e instalación de paquetes
+    necesarios
+  * [ba5708a] Agregada primera parte del particionador manual
+  * [64437a3] Eliminados los binarios innecesarios
+  * [52ebf13] Completado particionado manual
+  * [6de8105] corregido error en particionado manual al buscar el final
+    de la partición
+  * [e9988f6] Corregido error al convertir tamaño de las particiones y
+    agregada partición que será booteable
+  * [d1c045e] Coregido error en la conversión de valores para el final
+    de la partición
+  * [429d480] Error corregido: no se redimensionaba bien la partición
+    NTFS en modo particionado manual y no se formateaba la primera
+    partición lógica que se creaba
+  * [0b88402] Error corregido: cuando no existía la variable
+    cfg['partición'] probocaba una excepción. Aplicada validación que
+    elimina del combobox el punto de montaje que ya haya sido agregado
+  * [e8f89e2] Agregada validación para evitar puntos de montaje
+    repetidos al escoger punto de montaje manual
+  * [77fd608] Error corregido: no se mostraba correctamente el mensaje
+    de información al escoger el método de particionado
+  * [3e5014a] Cambiadas las rutas de los .deb nuevos que se instalarán
+  * [6742694] Agregada información acerca del metodo de particionado
+    manual en la info
+  * [8a44fbf] Agregada validación para obligar al usuario a crear un
+    punto de montaje raiz (/)
+  * [8dcc70f] Error corregido: el diálogo de redimensionamiento de la
+    partición no actualiza si se va hacia atras y se escoga oto disco o
+    particiń para redimensionar
+  * [45fc419] Error corregido: el diálogo del particionado no actualiza
+    si se va hacia atras y se escoge oto disco o partición
+  * [b66b5ab] Eliminada la opción de redimensionar partición ext3
+  * [bcdf752] Agregados los sistemas de archivos soportados por parted
+    en el particionador manual
+  * [180c3de] Agregando nueva dependencia (reiserfsprogs)
+  * [9b6f39c] Error corregido: Variables inexistentes cuando el metodo
+    es 'todo' y el tipo de particioado es 1
+  * [cf1a21c] Error corregido: No detecta el disco donde se instalará
+    burg cuando se redimensiona la partición
+  * [4f1cfee] Error corregido: particionado manual presentaba error con
+    variables
+  * [abe0461] Corregido error: la partición manual desde un espacio
+    vacio daba error
+  * [f67be7a] reescrita función deshacer ya que no estaba optimizada
+  * [f08c342] Añadido paso oem
+  * [fc91446] Error corregido: Si se consigue un disco sin tabla de
+    particiones se cuelga. Error corregido: El ejecutable del oem no
+    estaba definido Agregados nuevos paquetes en el makefile
+  * [71f895c] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: rules
 
- -- William Abrahan Cabrera Reyes <william@linux.es>  Thu, 05 Jan 2012 17:37:28 -0430
+ -- William Abrahan Cabrera Reyes <william@linux.es>  Wed, 09 May 2012 03:19:29 -0430
 
 canaima-instalador (1.0-2) stable; urgency=low
 
