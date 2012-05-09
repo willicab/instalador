@@ -36,8 +36,10 @@ canaima-instalador (1.0-5) stable; urgency=low
     modificados/añadidos: preinst wait.gif oem.py usuario.html
   * [341bd0b] [ canaima-desarrollador ] Los siguientes archivos han sido
     modificados/añadidos: Makefile preinst usuario.html
+  * [4187dc4] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: oem.py usuario.html
 
- -- William Abrahan Cabrera Reyes <william@linux.es>  Wed, 09 May 2012 17:53:40 -0430
+ -- William Abrahan Cabrera Reyes <william@linux.es>  Wed, 09 May 2012 18:20:42 -0430
 
 canaima-instalador (1.0-4) stable; urgency=low
 
