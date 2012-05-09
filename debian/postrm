@@ -31,7 +31,7 @@ function remove_divert {
     if [ -f /etc/gdm3/Init/Default ];
     then
         dpkg-divert --package ${PKG} --rename \
-        --remove --divert /etc/gdm3/Init/Default.real  /etc/gdm3/Init/Default
+        --remove /etc/gdm3/Init/Default
     fi
 }
 
