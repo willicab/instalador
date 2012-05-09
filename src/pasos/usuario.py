@@ -121,7 +121,7 @@ class Main(gtk.Fixed):
         self.put(self.txt_maquina, 150, 235)
         self.txt_maquina.show()
 
-        self.chkoem = gtk.CheckButton("Instalación OEM (Ignora esta configuración y la realiza al inicio)")
+        self.chkoem = gtk.CheckButton("Instalación OEM (Ignora esta configuración y la realiza al primer inicio)")
         self.chkoem.connect("toggled", self.CheckButton_on_changed)
         self.chkoem.set_size_request(590, 25)
         self.put(self.chkoem, 0, 260)
@@ -144,5 +144,11 @@ class Main(gtk.Fixed):
         #self.lbl1.show()
 
     def CheckButton_on_changed(self, widget=None):
-        print self.chkoem.get_active()
-        
+        active = self.chkoem.get_active()
+        self.txt_passroot.set_sensitive(active)
+        self.txt_passroot2.set_sensitive(active)
+        self.txt_nombre.set_sensitive(active)
+        self.txt_usuario.set_sensitive(active)
+        self.txt_passuser.set_sensitive(active)
+        self.txt_passuser2.set_sensitive(active)
+        self.txt_maquina.set_sensitive(active)
