@@ -206,12 +206,12 @@ class Main(gtk.Fixed):
         print cmd
         os.system('{0}'.format(cmd))
 
-        cmd = 'echo "127.0.0.1\t\t{0}\t\tlocalhost'.format(self.maquina)
-        cmd = cmd + '::1\t\tlocalhost\t\tip6-localhost ip6-loopback'
-        cmd = cmd + 'fe00::0\t\tip6-localnet'
-        cmd = cmd + 'ff00::0\t\tip6-mcastprefix'
-        cmd = cmd + 'ff02::1\t\tip6-allnodes'
-        cmd = cmd + 'ff02::2\t\tip6-allrouters'
+        cmd = 'echo "127.0.0.1\t\t{0}\t\tlocalhost\n'.format(self.maquina)
+        cmd = cmd + '::1\t\tlocalhost\t\tip6-localhost ip6-loopback\n'
+        cmd = cmd + 'fe00::0\t\tip6-localnet\n'
+        cmd = cmd + 'ff00::0\t\tip6-mcastprefix\n'
+        cmd = cmd + 'ff02::1\t\tip6-allnodes\n'
+        cmd = cmd + 'ff02::2\t\tip6-allrouters\n'
         cmd = cmd + 'ff02::3\t\tip6-allhosts" > /target/etc/hosts    '
         print cmd
         os.system('{0}'.format(cmd))
