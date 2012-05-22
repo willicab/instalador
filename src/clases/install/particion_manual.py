@@ -24,6 +24,7 @@ class Main():
             self.num = int(self.particion[-1:])
             self.ini = int(gen.kb(cfg['inicio']))
             self.fin = int(gen.kb(cfg['fin']))
+            self.lista = cfg['lista_manual']
             
             print 'Disco: ', cfg['disco']
             if cfg['metodo'] != 'todo' and cfg['metodo'] != 'vacio' :
