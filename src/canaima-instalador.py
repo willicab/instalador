@@ -312,6 +312,8 @@ class Info():
         if FRM_MAIN.indice(FRM_MAIN.nombres, 'info') == -1:
             FRM_MAIN.agregar('info', info.Main(CFG))
         FRM_MAIN.mostrar('info')
+        frm_info = FRM_MAIN.formulario('info')
+        frm_info.mostrar_info()
         desconectar()
         ID_SIGUIENTE = FRM_MAIN.btn_siguiente.connect("clicked", self.siguiente)
         ID_ANTERIOR = FRM_MAIN.btn_anterior.connect("clicked", self.anterior)

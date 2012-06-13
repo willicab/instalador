@@ -123,7 +123,7 @@ class Main():
                 File = a.find('Sistema de ficheros') - 1
                 Flags = a.find('Banderas') - 1
                 Leer = True
-        print particiones
+        #print particiones
         return particiones
     
     def particionar(self, disco, tipo, formato, inicio, fin):
