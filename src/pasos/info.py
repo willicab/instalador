@@ -8,7 +8,7 @@ class Main(gtk.Fixed):
     def __init__(self, cfg):
         gtk.Fixed.__init__(self)
         self.cfg = cfg
-        print self.cfg
+        #print self.cfg
     
         altura = 260
         inc = 20 
