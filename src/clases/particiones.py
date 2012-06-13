@@ -53,7 +53,7 @@ class Main():
         #print cmd, salida
         salida = salida[1].split('\n')
         for a in salida:
-            if a.find('Disk') == 0:
+            if a.find('Disk /') == 0:
                 total = a.split(':')[1][1:]
                 #print cmd, total
             if Leer == True:
@@ -123,6 +123,7 @@ class Main():
                 File = a.find('Sistema de ficheros') - 1
                 Flags = a.find('Banderas') - 1
                 Leer = True
+        print particiones
         return particiones
     
     def particionar(self, disco, tipo, formato, inicio, fin):
