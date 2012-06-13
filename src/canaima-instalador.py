@@ -7,11 +7,12 @@
 import pygtk
 pygtk.require('2.0')
 import gtk
+import os
+import re
 from pasos import bienvenida, teclado, metodo, particion_auto, particion_todo, \
     particion_manual, instalacion, usuario, info
 import wizard
 import clases.general as gen
-import os
 
 gtk.gdk.threads_init() 
 
@@ -266,7 +267,7 @@ class Usuario():
             if CFG['passroot'].strip() == '':
                 self.msg_error("Debe escribir una contraseña para root")
                 return
-            elif CFG['passroot'] != CFG['passroot2']:
+            if CFG['passroot'] != CFG['passroot2']:
                 self.msg_error("Las contraseñas de root no coinciden")
                 return
             if CFG['nombre'].strip() == '':
@@ -275,11 +276,17 @@ class Usuario():
             if CFG['usuario'].strip() == '':
                 self.msg_error("Debe escribir un nombre de usuario")
                 return
+            if re.compile('^[a-z][-a-z-0-9]*$').search(CFG['usuario']) == None:
+                self.msg_error("El nombre de usuario no está correctamente escrito")
+                return
             if CFG['passuser'].strip() == '':
                 self.msg_error("Debe escribir una contraseña para el usuario")
                 return
-            elif CFG['passuser'] != CFG['passuser2']:
+            if CFG['passuser'] != CFG['passuser2']:
                 self.msg_error("Las contraseñas del usuario no coinciden")
+                return
+            if re.compile("^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$").search(CFG['maquina']) == None:
+                self.msg_error("El nombre de la máquina no está correctamente escrito")
                 return
         Info()
     def anterior(self, widget = None):
