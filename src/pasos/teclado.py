@@ -50,8 +50,7 @@ class Main(gtk.Fixed):
         
     def change_distribucion(self, widget=None):
         self.distribucion = self.lst_distribuciones[self.cmb_dist.get_active()]
-        cmd = 'gconftool-2 -s /desktop/gnome/peripherals/keyboard/kbd/layouts '
-        cmd = cmd + '-t list --list-type=string [{0}]'.format(self.distribucion)
+        cmd = "setxkbmap {0}".format(self.distribucion)
         os.system('{0}'.format(cmd))
         self.txt_prueba.set_activates_default(True)
         path = 'data/distribuciones/' + self.distribucion + '.png'

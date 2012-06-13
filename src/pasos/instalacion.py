@@ -2,14 +2,15 @@
 
 import os
 import gtk
+import threading
+import commands
+import webkit
+from BeautifulSoup import BeautifulSoup
 import clases.particiones
 import clases.general as gen
 import clases.install.fstab
 import clases.install.particion_todo as particion_todo
 import clases.install.particion_auto as particion_auto
-import threading
-import commands
-import webkit
 
 class Main(gtk.Fixed):
     root1 = '20GB'
@@ -158,7 +159,7 @@ class Main(gtk.Fixed):
                 format(script, self.passroot))
             os.system('sh {0} "{1}" "{2}" "/target" "{3}"'. \
                 format(script, self.usuario, self.passuser, self.nombre))
-            os.system('aptitude purge canaima-instalador --assume-yes')
+            os.system('chroot /target aptitude purge canaima-instalador --assume-yes')
         
 # Aumenta la Barra 90
         self.par.accion('Ejecutando últimas configuraciones')
@@ -170,6 +171,7 @@ class Main(gtk.Fixed):
         self.hostname()
         os.system('chroot /target dhclient -v')
         os.system('chroot /target aptitude update')
+        self.keyboard()
 # Aumenta la Barra 100
         #os.system('chroot /target aptitude remove canaima-instalador')
         #os.system('chroot /target aptitude install canaima-contrasena -y')
@@ -215,4 +217,19 @@ class Main(gtk.Fixed):
         cmd = cmd + 'ff02::3\t\tip6-allhosts" > /target/etc/hosts    '
         print cmd
         os.system('{0}'.format(cmd))
+    
+    def keyboard(self):
+        f = open("/target/var/lib/gdm3/.gconf/apps/gdm/simple-greeter/%gconf.xml", "r")
+        string = f.read()
+        f.close()
 
+        soup = BeautifulSoup(string)
+        print(soup.prettify())
+        print soup
+        print soup.find("entry", {"name":"recent-layouts"}).li.stringvalue.string
+        soup.find("entry", {"name":"recent-layouts"}).li.stringvalue.string.replaceWith(CFG['teclado'])
+        print(soup.prettify())
+
+        f = open("/target/var/lib/gdm3/.gconf/apps/gdm/simple-greeter/%gconf.xml", "w")
+        string = f.write(str(soup.prettify()))
+        f.close()
