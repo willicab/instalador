@@ -9,6 +9,7 @@ import os
 import re
 import time
 import threading
+import webcam
 
 SEGURIDAD = {
     0: '#f00',
@@ -32,6 +33,7 @@ class frmMain(gtk.Window):
     passroot1 = ''
     passroot2 = ''
     maquina = ''
+    face = ''
     def __init__(self):
         #Creo la ventana
         gtk.Window.__init__(self, gtk.WINDOW_TOPLEVEL)
@@ -65,6 +67,19 @@ class frmMain(gtk.Window):
             return True
         elif scheme == 'btnmantenimiento':
             self.visor.execute_script("document.getElementById('mantenimiento').style.visibility = 'visible';")
+            return True
+        elif scheme == 'btnexplorer':
+            self.visor.execute_script("document.getElementById('explorer').style.visibility = 'visible';")
+            self.visor.execute_script("document.getElementById('filelist').innerHTML = '{0}';".format(self.facelist()))
+            return True
+        elif scheme == 'btnavatar':
+            homedir = "/usr/share/pixmaps/faces/" + path
+            self.visor.execute_script("document.getElementById('avatar').src = '{0}';".format(homedir))
+            self.visor.execute_script("document.getElementById('explorer').style.visibility = 'hidden';")
+            self.face = homedir
+            return True
+        elif scheme == 'btnwebcam':
+            web = webcam.WebCam(self)
             return True
         elif scheme == 'btncontinuar':
             self.mantenimiento()
@@ -174,6 +189,14 @@ class frmMain(gtk.Window):
         self.hostname()
         w.close()
         gtk.main_quit()
+        
+    def facelist(self):
+        path="/usr/share/pixmaps/faces"
+        dirList=os.listdir(path)
+        lst = ''
+        for fname in dirList:
+            lst = lst + '<a href="btnavatar://{0}"><img class="face" src="/usr/share/pixmaps/faces/{0}" /></a> '.format(fname)
+        return lst
 
     def crear_usuario(self):
         usr = self.usuario
@@ -199,6 +222,8 @@ class frmMain(gtk.Window):
         
         os.system('aptitude purge canaima-instalador --assume-yes')
         
+        os.system('mv {0} /home/{1}/.face'.format(self.face, usr))
+        
     def hostname(self):
         cmd = 'echo "{0}" > /target/etc/hostname'.format(self.maquina)
         print cmd
@@ -217,9 +242,12 @@ def main():
     '''
         Inicia la parte gráfica
     '''
+    frmMain()
     gtk.main()
     return 0
 
 if __name__ == "__main__":
-    frmMain()
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        pass

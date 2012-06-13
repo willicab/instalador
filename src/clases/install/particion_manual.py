@@ -14,17 +14,16 @@ class Main():
         self.cfg = cfg
         self.metodo = cfg['metodo']
         self.tipo = cfg['tipo']
+        self.lista = cfg['lista_manual']
         if (self.metodo == 'todo' or self.metodo == 'vacio') and \
            self.tipo == 'particion_4':
             self.disco = cfg['disco']
-            self.lista = cfg['lista_manual']
         else:
             self.particion = cfg['particion']
             self.disco = self.particion[:-1]
             self.num = int(self.particion[-1:])
             self.ini = int(gen.kb(cfg['inicio']))
             self.fin = int(gen.kb(cfg['fin']))
-            self.lista = cfg['lista_manual']
             
             print 'Disco: ', cfg['disco']
             if cfg['metodo'] != 'todo' and cfg['metodo'] != 'vacio' :

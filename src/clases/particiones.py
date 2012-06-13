@@ -113,6 +113,16 @@ class Main():
                 File = a.find('File')
                 Flags = a.find('Flags')
                 Leer = True
+            elif a.startswith('Numero'):
+                Number = a.find('Numero')
+                Start = a.find('Inicio')
+                End = a.find('Fin')
+                Size = a.find('Tamaño')
+                #Se Resta 1, ya que en la cadena el caracter ñ ocupa 2 espacios
+                Type = a.find('Typo') - 1
+                File = a.find('Sistema de ficheros') - 1
+                Flags = a.find('Banderas') - 1
+                Leer = True
         return particiones
     
     def particionar(self, disco, tipo, formato, inicio, fin):
