@@ -10,7 +10,7 @@ import gtk
 import os
 import re
 from pasos import bienvenida, teclado, metodo, particion_auto, particion_todo, \
-    particion_manual, instalacion, usuario, info
+    particion_manual, instalacion, usuario, accesibilidad, info
 import wizard
 import clases.general as gen
 
@@ -288,7 +288,7 @@ class Usuario():
             if re.compile("^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$").search(CFG['maquina']) == None:
                 self.msg_error("El nombre de la máquina no está correctamente escrito")
                 return
-        Info()
+        Accesibilidad()
     def anterior(self, widget = None):
         '''
             Función para el evento del botón anterior
@@ -309,6 +309,31 @@ class Usuario():
              mensaje)
         response = dialog.run()
         dialog.destroy()
+
+class Accesibilidad():
+    '''
+        Inicia el paso que muestr la información general de la instalación
+    '''
+    def __init__(self):
+        global ID_SIGUIENTE, ID_ANTERIOR, CFG
+        if FRM_MAIN.indice(FRM_MAIN.nombres, 'accesibilidad') == -1:
+            FRM_MAIN.agregar('accesibilidad', accesibilidad.Main())
+        FRM_MAIN.mostrar('accesibilidad')
+        desconectar()
+        ID_SIGUIENTE = FRM_MAIN.btn_siguiente.connect("clicked", self.siguiente)
+        ID_ANTERIOR = FRM_MAIN.btn_anterior.connect("clicked", self.anterior)
+    def siguiente(self, widget = None):
+        '''
+            Función para el evento del botón siguiente
+        '''
+        frm_accesibilidad = FRM_MAIN.formulario('accesibilidad')
+        CFG['chkgdm'] = frm_accesibilidad.chkgdm.get_active()
+        Info()
+    def anterior(self, widget = None):
+        '''
+            Función para el evento del botón anterior
+        '''
+        Usuario()
 
 class Info():
     '''
@@ -333,7 +358,7 @@ class Info():
         '''
             Función para el evento del botón anterior
         '''
-        Usuario()
+        Accesibilidad()
 
 class Instalacion():
     '''

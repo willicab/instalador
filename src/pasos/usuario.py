@@ -110,7 +110,6 @@ class Main(gtk.Fixed):
         self.lbl1.show()
         
         self.lbl1 = gtk.Label('Nombre de la máquina')
-        self.lbl1.set_max_length(255)
         self.lbl1.set_size_request(590, 25)
         self.lbl1.set_alignment(0, 0)
         self.put(self.lbl1, 0, 235)
@@ -119,6 +118,7 @@ class Main(gtk.Fixed):
         self.txt_maquina = gtk.Entry()
         self.txt_maquina.set_text('canaima-popular')
         self.txt_maquina.set_size_request(440, 25)
+        self.txt_maquina.set_max_length(255)
         self.put(self.txt_maquina, 150, 235)
         self.txt_maquina.show()
 

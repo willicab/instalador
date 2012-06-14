@@ -34,6 +34,7 @@ class Main(gtk.Fixed):
         self.passuser = cfg['passuser']
         self.maquina = cfg['maquina']
         self.oem = cfg['oem']
+        self.chkgdm = cfg['chkgdm']
 
         self.visor = webkit.WebView()
         self.visor.set_size_request(590, 280)
@@ -160,7 +161,11 @@ class Main(gtk.Fixed):
             os.system('sh {0} "{1}" "{2}" "/target" "{3}"'. \
                 format(script, self.usuario, self.passuser, self.nombre))
             os.system('chroot /target aptitude purge canaima-instalador --assume-yes')
-        
+        if self.chkgdm == True:
+            clave = "/desktop/gnome/applications/at/screen_reader_enabled true"
+            ruta = "/usr/share/gconf/defaults/30-canaima-instalador"
+            os.system('chroot /target echo {0} > {1}'.format(clave, ruta))
+            
 # Aumenta la Barra 90
         self.par.accion('Ejecutando últimas configuraciones')
         os.system('rm -f /target/etc/mtab')
@@ -224,12 +229,8 @@ class Main(gtk.Fixed):
         f.close()
 
         soup = BeautifulSoup(string)
-        print(soup.prettify())
-        print soup
-        print soup.find("entry", {"name":"recent-layouts"}).li.stringvalue.string
         soup.find("entry", {"name":"recent-layouts"}).li.stringvalue.string.replaceWith(CFG['teclado'])
-        print(soup.prettify())
 
         f = open("/target/var/lib/gdm3/.gconf/apps/gdm/simple-greeter/%gconf.xml", "w")
-        string = f.write(str(soup.prettify()))
+        string = f.write(str(soup))
         f.close()
