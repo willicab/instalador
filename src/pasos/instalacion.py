@@ -144,23 +144,23 @@ class Main(gtk.Fixed):
         os.system('chroot /target /usr/sbin/mkinitramfs -o /boot/{0} {1}'. \
             format(initrd, uname_r))
 # Aumenta la Barra 80
-        if self.oem == True:
-            self.par.accion('Creando usuarios')
-            script = os.path.realpath(os.path.join(os.path.dirname(__file__), 
-                    '..', 'scripts', 'make-user.sh'))
-            os.system('sh {0} "root" "root" "/target"'. \
-                format(script))
-            os.system('sh {0} "canaima" "canaima" "/target" "Mantenimiento"'. \
-                format(script))
-        else:
-            self.par.accion('Creando usuarios')
-            script = os.path.realpath(os.path.join(os.path.dirname(__file__), 
-                    '..', 'scripts', 'make-user.sh'))
-            os.system('sh {0} "root" "{1}" "/target"'. \
-                format(script, self.passroot))
-            os.system('sh {0} "{1}" "{2}" "/target" "{3}"'. \
-                format(script, self.usuario, self.passuser, self.nombre))
-            os.system('chroot /target aptitude purge canaima-instalador --assume-yes')
+#        if self.oem == True:
+#            self.par.accion('Creando usuarios')
+#            script = os.path.realpath(os.path.join(os.path.dirname(__file__), 
+#                    '..', 'scripts', 'make-user.sh'))
+#            os.system('sh {0} "root" "root" "/target"'. \
+#                format(script))
+#            os.system('sh {0} "canaima" "canaima" "/target" "Mantenimiento"'. \
+#                format(script))
+#        else:
+#            self.par.accion('Creando usuarios')
+#            script = os.path.realpath(os.path.join(os.path.dirname(__file__), 
+#                    '..', 'scripts', 'make-user.sh'))
+#            os.system('sh {0} "root" "{1}" "/target"'. \
+#                format(script, self.passroot))
+#            os.system('sh {0} "{1}" "{2}" "/target" "{3}"'. \
+#                format(script, self.usuario, self.passuser, self.nombre))
+        os.system('chroot /target aptitude purge canaima-instalador --assume-yes')
         if self.chkgdm == True:
             clave = "/desktop/gnome/applications/at/screen_reader_enabled true"
             ruta = "/usr/share/gconf/defaults/30-canaima-instalador"
