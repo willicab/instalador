@@ -144,22 +144,23 @@ class Main(gtk.Fixed):
         os.system('chroot /target /usr/sbin/mkinitramfs -o /boot/{0} {1}'. \
             format(initrd, uname_r))
 # Aumenta la Barra 80
-#        if self.oem == True:
-#            self.par.accion('Creando usuarios')
-#            script = os.path.realpath(os.path.join(os.path.dirname(__file__), 
-#                    '..', 'scripts', 'make-user.sh'))
-#            os.system('sh {0} "root" "root" "/target"'. \
-#                format(script))
-#            os.system('sh {0} "canaima" "canaima" "/target" "Mantenimiento"'. \
-#                format(script))
-#        else:
-#            self.par.accion('Creando usuarios')
-#            script = os.path.realpath(os.path.join(os.path.dirname(__file__), 
-#                    '..', 'scripts', 'make-user.sh'))
-#            os.system('sh {0} "root" "{1}" "/target"'. \
-#                format(script, self.passroot))
-#            os.system('sh {0} "{1}" "{2}" "/target" "{3}"'. \
-#                format(script, self.usuario, self.passuser, self.nombre))
+        if self.oem == True:
+            self.par.accion('Creando usuarios')
+            script = os.path.realpath(os.path.join(os.path.dirname(__file__), 
+                    '..', 'scripts', 'make-user.sh'))
+            os.system('sh {0} "root" "root" "/target"'. \
+                format(script))
+            os.system('sh {0} "canaima" "canaima" "/target" "Mantenimiento"'. \
+                format(script))
+            self.instalar-primeros-pasos()
+        else:
+            self.par.accion('Creando usuarios')
+            script = os.path.realpath(os.path.join(os.path.dirname(__file__), 
+                    '..', 'scripts', 'make-user.sh'))
+            os.system('sh {0} "root" "{1}" "/target"'. \
+                format(script, self.passroot))
+            os.system('sh {0} "{1}" "{2}" "/target" "{3}"'. \
+                format(script, self.usuario, self.passuser, self.nombre))
         os.system('chroot /target aptitude purge canaima-instalador --assume-yes')
         if self.chkgdm == True:
             clave = "/desktop/gnome/applications/at/screen_reader_enabled true"
@@ -234,3 +235,12 @@ class Main(gtk.Fixed):
         f = open("/target/var/lib/gdm3/.gconf/apps/gdm/simple-greeter/%gconf.xml", "w")
         string = f.write(str(soup))
         f.close()
+        
+    def instalar-primeros-pasos(self):
+        deb-orig = "/live/image/pool/main/c/canaima-primeros-pasos/*.deb"
+        deb-dest = "/target/root/debs/"
+        os.system('mkdir -p {0}'.format(deb-dest))
+        os.system('cp {0} {1}'.format(deb-orig, deb-dest))
+        os.system('dpkg -i {0}*.deb'.format(deb-dest))
+        os.system('rm -rf {0}'.format(deb-dest))
+        

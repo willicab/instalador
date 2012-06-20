@@ -31,8 +31,8 @@ function remove_divert {
     if [ -f /etc/gdm3/Init/Default ];
     then
         #dpkg-divert --package ${PKG} --rename --remove /etc/gdm3/Init/Default
-        ADVERTENCIA "borrando linea"
-        sed  -i  ':a;N;$!ba;s#/usr/bin/canaima-oem\n\n##g' /etc/gdm3/Init/Default
+        #ADVERTENCIA "borrando linea"
+        #sed  -i  ':a;N;$!ba;s#/usr/bin/canaima-oem\n\n##g' /etc/gdm3/Init/Default
     fi
 }
 
@@ -54,7 +54,7 @@ case ${1} in
 	purge|remove|upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
 	# Para cada usuario en /home/ ...
 	for usuario in /home/*? ; do
-    	remove_divert
+    	#remove_divert
 
 		# Obteniendo sólo el nombre del usuario
 		usuario_min=$(basename ${usuario})

@@ -12,8 +12,8 @@ DEVICE=$2
 
 chroot ${MOUNTPOINT}/ mkdir -p /root/debs/
  
-cp /live/image/pool/main/s/svgalib/libsvga1_1%3a1.4.3-29_i386.deb ${MOUNTPOINT}/root/debs/
-cp /live/image/pool/main/libx/libx86/libx86-1_1.1+ds1-6_i386.deb ${MOUNTPOINT}/root/debs/
+cp /live/image/pool/main/s/svgalib/libsvga1*.deb ${MOUNTPOINT}/root/debs/
+cp /live/image/pool/main/libx/libx86/libx86-1*.deb ${MOUNTPOINT}/root/debs/
 cp /live/image/pool/main/libs/libsdl1.2/libsdl1.2*.deb ${MOUNTPOINT}/root/debs/
 cp /live/image/pool/main/g/gettext/gettext-base*.deb ${MOUNTPOINT}/root/debs/
 cp /live/image/pool/main/b/burg/burg*.deb ${MOUNTPOINT}/root/debs/
