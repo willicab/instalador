@@ -44,8 +44,32 @@ canaima-instalador (1.0-5) stable; urgency=low
     modificados/añadidos: oem.py
   * [6732ab9] [ canaima-desarrollador ] Los siguientes archivos han sido
     modificados/añadidos: instalacion.py
+  * [dc904a5] Error Corregido no detectaba la lista de particiones
+    creadas manualmente en un punto definido
+  * [d121b9a] Corrección error con lista manual. Agregada opción para
+    incluir imagen de usuario. Agregada opción para que la función
+    lista_particiones para que soporte tambien el parted en español
+  * [f722b7a] Error Corregido: cuando parted está en español no mostraba
+    el tamaño total parando la aplicación al momento de mostrar los
+    discos.
+  * [5547d22] Error Corregido: Canaima Instalador, No cambia los valores
+    de configuración del usuario (Ticket #478)
+  * [85640b7] Error Corregido: Los campos no están bien validados.
+    (#479)
+  * [59d02ad] Error Corregido: La contraseña se imprime en texto plano.
+    (#480)
+  * [2001c3c] Error corregido: Configuración del teclado no se modifica.
+    (#477)
+  * [e14628a] Mejora: Pantalla de accesibilidad en el instalador. Error
+    Corregido: Archivo XML para idioma no está bien formada
+  * [7ebfe14] Eliminado el módulo OEM del instalador
+  * [15b65cc] Eliminando la instalación del OEM
+  * [3b22c03] Agregando funcion para la instalación del paquete canaima-
+    primeros-pasos
+  * [cbd6ed3] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: canaima-instalador.debhelper.log preinst
 
- -- William Abrahan Cabrera Reyes <william@linux.es>  Thu, 10 May 2012 15:44:16 -0430
+ -- William Abrahan Cabrera Reyes <cabrerawilliam@gmail.com>  Wed, 20 Jun 2012 11:57:09 -0430
 
 canaima-instalador (1.0-4) stable; urgency=low
 
