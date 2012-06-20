@@ -68,8 +68,10 @@ canaima-instalador (1.0-5) stable; urgency=low
     primeros-pasos
   * [cbd6ed3] [ canaima-desarrollador ] Los siguientes archivos han sido
     modificados/añadidos: canaima-instalador.debhelper.log preinst
+  * [ed03292] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos:
 
- -- William Abrahan Cabrera Reyes <cabrerawilliam@gmail.com>  Wed, 20 Jun 2012 11:57:09 -0430
+ -- William Abrahan Cabrera Reyes <cabrerawilliam@gmail.com>  Wed, 20 Jun 2012 11:58:54 -0430
 
 canaima-instalador (1.0-4) stable; urgency=low
 
