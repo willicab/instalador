@@ -1,3 +1,9 @@
+canaima-instalador (1.0-6) stable; urgency=low
+
+  * [9239d25] eliminado codigo innecesario.
+
+ -- William Abrahan Cabrera Reyes <cabrerawilliam@gmail.com>  Thu, 21 Jun 2012 15:29:23 -0430
+
 canaima-instalador (1.0-5) stable; urgency=low
 
   * [3b9a5a6] [ canaima-desarrollador ] Los siguientes archivos han sido
