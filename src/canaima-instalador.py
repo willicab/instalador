@@ -206,7 +206,6 @@ class PartManual():
         frm_manual = FRM_MAIN.formulario('PartManual')
         frm_manual.iniciar(data)
         FRM_MAIN.mostrar('PartManual')
-        #frm_manual.actualizar(disco)
         desconectar()
         ID_SIGUIENTE = FRM_MAIN.btn_siguiente.connect("clicked", self.siguiente)
         ID_ANTERIOR = FRM_MAIN.btn_anterior.connect("clicked", self.anterior)
