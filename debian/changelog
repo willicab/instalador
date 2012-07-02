@@ -1,3 +1,10 @@
+canaima-instalador (1.0-7) stable; urgency=low
+
+  * [5fb5780] Error Corregido: las funciones y variables no aceptan
+    guiones
+
+ -- William Abrahan Cabrera Reyes <cabrerawilliam@gmail.com>  Mon, 02 Jul 2012 18:39:36 -0430
+
 canaima-instalador (1.0-6) stable; urgency=low
 
   * [9239d25] eliminado codigo innecesario.
