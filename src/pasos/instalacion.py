@@ -237,7 +237,10 @@ class Main(gtk.Fixed):
         f.close()
         
     def instalar_primeros_pasos(self):
-        deb_dest = "/target/root/canaima-primeros-pasos/"
+        deb_orig = "/live/image/pool/main/c/canaima-primeros-pasos/*.deb"
+        deb_dest = "/target/root/debs/"
+        os.system('mkdir -p {0}'.format(deb_dest))
+        os.system('cp {0} {1}'.format(deb_orig, deb_dest))
         os.system('dpkg -i {0}*.deb'.format(deb_dest))
         os.system('rm -rf {0}'.format(deb_dest))
         
