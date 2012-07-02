@@ -1,3 +1,10 @@
+canaima-instalador (1.0-8) stable; urgency=low
+
+  * [5171d72] Devolviendo cambios en la función (Culpa de Huntingbears,
+    yo no fui XD)
+
+ -- William Abrahan Cabrera Reyes <cabrerawilliam@gmail.com>  Mon, 02 Jul 2012 18:48:43 -0430
+
 canaima-instalador (1.0-7) stable; urgency=low
 
   * [5fb5780] Error Corregido: las funciones y variables no aceptan
