@@ -152,7 +152,7 @@ class Main(gtk.Fixed):
                 format(script))
             os.system('sh {0} "canaima" "canaima" "/target" "Mantenimiento"'. \
                 format(script))
-            self.instalar-primeros-pasos()
+            self.instalar_primeros_pasos()
         else:
             self.par.accion('Creando usuarios')
             script = os.path.realpath(os.path.join(os.path.dirname(__file__), 
@@ -236,11 +236,8 @@ class Main(gtk.Fixed):
         string = f.write(str(soup))
         f.close()
         
-    def instalar-primeros-pasos(self):
-        deb-orig = "/live/image/pool/main/c/canaima-primeros-pasos/*.deb"
-        deb-dest = "/target/root/debs/"
-        os.system('mkdir -p {0}'.format(deb-dest))
-        os.system('cp {0} {1}'.format(deb-orig, deb-dest))
-        os.system('dpkg -i {0}*.deb'.format(deb-dest))
-        os.system('rm -rf {0}'.format(deb-dest))
+    def instalar_primeros_pasos(self):
+        deb_dest = "/target/root/canaima-primeros-pasos/"
+        os.system('dpkg -i {0}*.deb'.format(deb_dest))
+        os.system('rm -rf {0}'.format(deb_dest))
         
