@@ -103,11 +103,7 @@ install:
 	install -m 755 src/canaima-instalador.desktop $(DESTDIR)/etc/skel/Escritorio/canaima-instalador.desktop
 	install -m 755 src/canaima-instalador.py $(DESTDIR)/usr/share/canaima-instalador/canaima-instalador.py
 	install -m 755 src/canaima-instalador $(DESTDIR)/usr/bin/canaima-instalador
-	#install -m 755 src/canaima-oem $(DESTDIR)/usr/bin/canaima-oem
-	#install -m 644 src/wizard.py $(DESTDIR)/usr/share/canaima-instalador/wizard.py
-	#install -m 644 src/oem/oem.py $(DESTDIR)/usr/share/canaima-instalador/oem/oem.py
-	#install -m 644 src/oem/usuario.html $(DESTDIR)/usr/share/canaima-instalador/oem/usuario.html
-	#install -m 755 src/oem/Default $(DESTDIR)/etc/gdm3/Init/Default
+	install -m 644 src/wizard.py $(DESTDIR)/usr/share/canaima-instalador/wizard.py
 	install -m 644 src/data/wait.gif $(DESTDIR)/usr/share/canaima-instalador/data/wait.gif
 	install -m 644 src/data/canaima.png $(DESTDIR)/usr/share/canaima-instalador/data/canaima.png
 	install -m 644 src/data/banner-app-top.png $(DESTDIR)/usr/share/canaima-instalador/data/banner-app-top.png
