@@ -134,6 +134,7 @@ install:
 	install -m 644 src/pasos/particion_todo.py $(DESTDIR)/usr/share/canaima-instalador/pasos/particion_todo.py
 	install -m 644 src/pasos/teclado.py $(DESTDIR)/usr/share/canaima-instalador/pasos/teclado.py
 	install -m 644 src/pasos/usuario.py $(DESTDIR)/usr/share/canaima-instalador/pasos/usuario.py
+	install -m 644 src/pasos/accesibilidad.py $(DESTDIR)/usr/share/canaima-instalador/pasos/accesibilidad.py
 	install -m 755 src/scripts/install-grub.sh $(DESTDIR)/usr/share/canaima-instalador/scripts/install-grub.sh
 	install -m 755 src/scripts/install-grub-ini.sh $(DESTDIR)/usr/share/canaima-instalador/scripts/install-grub-ini.sh
 	install -m 755 src/scripts/make-user.sh $(DESTDIR)/usr/share/canaima-instalador/scripts/make-user.sh
