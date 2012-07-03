@@ -1,3 +1,9 @@
+canaima-instalador (1.0-10) stable; urgency=low
+
+  * [026304f] Error Corregido: faltaba la clase wizard en el makefile
+
+ -- William Abrahan Cabrera Reyes <cabrerawilliam@gmail.com>  Tue, 03 Jul 2012 11:56:26 -0430
+
 canaima-instalador (1.0-9) stable; urgency=low
 
   * [9f36dab] Error Corregido: faltaba la clase accesibilidad en el
