@@ -1,3 +1,10 @@
+canaima-instalador (1.0-9) stable; urgency=low
+
+  * [9f36dab] Error Corregido: faltaba la clase accesibilidad en el
+    makefile
+
+ -- William Abrahan Cabrera Reyes <cabrerawilliam@gmail.com>  Tue, 03 Jul 2012 11:45:37 -0430
+
 canaima-instalador (1.0-8) stable; urgency=low
 
   * [5171d72] Devolviendo cambios en la función (Culpa de Huntingbears,
