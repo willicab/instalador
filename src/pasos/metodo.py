@@ -57,6 +57,7 @@ class Main(gtk.Fixed):
         self.discos = self.part.lista_discos()
         borrados = []
         # Listar Discos
+        print self.discos
         for disco in self.discos:
             try:
                 particiones = self.part.lista_particiones(disco["logical name"])
@@ -72,6 +73,7 @@ class Main(gtk.Fixed):
 #                    borrados.append(disco)
 #                    print "Iniciando"
             except:
+                print "error"
                 pass
         #for borrado in borrados:
         #    self.discos.remove(borrado)

@@ -154,16 +154,16 @@ class Wizard(gtk.Window):
             Muestra la barra de progreso y oculta la botonera
         '''
         self.botonera.hide()
-        self.barra.show()
-        self.progreso.start()
+        #self.barra.show()
+        #self.progreso.start()
 
     def ocultar_barra(self):
         '''
             Oculta la barra de progreso y muestra la botonera
         '''
-        self.barra.hide()
         self.botonera.show()
-        self.progreso.stop()
+        #self.barra.hide()
+        #self.progreso.stop()
 
     def accion(self, accion):
         '''
