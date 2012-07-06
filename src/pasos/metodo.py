@@ -11,6 +11,9 @@ import clases.general as gen
 import clases.barra_particiones as barra
 import threading
 import os
+import time
+
+gtk.gdk.threads_init() 
 
 class Main(gtk.Fixed):
     disco = ''
@@ -31,12 +34,21 @@ class Main(gtk.Fixed):
         gtk.Fixed.__init__(self)
         self.par = parent
 
+        txt_info = "Escoja el disco donde quiere instalar el sistema:"
+        self.lbl1 = gtk.Label(txt_info)
+        self.lbl1.set_size_request(-1, 30)
+        self.lbl1.set_justify(gtk.JUSTIFY_CENTER)
+        self.put(self.lbl1, 0, 0)
+        self.lbl1.show()
+
         self.img_distribucion = gtk.Image() 
         self.img_distribucion.set_size_request(590, 240)
         self.put(self.img_distribucion, 0, 20)
         self.img_distribucion.set_from_file('data/buscar-discos.png')
         self.img_distribucion.show()
 
+        #time.sleep(3)
+        
         thread = threading.Thread(target=self.Iniciar, args=())
         thread.start()
         
@@ -47,12 +59,6 @@ class Main(gtk.Fixed):
         self.par.info_barra('Buscando discos en el computador')
         
 
-        txt_info = "Escoja el disco donde quiere instalar el sistema:"
-        self.lbl1 = gtk.Label(txt_info)
-        self.lbl1.set_size_request(-1, 30)
-        self.lbl1.set_justify(gtk.JUSTIFY_CENTER)
-        self.put(self.lbl1, 0, 0)
-        self.lbl1.show()
         
         self.discos = self.part.lista_discos()
         borrados = []
