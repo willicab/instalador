@@ -5,8 +5,10 @@ canaima-instalador (1.0-11) stable; urgency=low
   * [dcce26c] agregando función relativa a los hilos a la clase metodo
   * [193436b] corrigiendo error de cuelgues generados por los f*****g
     hilos en python
+  * [de92f30] corrigiendo la eliminación del nuevo usuario y la copia
+    incorrecta del inittab
 
- -- William Abrahan Cabrera Reyes <cabrerawilliam@gmail.com>  Fri, 06 Jul 2012 22:22:38 -0430
+ -- William Abrahan Cabrera Reyes <cabrerawilliam@gmail.com>  Fri, 06 Jul 2012 23:12:22 -0430
 
 canaima-instalador (1.0-10) stable; urgency=low
 
