@@ -244,6 +244,6 @@ class Main(gtk.Fixed):
         chroot_dest = "/root/debs/*.deb"
         os.system('mkdir -p {0}'.format(deb_dest))
         os.system('cp {0} {1}'.format(deb_orig, deb_dest))
-        os.system('chroot /target dpkg -i {0}'.format(chroot_dest))
+        os.system('for deb in $(ls -1 /target/root/debs/); do chroot /target dpkg -i /root/debs/${deb}; done')
         #os.system('rm -rf {0}'.format(deb_dest))
         
