@@ -177,6 +177,7 @@ class Main(gtk.Fixed):
         self.hostname()
         os.system('chroot /target dhclient -v')
         os.system('chroot /target aptitude update')
+        os.system('chroot /target dpkg-reconfigure canaima-base canaima-escritorio-gnome canaima-estilo-visual-gnome canaima-chat-gnome canaima-bienvenido-gnome')
         #self.keyboard()
 # Aumenta la Barra 100
         #os.system('chroot /target aptitude remove canaima-instalador')
@@ -240,9 +241,9 @@ class Main(gtk.Fixed):
     def instalar_primeros_pasos(self):
         deb_orig = "/live/image/pool/main/c/canaima-primeros-pasos/*.deb"
         deb_dest = "/target/root/debs/"
-        chroot_dest = "/root/debs/"
+        chroot_dest = "/root/debs/*.deb"
         os.system('mkdir -p {0}'.format(deb_dest))
         os.system('cp {0} {1}'.format(deb_orig, deb_dest))
-        os.system('chroot /target dpkg -i {0}*.deb'.format(chroot_dest))
-        os.system('rm -rf {0}'.format(deb_dest))
+        os.system('chroot /target dpkg -i {0}'.format(chroot_dest))
+        #os.system('rm -rf {0}'.format(deb_dest))
         
