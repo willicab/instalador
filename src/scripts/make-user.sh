@@ -18,6 +18,7 @@ export TEXTDOMAIN=make-user
 # USER no ROOT
 if [ "$1" != "root" ]; then
 	chroot $3 /usr/sbin/userdel -r usuario-nvivo
+	echo "chroot $3 /usr/sbin/useradd -m -d /home/$1 $1 -s /bin/bash -c \"$4\""
 	chroot $3 /usr/sbin/useradd -m -d /home/$1 $1 -s /bin/bash -c "$4"
 fi
 

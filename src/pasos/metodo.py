@@ -12,6 +12,7 @@ import clases.barra_particiones as barra
 import threading
 import os
 import time
+import Queue
 
 gtk.gdk.threads_init() 
 
@@ -33,21 +34,17 @@ class Main(gtk.Fixed):
     def __init__(self, parent):
         gtk.Fixed.__init__(self)
         self.par = parent
-
-        txt_info = "Escoja el disco donde quiere instalar el sistema:"
-        self.lbl1 = gtk.Label(txt_info)
-        self.lbl1.set_size_request(-1, 30)
-        self.lbl1.set_justify(gtk.JUSTIFY_CENTER)
-        self.put(self.lbl1, 0, 0)
-        self.lbl1.show()
-
+        self.cola = Queue.Queue()
+        self.evento = threading.Event()
+        
+        self.par.mostrar_barra()
+        self.par.info_barra('Buscando discos en el computador')
+        
         self.img_distribucion = gtk.Image() 
         self.img_distribucion.set_size_request(590, 240)
         self.put(self.img_distribucion, 0, 20)
         self.img_distribucion.set_from_file('data/buscar-discos.png')
         self.img_distribucion.show()
-
-        #time.sleep(3)
         
         thread = threading.Thread(target=self.Iniciar, args=())
         thread.start()
@@ -55,10 +52,8 @@ class Main(gtk.Fixed):
         #self.Iniciar()
         
     def Iniciar(self):
-        self.par.mostrar_barra()
-        self.par.info_barra('Buscando discos en el computador')
-        
-
+        #gtk.gdk.threads_enter()
+        #self.img_distribucion.hide()
         
         self.discos = self.part.lista_discos()
         borrados = []
@@ -89,6 +84,13 @@ class Main(gtk.Fixed):
         self.cmb_discos.set_size_request(280, 30)
         self.put(self.cmb_discos, 310, 0)
         self.cmb_discos.show()
+        
+        txt_info = "Escoja el disco donde quiere instalar el sistema:"
+        self.lbl1 = gtk.Label(txt_info)
+        self.lbl1.set_size_request(-1, 30)
+        self.lbl1.set_justify(gtk.JUSTIFY_CENTER)
+        self.put(self.lbl1, 0, 0)
+        self.lbl1.show()
         
         self.barra_part = barra.Main(self)
         self.barra_part.set_size_request(590, 84)
@@ -123,6 +125,7 @@ class Main(gtk.Fixed):
 
         self.par.ocultar_barra()
         self.img_distribucion.hide()
+        gtk.gdk.threads_leave()
     
     def lista_metodos(self):
         '''
@@ -264,3 +267,29 @@ class MessageBox(gtk.MessageDialog):
         
         #def handle_clicked(self, widget=None):
         #    self.destroy()
+
+class ThreadGenerator(threading.Thread):
+    def __init__(self, reference, function, params,
+                    gtk = False, window = False, event = False):
+        threading.Thread.__init__(self)
+        self._gtk = gtk
+        self._window = window
+        self._function = function
+        self._params = params
+        self._event = event
+        self.start()
+        
+    def run(self):
+        if self._gtk:
+            gtk.gdk.threads_enter()
+
+        if self._event:
+            self._event.wait()
+
+        self._function(**self._params)
+
+        if self._gtk:
+            gtk.gdk.threads_leave()
+
+        if self._window:
+            self._window.hide()

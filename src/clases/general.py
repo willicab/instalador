@@ -119,3 +119,5 @@ def get_active_text(combobox):
     if active < 0:
         return None
     return model[active][0]
+
+
