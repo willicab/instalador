@@ -2,8 +2,10 @@ canaima-instalador (1.0-12) stable; urgency=low
 
   * [78cd18a] corrigiendo la instalacción erronea de canaima-primeros-
     pasos
+  * [0845f68] reconfigurando diferentes paquetes para corregir error con
+    el idioma
 
- -- William Abrahan Cabrera Reyes <cabrerawilliam@gmail.com>  Sat, 07 Jul 2012 00:05:56 -0430
+ -- William Abrahan Cabrera Reyes <cabrerawilliam@gmail.com>  Sat, 07 Jul 2012 01:06:54 -0430
 
 canaima-instalador (1.0-11) stable; urgency=low
 
