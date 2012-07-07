@@ -3,8 +3,10 @@ canaima-instalador (1.0-11) stable; urgency=low
   * [4fca059] Error Corregido: el hilo del progressbar cuelga la
     aplicación
   * [dcce26c] agregando función relativa a los hilos a la clase metodo
+  * [193436b] corrigiendo error de cuelgues generados por los f*****g
+    hilos en python
 
- -- William Abrahan Cabrera Reyes <cabrerawilliam@gmail.com>  Fri, 06 Jul 2012 16:24:58 -0430
+ -- William Abrahan Cabrera Reyes <cabrerawilliam@gmail.com>  Fri, 06 Jul 2012 22:22:38 -0430
 
 canaima-instalador (1.0-10) stable; urgency=low
 
