@@ -12,6 +12,9 @@ echo "burg-pc burg/linux_cmdline string quiet splash" | debconf-set-selections
 echo "burg-pc burg/linux_cmdline_default string quiet splash vga=791" | debconf-set-selections
 echo "burg-pc burg-pc/install_devices multiselect ${DEVICE}" | debconf-set-selections
 
+DEBIAN_FRONTEND=noninteractive dpkg -i /live/image/pool/main/libx/libx86/libx86-1*.deb
+DEBIAN_FRONTEND=noninteractive dpkg -i /live/image/pool/main/s/svgalib/libsvga1*.deb
+DEBIAN_FRONTEND=noninteractive dpkg -i /live/image/pool/main/libs/libsdl1.2/libsdl1.2*.deb
 DEBIAN_FRONTEND=noninteractive dpkg -i /live/image/pool/main/g/gettext/gettext-base*.deb
 DEBIAN_FRONTEND=noninteractive dpkg -i /live/image/pool/main/b/burg-themes/burg-themes-common*.deb
 DEBIAN_FRONTEND=noninteractive dpkg -i /live/image/pool/main/b/burg-themes/burg-themes_*.deb
