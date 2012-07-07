@@ -1,3 +1,10 @@
+canaima-instalador (1.0-12) stable; urgency=low
+
+  * [78cd18a] corrigiendo la instalacción erronea de canaima-primeros-
+    pasos
+
+ -- William Abrahan Cabrera Reyes <cabrerawilliam@gmail.com>  Sat, 07 Jul 2012 00:05:56 -0430
+
 canaima-instalador (1.0-11) stable; urgency=low
 
   * [4fca059] Error Corregido: el hilo del progressbar cuelga la
