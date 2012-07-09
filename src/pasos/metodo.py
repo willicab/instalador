@@ -73,8 +73,8 @@ class Main(gtk.Fixed):
 #                    print "borrando ", disco["logical name"]
 #                    borrados.append(disco)
 #                    print "Iniciando"
-            except:
-                print "error"
+            except Exception, e:
+                print "Ha ocurrido un error detectando los discos", e
                 pass
         #for borrado in borrados:
         #    self.discos.remove(borrado)
