@@ -1,3 +1,21 @@
+canaima-instalador (1.0-14) stable; urgency=low
+
+  [ William Abrahan Cabrera Reyes ]
+  * [901d4f0] agregando paquetes faltantes al script de instalación de
+    burg
+
+  [ Erick Birbe ]
+  * [602051a] Creando archivo .gitignore para obviar archivos *.pyc al
+    hacer commits
+  * [5a44f60] Colocando un mensaje de error mas descriptivos
+  * [42683ee] Corrigiendo la detección de los discos duros (bug #487)
+
+  [ William Abrahan Cabrera Reyes ]
+  * [e8c430b] Corregido error en udevadm sobre la deteccion de los
+    discos.
+
+ -- William Abrahan Cabrera Reyes <cabrerawilliam@gmail.com>  Mon, 09 Jul 2012 18:52:54 -0430
+
 canaima-instalador (1.0-13) stable; urgency=low
 
   * [03e7b47] corrigiendo error en la instalación del paquete canaima-
