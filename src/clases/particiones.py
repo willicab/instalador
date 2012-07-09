@@ -24,7 +24,7 @@ class Main():
         opt = {}
         a = commands.getstatusoutput("lshw -class disk")[1].split('\n')
         for disco in a:
-            if disco[2:] == "*-disk":
+            if disco.find('*-disk:') == 2:
                 if i >= 0: 
                     discos.append(opt)
                     opt = {}
