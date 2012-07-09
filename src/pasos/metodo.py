@@ -34,26 +34,10 @@ class Main(gtk.Fixed):
     def __init__(self, parent):
         gtk.Fixed.__init__(self)
         self.par = parent
-        self.cola = Queue.Queue()
-        self.evento = threading.Event()
         
-        self.par.mostrar_barra()
-        self.par.info_barra('Buscando discos en el computador')
-        
-        self.img_distribucion = gtk.Image() 
-        self.img_distribucion.set_size_request(590, 240)
-        self.put(self.img_distribucion, 0, 20)
-        self.img_distribucion.set_from_file('data/buscar-discos.png')
-        self.img_distribucion.show()
-        
-        thread = threading.Thread(target=self.Iniciar, args=())
-        thread.start()
-        
-        #self.Iniciar()
+        self.Iniciar()
         
     def Iniciar(self):
-        #gtk.gdk.threads_enter()
-        #self.img_distribucion.hide()
         
         self.discos = self.part.lista_discos()
         borrados = []
@@ -61,20 +45,16 @@ class Main(gtk.Fixed):
         print self.discos
         for disco in self.discos:
             try:
-                particiones = self.part.lista_particiones(disco["logical name"])
-                print disco["logical name"], len(particiones)
+                particiones = self.part.lista_particiones(disco["DEVNAME"])
+                print disco["DEVNAME"], len(particiones)
                 #if len(particiones) > 0:
-                print "agregando ", disco["logical name"]
-                self.cmb_discos.append_text('{0} ({1})'.format( \
-                    disco['description'], \
-                    disco['size'].split('(')[1][:-1]
+                print "agregando ", disco["DEVNAME"]
+                self.cmb_discos.append_text('{0}'.format( \
+                    disco['DEVNAME']#, \
+                    #disco['size'].split('(')[1][:-1]
                 ))
-#                else:
-#                    print "borrando ", disco["logical name"]
-#                    borrados.append(disco)
-#                    print "Iniciando"
-            except Exception, e:
-                print "Ha ocurrido un error detectando los discos", e
+            except:
+                print "error"
                 pass
         #for borrado in borrados:
         #    self.discos.remove(borrado)
@@ -123,9 +103,9 @@ class Main(gtk.Fixed):
         self.lbl_info.show()    
         self.establecer_metodo()
 
-        self.par.ocultar_barra()
-        self.img_distribucion.hide()
-        gtk.gdk.threads_leave()
+#        self.par.ocultar_barra()
+#        self.img_distribucion.hide()
+#        gtk.gdk.threads_leave()
     
     def lista_metodos(self):
         '''
@@ -178,7 +158,7 @@ class Main(gtk.Fixed):
         self.lbl_info.set_text(msg)
 
     def seleccionar_disco(self, widget=None):   
-        self.disco = self.discos[self.cmb_discos.get_active()]['logical name']
+        self.disco = self.discos[self.cmb_discos.get_active()]['DEVNAME']
         #print self.disco
         self.particiones = self.part.lista_particiones(self.disco)
         if len(self.particiones) == 0:
