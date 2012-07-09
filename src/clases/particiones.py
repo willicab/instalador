@@ -18,28 +18,45 @@ class Main():
         '''
             devuelve los discos que están conectados al equipo
         '''
-        leer = False
-        i = -1
         discos = []
         opt = {}
-        a = commands.getstatusoutput("lshw -class disk")[1].split('\n')
-        for disco in a:
-            if disco.find('*-disk:') == 2:
-                if i >= 0: 
-                    discos.append(opt)
-                    opt = {}
-                i = i + 1
-                leer = True
-                continue
-            if disco[2:9] == "*-cdrom" or disco.find('*-disk:') == 2:
-                leer = False
-                continue
-            if leer == True:
-                disco = disco[7:].split(': ')
-                #print disco
-                opt[disco[0]] = disco[1]
-        discos.append(opt)
+        devices = commands.getstatusoutput("ls -1 /sys/block/")[1].split('\n')
+        print devices
+        for device in devices:
+            print device, device.find('sr')
+            if device.find('sd') != -1 or device.find('hd') != -1:
+                cmd = 'udevadm info --query="all" --name="{0}"'.format(device)
+                devinfo = commands.getstatusoutput(cmd)[1].split('\n')
+                for info in devinfo:
+                    disco = info.split('=')
+                    if len(disco) > 1:
+                        opt[disco[0].split(' ')[1]] = disco[1]
+            discos.append(opt)
+            opt = {}
         return discos
+#        leer = False
+#        i = -1
+#        discos = []
+#        opt = {}
+#        # 
+#        a = commands.getstatusoutput("lshw -class disk")[1].split('\n')
+#        for disco in a:
+#            if disco[2:] == "*-disk":
+#                if i >= 0: 
+#                    discos.append(opt)
+#                    opt = {}
+#                i = i + 1
+#                leer = True
+#                continue
+#            if disco[2:9] == "*-cdrom" or disco.find('*-disk:') == 2:
+#                leer = False
+#                continue
+#            if leer == True:
+#                disco = disco[7:].split(': ')
+#                #print disco
+#                opt[disco[0]] = disco[1]
+#        discos.append(opt)
+#        return discos
 
     def lista_particiones(self, disco, p=''):
         '''
