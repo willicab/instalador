@@ -9,6 +9,8 @@ import gtk
 import Image
 import threading
 
+gtk.gdk.threads_init() 
+
 class Barra(gtk.ProgressBar):
     '''
         Clase que muestra la barra de progreso
@@ -39,6 +41,7 @@ class Barra(gtk.ProgressBar):
         '''
         #self.hilo = False
         self.hide()
+        gtk.gdk.threads_leave()
 
     def anim(self): # Genera la animación en el progress bar
         '''
