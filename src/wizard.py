@@ -32,8 +32,8 @@ class Barra(gtk.ProgressBar):
         '''
         #self.hilo == True
         self.show()
-        thread = threading.Thread(target=self.anim, args=())
-        thread.start()
+        #thread = threading.Thread(target=self.anim, args=())
+        #thread.start()
 
     def stop(self): # finaliza la animación del progress bar
         '''
@@ -147,10 +147,10 @@ class Wizard(gtk.Window):
         self.lbl_info.show()
 
         self.progreso = Barra() # Barra de progreso
-        self.progreso.set_size_request(590, 30)
-        self.barra.add(self.progreso)
-        self.progreso.set_pulse_step(0.05)
-        self.progreso.show()
+        #self.progreso.set_size_request(590, 30)
+        #self.barra.add(self.progreso)
+        #self.progreso.set_pulse_step(0.05)
+        #self.progreso.show()
 
     def mostrar_barra(self):
         '''
@@ -158,7 +158,7 @@ class Wizard(gtk.Window):
         '''
         self.botonera.hide()
         self.barra.show()
-        self.progreso.start()
+        #self.progreso.start()
 
     def ocultar_barra(self):
         '''
@@ -166,13 +166,14 @@ class Wizard(gtk.Window):
         '''
         self.barra.hide()
         self.botonera.show()
-        self.progreso.stop()
+        #self.progreso.stop()
 
     def accion(self, accion):
         '''
             llama a la función accion de la barra
         '''
-        self.progreso.accion(accion)
+        #self.progreso.accion(accion)
+        elf.lbl_info.set_text(accion)
 
     def info_barra(self, info):
         '''
