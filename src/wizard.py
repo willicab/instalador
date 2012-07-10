@@ -173,7 +173,7 @@ class Wizard(gtk.Window):
             llama a la función accion de la barra
         '''
         #self.progreso.accion(accion)
-        elf.lbl_info.set_text(accion)
+        self.lbl_info.set_text(accion)
 
     def info_barra(self, info):
         '''
