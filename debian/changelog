@@ -2,8 +2,10 @@ canaima-instalador (1.0-15) stable; urgency=low
 
   * [2c75cf5] simplificación de la salida del udevadm
   * [a4f55ed] cambiando udevadm por fdisk
+  * [f724d75] probando cambios en el paso de instalación para evitar
+    congelamiento de la pantalla
 
- -- William Abrahan Cabrera Reyes <cabrerawilliam@gmail.com>  Mon, 09 Jul 2012 21:25:24 -0430
+ -- William Abrahan Cabrera Reyes <cabrerawilliam@gmail.com>  Tue, 10 Jul 2012 01:07:17 -0430
 
 canaima-instalador (1.0-14) stable; urgency=low
 
