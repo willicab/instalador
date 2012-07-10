@@ -20,20 +20,30 @@ class Main():
         '''
         discos = []
         opt = {}
-        devices = commands.getstatusoutput("ls -1 /sys/block/")[1].split('\n')
-        print devices
-        for device in devices:
-            print device, device.find('sr')
-            if device.find('sd') != -1 or device.find('hd') != -1:
-                cmd = 'udevadm info --query="all" --name="{0}"'.format(device)
-                devinfo = commands.getstatusoutput(cmd)[1].split('\n')
-                for info in devinfo:
-                    disco = info.split('=')
-                    if len(disco) > 1 and disco[0].split(' ')[1] == 'DEVNAME':
-                        opt[disco[0].split(' ')[1]] = disco[1]
+        #devices = commands.getstatusoutput("ls -1 /sys/block/")[1].split('\n')
+        salida = commands.getstatusoutput("fdisk -l")[1].split('\n')
+        print salida
+        for linea in salida:
+            if linea.find('Disk /') == 0:
+                opt["DEVNAME"] = linea.split(':')[0].split(' ')[1]
                 discos.append(opt)
                 opt = {}
         return discos
+            
+#        print devices
+#        for device in devices:
+#            print device, device.find('sr')
+#            if device.find('Disk') == 1:
+#                cmd = 'udevadm info --query="all" --name="{0}"'.format(device)
+#                devinfo = commands.getstatusoutput(cmd)[1].split('\n')
+#                for info in devinfo:
+#                    disco = info.split('=')
+#                    if len(disco) > 1 and disco[0].split(' ')[1] == 'DEVNAME':
+#                        opt[disco[0].split(' ')[1]] = disco[1]
+#                discos.append(opt)
+#                opt = {}
+#        return discos
+
 #        leer = False
 #        i = -1
 #        discos = []
