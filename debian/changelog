@@ -1,3 +1,9 @@
+canaima-instalador (1.0-18) stable; urgency=low
+
+  * [cd8432d] corrigiendo error de letra faltante
+
+ -- William Abrahan Cabrera Reyes <cabrerawilliam@gmail.com>  Tue, 10 Jul 2012 04:26:32 -0430
+
 canaima-instalador (1.0-17) stable; urgency=low
 
   * [1e0d059] Eliminando barra de progreso
