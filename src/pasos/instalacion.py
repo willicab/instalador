@@ -200,11 +200,11 @@ class Main(gtk.Fixed):
     def copiar(self):
         cmd = 'unsquashfs -f -i -d /target /live/image/live/filesystem.squashfs'
         salida = os.popen(cmd)
-        while 1:
-            linea = salida.readline()
-            if not linea: break
-            cmd = linea.split('\n')[0]
-            self.par.accion('Copiando los archivos al disco...\n{0}'.format(cmd))
+#        while 1:
+#            linea = salida.readline()
+#            if not linea: break
+#            cmd = linea.split('\n')[0]
+#            self.par.accion('Copiando los archivos al disco...\n{0}'.format(cmd))
 
     def interfaces(self):
         eth = commands.getstatusoutput('ifconfig -a | grep eth')[1].split()[0]
