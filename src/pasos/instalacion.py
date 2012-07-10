@@ -12,6 +12,8 @@ import clases.install.fstab
 import clases.install.particion_todo as particion_todo
 import clases.install.particion_auto as particion_auto
 
+gtk.gdk.threads_init() 
+
 class Main(gtk.Fixed):
     root1 = '20GB'
     root2 = '3GB'
@@ -56,7 +58,7 @@ class Main(gtk.Fixed):
         self.thread.start()
 
     def instalar(self):
-        self.par.mostrar_barra()
+        #self.par.mostrar_barra()
 
         self.par.btn_siguiente.set_label('Reiniciar más tarde')
         self.par.btn_siguiente.set_size_request(150, 30)
@@ -192,7 +194,7 @@ class Main(gtk.Fixed):
         os.system('sync > /dev/null')
         self.visor.hide()
         self.lblInfo.show()
-        self.par.ocultar_barra()
+        #self.par.ocultar_barra()
         gtk.gdk.threads_leave()
 
     def copiar(self):
