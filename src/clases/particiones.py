@@ -29,10 +29,10 @@ class Main():
                 devinfo = commands.getstatusoutput(cmd)[1].split('\n')
                 for info in devinfo:
                     disco = info.split('=')
-                    if len(disco) > 1:
+                    if len(disco) > 1 and disco[0].split(' ')[1] == 'DEVNAME':
                         opt[disco[0].split(' ')[1]] = disco[1]
-            discos.append(opt)
-            opt = {}
+                discos.append(opt)
+                opt = {}
         return discos
 #        leer = False
 #        i = -1
