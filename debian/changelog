@@ -1,3 +1,9 @@
+canaima-instalador (1.0-19) stable; urgency=low
+
+  * [923a5ae] mostrando archivos que se van copiando al disco
+
+ -- William Abrahan Cabrera Reyes <cabrerawilliam@gmail.com>  Tue, 10 Jul 2012 04:45:48 -0430
+
 canaima-instalador (1.0-18) stable; urgency=low
 
   * [cd8432d] corrigiendo error de letra faltante
