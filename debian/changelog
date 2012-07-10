@@ -1,3 +1,9 @@
+canaima-instalador (1.0-17) stable; urgency=low
+
+  * [1e0d059] Eliminando barra de progreso
+
+ -- William Abrahan Cabrera Reyes <cabrerawilliam@gmail.com>  Tue, 10 Jul 2012 04:09:54 -0430
+
 canaima-instalador (1.0-16) stable; urgency=low
 
   * [de790b0] revirtiendo cambios en el paso de instalación
