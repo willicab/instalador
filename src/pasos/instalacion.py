@@ -165,9 +165,10 @@ class Main(gtk.Fixed):
                 format(script, self.usuario, self.passuser, self.nombre))
         os.system('chroot /target aptitude purge canaima-instalador --assume-yes')
         if self.chkgdm == True:
-            clave = "/desktop/gnome/applications/at/screen_reader_enabled true"
-            ruta = "/usr/share/gconf/defaults/30-canaima-instalador"
-            os.system('chroot /target echo {0} > {1}'.format(clave, ruta))
+            self.instalar_accesibilidad()
+            #clave = "/desktop/gnome/applications/at/screen_reader_enabled true"
+            #ruta = "/usr/share/gconf/defaults/30-canaima-instalador"
+            #os.system('chroot /target echo {0} > {1}'.format(clave, ruta))
             
 # Aumenta la Barra 90
         self.par.accion('Ejecutando últimas configuraciones')
@@ -247,4 +248,12 @@ class Main(gtk.Fixed):
         os.system('cp {0} {1}'.format(deb_orig, deb_dest))
         os.system('for deb in $(ls -1 /target/root/debs/); do chroot /target dpkg -i /root/debs/${deb}; done')
         #os.system('rm -rf {0}'.format(deb_dest))
+
+    def instalar_accesibilidad(self):
+        deb_orig = "/live/image/pool/main/c/canaima-accesibilidad-gdm-gnome/*.deb"
+        deb_dest = "/target/root/debs/"
+        chroot_dest = "/root/debs/*.deb"
+        os.system('mkdir -p {0}'.format(deb_dest))
+        os.system('cp {0} {1}'.format(deb_orig, deb_dest))
+        os.system('for deb in $(ls -1 /target/root/debs/); do chroot /target dpkg -i /root/debs/${deb}; done')
         
