@@ -1,3 +1,9 @@
+canaima-instalador (1.0-21) stable; urgency=low
+
+  * [fc5d55c] cambiando función para instalar la accesibilidad del gdm
+
+ -- William Abrahan Cabrera Reyes <cabrerawilliam@gmail.com>  Thu, 12 Jul 2012 09:06:22 -0430
+
 canaima-instalador (1.0-20) stable; urgency=low
 
   * [968485a] devolviendo cambios anteriores
