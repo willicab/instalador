@@ -229,6 +229,12 @@ class Main(gtk.Fixed):
         os.system('{0}'.format(cmd))
 
     def keyboard(self):
+        strxml = "<?xml version='1.0' encoding='utf-8'?>\n<gconf>\n <entry name=\"recent-layouts\" mtime=\"1328718908\" type=\"list\" ltype=\"string\">\n  <li type=\"string\">\m   <stringvalue>latam</stringvalue>\n  </li>\n </entry>\n <entry name=\"recent-languages\" mtime=\"1328718908\" type=\"list\" ltype=\"string\">\n  <li type=\"string\">\n   <stringvalue>es_VE.utf8</stringvalue>\n  </li>\n </entry>\n</gconf>"
+        os.system('mkdir -p /target/var/lib/gdm3/.gconf/apps/gdm')
+        f = open("/target/var/lib/gdm3/.gconf/apps/gdm/simple-greeter/%gconf.xml", "w")
+        string = f.write(strxml)
+        f.close()
+
         f = open("/target/var/lib/gdm3/.gconf/apps/gdm/simple-greeter/%gconf.xml", "r")
         string = f.read()
         f.close()
