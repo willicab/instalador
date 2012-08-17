@@ -34,7 +34,7 @@ class Main():
         for p in particiones:
             if p[5].find('swap') != -1 : return True
         return False
-        
+
     def particion_1(self):
         particion_boot = ''
         ini = int(gen.kb(self.ini))        # Inicio de la partición
@@ -85,7 +85,7 @@ class Main():
                 fin_swap)
 
         p = self.part.lista_particiones(disco)
-        for s in p: 
+        for s in p:
         # vuelvo a listar las particiones para buscar el nombre de cada
         # particion creada
             l = [s[1][:-2], \
@@ -98,6 +98,7 @@ class Main():
                 os.system('mkfs.ext4 {0}'.format(s[0]))
                 self.particiones_montadas[s[0]] = '/target'
                 self.particiones_montadas2[s[0]] = '/target'
+                os.system("parted {0} toggle {1} boot".format(s[0][:-1], s[0][-1:]))
                 particion_boot=s[0]
 
             if swap == False:
@@ -135,7 +136,7 @@ class Main():
             fin_swap = fin_ext             # Fin de la partición Swap
             swap = False
         self.par.accion('Desmontando dispositivo')
-        cmd = 'umount {0}'.format(self.particion) 
+        cmd = 'umount {0}'.format(self.particion)
         print cmd, commands.getstatusoutput(cmd)
         self.par.accion('redimensionando partición {0}'.format(self.particion))
         if fs == 'ntfs': # Redimensiono la particion si es NTFS
@@ -159,9 +160,9 @@ class Main():
         if swap == False:
             self.part.particionar(disco, 'logical', 'linux-swap', ini_swap,\
                 fin_swap)
-            
+
         p = self.part.lista_particiones(disco)
-        for s in p: 
+        for s in p:
         # vuelvo a listar las particiones para buscar el nombre de cada
         # particion creada
             l = [s[1][:-2], \
@@ -174,6 +175,7 @@ class Main():
                 os.system('mkfs.ext4 {0}'.format(s[0]))
                 self.particiones_montadas[s[0]] = '/target'
                 self.particiones_montadas2[s[0]] = '/target'
+                os.system("parted {0} toggle {1} boot".format(s[0][:-1], s[0][-1:]))
                 particion_boot=s[0]
 
             if str(ini_home) in l:
@@ -222,7 +224,7 @@ class Main():
             fin_swap = fin_ext             # Fin de la partición Swap
             swap = False
         self.par.accion('Desmontando dispositivo')
-        cmd = 'umount {0}'.format(self.particion) 
+        cmd = 'umount {0}'.format(self.particion)
         print cmd, commands.getstatusoutput(cmd)
         self.par.accion('redimensionando partición {0}'.format(self.particion))
         if fs == 'ntfs': # Redimensiono la particion si es NTFS
@@ -245,13 +247,13 @@ class Main():
         self.part.particionar(disco, 'logical', 'ext4', ini_root, fin_root)
         self.part.particionar(disco, 'logical', 'ext4', ini_usr, fin_usr)
         self.part.particionar(disco, 'logical', 'ext4', ini_home, fin_home)
-        
+
         if swap == False:
             self.part.particionar(disco, 'logical', 'linux-swap', ini_swap,\
                 fin_swap)
-        
+
         p = self.part.lista_particiones(disco)
-        for s in p: 
+        for s in p:
         # vuelvo a listar las particiones para buscar el nombre de cada
         # particion creada
             l = [s[1][:-2], \
@@ -264,6 +266,7 @@ class Main():
                 os.system('mkfs.ext4 {0}'.format(s[0]))
                 self.particiones_montadas[s[0]] = '/target'
                 self.particiones_montadas2[s[0]] = '/target'
+                os.system("parted {0} toggle {1} boot".format(s[0][:-1], s[0][-1:]))
 
             if str(ini_home) in l:
                 self.par.accion('Formateando partición {0} como ext4'. \
@@ -278,7 +281,7 @@ class Main():
                 os.system('mkfs.ext4 {0}'.format(s[0]))
                 self.particiones_montadas[s[0]] = '/target/usr'
                 self.particiones_montadas2[s[0]] = '/target/usr'
-            
+
             if str(ini_boot) in l:
                 self.par.accion('Formateando partición {0} como ext2'. \
                     format(s[0]))
@@ -299,3 +302,4 @@ class Main():
     def particion_4(self):
         salida = self.part_manual.auto()
         return salida
+

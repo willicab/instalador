@@ -9,10 +9,10 @@ class Main(gtk.Fixed):
         gtk.Fixed.__init__(self)
         self.cfg = cfg
         #print self.cfg
-    
+
         altura = 260
-        inc = 20 
-        
+        inc = 20
+
         msg = "Distribución del Teclado: {0}".format(self.cfg['teclado'])
         self.lbldist = gtk.Label(msg)
         self.lbldist.set_size_request(590, 30)
@@ -79,7 +79,7 @@ class Main(gtk.Fixed):
         self.lblnombre.set_alignment(0, 0)
         self.lblnombre.show()
         altura = altura - inc
-        
+
         msg = "Nombre de usuario: {0}".format(self.cfg['usuario'])
         self.lblusuario = gtk.Label(msg)
         self.lblusuario.set_size_request(590, 30)
@@ -87,7 +87,7 @@ class Main(gtk.Fixed):
         self.lblusuario.set_alignment(0, 0)
         self.lblusuario.show()
         altura = altura - inc
-        
+
         msg = "Nombre de la maquina: {0}".format(self.cfg['maquina'])
         self.lblmaquina = gtk.Label(msg)
         self.lblmaquina.set_size_request(590, 30)
@@ -95,8 +95,8 @@ class Main(gtk.Fixed):
         self.lblmaquina.set_alignment(0, 0)
         self.lblmaquina.show()
         altura = altura - inc
-        
-        self.linea = gtk.HSeparator()   
+
+        self.linea = gtk.HSeparator()
         self.linea.set_size_request(590, 10);
         self.put(self.linea, 0, altura)
         self.linea.show()

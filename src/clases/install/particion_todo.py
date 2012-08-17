@@ -31,16 +31,16 @@ class Main():
             self.fin = cfg['fin']
         except:
             self.fin = 0
-        
+
 
     def particion_1(self):
         particion_boot = ''
         self.par.accion('Eliminando Particiones')
-        gen.desmontar(self.disco)     # Desmonta todas las particiones del disco              
+        gen.desmontar(self.disco)     # Desmonta todas las particiones del disco
         p = self.part.lista_particiones(self.disco)
         print self.ini, self.fin
         if self.vacio == False:
-            for s in p: 
+            for s in p:
                 num = s[10]
                 if s[4].find('swap') > -1:
                     cmd = 'swapoff '.format(s[0])
@@ -69,7 +69,7 @@ class Main():
         self.part.particionar(disco, 'logical', 'linux-swap', ini_swap,fin_swap)
 
         p = self.part.lista_particiones(self.disco)
-        for s in p: 
+        for s in p:
         # vuelvo a listar las particiones para buscar el nombre de cada
         # particion creada
             l = [str(int(float(s[1][:-2].replace(',', '.'))) + 0), \
@@ -82,6 +82,7 @@ class Main():
                 os.system('mkfs.ext4 {0}'.format(s[0]))
                 self.particiones_montadas[s[0]] = '/target'
                 self.particiones_montadas2[s[0]] = '/target'
+                os.system("parted {0} toggle {1} boot".format(s[0][:-1], s[0][-1:]))
                 particion_boot=s[0]
 
             if str(ini_swap) in l:
@@ -91,16 +92,16 @@ class Main():
                 os.system('swapon {0}'.format(s[0]))
         gen.montar(self.particiones_montadas)
         return [self.particiones_montadas2, particion_boot]
-        
+
     def particion_2(self):
         particion_boot = ''
         self.par.accion('Eliminando Particiones')
-        gen.desmontar(self.disco)  # Desmonta todas las particiones del disco              
+        gen.desmontar(self.disco)  # Desmonta todas las particiones del disco
         p = self.part.lista_particiones(self.disco)
         if self.vacio == False:
             ini = 1049                          # Inicio de la partición
             fin = gen.kb(p[0][9])               # Fin de la partición
-            for s in p: 
+            for s in p:
                 num = s[10]
                 if s[4].find('swap') > -1:
                     cmd = 'swapoff '.format(s[0])
@@ -130,20 +131,21 @@ class Main():
         self.part.particionar(disco, 'logical', 'linux-swap', ini_swap,fin_swap)
 
         p = self.part.lista_particiones(disco)
-        for s in p: 
+        for s in p:
         # vuelvo a listar las particiones para buscar el nombre de cada
         # particion creada
             l = [str(int(float(s[1][:-2].replace(',', '.'))) + 0), \
                 str(int(float(s[1][:-2].replace(',', '.'))) + 1), \
                 str(int(float(s[1][:-2].replace(',', '.'))) - 1)]
             print  ini_root, ini_home, ini_swap, l
-            
+
             if str(ini_root) in l:
                 self.par.accion('Formateando partición {0} como ext4'\
                 .format(s[0]))
                 os.system('mkfs.ext4 {0}'.format(s[0]))
                 self.particiones_montadas[s[0]] = '/target'
                 self.particiones_montadas2[s[0]] = '/target'
+                os.system("parted {0} toggle {1} boot".format(s[0][:-1], s[0][-1:]))
                 particion_boot=s[0]
 
             if str(ini_home) in l:
@@ -160,16 +162,16 @@ class Main():
                 os.system('swapon {0}'.format(s[0]))
         gen.montar(self.particiones_montadas)
         return [self.particiones_montadas2, particion_boot]
-                
+
     def particion_3(self):
         particion_boot = ''
         self.par.accion('Eliminando Particiones')
-        gen.desmontar(self.disco)  # Desmonta todas las particiones del disco              
+        gen.desmontar(self.disco)  # Desmonta todas las particiones del disco
         p = self.part.lista_particiones(self.disco)
         if self.vacio == False:
             ini = 1049                          # Inicio de la partición
             fin = gen.kb(p[0][9])               # Fin de la partición
-            for s in p: 
+            for s in p:
                 num = s[10]
                 if s[4].find('swap') > -1:
                     cmd = 'swapoff '.format(s[0])
@@ -205,7 +207,7 @@ class Main():
         self.part.particionar(disco, 'logical', 'linux-swap', ini_swap,fin_swap)
 
         p = self.part.lista_particiones(disco)
-        for s in p: 
+        for s in p:
         # vuelvo a listar las particiones para buscar el nombre de cada
         # particion creada
             l = [str(int(float(s[1][:-2].replace(',', '.'))) + 0), \
@@ -219,6 +221,7 @@ class Main():
                 os.system('mkfs.ext2 {0}'.format(s[0]))
                 self.particiones_montadas[s[0]] = '/target/boot'
                 self.particiones_montadas2[s[0]] = '/target/boot'
+                os.system("parted {0} toggle {1} boot".format(s[0][:-1], s[0][-1:]))
                 particion_boot=s[0]
 
             if str((ini_root)) in l:
@@ -255,3 +258,4 @@ class Main():
         self.part_manual = particion_manual.Main(self.cfg, self.par)
         salida = self.part_manual.todo(self.vacio)
         return salida
+

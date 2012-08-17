@@ -12,7 +12,7 @@ import clases.install.fstab
 import clases.install.particion_todo as particion_todo
 import clases.install.particion_auto as particion_auto
 
-gtk.gdk.threads_init() 
+gtk.gdk.threads_init()
 
 class Main(gtk.Fixed):
     root1 = '20GB'
@@ -42,18 +42,18 @@ class Main(gtk.Fixed):
         self.visor.set_size_request(590, 280)
         self.put(self.visor, 0, 0)
         self.visor.show()
-        
+
         msg = 'Ha culminado la instalación, puede reiniciar ahora el sistema\n'
         msg = msg + 'o seguir probando canaima y reiniciar más tarde.'
         self.lblInfo = gtk.Label(msg)
         self.lblInfo.set_size_request(590, 280)
         self.put(self.lblInfo, 0, 0)
         #self.lblInfo.show()
-        
-        path = os.path.realpath(os.path.join(os.path.dirname(__file__), 
+
+        path = os.path.realpath(os.path.join(os.path.dirname(__file__),
                 '..', 'data', 'preview', 'carrusel.html'))
-        self.visor.open(path)        
-    
+        self.visor.open(path)
+
         self.thread = threading.Thread(target=self.instalar, args=())
         self.thread.start()
 
@@ -67,7 +67,7 @@ class Main(gtk.Fixed):
         self.par.btn_anterior.set_size_request(150, 30)
         self.par.botonera.move(self.par.btn_anterior, 280, 10)
         self.par.btn_cancelar.hide()
-        
+
         self.par.info_barra("Creando particiones en el disco duro ...")
         # Comenzando el particionado
         if self.metodo == 'todo':
@@ -123,7 +123,7 @@ class Main(gtk.Fixed):
         os.system('mkdir -p /target/boot/burg')
 # Aumenta la Barra 50
         self.par.accion('instalando burg')
-        script = os.path.realpath(os.path.join(os.path.dirname(__file__), 
+        script = os.path.realpath(os.path.join(os.path.dirname(__file__),
                 '..', 'scripts', 'install-grub-ini.sh'))
         os.system('echo "0" > /proc/sys/kernel/printk')
         os.system('chmod +x {0}'.format(script))
@@ -133,9 +133,9 @@ class Main(gtk.Fixed):
         print '-----Burg Install: ' + cmd
         os.system(cmd)
         uname_r = commands.getstatusoutput('echo $(uname -r)')[1]
-        vmlinuz = 'vmlinuz-' + uname_r 
+        vmlinuz = 'vmlinuz-' + uname_r
         initrd = 'initrd.img-'  + uname_r
-        script = os.path.realpath(os.path.join(os.path.dirname(__file__), 
+        script = os.path.realpath(os.path.join(os.path.dirname(__file__),
                 '..', 'scripts', 'install-grub.sh'))
         os.system('chmod +x {0}'.format(script))
         os.system('sh {0} /target {1} '.format(script, self.disco))
@@ -148,7 +148,7 @@ class Main(gtk.Fixed):
 # Aumenta la Barra 80
         if self.oem == True:
             self.par.accion('Creando usuarios')
-            script = os.path.realpath(os.path.join(os.path.dirname(__file__), 
+            script = os.path.realpath(os.path.join(os.path.dirname(__file__),
                     '..', 'scripts', 'make-user.sh'))
             os.system('sh {0} "root" "root" "/target"'. \
                 format(script))
@@ -157,7 +157,7 @@ class Main(gtk.Fixed):
             self.instalar_primeros_pasos()
         else:
             self.par.accion('Creando usuarios')
-            script = os.path.realpath(os.path.join(os.path.dirname(__file__), 
+            script = os.path.realpath(os.path.join(os.path.dirname(__file__),
                     '..', 'scripts', 'make-user.sh'))
             os.system('sh {0} "root" "{1}" "/target"'. \
                 format(script, self.passroot))
@@ -169,7 +169,7 @@ class Main(gtk.Fixed):
             #clave = "/desktop/gnome/applications/at/screen_reader_enabled true"
             #ruta = "/usr/share/gconf/defaults/30-canaima-instalador"
             #os.system('chroot /target echo {0} > {1}'.format(clave, ruta))
-            
+
 # Aumenta la Barra 90
         self.par.accion('Ejecutando últimas configuraciones')
         os.system('rm -f /target/etc/mtab')
@@ -212,7 +212,7 @@ class Main(gtk.Fixed):
         des = '/target/etc/network/interfaces'
         os.system('echo auto {0} > {1}'.format(eth, des))
         os.system('echo iface {0} inet dhcp >> {1}'.format(eth, des))
-    
+
     def hostname(self):
         cmd = 'echo "{0}" > /target/etc/hostname'.format(self.maquina)
         print cmd
@@ -227,7 +227,7 @@ class Main(gtk.Fixed):
         cmd = cmd + 'ff02::3\t\tip6-allhosts" > /target/etc/hosts    '
         print cmd
         os.system('{0}'.format(cmd))
-    
+
     def keyboard(self):
         f = open("/target/var/lib/gdm3/.gconf/apps/gdm/simple-greeter/%gconf.xml", "r")
         string = f.read()
@@ -239,7 +239,7 @@ class Main(gtk.Fixed):
         f = open("/target/var/lib/gdm3/.gconf/apps/gdm/simple-greeter/%gconf.xml", "w")
         string = f.write(str(soup))
         f.close()
-        
+
     def instalar_primeros_pasos(self):
         deb_orig = "/live/image/pool/main/c/canaima-primeros-pasos/*.deb"
         deb_dest = "/target/root/debs/"
@@ -256,4 +256,4 @@ class Main(gtk.Fixed):
         os.system('mkdir -p {0}'.format(deb_dest))
         os.system('cp {0} {1}'.format(deb_orig, deb_dest))
         os.system('for deb in $(ls -1 /target/root/debs/); do chroot /target dpkg -i /root/debs/${deb}; done')
-        
+
