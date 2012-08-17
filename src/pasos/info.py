@@ -130,8 +130,8 @@ class Main(gtk.Fixed):
         elif self.cfg['metodo'] == 'vacio':
             pass
         else:
-            msg = "partición a usar: {0}".format(self.cfg['particion'])
-            self.lblmetodo.set_text(msg)
+            #msg = "partición a usar: {0}".format(self.cfg['particion'])
+            #self.lblmetodo.set_text(msg)
             msg = "Tamaño Anterior de la Partición: {0}".format(gen.hum(gen.h2kb(self.cfg['fin'])))
             self.lbltam.set_text(msg)
             msg = "Nuevo Tamaño de la Partición: {0}".format(gen.hum(gen.h2kb(self.cfg['nuevo_fin'])))
