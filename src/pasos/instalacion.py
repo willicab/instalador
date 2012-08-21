@@ -182,7 +182,7 @@ class Main(gtk.Fixed):
         os.system('chroot /target dpkg-reconfigure canaima-base \
         canaima-escritorio-gnome canaima-estilo-visual-gnome \
         canaima-chat-gnome canaima-bienvenido-gnome')
-        #self.keyboard()
+        self.keyboard()
 # Aumenta la Barra 100
         #os.system('chroot /target aptitude remove canaima-instalador')
         #os.system('chroot /target aptitude install canaima-contrasena -y')
