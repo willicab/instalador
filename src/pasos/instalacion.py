@@ -5,12 +5,11 @@ import gtk
 import threading
 import commands
 import webkit
-from BeautifulSoup import BeautifulSoup
 import clases.particiones
-import clases.general as gen
 import clases.install.fstab
 import clases.install.particion_todo as particion_todo
 import clases.install.particion_auto as particion_auto
+import re
 
 gtk.gdk.threads_init()
 
@@ -133,8 +132,8 @@ class Main(gtk.Fixed):
         print '-----Burg Install: ' + cmd
         os.system(cmd)
         uname_r = commands.getstatusoutput('echo $(uname -r)')[1]
-        vmlinuz = 'vmlinuz-' + uname_r
-        initrd = 'initrd.img-'  + uname_r
+        #vmlinuz = 'vmlinuz-' + uname_r
+        initrd = 'initrd.img-' + uname_r
         script = os.path.realpath(os.path.join(os.path.dirname(__file__),
                 '..', 'scripts', 'install-grub.sh'))
         os.system('chmod +x {0}'.format(script))
@@ -180,7 +179,9 @@ class Main(gtk.Fixed):
         self.hostname()
         os.system('chroot /target dhclient -v')
         os.system('chroot /target aptitude update')
-        os.system('chroot /target dpkg-reconfigure canaima-base canaima-escritorio-gnome canaima-estilo-visual-gnome canaima-chat-gnome canaima-bienvenido-gnome')
+        os.system('chroot /target dpkg-reconfigure canaima-base \
+        canaima-escritorio-gnome canaima-estilo-visual-gnome \
+        canaima-chat-gnome canaima-bienvenido-gnome')
         #self.keyboard()
 # Aumenta la Barra 100
         #os.system('chroot /target aptitude remove canaima-instalador')
@@ -229,27 +230,39 @@ class Main(gtk.Fixed):
         os.system('{0}'.format(cmd))
 
     def keyboard(self):
-        strxml = "<?xml version='1.0' encoding='utf-8'?>\n<gconf>\n <entry name=\"recent-layouts\" mtime=\"1328718908\" type=\"list\" ltype=\"string\">\n  <li type=\"string\">\m   <stringvalue>latam</stringvalue>\n  </li>\n </entry>\n <entry name=\"recent-languages\" mtime=\"1328718908\" type=\"list\" ltype=\"string\">\n  <li type=\"string\">\n   <stringvalue>es_VE.utf8</stringvalue>\n  </li>\n </entry>\n</gconf>"
-        os.system('mkdir -p /target/var/lib/gdm3/.gconf/apps/gdm')
-        f = open("/target/var/lib/gdm3/.gconf/apps/gdm/simple-greeter/%gconf.xml", "w")
-        string = f.write(strxml)
-        f.close()
 
-        f = open("/target/var/lib/gdm3/.gconf/apps/gdm/simple-greeter/%gconf.xml", "r")
-        string = f.read()
-        f.close()
+        pattern = "^XKBLAYOUT=*"
+        re_obj = re.compile(pattern)
+        new_value = "XKBLAYOUT=\"" + self.teclado + "\"\n"
 
-        soup = BeautifulSoup(string)
-        soup.find("entry", {"name":"recent-layouts"}).li.stringvalue.string.replaceWith(CFG['teclado'])
+        file_path = "/target/etc/default/keyboard"
+        infile = open (file_path, "r")
+        string = ''
 
-        f = open("/target/var/lib/gdm3/.gconf/apps/gdm/simple-greeter/%gconf.xml", "w")
-        string = f.write(str(soup))
-        f.close()
+        # Busca el valor del pattern
+        is_match = False
+        for line in infile:
+            match = re_obj.search(line)
+            if match :
+                is_match = True
+                string += new_value
+            else:
+                string += line
+        infile.close()
+
+        # Si no encuentra el pattern lo agrega al final con el valor asignado
+        if not is_match:
+            string += new_value
+
+        # Escribe el archivo modificado
+        outfile = open(file_path, "w")
+        outfile.write(string)
+        outfile.close()
 
     def instalar_primeros_pasos(self):
         deb_orig = "/live/image/pool/main/c/canaima-primeros-pasos/*.deb"
         deb_dest = "/target/root/debs/"
-        chroot_dest = "/root/debs/*.deb"
+        #chroot_dest = "/root/debs/*.deb"
         os.system('mkdir -p {0}'.format(deb_dest))
         os.system('cp {0} {1}'.format(deb_orig, deb_dest))
         os.system('for deb in $(ls -1 /target/root/debs/); do chroot /target dpkg -i /root/debs/${deb}; done')
@@ -258,8 +271,7 @@ class Main(gtk.Fixed):
     def instalar_accesibilidad(self):
         deb_orig = "/live/image/pool/main/c/canaima-accesibilidad-gdm-gnome/*.deb"
         deb_dest = "/target/root/debs/"
-        chroot_dest = "/root/debs/*.deb"
+        #chroot_dest = "/root/debs/*.deb"
         os.system('mkdir -p {0}'.format(deb_dest))
         os.system('cp {0} {1}'.format(deb_orig, deb_dest))
         os.system('for deb in $(ls -1 /target/root/debs/); do chroot /target dpkg -i /root/debs/${deb}; done')
-
