@@ -1,8 +1,17 @@
 canaima-instalador (1.0-22) stable; urgency=low
 
+  [ William Abrahan Cabrera Reyes ]
   * [6f0527b] Modificando método para configuración del teclado
 
- -- William Abrahan Cabrera Reyes <cabrerawilliam@gmail.com>  Fri, 17 Aug 2012 17:02:12 -0430
+  [ Erick Birbe ]
+  * [9effc69] Especificando la distribución de teclado en
+    /etc/default/keyborad (bug #426)
+  * [e3eb045] Corrigiendo error de lintian executable-not-elf-or-script
+  * [586d349] Activando el metodo de configuracion de teclado
+    self.keyboard()
+  * [b08fb5f] Agregandome como Uploader
+
+ -- Erick Birbe <erickcion@gmail.com>  Wed, 22 Aug 2012 09:19:14 -0430
 
 canaima-instalador (1.0-21) stable; urgency=low
 
