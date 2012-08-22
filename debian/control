@@ -2,7 +2,8 @@ Source: canaima-instalador
 Section: admin
 Priority: extra
 Maintainer: Equipo de Desarrollo de Canaima GNU/Linux <desarrolladores@canaima.softwarelibre.gob.ve>
-Uploaders: William Cabrera <william@linux.es>
+Uploaders: William Cabrera <william@linux.es>,
+	Erick Birbe <erickcion@gmail.com>
 Build-Depends: debhelper (>= 7.0.50~)
 Standards-Version: 3.9.1
 Homepage: http://canaima.softwarelibre.gob.ve/
