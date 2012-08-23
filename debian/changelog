@@ -1,3 +1,9 @@
+canaima-instalador (1.0-23) stable; urgency=low
+
+  * [87844f4] Removiendo mensajes innecesarios.
+
+ -- Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>  Wed, 22 Aug 2012 22:39:13 -0430
+
 canaima-instalador (1.0-22) stable; urgency=low
 
   [ William Abrahan Cabrera Reyes ]
