@@ -1,3 +1,10 @@
+canaima-instalador (1.0-27) stable; urgency=low
+
+  * [720ff48] Moviendo base del código fuente al primer nivel de la
+    carpeta.
+
+ -- Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>  Thu, 30 Aug 2012 21:02:13 +0000
+
 canaima-instalador (1.0-26) stable; urgency=low
 
   * [bed9207] Mejorando respuesta de h2kb si num es False.
