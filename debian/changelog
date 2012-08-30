@@ -1,3 +1,9 @@
+canaima-instalador (1.0-25) stable; urgency=low
+
+  * [7373b45] Arreglando detalle con asignación previa de variable.
+
+ -- Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>  Thu, 30 Aug 2012 14:42:03 -0430
+
 canaima-instalador (1.0-24) stable; urgency=low
 
   * [6db0db9] Removiendo carpeta de ejemplos.
