@@ -1,8 +1,16 @@
 canaima-instalador (1.0-23) stable; urgency=low
 
   * [87844f4] Removiendo mensajes innecesarios.
+  * [44ff48c] Corrigiendo lugar de escritura del /etc/default/keyboard.
+    Corrigiendo error resultante del procesamiento de las particiones
+    cuando existe una partición de 0KB o cuando no existe tabla de
+    particiones. Ampliando la escritura de /etc/network/interfaces según
+    el número de interfaces. Sustituyendo "auto" por "allow-hotplug" en
+    las entradas de /etc/network/interfaces para evitar que haga DHCP en
+    el boot. Escribiendo /etc/fstab correctamente.
+  * [c6b725d] Pequeño detalle estético en el Makefile.
 
- -- Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>  Wed, 22 Aug 2012 22:39:13 -0430
+ -- Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>  Thu, 30 Aug 2012 04:17:20 -0430
 
 canaima-instalador (1.0-22) stable; urgency=low
 
