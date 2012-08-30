@@ -1,3 +1,9 @@
+canaima-instalador (1.0-26) stable; urgency=low
+
+  * [bed9207] Mejorando respuesta de h2kb si num es False.
+
+ -- Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>  Thu, 30 Aug 2012 17:04:23 -0430
+
 canaima-instalador (1.0-25) stable; urgency=low
 
   * [7373b45] Arreglando detalle con asignación previa de variable.
