@@ -1,3 +1,9 @@
+canaima-instalador (1.0-24) stable; urgency=low
+
+  * [6db0db9] Removiendo carpeta de ejemplos.
+
+ -- Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>  Thu, 30 Aug 2012 04:23:28 -0430
+
 canaima-instalador (1.0-23) stable; urgency=low
 
   * [87844f4] Removiendo mensajes innecesarios.
