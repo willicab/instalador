@@ -26,7 +26,6 @@ install:
 
 	install -d $(DESTDIR)/usr/bin
 	install -d $(DESTDIR)/usr/share/canaima-instalador
-	#install -d $(DESTDIR)/usr/share/canaima-instalador/oem
 	install -d $(DESTDIR)/usr/share/canaima-instalador/data
 	install -d $(DESTDIR)/usr/share/canaima-instalador/data/distribuciones
 	install -d $(DESTDIR)/usr/share/canaima-instalador/data/preview
