@@ -1,6 +1,6 @@
 #-*- coding: UTF-8 -*-
 
-import commands
+import commands, re
 
 root1_min = '2.5GB'
 root1_max = '18GB'
@@ -29,11 +29,14 @@ def h2kb(num):
         Salida: el valor en kB de tipo float
     '''
     if type(num) == int or type(num) == float : return float(num)
-    unidad, num = num[-2:], float(num[:-2].replace(',', '.'))
-    if unidad == 'GB': return num * 1048576.0 # GB a kB
-    if unidad == 'MB': return num * 1024.0    # MB a kB
-    if unidad == 'kB': return num             # kB a kB
-    return num / 1024.0                       # Bytes a kB
+    unidad = re.sub('[0123456789.]', '', num.replace(',', '.').upper())
+    peso = float(re.sub('[TGMKB]', '', num.replace(',', '.').upper()))
+    if unidad == 'TB': kb = peso * 1024.0 * 1024.0 * 1024.0	# TB a KB
+    if unidad == 'GB': kb = peso * 1024.0 * 1024.0		# GB a KB
+    if unidad == 'MB': kb = peso * 1024.0			# MB a KB
+    if unidad == 'KB': kb = peso				# KB a KB
+    if unidad == 'B': kb = peso / 1024.0			# B a KB
+    return kb
     
 def redondear(w, dec=0):
     if type(w) == int : return w

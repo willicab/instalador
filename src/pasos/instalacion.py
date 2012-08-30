@@ -121,7 +121,7 @@ class Main(gtk.Fixed):
         os.system('mount -o bind /sys /target/sys')
         os.system('mkdir -p /target/boot/burg')
 # Aumenta la Barra 50
-        self.par.accion('instalando burg')
+        self.par.accion('Instalando burg')
         script = os.path.realpath(os.path.join(os.path.dirname(__file__),
                 '..', 'scripts', 'install-grub-ini.sh'))
         os.system('echo "0" > /proc/sys/kernel/printk')
@@ -209,10 +209,21 @@ class Main(gtk.Fixed):
 #            self.par.accion('Copiando los archivos al disco...\n{0}'.format(cmd))
 
     def interfaces(self):
-        eth = commands.getstatusoutput('ifconfig -a | grep eth')[1].split()[0]
-        des = '/target/etc/network/interfaces'
-        os.system('echo auto {0} > {1}'.format(eth, des))
-        os.system('echo iface {0} inet dhcp >> {1}'.format(eth, des))
+        destination = '/target/etc/network/interfaces'
+	interdir = '/sys/class/net/'
+        interlist = next(os.walk(interdir))[1]
+
+        for i in interlist:
+            if i == 'lo':
+                content += '\nauto lo'
+                content += '\niface lo inet loopback\n'
+            elif re.sub('\d', '', i) == 'eth':
+                content += '\nallow-hotplug {0}'.format(i)
+                content += '\niface {0} inet dhcp\n'.format(i)
+
+        f = open(destination, 'w')
+        f.write(content)
+	f.close()
 
     def hostname(self):
         cmd = 'echo "{0}" > /target/etc/hostname'.format(self.maquina)
@@ -235,7 +246,7 @@ class Main(gtk.Fixed):
         re_obj = re.compile(pattern)
         new_value = "XKBLAYOUT=\"" + self.teclado + "\"\n"
 
-        file_path = "/target/etc/default/keyboard"
+        file_path = "/target/etc/canaima-base/alternatives/keyboard"
         infile = open (file_path, "r")
         string = ''
 
