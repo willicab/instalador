@@ -28,6 +28,7 @@ def h2kb(num):
         - num: un número en formato para lectura por humanos de tipo string
         Salida: el valor en kB de tipo float
     '''
+    if not num: return num
     if type(num) == int or type(num) == float : return float(num)
     unidad = re.sub('[0123456789.]', '', num.replace(',', '.').upper())
     peso = float(re.sub('[TGMKB]', '', num.replace(',', '.').upper()))
