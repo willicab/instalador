@@ -209,6 +209,7 @@ class Main(gtk.Fixed):
 #            self.par.accion('Copiando los archivos al disco...\n{0}'.format(cmd))
 
     def interfaces(self):
+        content = ''
         destination = '/target/etc/network/interfaces'
 	interdir = '/sys/class/net/'
         interlist = next(os.walk(interdir))[1]
