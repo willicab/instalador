@@ -24,21 +24,20 @@ build:
 
 install:
 
-	mkdir -p $(DESTDIR)/usr/bin
-	mkdir -p $(DESTDIR)/usr/share/canaima-instalador
-	mkdir -p $(DESTDIR)/etc/skel/Escritorio
-	mkdir -p $(DESTDIR)/etc/gdm3/Init
+	@mkdir -p $(DESTDIR)/usr/bin
+	@mkdir -p $(DESTDIR)/usr/share/canaima-instalador
+	@mkdir -p $(DESTDIR)/etc/skel/Escritorio
+	@mkdir -p $(DESTDIR)/etc/gdm3/Init
 
-	cp canaima-instalador.desktop $(DESTDIR)/etc/skel/Escritorio/
-	cp wizard.py canaima-instalador.py $(DESTDIR)/usr/share/canaima-instalador/
-	cp canaima-instalador $(DESTDIR)/usr/bin/canaima-instalador
-	cp -r data pasos scripts clases $(DESTDIR)/usr/share/canaima-instalador/
+	@cp canaima-instalador.desktop $(DESTDIR)/etc/skel/Escritorio/
+	@cp canaima-instalador $(DESTDIR)/usr/bin/canaima-instalador
+	@cp -r data pasos scripts clases wizard.py canaima-instalador.py $(DESTDIR)/usr/share/canaima-instalador/
 
 uninstall:
 
-	rm -rf $(DESTDIR)/usr/bin/canaima-instalador
-	rm -rf $(DESTDIR)/usr/share/canaima-instalador
-	rm -rf $(DESTDIR)/etc/skel/Escritorio/canaima-instalador.desktop
+	@rm -rf $(DESTDIR)/usr/bin/canaima-instalador
+	@rm -rf $(DESTDIR)/usr/share/canaima-instalador
+	@rm -rf $(DESTDIR)/etc/skel/Escritorio/canaima-instalador.desktop
 
 clean:
 
