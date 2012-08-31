@@ -211,7 +211,7 @@ class Main(gtk.Fixed):
     def interfaces(self):
         content = ''
         destination = '/target/etc/network/interfaces'
-	interdir = '/sys/class/net/'
+        interdir = '/sys/class/net/'
         interlist = next(os.walk(interdir))[1]
 
         for i in interlist:
@@ -224,7 +224,7 @@ class Main(gtk.Fixed):
 
         f = open(destination, 'w')
         f.write(content)
-	f.close()
+        f.close()
 
     def hostname(self):
         cmd = 'echo "{0}" > /target/etc/hostname'.format(self.maquina)
