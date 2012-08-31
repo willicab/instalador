@@ -8,15 +8,15 @@ class Main():
 
     def obtener_particiones(self):
         return glob.glob('/dev/[sh]d[a-z]?*')
-    
+
     def obtener_cdroms(self):
         info = '/proc/sys/dev/cdrom/info'
         cmd = 'cat {0} | grep "drive name:" | sed "s/drive name://g"'.format(info)
         salida = commands.getstatusoutput(cmd)[1].split()
 
         if salida: return salida
-	else: return False
-    
+        else: return False
+
     def obtener_fs(self, particion):
         cmd = '/sbin/blkid -p {0}'.format(particion)
         salida = commands.getstatusoutput(cmd)[1].split()
@@ -24,14 +24,14 @@ class Main():
         uid = [i for i, item in enumerate(salida) if re.search('^UUID=*', item)]
 
         if tid and uid:
-            uuid = salida[uid[0]].replace('"','')
-            fs = salida[tid[0]].replace('TYPE=', '').replace('"','')
+            uuid = salida[uid[0]].replace('"', '')
+            fs = salida[tid[0]].replace('TYPE=', '').replace('"', '')
         else:
             uuid = ''
             fs = ''
 
         return {'uuid' : uuid, 'fs' : fs}
-        
+
     def crear_archivo(self):
         particiones = self.obtener_particiones()
         cdroms = self.obtener_cdroms()
@@ -39,7 +39,7 @@ class Main():
         defaults = 'defaults\t0\t0'
         destination = '/target/etc/fstab'
         content = ''
-	content += '#<filesystem>\t<mountpoint>\t<type>\t<options>\t<dump>\t<pass>\n'
+        content += '#<filesystem>\t<mountpoint>\t<type>\t<options>\t<dump>\t<pass>\n'
         content += '\nproc\t/proc\tproc\tdefaults\t0\t0'
 
         for part in particiones:
@@ -48,14 +48,14 @@ class Main():
             fs = entrada['fs']
 
             cmd = 'udevadm info --query="all" --name="{0}"'.format(part.split('/dev/')[1][:-1])
-            cbus = cmd+" | grep 'ID_BUS' | awk -F= '{print $2}'"
-            ctype = cmd+" | grep 'ID_TYPE' | awk -F= '{print $2}'"
+            cbus = cmd + " | grep 'ID_BUS' | awk -F= '{print $2}'"
+            ctype = cmd + " | grep 'ID_TYPE' | awk -F= '{print $2}'"
             dbus = commands.getstatusoutput(cbus)[1].split()
             dtype = commands.getstatusoutput(ctype)[1].split()
 
             if fs == 'swap' and dbus[0] != 'usb' and dtype[0] == 'disk':
                 content += "\n{0}\tnone\tswap\tsw\t0\t0".format(uuid)
-                print part,uuid,fs,dbus,dtype
+                print part, uuid, fs, dbus, dtype
             elif fs and uuid:
                 for fstype in supported:
                     if fstype == fs:
@@ -69,7 +69,7 @@ class Main():
                             point = '{0}/'.format(mnt)
                         else:
                             point = ''
-                        print part,uuid,fs,dbus,dtype
+                        print part, uuid, fs, dbus, dtype
                 if point:
                     content += '\n{0}\t{1}\t{2}\t{3}'.format(uuid, point, fs, defaults)
             else:
