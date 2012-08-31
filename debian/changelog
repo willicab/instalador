@@ -1,9 +1,17 @@
 canaima-instalador (1.0-27) stable; urgency=low
 
+  [ Luis Alejandro Martínez Faneyth ]
   * [720ff48] Moviendo base del código fuente al primer nivel de la
     carpeta.
+  * [c53b965] Mejorando detalles estéticos.
 
- -- Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>  Thu, 30 Aug 2012 21:02:13 +0000
+  [ Erick Birbe ]
+  * [58a6cd8] Corrigiendo problemas de identación del codigo
+
+  [ Luis Alejandro Martínez Faneyth ]
+  * [d54e9ca] Agregando colaboradores.
+
+ -- Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>  Fri, 31 Aug 2012 17:43:06 -0430
 
 canaima-instalador (1.0-26) stable; urgency=low
 
