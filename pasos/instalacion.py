@@ -192,7 +192,7 @@ class Main(gtk.Fixed):
         #os.system('umount -l /target/boot ')
         #os.system('umount -l /target/usr ')
         #os.system('umount -l /target/home ')
-        #os.system('umount -l /target ')
+        os.system('umount -l /target ')
         os.system('sync > /dev/null')
         self.visor.hide()
         self.lblInfo.show()
