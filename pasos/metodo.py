@@ -3,8 +3,6 @@
 # Autor: William Cabrera
 # Fecha: 13/10/2011
 
-import pygtk
-pygtk.require('2.0')
 import gtk
 import clases.particiones
 import clases.general as gen

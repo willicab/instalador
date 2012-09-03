@@ -3,8 +3,6 @@
 # Autor: William Cabrera
 # Fecha: 11/10/2011
 
-import pygtk
-pygtk.require('2.0')
 import gtk
 
 class Main(gtk.Label):

@@ -95,14 +95,15 @@ class Main():
             if fila[1] == 'Extendida':
                 tipo = 'extended'
             inicio = fila[5] + suma
-            cmd = 'parted -s {0} mkpart {1} {2} {3}k {4}k'.\
-                   format(fila[0],
-                          tipo,
-                          fila[2],
-                          fila[5] + suma,
-                          fila[6]
-                   )
-            print cmd, commands.getstatusoutput(cmd)
+            if fila[0] != '':
+                cmd = 'parted -s {0} mkpart {1} {2} {3}k {4}k'.\
+                       format(fila[0],
+                              tipo,
+                              fila[2],
+                              fila[5] + suma,
+                              fila[6]
+                       )
+                print cmd, commands.getstatusoutput(cmd)
         particiones = self.part.lista_particiones(disco)
         for inicios in particiones:
         # vuelvo a listar las particiones para buscar el nombre de cada
