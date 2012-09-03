@@ -11,10 +11,8 @@ import clases.general as gen
 import clases.barra_particiones as barra
 import threading
 import os
-import time
-import Queue
 
-gtk.gdk.threads_init() 
+gtk.gdk.threads_init()
 
 class Main(gtk.Fixed):
     disco = ''
@@ -34,24 +32,18 @@ class Main(gtk.Fixed):
     def __init__(self, parent):
         gtk.Fixed.__init__(self)
         self.par = parent
-        
+
         self.Iniciar()
-        
+
     def Iniciar(self):
-        
+
         self.discos = self.part.lista_discos()
-        borrados = []
         # Listar Discos
         print self.discos
         for disco in self.discos:
             try:
-                particiones = self.part.lista_particiones(disco["DEVNAME"])
-                print disco["DEVNAME"], len(particiones)
-                #if len(particiones) > 0:
-                print "agregando ", disco["DEVNAME"]
-                self.cmb_discos.append_text('{0}'.format( \
-                    disco['DEVNAME']#, \
-                    #disco['size'].split('(')[1][:-1]
+                self.cmb_discos.append_text('{0}'.format(\
+                    disco['DEVNAME']
                 ))
             except:
                 print "error"
@@ -64,14 +56,14 @@ class Main(gtk.Fixed):
         self.cmb_discos.set_size_request(280, 30)
         self.put(self.cmb_discos, 310, 0)
         self.cmb_discos.show()
-        
+
         txt_info = "Escoja el disco donde quiere instalar el sistema:"
         self.lbl1 = gtk.Label(txt_info)
         self.lbl1.set_size_request(-1, 30)
         self.lbl1.set_justify(gtk.JUSTIFY_CENTER)
         self.put(self.lbl1, 0, 0)
         self.lbl1.show()
-        
+
         self.barra_part = barra.Main(self)
         self.barra_part.set_size_request(590, 84)
         self.put(self.barra_part, 0, 35)
@@ -100,13 +92,13 @@ class Main(gtk.Fixed):
         self.lbl_info.set_size_request(590, 90)
         self.lbl_info.set_alignment(0, 0)
         self.put(self.lbl_info, 0, 185)
-        self.lbl_info.show()    
+        self.lbl_info.show()
         self.establecer_metodo()
 
 #        self.par.ocultar_barra()
 #        self.img_distribucion.hide()
 #        gtk.gdk.threads_leave()
-    
+
     def lista_metodos(self):
         '''
             Crea una lista de los metodos de instalación disponibles para la
@@ -116,7 +108,7 @@ class Main(gtk.Fixed):
         self.cmb_metodo.get_model().clear()
         i = 0
         for p in self.particiones:
-            if (gen.h2kb(p[8])) >= (gen.h2kb(self.minimo)) and (p[5] == 'ntfs' 
+            if (gen.h2kb(p[8])) >= (gen.h2kb(self.minimo)) and (p[5] == 'ntfs'
                 or p[5] == 'fat32'):
                 msg = 'Instalar Canaima en {0} ({1} libres)'
                 self.metodos[p[0]] = msg.format(p[0], p[8])
@@ -132,7 +124,7 @@ class Main(gtk.Fixed):
             self.cmb_metodo.append_text(l2)
         self.cmb_metodo.set_active(0)
         self.cmb_metodo.connect("changed", self.establecer_metodo)
-        
+
     def establecer_metodo(self, widget=None):
         m = self.cmb_metodo.get_model()
         a = self.cmb_metodo.get_active()
@@ -157,12 +149,12 @@ class Main(gtk.Fixed):
             msg = msg + '{0} para realizar la instalación.'.format(self.metodo)
         self.lbl_info.set_text(msg)
 
-    def seleccionar_disco(self, widget=None):   
+    def seleccionar_disco(self, widget=None):
         self.disco = self.discos[self.cmb_discos.get_active()]['DEVNAME']
         #print self.disco
         self.particiones = self.part.lista_particiones(self.disco)
         if len(self.particiones) == 0:
-            res = MessageBox(self, self.par, self.disco)
+            MessageBox(self, self.par, self.disco)
         else:
             self.total = self.particiones[0][9]
             try:
@@ -198,7 +190,7 @@ class MessageBox(gtk.MessageDialog):
         self.cont = gtk.Fixed()
         self.cont.show()
         self.vbox.pack_start(self.cont)
-        
+
         #Sistema de Archivos
         self.hbox = gtk.HBox()
         self.vbox.pack_start(self.hbox)
@@ -221,8 +213,8 @@ class MessageBox(gtk.MessageDialog):
         self.cmb_label.append_text('loop')
         self.cmb_label.set_active(0)
         self.cmb_label.show()
-        
-        response = self.show_all()
+
+        self.show_all()
         #self.run()
         #self.destroy()
     def _handle_clicked(self, *args):
@@ -236,21 +228,21 @@ class MessageBox(gtk.MessageDialog):
             self.padre.barra_part.show()
             self.padre.cmb_metodo.show()
             self.padre.lbl_info.show()
-            
+
         else:
             self.padre.barra_part.hide()
             self.padre.cmb_metodo.hide()
             self.padre.lbl_info.hide()
         self.destroy()
-        
+
         #self.connect('response', self.handle_clicked)
-        
+
         #def handle_clicked(self, widget=None):
         #    self.destroy()
 
 class ThreadGenerator(threading.Thread):
     def __init__(self, reference, function, params,
-                    gtk = False, window = False, event = False):
+                    gtk=False, window=False, event=False):
         threading.Thread.__init__(self)
         self._gtk = gtk
         self._window = window
@@ -258,7 +250,7 @@ class ThreadGenerator(threading.Thread):
         self._params = params
         self._event = event
         self.start()
-        
+
     def run(self):
         if self._gtk:
             gtk.gdk.threads_enter()

@@ -24,7 +24,7 @@ class Main():
             self.num = int(self.particion[-1:])
             self.ini = int(gen.kb(cfg['inicio']))
             self.fin = int(gen.kb(cfg['fin']))
-            
+
             print 'Disco: ', cfg['disco']
             if cfg['metodo'] != 'todo' and cfg['metodo'] != 'vacio' :
                 self.nuevo_fin = int(gen.kb(cfg['nuevo_fin']))
@@ -49,7 +49,7 @@ class Main():
         self.fin = int(float(gen.kb(self.cfg['fin'])))
         gen.desmontar(self.disco)
         if vacio == False:
-            for s in p: 
+            for s in p:
                 num = s[10]
                 if s[4].find('swap') > -1:
                     cmd = 'swapoff '.format(s[0])
@@ -76,10 +76,10 @@ class Main():
         elif fs == 'fat32': # Redimensiono la partición si es FAT32 o EXT3
             cmd = 'parted -s {0} resize {1} {2}k {3}k'.\
                 format(disco, num, ini_win, fin_win)
-            
+
             print cmd, commands.getstatusoutput(cmd)
             #commands.getstatusoutput(cmd)
-    
+
     def particionar(self):
         particion = []
         for fila in self.lista:
@@ -104,7 +104,7 @@ class Main():
                    )
             print cmd, commands.getstatusoutput(cmd)
         particiones = self.part.lista_particiones(disco)
-        for inicios in particiones: 
+        for inicios in particiones:
         # vuelvo a listar las particiones para buscar el nombre de cada
         # particion creada
             inicio = [inicios[1][:-2] , \
@@ -116,36 +116,36 @@ class Main():
                     if part[0] == 'ext4':
                         cmd = 'mkfs.ext4 '
                         if part[2] != 'Ninguno':
-                            self.particiones_montadas[inicios[0]] = '/target/' +part[2]
-                            self.particiones_montadas2[inicios[0]] = '/target/' +part[2]
+                            self.particiones_montadas[inicios[0]] = '/target/' + part[2]
+                            self.particiones_montadas2[inicios[0]] = '/target/' + part[2]
                     elif part[0] == 'ext3':
                         cmd = 'mkfs.ext3 '
                         if part[2] != 'Ninguno':
-                            self.particiones_montadas[inicios[0]] = '/target/' +part[2]
-                            self.particiones_montadas2[inicios[0]] = '/target/' +part[2]
+                            self.particiones_montadas[inicios[0]] = '/target/' + part[2]
+                            self.particiones_montadas2[inicios[0]] = '/target/' + part[2]
                     elif part[0] == 'ext2':
                         cmd = 'mkfs.ext2 '
                         if part[2] != 'Ninguno':
-                            self.particiones_montadas[inicios[0]] = '/target/' +part[2]
-                            self.particiones_montadas2[inicios[0]] = '/target/' +part[2]
+                            self.particiones_montadas[inicios[0]] = '/target/' + part[2]
+                            self.particiones_montadas2[inicios[0]] = '/target/' + part[2]
                     elif part[0] == 'linux-swap':
                         cmd = 'mkswap '
                         os.system('swapon {0}'.format(inicios[0]))
                     elif part[0] == 'reiserfs':
                         cmd = 'echo y | mkreiserfs '
                         if part[2] != 'Ninguno':
-                            self.particiones_montadas[inicios[0]] = '/target/' +part[2]
-                            self.particiones_montadas2[inicios[0]] = '/target/' +part[2]
+                            self.particiones_montadas[inicios[0]] = '/target/' + part[2]
+                            self.particiones_montadas2[inicios[0]] = '/target/' + part[2]
                     elif part[0] == 'fat16':
                         cmd = 'mkfs.vfat -F 16 '
                         if part[2] != 'Ninguno':
-                            self.particiones_montadas[inicios[0]] = '/target/' +part[2]
-                            self.particiones_montadas2[inicios[0]] = '/target/' +part[2]
+                            self.particiones_montadas[inicios[0]] = '/target/' + part[2]
+                            self.particiones_montadas2[inicios[0]] = '/target/' + part[2]
                     elif part[0] == 'fat32':
                         cmd = 'mkfs.vfat -F 32 '
                         if part[2] != 'Ninguno':
-                            self.particiones_montadas[inicios[0]] = '/target/' +part[2]
-                            self.particiones_montadas2[inicios[0]] = '/target/' +part[2]
+                            self.particiones_montadas[inicios[0]] = '/target/' + part[2]
+                            self.particiones_montadas2[inicios[0]] = '/target/' + part[2]
 
                     cmd = cmd + str(inicios[0])
                     print '---', cmd, commands.getstatusoutput(cmd)
