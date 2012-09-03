@@ -148,6 +148,7 @@ class Main(gtk.Fixed):
         self.lbl_info.set_text(msg)
 
     def seleccionar_disco(self, widget=None):
+        print self.cmb_discos.get_active()
         self.disco = self.discos[self.cmb_discos.get_active()]['DEVNAME']
         #print self.disco
         self.particiones = self.part.lista_particiones(self.disco)

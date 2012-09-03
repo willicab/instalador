@@ -4,28 +4,18 @@
 # Autor: William Cabrera
 # Fecha: 11/10/2011
 
-import gtk
-import os
-import re
-from pasos import bienvenida, teclado, metodo, particion_auto, particion_todo, \
-    particion_manual, instalacion, usuario, accesibilidad, info
+# Módulos globales
+import gtk, os, re
+
+# Módulos locales
 import wizard
-import clases.general as gen
+from pasos import bienvenida, teclado, metodo, particion_auto, particion_todo
+from pasos import particion_manual, instalacion, usuario, accesibilidad, info
 
-gtk.gdk.threads_init()
-
+CFG = {}
 ID_SIGUIENTE, ID_ANTERIOR = -1, -1
 BANNER = 'data/banner-app-top.png'
 FRM_MAIN = wizard.Wizard(600, 407, "Canaima Instalador", BANNER)
-CFG = {}
-
-def inicio():
-    '''
-        Inicia la aplicación
-    '''
-    gen.ram()
-    Bienvenida()
-    FRM_MAIN.show()
 
 class Bienvenida():
     '''
@@ -45,6 +35,7 @@ class Bienvenida():
             Función para el evento del boton siguiente
         '''
         Teclado()
+
     def anterior(self, widget=None):
         '''
             Función para el evento del botón anterior
@@ -72,6 +63,7 @@ class Teclado():
         frm_teclado = FRM_MAIN.formulario('Teclado')
         CFG['teclado'] = frm_teclado.distribucion
         Metodo()
+
     def anterior(self, widget=None):
         '''
             Función para el evento del botón anterior
@@ -392,13 +384,7 @@ def desconectar():
         FRM_MAIN.btn_anterior.disconnect(ID_ANTERIOR)
         ID_ANTERIOR = -1
 
-def main():
-    '''
-        Inicia la parte gráfica
-    '''
-    gtk.main()
-    return 0
-
 if __name__ == "__main__":
-    inicio()
-    main()
+    app = Bienvenida()
+    gtk.main()
+    sys.exit()

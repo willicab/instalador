@@ -1,6 +1,7 @@
 # Makefile
 
 SHELL := sh -e
+PYCS = $(shell find . -type f -iname "*.pyc")
 
 SCRIPTS = "debian/preinst install" "debian/postinst configure" "debian/prerm remove" "debian/postrm remove"
 
@@ -21,6 +22,15 @@ test:
 build:
 
 	@echo "Nada para compilar!"
+
+clean-pyc:
+
+	@printf "Cleaning precompilated python files ["
+	@for PYC in $(PYCS); do \
+		rm -rf $${PYC}; \
+		printf "."; \
+	done
+	@printf "]\n"
 
 install:
 

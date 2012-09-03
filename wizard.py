@@ -3,10 +3,7 @@
 # Autor: William Cabrera
 # Fecha: 11/10/2011
 
-import gtk
-import Image
-
-gtk.gdk.threads_init()
+import gtk, Image
 
 class Barra(gtk.ProgressBar):
     '''
@@ -15,7 +12,6 @@ class Barra(gtk.ProgressBar):
     hilo = True
     def __init__(self):
         gtk.ProgressBar.__init__(self)
-        #self.hilo = True
 
     def accion(self, accion): # Agrega el mensaje de acción
         '''
@@ -27,18 +23,13 @@ class Barra(gtk.ProgressBar):
         '''
             Inicia la animación de la barra
         '''
-        #self.hilo == True
         self.show()
-        #thread = threading.Thread(target=self.anim, args=())
-        #thread.start()
 
     def stop(self): # finaliza la animación del progress bar
         '''
             Detiene la animación de la barra
         '''
-        #self.hilo = False
         self.hide()
-        gtk.gdk.threads_leave()
 
     def anim(self): # Genera la animación en el progress bar
         '''
@@ -53,17 +44,18 @@ class Wizard(gtk.Window):
     '''
         Clase del Asistente
     '''
+    pasos = []                  # Pasos
+    nombres = []                # Nombres
+    contenidos = []             # Contenidos
+    __paso = ''                 # Paso actual
+    __count = 0                 # Número de pasos
     __c_principal = gtk.Fixed() # Contenedor Principal
     btn_aplicar = gtk.Button()  # Botón Aplicar
     c_pasos = gtk.VBox()
-    #pasos = {}                # Pasos
-    pasos = []
-    nombres = []
-    contenidos = []
-    __paso = ''                 # Paso actual
-    __count = 0                 # Número de pasos
+    
     def __init__(self, ancho, alto, titulo, banner):
-        #Creo la ventana
+
+        # Creo la ventana
         gtk.Window.__init__(self, gtk.WINDOW_TOPLEVEL)
         gtk.Window.set_position(self, gtk.WIN_POS_CENTER_ALWAYS)
         self.set_icon_from_file('data/canaima.png')
@@ -73,81 +65,58 @@ class Wizard(gtk.Window):
         self.set_resizable(0)
         self.set_border_width(0)
         self.connect("destroy", self.close)
-        #Creo el contenedor principal
+
+        # Creo el contenedor principal
         self.add(self.__c_principal)
         self.__c_principal.show()
-        #Calculo tamaño del banner
-        self.banner_img = Image.open (banner)
+
+        # Calculo tamaño del banner
+        self.banner_img = Image.open(banner)
         self.banner_w = self.banner_img.size[0]
         self.banner_h = self.banner_img.size[1]
-        #Creo el banner
+
+        # Creo el banner
         self.banner = gtk.Image()
         self.banner.set_from_file(banner)
         self.banner.set_size_request(ancho, self.banner_h)
         self.__c_principal.put(self.banner, 0, 0)
         self.banner.show()
-        #Creo el contenedor de los pasos
+
+        # Creo el contenedor de los pasos
         self.c_pasos.set_size_request((ancho - 10), (alto - 50 - self.banner_h))
         self.__c_principal.put(self.c_pasos, 5, (self.banner_h + 5))
         self.c_pasos.show()
 
-        #self.banner = gtk.Image()
-        #self.banner.set_from_file(banner)
-        #self.banner.set_size_request(ancho, self.banner_h)
-        #self.__c_principal.put(self.banner, 0, (alto - 80))
-        #self.banner.show()
-
+        # Creo la botonera
         self.botonera = gtk.Fixed()
         self.botonera.set_size_request(ancho, 40)
         self.__c_principal.put(self.botonera, 0, (alto - 40))
         self.botonera.show()
 
-
-        #Creo la linea divisoria
+        # Creo la linea divisoria
         self.linea = gtk.HSeparator()
         self.linea.set_size_request(ancho, 5)
         self.botonera.put(self.linea, 0, 0)
         self.linea.show()
-        #Creo la botonera
-        #Anterior
+
+        # Anterior
         self.btn_anterior = gtk.Button(stock=gtk.STOCK_GO_BACK)
         self.botonera.put(self.btn_anterior, (ancho - 180), 10)
         self.btn_anterior.set_size_request(80, 30)
         self.btn_anterior.show()
-        #Siguiente
+
+        # Siguiente
         self.btn_siguiente = gtk.Button(stock=gtk.STOCK_GO_FORWARD)
         self.botonera.put(self.btn_siguiente, (ancho - 90), 10)
         self.btn_siguiente.set_size_request(80, 30)
         self.btn_siguiente.show()
-        #Cancelar
+
+        # Cancelar
         self.btn_cancelar = gtk.Button(stock=gtk.STOCK_CANCEL)
-        #self.botonera.put(self.btn_cancelar, (ancho - 180), 10)
         self.botonera.put(self.btn_cancelar, 10, 10)
         self.btn_cancelar.set_size_request(80, 30)
         self.btn_cancelar.connect("clicked", self.close)
         self.btn_cancelar.show()
-        #Aceptar
-#        self.btn_aplicar.set_label(btn_apply)
-#        self.botonera.put(self.btn_aplicar, (ancho - 90), 10)
-#        self.__c_principal.put(self.btn_aplicar, (ancho - 90), (alto - 30))
-#        self.btn_aplicar.set_size_request(80, 30)
-
-        self.barra = gtk.VBox()
-        self.barra.set_size_request(ancho, 40)
-        self.__c_principal.put(self.barra, 0, (alto - 40))
-#        self.barra.show()
-
-        self.lbl_info = gtk.Label('')
-        self.lbl_info.set_size_request(590, 20)
-        self.lbl_info.set_justify(gtk.JUSTIFY_CENTER)
-        self.barra.add(self.lbl_info)
-        self.lbl_info.show()
-
-        self.progreso = Barra() # Barra de progreso
-        #self.progreso.set_size_request(590, 30)
-        #self.barra.add(self.progreso)
-        #self.progreso.set_pulse_step(0.05)
-        #self.progreso.show()
 
     def mostrar_barra(self):
         '''
@@ -155,7 +124,7 @@ class Wizard(gtk.Window):
         '''
         self.botonera.hide()
         self.barra.show()
-        #self.progreso.start()
+
 
     def ocultar_barra(self):
         '''
@@ -163,7 +132,6 @@ class Wizard(gtk.Window):
         '''
         self.barra.hide()
         self.botonera.show()
-        #self.progreso.stop()
 
     def accion(self, accion):
         '''
