@@ -1,7 +1,6 @@
 #-*- coding: UTF-8 -*-
 
 import commands
-import os
 
 class Main():
     def __init__(self):
@@ -22,14 +21,13 @@ class Main():
         opt = {}
         #devices = commands.getstatusoutput("ls -1 /sys/block/")[1].split('\n')
         salida = commands.getstatusoutput("fdisk -l")[1].split('\n')
-        print salida
         for linea in salida:
             if linea.find('Disk /') == 0:
                 opt["DEVNAME"] = linea.split(':')[0].split(' ')[1]
                 discos.append(opt)
                 opt = {}
         return discos
-            
+
 #        print devices
 #        for device in devices:
 #            print device, device.find('sr')
@@ -73,7 +71,6 @@ class Main():
             Crea una lista de particiones disponibles en un disco dado
         '''
         particiones = []
-        libres = []
         Leer = False
         cmd = "parted {0} unit kB print free".format(disco)
         salida = commands.getstatusoutput(cmd)
@@ -90,14 +87,14 @@ class Main():
                 tam = a[Size:Type].strip().replace(',', '.')    # tamaño
                 tipo = a[Type:File].strip().replace(',', '.')   # tipo de partición
                 fs = a[File:Flags].strip().replace(',', '.')    # sistema de archivos de la partición
-                if fs == '' : 
+                if fs == '' :
                     fs = 'none'
                 flags = a[Flags:].strip().replace(',', '.')     # banderas
                 part = disco + num                              # partición
                 # Espacios usado y libre
-                
+
                 if fs.find('swap') == -1 and num != '' and tipo != 'extended':
-                    usado, libre = self.usado(part) 
+                    usado, libre = self.usado(part)
                 else:
                     usado, libre = '0kB', tam
                 if ini != '': # and tipo != 'extended':
@@ -152,7 +149,7 @@ class Main():
                 Leer = True
         #print particiones
         return particiones
-    
+
     def particionar(self, disco, tipo, formato, inicio, fin):
         '''
             Argumentos:
@@ -167,3 +164,14 @@ class Main():
         format(disco, tipo, formato, inicio, fin)
         salida = commands.getstatusoutput(cmd)
         return salida[0]
+
+if __name__ == "__main__":
+    print "Iniciado..."
+    obj = Main()
+    print obj.lista_discos()
+
+    for part in obj.lista_particiones('/dev/sda'):
+        print part
+
+    print "Finalizado."
+
