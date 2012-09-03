@@ -39,7 +39,7 @@ class TablaParticiones (gtk.TreeView):
         self.set_headers_clickable(False)
         #self.connect("row-activated", self._accion_doble_click)
         #self.connect("cursor-changed", self._accion_seleccionar)
-        
+
         self.armar_tabla()
 
     def set_seleccionar(self, callback):
@@ -60,7 +60,7 @@ class TablaParticiones (gtk.TreeView):
     def _accion_doble_click(self, treeview, path, column):
         modelo = treeview.get_model()
         iter = modelo.get_iter(path)
-        fila = modelo.get(iter, 0,1,2,3,4,5,6)
+        fila = modelo.get(iter, 0, 1, 2, 3, 4, 5, 6)
 
         self.doble_click(fila)
 
@@ -73,7 +73,7 @@ class TablaParticiones (gtk.TreeView):
         iterador = obj_seleccion[1]
 
         if iterador != None:
-            return modelo.get(iterador,0,1,2,3,4,5,6)
+            return modelo.get(iterador, 0, 1, 2, 3, 4, 5, 6)
         else:
             return None
 
@@ -82,7 +82,7 @@ class TablaParticiones (gtk.TreeView):
 
         # Columnas
         self.nueva_columna_texto("Dispositivo", 0)
-        self.nueva_columna_texto("Tipo",1)
+        self.nueva_columna_texto("Tipo", 1)
         self.nueva_columna_texto("Formato", 2)
         self.nueva_columna_texto("Punto de Montaje", 3)
         self.nueva_columna_texto("Tamaño", 4)
@@ -157,18 +157,18 @@ class TablaParticiones (gtk.TreeView):
         #                       fin])
 
 datos_ejemplo = [
-    ['#ff0000', '/dev/sda1', 'Primaria', 'fat32', '','32 GB', False, 1],
-    ['#00ff00', '/dev/sdb1', 'Primaria', 'ext2', '/boot','512 MB', True, 1],
-    ['#0000ff', 'Nueva', 'Extendida', '', '','100 GB', False, 30],
-    ['#0f0f0f', 'Nueva', 'Logica', 'ext4', '/','20 GB', True, 45],
-    ['#f0f0f0', 'Nueva', 'Logica', 'ext4', '/home','78 GB', True, 70],
-    ['#0f00f0', 'Nueva', 'Logica', 'Swap', '','1.8 GB', True, 100],
+    ['#ff0000', '/dev/sda1', 'Primaria', 'fat32', '', '32 GB', False, 1],
+    ['#00ff00', '/dev/sdb1', 'Primaria', 'ext2', '/boot', '512 MB', True, 1],
+    ['#0000ff', 'Nueva', 'Extendida', '', '', '100 GB', False, 30],
+    ['#0f0f0f', 'Nueva', 'Logica', 'ext4', '/', '20 GB', True, 45],
+    ['#f0f0f0', 'Nueva', 'Logica', 'ext4', '/home', '78 GB', True, 70],
+    ['#0f00f0', 'Nueva', 'Logica', 'Swap', '', '1.8 GB', True, 100],
 ]
 
 class Ventana:
-    
+
     def __init__(self):
-        
+
         self.tabla = TablaParticiones()
         self.llenar_tabla(datos_ejemplo)
         self.tabla.set_doble_click(self.funcion_prueba);
@@ -188,7 +188,7 @@ class Ventana:
         self.ventana = gtk.Window(gtk.WINDOW_TOPLEVEL)
         self.ventana.set_title(program['name'] + " " + program['version'])
         self.ventana.add(self.vbox)
-	self.ventana.connect("destroy", self.destroy)
+        self.ventana.connect("destroy", self.destroy)
         self.ventana.show()
 
     def llenar_tabla(self, data=None):
@@ -204,7 +204,7 @@ class Ventana:
 
     def destroy(self, widget, data=None):
         gtk.main_quit()
-    
+
     def main(self):
         'Funcion Principal'
         gtk.main()
