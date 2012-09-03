@@ -108,7 +108,6 @@ class Main(gtk.Fixed):
                  tamano, # 4 Tamaño
                  inicio, # 5 inicio
                  fin]                       # 6 fin
-        print "3 ", inicio, fin, tamano
         self.lista.append(libre)
 
         self.llenar_tabla(self.lista)
@@ -160,8 +159,6 @@ class Main(gtk.Fixed):
 
         self.lista.pop()
 
-        print tipo
-
         if tipo == 'Extendida':
             inicio = self.ext_ini
             fin = self.ext_fin
@@ -177,8 +174,6 @@ class Main(gtk.Fixed):
             except:
                 inicio = gen.kb(self.ini)
             fin = gen.kb(self.fin)
-
-        print inicio, fin, self.fin, self.bext
 
         if self.bext == True:
             tamano = gen.hum(fin - inicio)
