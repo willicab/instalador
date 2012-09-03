@@ -68,7 +68,6 @@ class Wizard(gtk.Window):
 
         # Creo el contenedor principal
         self.add(self.__c_principal)
-        self.__c_principal.show()
 
         # Calculo tamaño del banner
         self.banner_img = Image.open(banner)
@@ -80,43 +79,38 @@ class Wizard(gtk.Window):
         self.banner.set_from_file(banner)
         self.banner.set_size_request(ancho, self.banner_h)
         self.__c_principal.put(self.banner, 0, 0)
-        self.banner.show()
 
         # Creo el contenedor de los pasos
         self.c_pasos.set_size_request((ancho - 10), (alto - 50 - self.banner_h))
         self.__c_principal.put(self.c_pasos, 5, (self.banner_h + 5))
-        self.c_pasos.show()
 
         # Creo la botonera
         self.botonera = gtk.Fixed()
         self.botonera.set_size_request(ancho, 40)
         self.__c_principal.put(self.botonera, 0, (alto - 40))
-        self.botonera.show()
 
         # Creo la linea divisoria
         self.linea = gtk.HSeparator()
         self.linea.set_size_request(ancho, 5)
         self.botonera.put(self.linea, 0, 0)
-        self.linea.show()
 
         # Anterior
         self.btn_anterior = gtk.Button(stock=gtk.STOCK_GO_BACK)
         self.botonera.put(self.btn_anterior, (ancho - 180), 10)
         self.btn_anterior.set_size_request(80, 30)
-        self.btn_anterior.show()
 
         # Siguiente
         self.btn_siguiente = gtk.Button(stock=gtk.STOCK_GO_FORWARD)
         self.botonera.put(self.btn_siguiente, (ancho - 90), 10)
         self.btn_siguiente.set_size_request(80, 30)
-        self.btn_siguiente.show()
 
         # Cancelar
         self.btn_cancelar = gtk.Button(stock=gtk.STOCK_CANCEL)
         self.botonera.put(self.btn_cancelar, 10, 10)
         self.btn_cancelar.set_size_request(80, 30)
         self.btn_cancelar.connect("clicked", self.close)
-        self.btn_cancelar.show()
+
+        self.show_all()
 
     def mostrar_barra(self):
         '''
