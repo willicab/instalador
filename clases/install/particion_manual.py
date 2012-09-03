@@ -84,18 +84,18 @@ class Main():
         particion = []
         for fila in self.lista:
             suma = 0
-            disco = fila[0]
-            if fila[1] == 'Primaria':
-                tipo = 'primary'
-                particion.append([fila[2], fila[5], fila[3]])
-            if fila[1] == 'Lógica':
-                tipo = 'logical'
-                suma = 32
-                particion.append([fila[2], fila[5] + 32, fila[3]])
-            if fila[1] == 'Extendida':
-                tipo = 'extended'
-            inicio = fila[5] + suma
             if fila[0] != '':
+                disco = fila[0]
+                if fila[1] == 'Primaria':
+                    tipo = 'primary'
+                    particion.append([fila[2], fila[5], fila[3]])
+                if fila[1] == 'Lógica':
+                    tipo = 'logical'
+                    suma = 32
+                    particion.append([fila[2], fila[5] + 32, fila[3]])
+                if fila[1] == 'Extendida':
+                    tipo = 'extended'
+                inicio = fila[5] + suma
                 cmd = 'parted -s {0} mkpart {1} {2} {3}k {4}k'.\
                        format(fila[0],
                               tipo,
