@@ -4,8 +4,6 @@
 # Autor: William Cabrera
 # Fecha: 11/10/2011
 
-import pygtk
-pygtk.require('2.0')
 import gtk
 import os
 import re
@@ -14,7 +12,7 @@ from pasos import bienvenida, teclado, metodo, particion_auto, particion_todo, \
 import wizard
 import clases.general as gen
 
-gtk.gdk.threads_init() 
+gtk.gdk.threads_init()
 
 ID_SIGUIENTE, ID_ANTERIOR = -1, -1
 BANNER = 'data/banner-app-top.png'
@@ -42,12 +40,12 @@ class Bienvenida():
         ID_SIGUIENTE = FRM_MAIN.btn_siguiente.connect("clicked", self.siguiente)
         FRM_MAIN.btn_anterior.set_sensitive(False)
 
-    def siguiente(self, widget = None):
+    def siguiente(self, widget=None):
         '''
             Función para el evento del boton siguiente
         '''
         Teclado()
-    def anterior(self, widget = None):
+    def anterior(self, widget=None):
         '''
             Función para el evento del botón anterior
         '''
@@ -67,14 +65,14 @@ class Teclado():
         ID_ANTERIOR = FRM_MAIN.btn_anterior.connect("clicked", self.anterior)
         FRM_MAIN.btn_anterior.set_sensitive(True)
 
-    def siguiente(self, widget = None):
+    def siguiente(self, widget=None):
         '''
             Función para el evento del botón siguiente
         '''
         frm_teclado = FRM_MAIN.formulario('Teclado')
         CFG['teclado'] = frm_teclado.distribucion
         Metodo()
-    def anterior(self, widget = None):
+    def anterior(self, widget=None):
         '''
             Función para el evento del botón anterior
         '''
@@ -93,7 +91,7 @@ class Metodo():
         ID_SIGUIENTE = FRM_MAIN.btn_siguiente.connect("clicked", self.siguiente)
         ID_ANTERIOR = FRM_MAIN.btn_anterior.connect("clicked", self.anterior)
 
-    def siguiente(self, widget = None):
+    def siguiente(self, widget=None):
         '''
             Funcion para el evento del botón siguiente
         '''
@@ -116,7 +114,7 @@ class Metodo():
             CFG['particion'] = frm_metodo.metodo
             CFG['disco'] = ''
             PartAuto(frm_metodo.metodo)
-    def anterior(self, widget = None):
+    def anterior(self, widget=None):
         '''
             Función para el evento del botón anterior
         '''
@@ -137,7 +135,7 @@ class PartAuto():
         ID_SIGUIENTE = FRM_MAIN.btn_siguiente.connect("clicked", self.siguiente)
         ID_ANTERIOR = FRM_MAIN.btn_anterior.connect("clicked", self.anterior)
 
-    def siguiente(self, widget = None):
+    def siguiente(self, widget=None):
         '''
             Función para el evento del botón siguiente
         '''
@@ -155,7 +153,7 @@ class PartAuto():
         else:
             Usuario()
         #Info()
-    def anterior(self, widget = None):
+    def anterior(self, widget=None):
         '''
             Función para el evento del botón anterior
         '''
@@ -175,7 +173,7 @@ class PartTodo():
         ID_SIGUIENTE = FRM_MAIN.btn_siguiente.connect("clicked", self.siguiente)
         ID_ANTERIOR = FRM_MAIN.btn_anterior.connect("clicked", self.anterior)
         FRM_MAIN.formulario('PartTodo').iniciar(disco, ini, fin)
-    def siguiente(self, widget = None):
+    def siguiente(self, widget=None):
         '''
             Función para el evento del botón siguiente
         '''
@@ -189,7 +187,7 @@ class PartTodo():
         else:
             Usuario()
         #Info()
-    def anterior(self, widget = None):
+    def anterior(self, widget=None):
         '''
             Función para el evento del botón anterior
         '''
@@ -209,7 +207,7 @@ class PartManual():
         desconectar()
         ID_SIGUIENTE = FRM_MAIN.btn_siguiente.connect("clicked", self.siguiente)
         ID_ANTERIOR = FRM_MAIN.btn_anterior.connect("clicked", self.anterior)
-    def siguiente(self, widget = None):
+    def siguiente(self, widget=None):
         '''
             Función para el evento del botón siguiente
         '''
@@ -220,7 +218,7 @@ class PartManual():
             self.msg_error("Debe existir una partición raiz (/)")
             return
         Usuario()
-    def anterior(self, widget = None):
+    def anterior(self, widget=None):
         '''
             Función para el evento del botón anterior
         '''
@@ -249,7 +247,7 @@ class Usuario():
         desconectar()
         ID_SIGUIENTE = FRM_MAIN.btn_siguiente.connect("clicked", self.siguiente)
         ID_ANTERIOR = FRM_MAIN.btn_anterior.connect("clicked", self.anterior)
-    def siguiente(self, widget = None):
+    def siguiente(self, widget=None):
         '''
             Función para el evento del botón siguiente
         '''
@@ -288,7 +286,7 @@ class Usuario():
                 self.msg_error("El nombre de la máquina no está correctamente escrito")
                 return
         Accesibilidad()
-    def anterior(self, widget = None):
+    def anterior(self, widget=None):
         '''
             Función para el evento del botón anterior
         '''
@@ -321,14 +319,14 @@ class Accesibilidad():
         desconectar()
         ID_SIGUIENTE = FRM_MAIN.btn_siguiente.connect("clicked", self.siguiente)
         ID_ANTERIOR = FRM_MAIN.btn_anterior.connect("clicked", self.anterior)
-    def siguiente(self, widget = None):
+    def siguiente(self, widget=None):
         '''
             Función para el evento del botón siguiente
         '''
         frm_accesibilidad = FRM_MAIN.formulario('accesibilidad')
         CFG['chkgdm'] = frm_accesibilidad.chkgdm.get_active()
         Info()
-    def anterior(self, widget = None):
+    def anterior(self, widget=None):
         '''
             Función para el evento del botón anterior
         '''
@@ -348,12 +346,12 @@ class Info():
         desconectar()
         ID_SIGUIENTE = FRM_MAIN.btn_siguiente.connect("clicked", self.siguiente)
         ID_ANTERIOR = FRM_MAIN.btn_anterior.connect("clicked", self.anterior)
-    def siguiente(self, widget = None):
+    def siguiente(self, widget=None):
         '''
             Función para el evento del botón siguiente
         '''
         Instalacion()
-    def anterior(self, widget = None):
+    def anterior(self, widget=None):
         '''
             Función para el evento del botón anterior
         '''
@@ -371,12 +369,12 @@ class Instalacion():
         desconectar()
         ID_SIGUIENTE = FRM_MAIN.btn_siguiente.connect("clicked", self.siguiente)
         ID_ANTERIOR = FRM_MAIN.btn_anterior.connect("clicked", self.anterior)
-    def siguiente(self, widget = None):
+    def siguiente(self, widget=None):
         '''
             Función para el evento del botón cerrar
         '''
         FRM_MAIN.close()
-    def anterior(self, widget = None):
+    def anterior(self, widget=None):
         '''
             Función para el evento del botón reiniciar
         '''

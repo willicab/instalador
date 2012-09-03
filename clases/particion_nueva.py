@@ -1,7 +1,5 @@
 #-*- coding: UTF-8 -*-
 
-import pygtk
-pygtk.require('2.0')
 import gtk
 import clases.general as gen
 
@@ -169,7 +167,6 @@ class Main(gtk.Dialog):
                              inicio, #inicio
                              fin]               #fin
                 self.padre.lista.append(particion)
-                self.padre.primarias = self.padre.primarias + 1
             # Si la partición nueva es Extendida
             elif tipo == 'Extendida':
                 # Calculo el tamaño
@@ -201,7 +198,6 @@ class Main(gtk.Dialog):
                              inicio, #inicio
                              fin]                                   #fin
                 self.padre.lista.append(particion)
-                self.padre.primarias = self.padre.primarias + 1
             # Si la partición nueva es Lógica
             elif tipo == 'Lógica':
                 # Calculo el tamaño

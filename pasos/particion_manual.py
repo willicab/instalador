@@ -1,7 +1,5 @@
 #-*- coding: UTF-8 -*-
 
-import pygtk
-pygtk.require('2.0')
 import gtk
 
 import clases.general as gen
@@ -132,7 +130,7 @@ class Main(gtk.Fixed):
             self.btn_deshacer.set_sensitive(False)
         else:
             self.btn_deshacer.set_sensitive(True)
-        if self.bext == False  and self.primarias == 4:
+        if self.bext == False and self.primarias == 4:
             self.btn_nueva.set_sensitive(False)
         elif fila[1] != 'Espacio Libre' and fila[1] != 'Espacio Libre Extendida':
             self.btn_nueva.set_sensitive(False)
