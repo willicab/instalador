@@ -5,7 +5,7 @@ pygtk.require('2.0')
 import gtk
 import clases.general as gen
 
-class Main(gtk.Dialog): 
+class Main(gtk.Dialog):
     inicio = 0
     fin = 0
     def __init__(self, padre):
@@ -16,23 +16,23 @@ class Main(gtk.Dialog):
         self.set_size_request(400, 200)
         self.set_resizable(0)
         self.set_border_width(0)
-        
+
         self.add_button(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL)
         self.add_button(gtk.STOCK_OK, gtk.RESPONSE_OK)
         self.set_default_response(gtk.RESPONSE_CANCEL)
-        
+
         if self.padre.bext == False:
             self.inicio = gen.kb(self.padre.lista[-1][5])
             self.fin = gen.kb(self.padre.fin)
         else:
             self.inicio = gen.kb(self.padre.ext_ini)
             self.fin = gen.kb(self.padre.ext_fin)
-        
+
         # Contenedor General
         self.cont = gtk.Fixed()
         self.cont.show()
         self.vbox.pack_start(self.cont)
-        
+
         #Tamaño de la partición
         self.lbl = gtk.Label('Tamaño')
         self.lbl.set_alignment(0, 0.5)
@@ -59,7 +59,7 @@ class Main(gtk.Dialog):
         self.lblsize.set_size_request(100, 30)
         self.lblsize.show()
         self.cont.put(self.lblsize, 320, 5)
-        
+
         #Tipo de partición
         self.lbl = gtk.Label('Tipo de partición')
         self.lbl.set_alignment(0, 0.5)
@@ -133,8 +133,8 @@ class Main(gtk.Dialog):
         self.entrada.connect("changed", self.validar_punto)
 
         response = self.run()
-        
-        if response==gtk.RESPONSE_OK:
+
+        if response == gtk.RESPONSE_OK:
             tipo = gen.get_active_text(self.cmb_tipo)
             formato = gen.get_active_text(self.cmb_fs)
             montaje = gen.get_active_text(self.cmb_montaje)
@@ -145,13 +145,13 @@ class Main(gtk.Dialog):
                 montaje = 'Ninguno'
             if montaje == 'Escoger manualmente':
                 montaje = self.entrada.get_text().strip()
-            
+
             if self.padre.lista[-1][1] == 'Espacio Libre':
                 self.padre.lista.pop()
-            if len(self.padre.lista)>0:
+            if len(self.padre.lista) > 0:
                 if self.padre.lista[-1][1] == 'Espacio Libre Extendida':
                     self.padre.lista.pop()
-            
+
             # Si la partición nueva es Primaria
             if tipo == 'Primaria':
                 # Calculo el tamaño
@@ -161,12 +161,12 @@ class Main(gtk.Dialog):
                 # Elimina ultimo elemento de la lista
                 #self.padre.lista.pop()
                 # Se crea elemento particion primaria y se agrega a la lista
-                particion = [self.padre.disco,  #Dispositivo
-                             tipo,              #Tipo
-                             formato,           #Formato
-                             montaje,           #Punto de montaje
-                             tamano,            #Tamaño
-                             inicio,            #inicio
+                particion = [self.padre.disco, #Dispositivo
+                             tipo, #Tipo
+                             formato, #Formato
+                             montaje, #Punto de montaje
+                             tamano, #Tamaño
+                             inicio, #inicio
                              fin]               #fin
                 self.padre.lista.append(particion)
                 self.padre.primarias = self.padre.primarias + 1
@@ -184,21 +184,21 @@ class Main(gtk.Dialog):
                 # Elimina ultimo elemento de la lista
                 #self.padre.lista.pop()
                 # Se crea elemento particion extendida y se agrega a la lista
-                particion = [self.padre.disco,  #Dispositivo
-                             tipo,              #Tipo
-                             '',                #formato,     #Formato
-                             montaje,           #Punto de montaje
-                             tamano,            #Tamaño
-                             inicio,            #inicio
+                particion = [self.padre.disco, #Dispositivo
+                             tipo, #Tipo
+                             '', #formato,     #Formato
+                             montaje, #Punto de montaje
+                             tamano, #Tamaño
+                             inicio, #inicio
                              fin]               #fin
                 self.padre.lista.append(particion)
                 # Se crea elemento espacio libre en partición extendida
-                particion = ['',#self.padre.disco,                      #Dispositivo
-                             'Espacio Libre Extendida',   #Tipo
-                             '',#self.get_active_text(self.cmb_fs),     #Formato
-                             '',#self.get_active_text(self.cmb_montaje),#Punto de montaje
-                             tamano,                                #Tamaño
-                             inicio,                                #inicio
+                particion = ['', #self.padre.disco,                      #Dispositivo
+                             'Espacio Libre Extendida', #Tipo
+                             '', #self.get_active_text(self.cmb_fs),     #Formato
+                             '', #self.get_active_text(self.cmb_montaje),#Punto de montaje
+                             tamano, #Tamaño
+                             inicio, #inicio
                              fin]                                   #fin
                 self.padre.lista.append(particion)
                 self.padre.primarias = self.padre.primarias + 1
@@ -212,12 +212,12 @@ class Main(gtk.Dialog):
                 #self.padre.lista.pop()
                 #self.padre.lista.pop()
                 # Se crea elemento particion lógica y se agrega a la lista
-                particion = [self.padre.disco,  #Dispositivo
-                             tipo,              #Tipo
-                             formato,           #Formato
-                             montaje,           #Punto de montaje
-                             tamano,            #Tamaño
-                             inicio,            #inicio
+                particion = [self.padre.disco, #Dispositivo
+                             tipo, #Tipo
+                             formato, #Formato
+                             montaje, #Punto de montaje
+                             tamano, #Tamaño
+                             inicio, #inicio
                              fin]               #fin
                 self.padre.lista.append(particion)
                 # Si self.padre.ext_fin != fin entonces
@@ -233,18 +233,18 @@ class Main(gtk.Dialog):
                     tamano = gen.hum(ext_fin - ext_ini)
                     self.padre.ext_ini = ext_ini
                     # Se crea elemento espacio libre en partición extendida
-                    particion = ['',#self.padre.disco,                      #Dispositivo
-                                 'Espacio Libre Extendida',   #Tipo
-                                 '',#self.get_active_text(self.cmb_fs),     #Formato
-                                 '',#self.get_active_text(self.cmb_montaje),#Punto de montaje
-                                 tamano,                                #Tamaño
-                                 ext_ini,                                #inicio
+                    particion = ['', #self.padre.disco,                      #Dispositivo
+                                 'Espacio Libre Extendida', #Tipo
+                                 '', #self.get_active_text(self.cmb_fs),     #Formato
+                                 '', #self.get_active_text(self.cmb_montaje),#Punto de montaje
+                                 tamano, #Tamaño
+                                 ext_ini, #inicio
                                  ext_fin]                                   #fin
                     self.padre.lista.append(particion)
-                    
+
             # Calculamos el tamaño de la partición libre
             # si bext == True entonces se usará ext_fin como fin
-            if self.padre.bext == True: 
+            if self.padre.bext == True:
                 fin = self.padre.ext_fin
             #print 'Inicio:', inicio, 'fin:', fin, "self.fin", int(self.fin)
             # Si fin == self.fin entonces 
@@ -260,29 +260,26 @@ class Main(gtk.Dialog):
                 fin = int(gen.kb(self.padre.fin))
                 tamano = gen.hum(fin - inicio)
                 # Se crea elemento espacio libre
-                libre = ['',                #Dispositivo
-                         'Espacio Libre',   #Tipo
-                         '',                #Formato
-                         '',                #Punto de montaje
-                         tamano,            #Tamaño
-                         inicio,            #inicio
+                libre = ['', #Dispositivo
+                         'Espacio Libre', #Tipo
+                         '', #Formato
+                         '', #Punto de montaje
+                         tamano, #Tamaño
+                         inicio, #inicio
                          fin]               #fin
                 self.padre.lista.append(libre)
             # Se actualiza la tabla
             self.padre.llenar_tabla(self.padre.lista)
-                
+
         else:
             pass
-        
+
         self.destroy()
         return None
 
     def on_changed(self, widget=None):
         self.lblsize.set_text(gen.hum(widget.get_value() - float(self.inicio)))
-        
-    def cmb_tipo_on_changed(self, widget=None):
-        pass
-    
+
     def cmb_tipo_on_changed(self, widget=None):
         tipo = gen.get_active_text(self.cmb_tipo)
         if tipo == 'Extendida':
@@ -307,7 +304,7 @@ class Main(gtk.Dialog):
         else:
             self.entrada.hide()
             self.set_response_sensitive(gtk.RESPONSE_OK, True)
-    
+
     def agregar(self, punto):
         data = self.padre.lista
         aparece = False
@@ -317,7 +314,7 @@ class Main(gtk.Dialog):
                 aparece = True
         if aparece == False:
             self.cmb_montaje.append_text(punto)
-            
+
     def validar_punto(self, widget=None):
         data = self.padre.lista
         aparece = False
