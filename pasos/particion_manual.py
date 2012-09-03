@@ -51,7 +51,6 @@ class Main(gtk.Fixed):
                      tamano, #Tamaño
                      inicio, #inicio
                      fin]                       #fin
-            print "3 ", inicio, fin, tamano
             self.lista.append(libre)
 
             self.llenar_tabla(self.lista)
