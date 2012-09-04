@@ -100,6 +100,9 @@ class Metodo():
             CFG['disco'] = WIZ.formulario('Metodo').disco
             CFG['inicio'] = WIZ.formulario('Metodo').ini
             CFG['fin'] = WIZ.formulario('Metodo').fin
+            #TODO: Todavía no se por qué hago esto pero ahí va:
+            CFG['nuevo_fin'] = 1049
+
             print 'CFG: {0}\n'.format(CFG)
             PartManual(CFG)
 
