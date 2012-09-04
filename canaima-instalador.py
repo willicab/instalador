@@ -5,7 +5,7 @@
 # Fecha: 11/10/2011
 
 # Módulos globales
-import gtk, os, re
+import gtk, os, re, sys
 
 # Módulos locales
 import wizard

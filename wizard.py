@@ -117,6 +117,8 @@ class Wizard(gtk.Window):
         self.btn_cancelar.set_size_request(80, 30)
         self.btn_cancelar.connect("clicked", self.close)
         self.btn_cancelar.show()
+        
+        self.show_all()
 
     def mostrar_barra(self):
         '''
@@ -124,7 +126,6 @@ class Wizard(gtk.Window):
         '''
         self.botonera.hide()
         self.barra.show()
-
 
     def ocultar_barra(self):
         '''
@@ -163,7 +164,6 @@ class Wizard(gtk.Window):
         #    return True
         #self.destroy()
         #print widget
-        self.progreso.hilo = False
         gtk.main_quit()
 
     def agregar(self, nombre, paso):
