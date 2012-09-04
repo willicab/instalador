@@ -14,7 +14,7 @@ from clases.wizard import Wizard
 from clases.constructor import UserMessage
 from clases.translator import MAIN_ROOT_ERROR_MSG, MAIN_ROOT_ERROR_TITLE
 
-CFG = {'next': -1, 'prev': -1}
+CFG = {'next':-1, 'prev':-1}
 BANNER = 'data/banner-app-top.png'
 WIZ = Wizard(700, 550, "Canaima Instalador", BANNER)
 
@@ -97,7 +97,14 @@ class Metodo():
         print 'El metodo de instalación escogido es: {0}'.format(CFG['metodo'])
         
         if CFG['metodo'].split(':')[0] == 'MANUAL':
-            pass
+            CFG['disco'] = WIZ.formulario('Metodo').disco
+            CFG['inicio'] = WIZ.formulario('Metodo').ini
+            CFG['fin'] = WIZ.formulario('Metodo').fin
+            #TODO: Todavía no se por qué hago esto pero ahí va:
+            CFG['nuevo_fin'] = 1049
+
+            print 'CFG: {0}\n'.format(CFG)
+            PartManual(CFG)
 
         elif CFG['metodo'].split(':')[0] == 'TODO':
             CFG['disco'] = WIZ.formulario('Metodo').disco
@@ -405,9 +412,9 @@ class Instalacion():
 if __name__ == "__main__":
     if os.geteuid() != 0:
         dialog = UserMessage(
-            message = MAIN_ROOT_ERROR_MSG, title = MAIN_ROOT_ERROR_TITLE,
-            mtype = gtk.MESSAGE_ERROR, buttons = gtk.BUTTONS_OK,
-            c_1 = gtk.RESPONSE_OK, f_1 = sys.exit, p_1 = (1,)
+            message=MAIN_ROOT_ERROR_MSG, title=MAIN_ROOT_ERROR_TITLE,
+            mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
+            c_1=gtk.RESPONSE_OK, f_1=sys.exit, p_1=(1,)
             )
     else:
         app = Bienvenida(CFG)

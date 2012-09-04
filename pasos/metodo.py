@@ -26,7 +26,7 @@ class Main(gtk.Fixed):
     cmb_metodo = gtk.combo_box_new_text()
     barra_part = gtk.DrawingArea()
     part = clases.particiones.Main()
-  
+
     def __init__(self, parent):
         gtk.Fixed.__init__(self)
         self.par = parent
@@ -64,6 +64,7 @@ class Main(gtk.Fixed):
         self.lbl_info = gtk.Label('Info')
         self.lbl_info.set_size_request(690, 90)
         self.lbl_info.set_alignment(0, 0)
+        self.lbl_info.set_line_wrap(True)
         self.put(self.lbl_info, 0, 220)
 
         self.show_all()
