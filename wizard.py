@@ -117,6 +117,8 @@ class Wizard(gtk.Window):
         self.btn_cancelar.set_size_request(80, 30)
         self.btn_cancelar.connect("clicked", self.close)
         self.btn_cancelar.show()
+        
+        self.show_all()
 
 	self.show_all()
 
@@ -126,7 +128,6 @@ class Wizard(gtk.Window):
         '''
         self.botonera.hide()
         self.barra.show()
-
 
     def ocultar_barra(self):
         '''
