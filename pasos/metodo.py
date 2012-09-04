@@ -40,10 +40,9 @@ class Main(gtk.Fixed):
         print self.discos
         for disco in self.discos:
             try:
-                self.cmb_discos.append_text('{0}'.format(\
-                    disco['DEVNAME']
-                ))
+                self.cmb_discos.append_text('{0}'.format(disco['DEVNAME']))
             except:
+                # TODO Este error debería ser más descriptivo
                 print "error"
                 pass
         #for borrado in borrados:
@@ -114,7 +113,8 @@ class Main(gtk.Fixed):
             if (total_part) >= gen.h2kb(self.minimo) \
                 and p[5] == 'Free Space':
                 msg = 'Instalar Canaima en espacio sin particionar ({0} libres)'
-                self.metodos['vacio-{0}-{1}'.format(p[1], p[2])] = msg.format(gen.hum(total_part))
+                self.metodos['vacio-{0}-{1}'.format(p[1],
+                                        p[2])] = msg.format(gen.hum(total_part))
                 i += 1
         self.metodos['todo'] = ('Usar todo el disco duro')
         #self.metodos['manual'] = ('Particionado Manual')
@@ -132,23 +132,20 @@ class Main(gtk.Fixed):
         self.cfg['metodo'] = metodo
         self.metodo = metodo
         if self.metodo == 'todo' or self.metodo == 'vacio':
-            msg = 'Si escoge esta opción tenga en cuenta que se borrarán todos '
-            msg = msg + 'los datos en el disco que ha\nseleccionado, Este '
-            msg = msg + 'borrado no se hará hasta que confirme que realmente '
-            msg = msg + 'quiere hacer los\ncambios.'
+            msg = 'Si escoge esta opción tenga en cuenta que se borrarán todos \
+los datos en el disco que ha seleccionado, Este borrado no se hará hasta que \
+confirme que realmente quiere hacer los cambios.'
         elif self.metodo[0:5] == 'vacio':
             self.ini = gen.h2kb(self.metodo.split('-')[1])
             self.fin = gen.h2kb(self.metodo.split('-')[2])
-            msg = 'Si escoge esta opción se instalará el sistema en la '
-            msg = msg + 'partición sin usar que mide {0}'
-            msg = msg.format(gen.hum(self.fin - self.ini))
+            msg = 'Si escoge esta opción se instalará el sistema en la \
+partición sin usar que mide {0}'.format(gen.hum(self.fin - self.ini))
         else:
-            msg = 'Si escoge esta opción se redimensionará la partición '
-            msg = msg + '{0} para realizar la instalación.'.format(self.metodo)
+            msg = 'Si escoge esta opción se redimensionará la partición {0} \
+para realizar la instalación.'.format(self.metodo)
         self.lbl_info.set_text(msg)
 
     def seleccionar_disco(self, widget=None):
-        print self.cmb_discos.get_active()
         self.disco = self.discos[self.cmb_discos.get_active()]['DEVNAME']
         #print self.disco
         self.particiones = self.part.lista_particiones(self.disco)
@@ -172,12 +169,14 @@ class MessageBox(gtk.MessageDialog):
     def __init__(self, padre, parent, disco):
         self.padre = padre
         self.disco = disco
-        msg = "El disco {0} necesita una tabla de particiones para\n"
-        msg = msg + "la instalación. El tipo de tabla de particiones\n"
-        msg = msg + "recomendada es msdos.\n\nSí presiona cancelar no\n"
-        msg = msg + "podrá usar este disco para realizar la instalación."
-        msg = msg.format(self.disco)
-        gtk.MessageDialog.__init__(self, parent, gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT, gtk.MESSAGE_INFO, gtk.BUTTONS_OK_CANCEL, msg)
+        msg = "El disco {0} necesita una tabla de particiones para la \
+instalación. El tipo de tabla de particiones recomendada es msdos.\n\n \
+Si presiona cancelar no podrá usar este disco para realizar la \
+instalación.".format(self.disco)
+        gtk.MessageDialog.__init__(self, parent, gtk.DIALOG_MODAL | \
+                                   gtk.DIALOG_DESTROY_WITH_PARENT,
+                                   gtk.MESSAGE_INFO, gtk.BUTTONS_OK_CANCEL,
+                                   msg)
         self.connect('response', self._handle_clicked)
         #self.add_button("Cancelar", gtk.RESPONSE_CANCEL)
         #self.set_default_response(gtk.RESPONSE_OK)
@@ -220,7 +219,8 @@ class MessageBox(gtk.MessageDialog):
         # -5 = OK
         # -6 = CANCEL
         if args[1] == -5:
-            cmd = 'parted {0} mklabel {1}'.format(self.disco, gen.get_active_text(self.cmb_label).split(' ')[0])
+            cmd = 'parted {0} mklabel {1}'.format(self.disco,
+                      gen.get_active_text(self.cmb_label).split(' ')[0])
             os.system(cmd)
             print cmd
             self.padre.seleccionar_disco()
