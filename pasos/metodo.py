@@ -26,7 +26,7 @@ class Main(gtk.Fixed):
     cmb_metodo = gtk.combo_box_new_text()
     barra_part = gtk.DrawingArea()
     part = clases.particiones.Main()
-  
+
     def __init__(self, parent):
         gtk.Fixed.__init__(self)
         self.par = parent
@@ -74,7 +74,7 @@ class Main(gtk.Fixed):
         print '{0} seleccionado'.format(self.disco)
 
         self.particiones = self.part.lista_particiones(self.disco)
-        
+
         if len(self.particiones) == 0:
             MessageBox(self, self.par, self.disco)
         else:
@@ -144,8 +144,8 @@ confirme que realmente quiere hacer los cambios.'
             msg = 'Si escoge esta opción se instalará el sistema en la \
 partición sin usar que mide {0}'.format(gen.hum(self.fin - self.ini))
         else:
-            msg = 'Si escoge esta opción se redimensionará la partición {0} \
-para realizar la instalación.'.format(self.metodo)
+            msg = 'Si escoge esta opción se modificará el disco {0} para \
+realizar la instalación.'.format(self.disco)
         self.lbl_info.set_text(msg)
 
 
