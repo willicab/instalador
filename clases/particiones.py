@@ -7,147 +7,66 @@ class Main():
         pass
 
     def usado(self, particion):
-        commands.getstatusoutput("mount {0} /tmp".format(particion))
-        a = commands.getstatusoutput("df -h /tmp")
-        a = a[1].split('\n')[1].split()
-        commands.getstatusoutput("umount /tmp")
-        return [a[2] + 'B', a[3] + 'B']
+        commands.getstatusoutput('umount /mnt'.format(particion))
+        commands.getstatusoutput('mount {0} /mnt'.format(particion))
+        cmd = 'df --sync {0}'.format(particion)
+        a, b = commands.getstatusoutput(
+            cmd+" | grep '/' | awk '{print $3,$4}'"
+            )[1].split()
+        commands.getstatusoutput('umount {0}'.format(particion))
+        return a+'kB', b+'kB'
 
     def lista_discos(self):
         '''
             devuelve los discos que están conectados al equipo
         '''
         discos = []
-        opt = {}
-        #devices = commands.getstatusoutput("ls -1 /sys/block/")[1].split('\n')
-        salida = commands.getstatusoutput("fdisk -l")[1].split('\n')
-        for linea in salida:
-            if linea.find('Disk /') == 0:
-                opt["DEVNAME"] = linea.split(':')[0].split(' ')[1]
-                discos.append(opt)
-                opt = {}
+        devices = commands.getstatusoutput('ls -1 /sys/block/')[1].split('\n')
+        for dev in devices:
+            discos.append('/dev/'+dev)
         return discos
 
-#        print devices
-#        for device in devices:
-#            print device, device.find('sr')
-#            if device.find('Disk') == 1:
-#                cmd = 'udevadm info --query="all" --name="{0}"'.format(device)
-#                devinfo = commands.getstatusoutput(cmd)[1].split('\n')
-#                for info in devinfo:
-#                    disco = info.split('=')
-#                    if len(disco) > 1 and disco[0].split(' ')[1] == 'DEVNAME':
-#                        opt[disco[0].split(' ')[1]] = disco[1]
-#                discos.append(opt)
-#                opt = {}
-#        return discos
-
-#        leer = False
-#        i = -1
-#        discos = []
-#        opt = {}
-#        # 
-#        a = commands.getstatusoutput("lshw -class disk")[1].split('\n')
-#        for disco in a:
-#            if disco[2:] == "*-disk":
-#                if i >= 0: 
-#                    discos.append(opt)
-#                    opt = {}
-#                i = i + 1
-#                leer = True
-#                continue
-#            if disco[2:9] == "*-cdrom" or disco.find('*-disk:') == 2:
-#                leer = False
-#                continue
-#            if leer == True:
-#                disco = disco[7:].split(': ')
-#                #print disco
-#                opt[disco[0]] = disco[1]
-#        discos.append(opt)
-#        return discos
-
-    def lista_particiones(self, disco, p=''):
+    def lista_particiones(self, disco):
         '''
             Crea una lista de particiones disponibles en un disco dado
         '''
         particiones = []
-        Leer = False
-        cmd = "parted {0} unit kB print free".format(disco)
-        salida = commands.getstatusoutput(cmd)
-        #print cmd, salida
-        salida = salida[1].split('\n')
-        for a in salida:
-            if a.find('Disk /') == 0:
-                total = a.split(':')[1][1:]
-                #print cmd, total
-            if Leer == True:
-                num = a[Number:Start].strip().replace(',', '.') # número de la partición
-                ini = a[Start:End].strip().replace(',', '.')    # inicio
-                fin = a[End:Size].strip().replace(',', '.')     # fin
-                tam = a[Size:Type].strip().replace(',', '.')    # tamaño
-                tipo = a[Type:File].strip().replace(',', '.')   # tipo de partición
-                fs = a[File:Flags].strip().replace(',', '.')    # sistema de archivos de la partición
-                if fs == '' :
-                    fs = 'none'
-                flags = a[Flags:].strip().replace(',', '.')     # banderas
-                part = disco + num                              # partición
-                # Espacios usado y libre
+        parted = 'parted -s -m {0} unit kB print free'.format(disco)
+        parts = commands.getstatusoutput(parted)[1].split('\n')
+        total = parts[1].split(':')[1]
+        salida = parts[2:]
 
-                if fs.find('swap') == -1 and num != '' and tipo != 'extended':
-                    usado, libre = self.usado(part)
-                else:
-                    usado, libre = '0kB', tam
-                if ini != '': # and tipo != 'extended':
-                    if p != '':
-                        if p == part: particiones.append([
-                            part,   #0
-                            ini,    #1
-                            fin,    #2
-                            tam,    #3
-                            tipo,   #4
-                            fs,     #5
-                            flags,  #6
-                            usado,  #7
-                            libre,  #8
-                            total,  #9
-                            num,    #10
-                            ])
-                    else:
-                        particiones.append([
-                            part,   #0
-                            ini,    #1
-                            fin,    #2
-                            tam,    #3
-                            tipo,   #4
-                            fs,     #5
-                            flags,  #6
-                            usado,  #7
-                            libre,  #8
-                            total,  #9
-                            num,    #10
-                            ])
-                #print part, ini, fin, tam, tipo, fs, flags, usado, libre, \
-                #    total, num
-            if a.startswith('Number'):
-                Number = a.find('Number')
-                Start = a.find('Start')
-                End = a.find('End')
-                Size = a.find('Size')
-                Type = a.find('Type')
-                File = a.find('File')
-                Flags = a.find('Flags')
-                Leer = True
-            elif a.startswith('Numero'):
-                Number = a.find('Numero')
-                Start = a.find('Inicio')
-                End = a.find('Fin')
-                Size = a.find('Tamaño')
-                #Se Resta 1, ya que en la cadena el caracter ñ ocupa 2 espacios
-                Type = a.find('Typo') - 1
-                File = a.find('Sistema de ficheros') - 1
-                Flags = a.find('Banderas') - 1
-                Leer = True
-        #print particiones
+        for l in salida:
+            l = l.strip(';')
+            if len(l.split(':')) == 5:
+                l = l+'::'
+
+            num, ini, fin, tam, fs, tipo, flags = l.split(':')
+            part = disco+str(num)
+            usado = '0kB'
+            libre = tam
+
+            if fs.find('swap') != -1:
+                fs = 'swap'
+
+            if flags == '':
+                flags = 'none'
+
+            if fs == 'free':
+                num = 0
+                part = 0
+                tipo = 'free'
+            elif fs == '':
+                tipo = 'extended'
+                fs = 'extended'
+            else:
+                tipo = 'primary'
+                usado, libre = self.usado(part)
+            print part, ini, fin, tam, fs, tipo, flags, usado, libre, total, num
+            particiones.append(
+                [part, ini, fin, tam, fs, tipo, flags, usado, libre, total, num]
+                )
+
         return particiones
 
     def particionar(self, disco, tipo, formato, inicio, fin):

@@ -95,20 +95,20 @@ class Wizard(gtk.Window):
         self.botonera.put(self.linea, 0, 0)
 
         # Anterior
-        self.btn_anterior = gtk.Button(stock=gtk.STOCK_GO_BACK)
-        self.botonera.put(self.btn_anterior, (ancho - 180), 10)
-        self.btn_anterior.set_size_request(80, 30)
+        self.anterior = gtk.Button(stock=gtk.STOCK_GO_BACK)
+        self.botonera.put(self.anterior, (ancho - 180), 10)
+        self.anterior.set_size_request(80, 30)
 
         # Siguiente
-        self.btn_siguiente = gtk.Button(stock=gtk.STOCK_GO_FORWARD)
-        self.botonera.put(self.btn_siguiente, (ancho - 90), 10)
-        self.btn_siguiente.set_size_request(80, 30)
+        self.siguiente = gtk.Button(stock=gtk.STOCK_GO_FORWARD)
+        self.botonera.put(self.siguiente, (ancho - 90), 10)
+        self.siguiente.set_size_request(80, 30)
 
         # Cancelar
-        self.btn_cancelar = gtk.Button(stock=gtk.STOCK_CANCEL)
-        self.botonera.put(self.btn_cancelar, 10, 10)
-        self.btn_cancelar.set_size_request(80, 30)
-        self.btn_cancelar.connect("clicked", self.close)
+        self.cancelar = gtk.Button(stock=gtk.STOCK_CANCEL)
+        self.botonera.put(self.cancelar, 10, 10)
+        self.cancelar.set_size_request(80, 30)
+        self.cancelar.connect("clicked", self.close)
 
         self.show_all()
 

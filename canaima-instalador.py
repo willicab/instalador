@@ -14,12 +14,11 @@ from clases.wizard import Wizard
 from clases.constructor import UserMessage
 from clases.translator import MAIN_ROOT_ERROR_MSG, MAIN_ROOT_ERROR_TITLE
 
-CFG = {}
-ID_SIGUIENTE, ID_ANTERIOR = -1, -1
+CFG = {'next': -1, 'prev': -1}
 BANNER = 'data/banner-app-top.png'
-WIZ = Wizard(600, 407, "Canaima Instalador", BANNER)
+WIZ = Wizard(700, 550, "Canaima Instalador", BANNER)
 
-def assisted_connect(button, function, bid, params):
+def aconnect(button, function, bid, params):
     '''
         desconecta los eventos de los controles btn_sigiente y btn_anterior
     '''
@@ -27,122 +26,104 @@ def assisted_connect(button, function, bid, params):
         button.disconnect(bid)
         bid = -1
 
-    button.connect_object('clicked', function, *params)
+    button.connect_object('clicked', function, params)
 
 class Bienvenida():
     '''
         Inicia el paso que muestra el mensaje de bienvenida
     '''
-    def __init__(self, ID_SIGUIENTE, ID_ANTERIOR, CFG):
+    def __init__(self, CFG):
 
         if WIZ.indice(WIZ.nombres, 'Bienvenida') == -1:
-            WIZ.agregar('Bienvenida', bienvenida.Main())
+            a = WIZ.agregar('Bienvenida', bienvenida.Main())
 
-        WIZ.mostrar('Bienvenida')
+        m = WIZ.mostrar('Bienvenida')
+        c = aconnect(WIZ.siguiente, self.siguiente, CFG['next'], CFG)
+        s = WIZ.anterior.set_sensitive(False)
 
-        c = assisted_connect(
-            WIZ.btn_siguiente, self.siguiente, ID_SIGUIENTE,
-            (ID_SIGUIENTE, ID_ANTERIOR, CFG)
-            )
-
-        WIZ.btn_anterior.set_sensitive(False)
-
-    def siguiente(self, ID_SIGUIENTE, ID_ANTERIOR, CFG):
+    def siguiente(self, CFG):
         '''
             Función para el evento del botón siguiente
         '''
-        Teclado(ID_SIGUIENTE, ID_ANTERIOR, CFG)
+        s = Teclado(CFG)
 
 class Teclado():
     '''
         Inicia el paso que escoge la distribución del teclado
     '''
-    def __init__(self, ID_SIGUIENTE, ID_ANTERIOR, CFG):
+    def __init__(self, CFG):
 
         if WIZ.indice(WIZ.nombres, 'Teclado') == -1:
-            WIZ.agregar('Teclado', teclado.Main())
+            a = WIZ.agregar('Teclado', teclado.Main())
 
-        WIZ.mostrar('Teclado')
+        m = WIZ.mostrar('Teclado')
+        c = aconnect(WIZ.siguiente, self.siguiente, CFG['next'], CFG)
+        c = aconnect(WIZ.anterior, self.anterior, CFG['prev'], CFG)
+        s = WIZ.anterior.set_sensitive(True)
 
-        c = assisted_connect(
-            WIZ.btn_siguiente, self.siguiente, ID_SIGUIENTE,
-            (ID_SIGUIENTE, ID_ANTERIOR, CFG)
-            )
-        c = assisted_connect(
-            WIZ.btn_anterior, self.anterior, ID_ANTERIOR,
-            (ID_SIGUIENTE, ID_ANTERIOR, CFG)
-            )
-
-        WIZ.btn_anterior.set_sensitive(True)
-
-    def siguiente(self, ID_SIGUIENTE, ID_ANTERIOR, CFG):
+    def siguiente(self, CFG):
         '''
             Función para el evento del botón siguiente
         '''
-        frm_teclado = WIZ.formulario('Teclado')
-        CFG['teclado'] = frm_teclado.distribucion
-        Metodo(ID_SIGUIENTE, ID_ANTERIOR, CFG)
+        CFG['teclado'] = WIZ.formulario('Teclado').distribucion
+        print 'Distribución de teclado seleccionada: {0}'.format(CFG['teclado'])
+        print 'CFG: {0}\n'.format(CFG)
+        s = Metodo(CFG)
 
-    def anterior(self, ID_SIGUIENTE, ID_ANTERIOR, CFG):
+    def anterior(self, CFG):
         '''
             Función para el evento del botón anterior
         '''
-        Bienvenida(ID_SIGUIENTE, ID_ANTERIOR, CFG)
+        s = Bienvenida(CFG)
 
 class Metodo():
     '''
         Inicia el paso que escoge el método de particionado
     '''
-    def __init__(self, ID_SIGUIENTE, ID_ANTERIOR, CFG):
+    def __init__(self, CFG):
 
         if WIZ.indice(WIZ.nombres, 'Metodo') == -1:
-            WIZ.agregar('Metodo', metodo.Main(WIZ))
+            a = WIZ.agregar('Metodo', metodo.Main(WIZ))
 
-        WIZ.mostrar('Metodo')
+        m = WIZ.mostrar('Metodo')
+        c = aconnect(WIZ.siguiente, self.siguiente, CFG['next'], CFG)
+        c = aconnect(WIZ.anterior, self.anterior, CFG['prev'], CFG)
 
-        c = assisted_connect(
-            WIZ.btn_siguiente, self.siguiente, ID_SIGUIENTE,
-            (ID_SIGUIENTE, ID_ANTERIOR, CFG)
-            )
-        c = assisted_connect(
-            WIZ.btn_anterior, self.anterior, ID_ANTERIOR,
-            (ID_SIGUIENTE, ID_ANTERIOR, CFG)
-            )
-
-    def siguiente(self, ID_SIGUIENTE, ID_ANTERIOR, CFG):
+    def siguiente(self, CFG):
         '''
             Funcion para el evento del botón siguiente
         '''
-
-        frm_metodo = WIZ.formulario('Metodo')
-        CFG['metodo'] = frm_metodo.metodo
-
+        CFG['metodo'] = WIZ.formulario('Metodo').metodo
+        print 'El metodo de instalación escogido es: {0}'.format(CFG['metodo'])
+        
         if CFG['metodo'] == 'manual':
             pass
 
         elif CFG['metodo'] == 'todo':
-            CFG['disco'] = frm_metodo.disco
+            CFG['disco'] = WIZ.formulario('Metodo').disco
             CFG['inicio'] = 0
             CFG['fin'] = 0
-            PartTodo(ID_SIGUIENTE, ID_ANTERIOR, CFG)
+            print 'CFG: {0}\n'.format(CFG)
+            PartTodo(CFG)
 
-        elif frm_metodo.metodo[0:5] == 'vacio':
-            CFG['metodo'] = frm_metodo.metodo[0:5]
-            CFG['disco'] = frm_metodo.disco
-            CFG['inicio'] = frm_metodo.ini
-            CFG['fin'] = frm_metodo.fin
-            PartTodo(CFG['disco'], CFG['inicio'], CFG['fin'])
+        elif CFG['metodo'] == 'vacio':
+            CFG['disco'] = WIZ.formulario('Metodo').disco
+            CFG['inicio'] = WIZ.formulario('Metodo').ini
+            CFG['fin'] = WIZ.formulario('Metodo').fin
+            print 'CFG: {0}\n'.format(CFG)
+            PartTodo(CFG)
 
         else:
-            CFG['particion'] = frm_metodo.metodo
+            CFG['particion'] = WIZ.formulario('Metodo').metodo
             CFG['disco'] = ''
-            PartAuto(frm_metodo.metodo)
+            print 'CFG: {0}\n'.format(CFG)
+            PartAuto(CFG)
 
-    def anterior(self, ID_SIGUIENTE, ID_ANTERIOR, CFG):
+    def anterior(self, CFG):
         '''
             Función para el evento del botón anterior
         '''
-        Teclado(ID_SIGUIENTE, ID_ANTERIOR, CFG)
+        Teclado(CFG)
 
 class PartAuto():
     '''
@@ -151,20 +132,14 @@ class PartAuto():
     def __init__(self, particion):
 
         if WIZ.indice(WIZ.nombres, 'ParticionAuto') == -1:
-            WIZ.agregar('ParticionAuto', particion_auto.Main(particion))
+            a = WIZ.agregar('ParticionAuto', particion_auto.Main(particion))
 
         frm_part_auto = WIZ.formulario('ParticionAuto')
         frm_part_auto.inicio(particion)
         WIZ.mostrar('ParticionAuto')
 
-        c = assisted_connect(
-            WIZ.btn_siguiente, self.siguiente, ID_SIGUIENTE,
-            (ID_SIGUIENTE, ID_ANTERIOR, CFG)
-            )
-        c = assisted_connect(
-            WIZ.btn_anterior, self.anterior, ID_ANTERIOR,
-            (ID_SIGUIENTE, ID_ANTERIOR, CFG)
-            )
+        c = aconnect(WIZ.siguiente, self.siguiente, CFG['next'], CFG)
+        c = aconnect(WIZ.anterior, self.anterior, CFG['prev'], CFG)
 
     def siguiente(self, widget=None):
         '''
@@ -178,12 +153,13 @@ class PartAuto():
         CFG['tipo'] = frm_part_auto.metodo
         CFG['swap'] = frm_part_auto.swap
         CFG['fs'] = frm_part_auto.fs
+
         if CFG['tipo'] == 'particion_4':
             data = [CFG]
             PartManual(data)
         else:
             Usuario()
-        #Info()
+
     def anterior(self, widget=None):
         '''
             Función para el evento del botón anterior
@@ -201,16 +177,11 @@ class PartTodo():
             WIZ.agregar('PartTodo', particion_todo.Main(disco, ini, fin))
         WIZ.mostrar('PartTodo')
 
-        c = assisted_connect(
-            WIZ.btn_siguiente, self.siguiente, ID_SIGUIENTE,
-            (ID_SIGUIENTE, ID_ANTERIOR, CFG)
-            )
-        c = assisted_connect(
-            WIZ.btn_anterior, self.anterior, ID_ANTERIOR,
-            (ID_SIGUIENTE, ID_ANTERIOR, CFG)
-            )
+        c = aconnect(WIZ.siguiente, self.siguiente, CFG['next'], CFG)
+        c = aconnect(WIZ.anterior, self.anterior, CFG['prev'], CFG)
 
         WIZ.formulario('PartTodo').iniciar(disco, ini, fin)
+
     def siguiente(self, widget=None):
         '''
             Función para el evento del botón siguiente
@@ -224,7 +195,7 @@ class PartTodo():
             PartManual(data)
         else:
             Usuario()
-        #Info()
+
     def anterior(self, widget=None):
         '''
             Función para el evento del botón anterior
@@ -243,14 +214,8 @@ class PartManual():
         frm_manual.iniciar(data)
         WIZ.mostrar('PartManual')
 
-        c = assisted_connect(
-            WIZ.btn_siguiente, self.siguiente, ID_SIGUIENTE,
-            (ID_SIGUIENTE, ID_ANTERIOR, CFG)
-            )
-        c = assisted_connect(
-            WIZ.btn_anterior, self.anterior, ID_ANTERIOR,
-            (ID_SIGUIENTE, ID_ANTERIOR, CFG)
-            )
+        c = aconnect(WIZ.siguiente, self.siguiente, CFG['next'], CFG)
+        c = aconnect(WIZ.anterior, self.anterior, CFG['prev'], CFG)
 
     def siguiente(self, widget=None):
         '''
@@ -292,14 +257,8 @@ class Usuario():
             WIZ.agregar('UsuarioRoot', usuario.Main())
         WIZ.mostrar('UsuarioRoot')
 
-        c = assisted_connect(
-            WIZ.btn_siguiente, self.siguiente, ID_SIGUIENTE,
-            (ID_SIGUIENTE, ID_ANTERIOR, CFG)
-            )
-        c = assisted_connect(
-            WIZ.btn_anterior, self.anterior, ID_ANTERIOR,
-            (ID_SIGUIENTE, ID_ANTERIOR, CFG)
-            )
+        c = aconnect(WIZ.siguiente, self.siguiente, CFG['next'], CFG)
+        c = aconnect(WIZ.anterior, self.anterior, CFG['prev'], CFG)
 
     def siguiente(self, widget=None):
         '''
@@ -314,6 +273,7 @@ class Usuario():
         CFG['passuser2'] = frm_usuario_root.txt_passuser2.get_text()
         CFG['maquina'] = frm_usuario_root.txt_maquina.get_text()
         CFG['oem'] = frm_usuario_root.chkoem.get_active()
+
         if CFG['oem'] == False:
             if CFG['passroot'].strip() == '':
                 self.msg_error("Debe escribir una contraseña para root")
@@ -340,6 +300,7 @@ class Usuario():
                 self.msg_error("El nombre de la máquina no está correctamente escrito")
                 return
         Accesibilidad()
+
     def anterior(self, widget=None):
         '''
             Función para el evento del botón anterior
@@ -370,9 +331,8 @@ class Accesibilidad():
         if WIZ.indice(WIZ.nombres, 'accesibilidad') == -1:
             WIZ.agregar('accesibilidad', accesibilidad.Main())
         WIZ.mostrar('accesibilidad')
-        desconectar()
-        ID_SIGUIENTE = WIZ.btn_siguiente.connect("clicked", self.siguiente)
-        ID_ANTERIOR = WIZ.btn_anterior.connect("clicked", self.anterior)
+        c = aconnect(WIZ.siguiente, self.siguiente, CFG['next'], CFG)
+        c = aconnect(WIZ.anterior, self.anterior, CFG['prev'], CFG)
     def siguiente(self, widget=None):
         '''
             Función para el evento del botón siguiente
@@ -397,14 +357,15 @@ class Info():
         WIZ.mostrar('info')
         frm_info = WIZ.formulario('info')
         frm_info.mostrar_info()
-        desconectar()
-        ID_SIGUIENTE = WIZ.btn_siguiente.connect("clicked", self.siguiente)
-        ID_ANTERIOR = WIZ.btn_anterior.connect("clicked", self.anterior)
+        c = aconnect(WIZ.siguiente, self.siguiente, CFG['next'], CFG)
+        c = aconnect(WIZ.anterior, self.anterior, CFG['prev'], CFG)
+
     def siguiente(self, widget=None):
         '''
             Función para el evento del botón siguiente
         '''
         Instalacion()
+
     def anterior(self, widget=None):
         '''
             Función para el evento del botón anterior
@@ -416,24 +377,25 @@ class Instalacion():
         Inicia el paso que realiza la instalación del sistema
     '''
     def __init__(self):
-        global ID_SIGUIENTE, ID_ANTERIOR, CFG
+
         if WIZ.indice(WIZ.nombres, 'Instalacion') == -1:
             WIZ.agregar('Instalacion', instalacion.Main(CFG, WIZ))
+
         WIZ.mostrar('Instalacion')
-        desconectar()
-        ID_SIGUIENTE = WIZ.btn_siguiente.connect("clicked", self.siguiente)
-        ID_ANTERIOR = WIZ.btn_anterior.connect("clicked", self.anterior)
+        c = aconnect(WIZ.siguiente, self.siguiente, CFG['next'], CFG)
+        c = aconnect(WIZ.anterior, self.anterior, CFG['prev'], CFG)
+
     def siguiente(self, widget=None):
         '''
             Función para el evento del botón cerrar
         '''
         WIZ.close()
+
     def anterior(self, widget=None):
         '''
             Función para el evento del botón reiniciar
         '''
         os.system('reboot')
-
 
 if __name__ == "__main__":
     if os.geteuid() != 0:
@@ -443,6 +405,6 @@ if __name__ == "__main__":
             c_1 = gtk.RESPONSE_OK, f_1 = sys.exit, p_1 = (1,)
             )
     else:
-        app = Bienvenida(ID_SIGUIENTE, ID_ANTERIOR, CFG)
+        app = Bienvenida(CFG)
         gtk.main()
         sys.exit()

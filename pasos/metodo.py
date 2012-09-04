@@ -3,14 +3,13 @@
 # Autor: William Cabrera
 # Fecha: 13/10/2011
 
-import gtk
+# Módulos globales
+import gtk, os, threading
+
+# Módulos locales
 import clases.particiones
 import clases.general as gen
 import clases.barra_particiones as barra
-import threading
-import os
-
-gtk.gdk.threads_init()
 
 class Main(gtk.Fixed):
     disco = ''
@@ -20,36 +19,28 @@ class Main(gtk.Fixed):
     particiones = []
     libres = []
     metodos = {}
+    cfg = {}
+    minimo = '1GB'
     lbl_info = gtk.Label('')
     cmb_discos = gtk.combo_box_new_text()
     cmb_metodo = gtk.combo_box_new_text()
     barra_part = gtk.DrawingArea()
-    minimo = '5GB'
     part = clases.particiones.Main()
-    cfg = {}
+  
     def __init__(self, parent):
         gtk.Fixed.__init__(self)
         self.par = parent
-
         self.Iniciar()
 
     def Iniciar(self):
 
-        self.discos = self.part.lista_discos()
         # Listar Discos
-        print self.discos
-        for disco in self.discos:
-            try:
-                self.cmb_discos.append_text('{0}'.format(\
-                    disco['DEVNAME']
-                ))
-            except:
-                print "error"
-                pass
-        #for borrado in borrados:
-        #    self.discos.remove(borrado)
-        self.cmb_discos.set_active(0)
-        self.seleccionar_disco()
+        self.discos = self.part.lista_discos()
+        print 'Se han encontrado los siguientes discos: {0}'.format(self.discos)
+
+        for d in self.discos:
+            self.cmb_discos.append_text(d)
+
         self.cmb_discos.connect("changed", self.seleccionar_disco)
         self.cmb_discos.set_size_request(280, 30)
         self.put(self.cmb_discos, 310, 0)
@@ -92,10 +83,6 @@ class Main(gtk.Fixed):
         self.put(self.lbl_info, 0, 185)
         self.lbl_info.show()
         self.establecer_metodo()
-
-#        self.par.ocultar_barra()
-#        self.img_distribucion.hide()
-#        gtk.gdk.threads_leave()
 
     def lista_metodos(self):
         '''
@@ -148,10 +135,11 @@ class Main(gtk.Fixed):
         self.lbl_info.set_text(msg)
 
     def seleccionar_disco(self, widget=None):
-        print self.cmb_discos.get_active()
-        self.disco = self.discos[self.cmb_discos.get_active()]['DEVNAME']
-        #print self.disco
+        self.disco = self.cmb_discos.get_active_text()
+        print '{0} seleccionado'.format(self.disco)
+
         self.particiones = self.part.lista_particiones(self.disco)
+        
         if len(self.particiones) == 0:
             MessageBox(self, self.par, self.disco)
         else:
@@ -160,6 +148,7 @@ class Main(gtk.Fixed):
                 self.barra_part.expose()
             except:
                 pass
+
             self.cfg['particion'] = self.particiones[0]
             self.cfg['disco'] = self.disco
             self.lista_metodos()
