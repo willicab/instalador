@@ -25,7 +25,6 @@ class Main(gtk.Fixed):
         Inicia el llenado de la tabla
         '''
 
-        data = data[0]
         self.data = data
         self.lista = []
         self.disco = data['disco'] if data['disco'] != '' \
