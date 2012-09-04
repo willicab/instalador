@@ -21,21 +21,33 @@ class Main(gtk.Fixed):
     ext_fin = 0         #El fin de la partición extendida
 
     def iniciar(self, data):
+        '''
+        Inicia el llenado de la tabla
+        '''
+
         data = data[0]
         self.data = data
         self.lista = []
         self.disco = data['disco'] if data['disco'] != '' \
                      else data['particion'][:-1]
+
         if data['metodo'] != 'todo' and data['metodo'] != 'vacio' :
             self.ini = data['nuevo_fin']
         else:
-            self.ini = 1049                          # Inicio de la partición
+            self.ini = 1049                            # Inicio de la partición
+
         if str(data['fin'])[-2:] != 'kB':
             data['fin'] = str(data['fin']) + 'kB'
+
         self.fin = int(float(gen.kb(gen.hum(data['fin']))))
-        float(gen.kb(gen.hum(data['fin']))), int(float(gen.kb(gen.hum(data['fin']))))
+
+        #TODO: Revisar el por qué de esta sentencia, no asigna ni modifica nada
+        float(gen.kb(gen.hum(data['fin']))),
+        int(float(gen.kb(gen.hum(data['fin']))))
+
         if str(data['fin'])[-2:] != 'kB':
             data['fin'] = str(data['fin']) + 'kB'
+
         self.fin = data['fin']
 
         if self.tabla != None:
@@ -56,21 +68,6 @@ class Main(gtk.Fixed):
     def __init__(self, data):
         gtk.Fixed.__init__(self)
         self.iniciar(data)
-        data = data[0]
-#        self.data = data
-#        self.disco = data['disco'] if data['disco'] != '' \
-#                     else data['particion'][:-1]
-#        if data['metodo'] != 'todo' and data['metodo'] != 'vacio' :
-#            self.ini = data['nuevo_fin']
-#        else:
-#            self.ini = 1049                          # Inicio de la partición
-#        if data['fin'][-2:] != 'kB':
-#            data['fin'] = data['fin'] + 'kB'
-#        self.fin = int(float(gen.kb(gen.hum(data['fin']))))
-#        float(gen.kb(gen.hum(data['fin']))), int(float(gen.kb(gen.hum(data['fin']))))
-#        if data['fin'][-2:] != 'kB':
-#            data['fin'] = data['fin'] + 'kB'
-#        self.fin = data['fin']
 
         self.tabla = clases.tabla_particiones.TablaParticiones()
         #self.tabla.set_doble_click(self.activar_tabla);
