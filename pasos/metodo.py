@@ -108,6 +108,9 @@ class Main(gtk.Fixed):
             part = p[0]
             fs = p[5]
 
+            self.part_inicio = p[1]
+            self.part_fin = p[2]
+
             if fs == 'ntfs' or fs == 'fat32':
                 if libre >= minimo:
                     msg = 'Instalar Canaima en {0} ({1} libres)'
@@ -144,6 +147,8 @@ confirme que realmente quiere hacer los cambios.'
             msg = 'Si escoge esta opción se instalará el sistema en la \
 partición sin usar que mide {0}'.format(gen.hum(self.fin - self.ini))
         else:
+            self.ini = gen.h2kb(self.inicio)
+            self.fin = gen.h2kb(self.inicio)
             msg = 'Si escoge esta opción se modificará el disco {0} para \
 realizar la instalación.'.format(self.disco)
         self.lbl_info.set_text(msg)
