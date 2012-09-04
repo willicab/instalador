@@ -30,7 +30,7 @@ class Main(gtk.Fixed):
         self.disco = data['disco'] if data['disco'] != '' \
                      else data['particion'][:-1]
 
-        if data['metodo'] != 'todo' and data['metodo'] != 'vacio' :
+        if data['metodo'] != 'todo' and data['metodo'] != 'vacio':
             self.ini = data['nuevo_fin']
         else:
             self.ini = 1049                            # Inicio de la partición
@@ -91,20 +91,6 @@ class Main(gtk.Fixed):
         self.btn_deshacer.show()
         self.put(self.btn_deshacer, 205, 245)
         self.btn_deshacer.connect("clicked", self.deshacer)
-
-        tamano = gen.hum(gen.kb(self.fin) - gen.kb(self.ini))
-        inicio = self.ini
-        fin = gen.kb(self.fin)
-        libre = [self.disco, # 0 Dispositivo
-                 'Espacio Libre', # 1 Tipo
-                 '', # 2 Formato
-                 '', # 3 Punto de montaje
-                 tamano, # 4 Tamaño
-                 inicio, # 5 inicio
-                 fin]                       # 6 fin
-        self.lista.append(libre)
-
-        self.llenar_tabla(self.lista)
 
     def llenar_tabla(self, data=None):
         if self.data['metodo'] == 'todo':
