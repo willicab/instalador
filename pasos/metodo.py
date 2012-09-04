@@ -80,6 +80,7 @@ class Main(gtk.Fixed):
         self.lbl_info = gtk.Label('Info')
         self.lbl_info.set_size_request(590, 90)
         self.lbl_info.set_alignment(0, 0)
+        self.lbl_info.set_line_wrap(True)
         self.put(self.lbl_info, 0, 185)
         self.lbl_info.show()
         self.establecer_metodo()
