@@ -154,7 +154,7 @@ class Wizard(gtk.Window):
             Cierra la ventana
         '''
         dialog = gtk.MessageDialog(self, gtk.DIALOG_MODAL,
-                                   gtk.MESSAGE_INFO, gtk.BUTTONS_YES_NO,
+                                   gtk.MESSAGE_WARNING, gtk.BUTTONS_YES_NO,
                                "¿Está seguro que desea salir del asistente?")
         dialog.set_title("Salir del Instalador")
         response = dialog.run()
