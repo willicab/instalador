@@ -62,8 +62,8 @@ class Main():
             else:
                 tipo = 'primary'
                 usado, libre = self.usado(part)
-            print 'part, ini, fin, tam, fs, tipo, flags, usado, libre, total, num'
-            print part, ini, fin, tam, fs, tipo, flags, usado, libre, total, num
+#            print 'part, ini, fin, tam, fs, tipo, flags, usado, libre, total, num'
+#            print part, ini, fin, tam, fs, tipo, flags, usado, libre, total, num
             particiones.append(
                 [part, ini, fin, tam, fs, tipo, flags, usado, libre, total, num]
                 )

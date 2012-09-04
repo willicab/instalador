@@ -96,28 +96,30 @@ class Metodo():
         CFG['metodo'] = WIZ.formulario('Metodo').metodo
         print 'El metodo de instalación escogido es: {0}'.format(CFG['metodo'])
         
-        if CFG['metodo'] == 'manual':
+        if CFG['metodo'].split(':')[0] == 'MANUAL':
             pass
 
-        elif CFG['metodo'] == 'todo':
+        elif CFG['metodo'].split(':')[0] == 'TODO':
             CFG['disco'] = WIZ.formulario('Metodo').disco
-            CFG['inicio'] = 0
-            CFG['fin'] = 0
-            print 'CFG: {0}\n'.format(CFG)
-            PartTodo(CFG)
-
-        elif CFG['metodo'] == 'vacio':
-            CFG['disco'] = WIZ.formulario('Metodo').disco
-            CFG['inicio'] = WIZ.formulario('Metodo').ini
+            CFG['ini'] = WIZ.formulario('Metodo').ini
             CFG['fin'] = WIZ.formulario('Metodo').fin
             print 'CFG: {0}\n'.format(CFG)
             PartTodo(CFG)
 
-        else:
-            CFG['particion'] = WIZ.formulario('Metodo').metodo
-            CFG['disco'] = ''
+        elif CFG['metodo'].split(':')[0] == 'LIBRE':
+            CFG['disco'] = WIZ.formulario('Metodo').disco
+            CFG['ini'] = WIZ.formulario('Metodo').ini
+            CFG['fin'] = WIZ.formulario('Metodo').fin
+            print 'CFG: {0}\n'.format(CFG)
+            PartTodo(CFG)
+
+        elif CFG['metodo'].split(':')[0] == 'REDIM':
+            CFG['particion'] = CFG['metodo'].split(':')[0]
             print 'CFG: {0}\n'.format(CFG)
             PartAuto(CFG)
+
+        else:
+            pass
 
     def anterior(self, CFG):
         '''
@@ -129,7 +131,7 @@ class PartAuto():
     '''
         Inicia el paso que redimensiona la partición
     '''
-    def __init__(self, particion):
+    def __init__(self, CFG):
 
         if WIZ.indice(WIZ.nombres, 'ParticionAuto') == -1:
             a = WIZ.agregar('ParticionAuto', particion_auto.Main(particion))
@@ -170,37 +172,40 @@ class PartTodo():
     '''
         Inicia el paso que particiona el disco
     '''
-    def __init__(self, disco, ini, fin):
-        global ID_SIGUIENTE, ID_ANTERIOR, CFG
-        self.disco = disco
-        if WIZ.indice(WIZ.nombres, 'PartTodo') == -1:
-            WIZ.agregar('PartTodo', particion_todo.Main(disco, ini, fin))
-        WIZ.mostrar('PartTodo')
+    def __init__(self, CFG):
 
+        self.disco = CFG['disco']
+        self.ini = CFG['ini']
+        self.fin = CFG['fin']
+
+        if WIZ.indice(WIZ.nombres, 'PartTodo') == -1:
+            a = WIZ.agregar('PartTodo',
+                particion_todo.Main(self.disco, self.ini, self.fin)
+                )
+
+        m = WIZ.mostrar('PartTodo')
         c = aconnect(WIZ.siguiente, self.siguiente, CFG['next'], CFG)
         c = aconnect(WIZ.anterior, self.anterior, CFG['prev'], CFG)
 
-        WIZ.formulario('PartTodo').iniciar(disco, ini, fin)
-
-    def siguiente(self, widget=None):
+    def siguiente(self, CFG):
         '''
             Función para el evento del botón siguiente
         '''
-        frm_part_todo = WIZ.formulario('PartTodo')
-        CFG['inicio'] = frm_part_todo.ini
-        CFG['fin'] = frm_part_todo.fin
-        CFG['tipo'] = frm_part_todo.metodo
+        CFG['ini'] = WIZ.formulario('PartTodo').ini
+        CFG['fin'] = WIZ.formulario('PartTodo').fin
+        CFG['tipo'] = WIZ.formulario('PartTodo').metodo
+
         if CFG['tipo'] == 'particion_4':
             data = [CFG]
             PartManual(data)
         else:
-            Usuario()
+            Usuario(CFG)
 
-    def anterior(self, widget=None):
+    def anterior(self, CFG):
         '''
             Función para el evento del botón anterior
         '''
-        Metodo()
+        Metodo(CFG)
 
 class PartManual():
     '''

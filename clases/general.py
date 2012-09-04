@@ -28,15 +28,20 @@ def h2kb(num):
         - num: un número en formato para lectura por humanos de tipo string
         Salida: el valor en kB de tipo float
     '''
-    if not num: return num
-    if type(num) == int or type(num) == float : return float(num)
+    if not num:
+        print 'num vacío'
+        return num
+        
     unidad = re.sub('[0123456789.]', '', num.replace(',', '.').upper())
     peso = float(re.sub('[TGMKB]', '', num.replace(',', '.').upper()))
-    if unidad == 'TB': kb = peso * 1024.0 * 1024.0 * 1024.0	# TB a KB
-    if unidad == 'GB': kb = peso * 1024.0 * 1024.0		# GB a KB
-    if unidad == 'MB': kb = peso * 1024.0			# MB a KB
-    if unidad == 'KB': kb = peso				# KB a KB
-    if unidad == 'B': kb = peso / 1024.0			# B a KB
+
+    if unidad == 'TB': kb = peso * 1024.0 * 1024.0 * 1024.0 # TB a KB
+    if unidad == 'GB': kb = peso * 1024.0 * 1024.0          # GB a KB
+    if unidad == 'MB': kb = peso * 1024.0                   # MB a KB
+    if unidad == 'KB': kb = peso                            # KB a KB
+    if unidad == 'B': kb = peso / 1024.0                    # B a KB
+    if unidad == '': kb = peso                              # Sin unidad
+    
     return kb
     
 def redondear(w, dec=0):

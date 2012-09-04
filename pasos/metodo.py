@@ -73,7 +73,7 @@ class Main(gtk.Fixed):
         print '{0} seleccionado'.format(self.disco)
 
         self.particiones = self.part.lista_particiones(self.disco)
-        
+
         if len(self.particiones) == 0:
             MessageBox(self, self.par, self.disco)
         else:
@@ -83,8 +83,6 @@ class Main(gtk.Fixed):
             except:
                 pass
 
-            self.cfg['particion'] = self.particiones[0]
-            self.cfg['disco'] = self.disco
             self.lista_metodos()
             self.establecer_metodo()
             self.barra_part.show()
@@ -98,53 +96,61 @@ class Main(gtk.Fixed):
         '''
         self.metodos = {}
         self.cmb_metodo.get_model().clear()
-#part, ini, fin, tam, fs, tipo, flags, usado, libre, total, num
-#0      1    2     3   4    5     6       7     8     9     10
+
         for p in self.particiones:
             tam = gen.h2kb(p[3])
             libre = gen.h2kb(p[8])
             minimo = gen.h2kb(self.minimo)
+            ini = gen.h2kb(p[1])
+            fin = gen.h2kb(p[2])
             part = p[0]
             fs = p[5]
 
-            if fs == 'ntfs' or fs == 'fat32':
-                if libre >= minimo:
-                    msg = 'Instalar Canaima en {0} ({1} libres)'
-                    self.metodos[part] = msg.format(part, libre)
+            if fs != 'free' and libre >= minimo:
+                msg = 'Instalar redimensionando {0} para liberar espacio ({1} libres)'
+                met = 'REDIM:{0}:{1}:{2}'.format(part,ini,fin)
+                self.metodos[met] = msg.format(part, gen.hum(libre))
 
             if fs == 'free' and tam >= minimo:
-                msg = 'Instalar Canaima en espacio sin particionar ({0} libres)'
-                self.metodos['vacio-{0}-{1}'.format(p[1],
-                                        p[2])] = msg.format(gen.hum(tam))
+                msg = 'Instalar usando espacio libre disponible ({0})'
+                met = 'LIBRE:{0}:{1}:{2}'.format(part,ini,fin)
+                self.metodos[met] = msg.format(gen.hum(tam))
 
-        self.metodos['todo'] = ('Usar todo el disco duro')
-        self.metodos['manual'] = ('Particionado Manual')
+        self.metodos['TODO'] = 'Instalar usando todo el disco ({0})'.format(gen.hum(gen.h2kb(self.total)))
+        self.metodos['MANUAL'] = 'Instalar editando particiones manualmente'
 
         for l1, l2 in self.metodos.items():
             self.cmb_metodo.append_text(l2)
-        self.cmb_metodo.set_active(0)
-        self.cmb_metodo.connect("changed", self.establecer_metodo)
 
     def establecer_metodo(self, widget=None):
         m = self.cmb_metodo.get_model()
         a = self.cmb_metodo.get_active()
+
         if a < 0:
             return None
-        metodo = [k for k, v in self.metodos.iteritems() if v == m[a][0]][0]
-        self.cfg['metodo'] = metodo
-        self.metodo = metodo
-        if self.metodo == 'todo' or self.metodo == 'vacio':
+
+        self.metodo = [k for k, v in self.metodos.iteritems() if v == m[a][0]][0]
+
+        if self.metodo.split(':')[0] == 'TODO':
             msg = 'Si escoge esta opción tenga en cuenta que se borrarán todos \
 los datos en el disco que ha seleccionado, Este borrado no se hará hasta que \
 confirme que realmente quiere hacer los cambios.'
-        elif self.metodo[0:5] == 'vacio':
-            self.ini = gen.h2kb(self.metodo.split('-')[1])
-            self.fin = gen.h2kb(self.metodo.split('-')[2])
+            self.ini = 0
+            self.fin = 0
+        elif self.metodo.split(':')[0] == 'LIBRE':
             msg = 'Si escoge esta opción se instalará el sistema en la \
-partición sin usar que mide {0}'.format(gen.hum(self.fin - self.ini))
-        else:
+partición sin usar que mide {0}'.format(gen.hum(2))
+            self.ini = self.metodo.split(':')[2]
+            self.fin = self.metodo.split(':')[3]
+        elif self.metodo.split(':')[0] == 'REDIM':
             msg = 'Si escoge esta opción se redimensionará la partición {0} \
 para realizar la instalación.'.format(self.metodo)
+        elif self.metodo.split(':')[0] == 'MANUAL':
+            msg = 'Si escoge esta opción se instalará el sistema en la \
+partición sin usar que mide {0}'.format(gen.hum(2))
+        else:
+            pass
+
         self.lbl_info.set_text(msg)
 
 
