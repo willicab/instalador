@@ -108,6 +108,7 @@ class Main(gtk.Fixed):
             part = p[0]
             fs = p[5]
 
+            #TODO: Estas propiedades seria mejor integrarlas en un arreglo
             self.part_inicio = p[1]
             self.part_fin = p[2]
 
@@ -142,15 +143,18 @@ class Main(gtk.Fixed):
 los datos en el disco que ha seleccionado, Este borrado no se hará hasta que \
 confirme que realmente quiere hacer los cambios.'
         elif self.metodo[0:5] == 'vacio':
+            '''TODO: Rehacer esto con las nuevas propiedades correctas:
+            self.part_inicio y self.part_fin'''
             self.ini = gen.h2kb(self.metodo.split('-')[1])
             self.fin = gen.h2kb(self.metodo.split('-')[2])
             msg = 'Si escoge esta opción se instalará el sistema en la \
 partición sin usar que mide {0}'.format(gen.hum(self.fin - self.ini))
         else:
-            self.ini = gen.h2kb(self.inicio)
-            self.fin = gen.h2kb(self.inicio)
+            self.ini = gen.h2kb(self.part_inicio)
+            self.fin = gen.h2kb(self.part_fin)
             msg = 'Si escoge esta opción se modificará el disco {0} para \
 realizar la instalación.'.format(self.disco)
+
         self.lbl_info.set_text(msg)
 
 
