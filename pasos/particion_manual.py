@@ -6,6 +6,7 @@ import clases.general as gen
 import clases.particiones
 import clases.particion_nueva as part_nueva
 import clases.tabla_particiones
+from clases import particiones
 
 class Main(gtk.Fixed):
     part = clases.particiones.Main()
@@ -50,17 +51,26 @@ class Main(gtk.Fixed):
         self.fin = data['fin']
 
         if self.tabla != None:
-            tamano = gen.hum(gen.kb(self.fin) - gen.kb(self.ini))
-            inicio = self.ini
-            fin = gen.kb(self.fin)
-            libre = [self.disco, #Dispositivo
-                     'Espacio Libre', #Tipo
-                     '', #Formato
-                     '', #Punto de montaje
-                     tamano, #Tamaño
-                     inicio, #inicio
-                     fin]                       #fin
-            self.lista.append(libre)
+
+            l_part = particiones.Main().lista_particiones(self.disco)
+            for particion in l_part:
+                p_disp = particion[0]
+                p_ini = particion[1]
+                p_fin = particion[2]
+                p_tam = particion[3]
+                p_format = particion[4]
+                p_tipo = particion[5]
+
+                fila = [
+                       p_disp,
+                       p_tipo + '',
+                       p_format + '',
+                       '', # Punto de montaje
+                       gen.hum(gen.kb(p_tam)),
+                       gen.kb(p_ini),
+                       gen.kb(p_fin)
+                   ]
+                self.lista.append(fila)
 
             self.llenar_tabla(self.lista)
 
