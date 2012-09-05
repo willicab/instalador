@@ -79,68 +79,40 @@ class Main(gtk.DrawingArea):
             rgb = float(i[3]), float(i[0])/255, float(i[1])/255, float(i[2])/255
             item.add_color_stop_rgb(*rgb)
 
-    def set_color(self, fs, tipo_part):
+    def set_color(self, fs, tipo):
         libre = cairo.LinearGradient(0, 0, 0, self.alto)
 
-        if fs == 'ntfs':
-            self.process_color(libre, '#00cc00', '#00ff00')
-        if fs == 'fat32':
-            self.process_color(libre, '#009900', '#00cc00')
-        if fs == 'fat16':
-            self.process_color(libre, '#005200', '#009900')
+        if fs == 'btrfs':
+            self.process_color(libre, '#ff5d2e', '#ff912e')
         elif fs == 'ext2':
-            #colores 0.6, 0.7, 0.8
-            libre.add_color_stop_rgb(0, 0.2, 0.3, 0.4)
-            libre.add_color_stop_rgb(0.3, 0.4, 0.5, 0.6)
-            libre.add_color_stop_rgb(0.7, 0.6, 0.7, 0.8)
-
-#            usado.add_color_stop_rgb(0, 0, 0.1, 0.2)
-#            usado.add_color_stop_rgb(0.3, 0.2, 0.3, 0.4)
-#            usado.add_color_stop_rgb(0.7, 0.4, 0.5, 0.6)
-
+            self.process_color(libre, '#2460c8', '#2e7bff')
         elif fs == 'ext3':
-            #colores 0.4, 0.5, 0.6
-            libre.add_color_stop_rgb(0, 0, 0.1, 0.2)
-            libre.add_color_stop_rgb(0.3, 0.2, 0.3, 0.4)
-            libre.add_color_stop_rgb(0.7, 0.4, 0.5, 0.6)
-
-#            usado.add_color_stop_rgb(0, 0.0, 0.05, 0.1)
-#            usado.add_color_stop_rgb(0.3, 0.1, 0.2, 0.3)
-#            usado.add_color_stop_rgb(0.7, 0.3, 0.4, 0.5)
-
+            self.process_color(libre, '#1b4794', '#2460c8')
         elif fs == 'ext4':
-            #colores 0.3, 0.4, 0.5
-            libre.add_color_stop_rgb(0, 0.0, 0.05, 0.1)
-            libre.add_color_stop_rgb(0.3, 0.1, 0.2, 0.3)
-            libre.add_color_stop_rgb(0.7, 0.3, 0.4, 0.5)
-
-#            usado.add_color_stop_rgb(0, 0.0, 0.0, 0.05)
-#            usado.add_color_stop_rgb(0.3, 0.0, 0.1, 0.2)
-#            usado.add_color_stop_rgb(0.7, 0.2, 0.3, 0.4)
-
+            self.process_color(libre, '#102b58', '#1b4794')
+        elif fs == 'fat16':
+            self.process_color(libre, '#00b900', '#00ff00')
+        elif fs == 'fat32':
+            self.process_color(libre, '#008100', '#00b900')
+        elif fs == 'ntfs':
+            self.process_color(libre, '#003800', '#008100')
+        elif fs == 'hfs+':
+            self.process_color(libre, '#382720', '#895f4d')
+        elif fs == 'hfs':
+            self.process_color(libre, '#895f4d', '#e49e80')
+        elif fs == 'jfs':
+            self.process_color(libre, '#e49e80', '#ffcfbb')
         elif fs == 'swap':
-            #colores 0.7, 0.4, 0.3
-            libre.add_color_stop_rgb(0, 0.3, 0.05, 0.0)
-            libre.add_color_stop_rgb(0.3, 0.5, 0.2, 0.1)
-            libre.add_color_stop_rgb(0.7, 0.7, 0.4, 0.3)
-
-#            usado.add_color_stop_rgb(0, 0.0, 0.0, 0.05)
-#            usado.add_color_stop_rgb(0.3, 0.0, 0.1, 0.2)
-#            usado.add_color_stop_rgb(0.7, 0.2, 0.3, 0.4)
-
+            self.process_color(libre, '#650000', '#cc0000')
+        elif fs == 'reiser4':
+            self.process_color(libre, '#45374f', '#806794')
+        elif fs == 'reiserfs':
+            self.process_color(libre, '#806794', '#b994d5')
+        elif fs == 'xfs':
+            self.process_color(libre, '#e89900', '#e8d000')
         elif fs == 'free':
-            #colores 0.7, 0.4, 0.3
-            libre.add_color_stop_rgb(0.0, 0.74, 0.74, 0.74)
-            libre.add_color_stop_rgb(0.5, 0.88, 0.88, 0.88)
-            libre.add_color_stop_rgb(1, 0.95, 0.95, 0.95)
-
-#            usado.add_color_stop_rgb(0, 0.0, 0.0, 0.05)
-#            usado.add_color_stop_rgb(0.3, 0.0, 0.1, 0.2)
-#            usado.add_color_stop_rgb(0.7, 0.2, 0.3, 0.4)
-
-        if tipo_part == 'extended':
-            #colores 0.5, 0.1, 0.1
-            libre.add_color_stop_rgb(0, 0.5, 1.0, 1.0)
-#            usado.add_color_stop_rgb(0, 0.0, 0.0, 0.05)
+            self.process_color(libre, '#efefef', '#efefef')
+        elif tipo == 'extended':
+            self.process_color(libre, '#000000', '#000000')
 
         return libre

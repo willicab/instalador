@@ -20,11 +20,8 @@ class Main():
         '''
             devuelve los discos que están conectados al equipo
         '''
-        discos = []
-        devices = commands.getstatusoutput('ls -1 /sys/block/')[1].split('\n')
-        for dev in devices:
-            discos.append('/dev/'+dev)
-        return discos
+        cmd = "parted -l -s -m | grep '/dev/' | awk -F: '{print $1}'"
+        return commands.getstatusoutput(cmd)[1].split('\n')
 
     def lista_particiones(self, disco):
         '''
@@ -63,7 +60,7 @@ class Main():
                 tipo = 'primary'
                 usado, libre = self.usado(part)
 #            print 'part, ini, fin, tam, fs, tipo, flags, usado, libre, total, num'
-            print part, ini, fin, tam, fs, tipo, flags, usado, libre, total, num
+#            print part, ini, fin, tam, fs, tipo, flags, usado, libre, total, num
             particiones.append(
                 [part, ini, fin, tam, fs, tipo, flags, usado, libre, total, num]
                 )
