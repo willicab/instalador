@@ -61,32 +61,33 @@ class Main(gtk.DrawingArea):
         cr.arc(x1 + radius, y2 - radius, radius, 1*(pi/2), 2*(pi/2))
         cr.close_path()
 
+    def hex_to_rgb(self, value):
+        value = value.lstrip('#')
+        lv = len(value)
+        return tuple(int(value[i:i+lv/3], 16) for i in range(0, lv, lv/3))
+
     def process_color (self, item, start, end):
-        start = start+(0,)
-        end = end+(1,)
+        start = self.hex_to_rgb(start)+(0,)
+        end = self.hex_to_rgb(end)+(1,)
+
         r1, g1, b1, pos = start
         r3, g3, b3, pos = end
-        r2, g2, b2, pos = (int(r1+r3/2), int(g1+g3/2), int(b1+b3/2), 0.5)
+        r2, g2, b2, pos = (int(r1+r3)/2, int(g1+g3)/2, int(b1+b3)/2, 0.5)
         mid = (r2, g2, b2, pos)
 
         for i in start, mid, end:
-            print i
-#            item.add_color_stop_rgb(0, 0.5, 0.5, 0)
+            rgb = float(i[3]), float(i[0])/255, float(i[1])/255, float(i[2])/255
+            item.add_color_stop_rgb(*rgb)
 
     def set_color(self, fs, tipo_part):
         libre = cairo.LinearGradient(0, 0, 0, self.alto)
-#        usado = cairo.LinearGradient(0, 0, 0, self.alto)
-        self.process_color(libre, (255,255,255), (0,0,0))
 
         if fs == 'ntfs':
-            libre.add_color_stop_rgb(0, 0.5, 0.5, 0)
-            libre.add_color_stop_rgb(0.3, 0.7, 0.7, 0.3)
-            libre.add_color_stop_rgb(0.7, 1.0, 1.0, 0.7)
-
-#            usado.add_color_stop_rgb(0, 0.3, 0.3, 0)
-#            usado.add_color_stop_rgb(0.3, 0.5, 0.5, 0.2)
-#            usado.add_color_stop_rgb(0.7, 0.8, 0.8, 0.4)
-
+            self.process_color(libre, '#00cc00', '#00ff00')
+        if fs == 'fat32':
+            self.process_color(libre, '#009900', '#00cc00')
+        if fs == 'fat16':
+            self.process_color(libre, '#005200', '#009900')
         elif fs == 'ext2':
             #colores 0.6, 0.7, 0.8
             libre.add_color_stop_rgb(0, 0.2, 0.3, 0.4)
