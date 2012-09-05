@@ -94,7 +94,7 @@ class Metodo():
         '''
         CFG['metodo'] = WIZ.formulario('Metodo').metodo
         print 'El metodo de instalación escogido es: {0}'.format(CFG['metodo'])
-        
+
         if CFG['metodo'].split(':')[0] == 'MANUAL':
             CFG['disco'] = WIZ.formulario('Metodo').disco
             CFG['inicio'] = WIZ.formulario('Metodo').ini
@@ -214,14 +214,11 @@ class PartTodo():
 
 class PartManual():
     '''
-        Inicia el paso que particiona el disco
+        Inicia el paso que particiona el disco de forma manual
     '''
     def __init__(self, data):
-        global ID_SIGUIENTE, ID_ANTERIOR, CFG
         if WIZ.indice(WIZ.nombres, 'PartManual') == -1:
             WIZ.agregar('PartManual', particion_manual.Main(data))
-        frm_manual = WIZ.formulario('PartManual')
-        frm_manual.iniciar(data)
         WIZ.mostrar('PartManual')
 
         c = aconnect(WIZ.siguiente, self.siguiente, CFG['next'], CFG)

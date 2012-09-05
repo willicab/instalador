@@ -72,7 +72,6 @@ class Main(gtk.Fixed):
 
     def __init__(self, data):
         gtk.Fixed.__init__(self)
-        self.iniciar(data)
 
         self.tabla = clases.tabla_particiones.TablaParticiones()
         #self.tabla.set_doble_click(self.activar_tabla);
@@ -97,6 +96,8 @@ class Main(gtk.Fixed):
         self.btn_deshacer.show()
         self.put(self.btn_deshacer, 205, 245)
         self.btn_deshacer.connect("clicked", self.deshacer)
+
+        self.iniciar(data)
 
     def llenar_tabla(self, data=None):
         if self.data['metodo'] == 'todo':
