@@ -84,7 +84,7 @@ class Main(gtk.Fixed):
 
         self.scroll = gtk.ScrolledWindow()
         self.scroll.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
-        self.scroll.set_size_request(590, 240)
+        self.scroll.set_size_request(690, 240)
         self.scroll.add(self.tabla)
         self.put(self.scroll, 0, 0)
         self.tabla.show()
