@@ -68,14 +68,15 @@ class Main(gtk.Dialog):
         self.cmb_tipo = gtk.combo_box_new_text()
         self.cmb_tipo.set_size_request(100, 30)
         self.cont.put(self.cmb_tipo, 145, 35)
+
         if padre.bext == True:
             self.cmb_tipo.append_text('Lógica')
             self.cmb_tipo.set_sensitive(False)
         else:
-            #if self.padre.primarias < 4:
             self.cmb_tipo.append_text('Primaria')
             self.cmb_tipo.append_text('Extendida')
-        self.cmb_tipo.set_active(0)
+
+        self.cmb_tipo.set_active(False)
         self.cmb_tipo.connect("changed", self.cmb_tipo_on_changed)
         self.cmb_tipo.show()
 
@@ -95,7 +96,7 @@ class Main(gtk.Dialog):
         self.cmb_fs.append_text('reiserfs')
         self.cmb_fs.append_text('fat16')
         self.cmb_fs.append_text('fat32')
-        self.cmb_fs.set_active(2)
+        self.cmb_fs.set_active(True)
         self.cmb_fs.connect("changed", self.cmb_fs_on_changed)
         self.cmb_fs.show()
 
