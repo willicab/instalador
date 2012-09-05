@@ -31,7 +31,7 @@ def h2kb(num):
     if not num:
         print 'num vacío'
         return num
-        
+    num = str(num)
     unidad = re.sub('[0123456789.]', '', num.replace(',', '.').upper())
     peso = float(re.sub('[TGMKB]', '', num.replace(',', '.').upper()))
 
@@ -42,7 +42,7 @@ def h2kb(num):
     if unidad == 'B': kb = peso / 1024.0                    # B a KB
     if unidad == '': kb = peso                              # Sin unidad
     
-    return kb
+    return float(kb)
     
 def redondear(w, dec=0):
     if type(w) == int : return w

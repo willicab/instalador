@@ -15,8 +15,7 @@ from clases.constructor import UserMessage
 from clases.translator import MAIN_ROOT_ERROR_MSG, MAIN_ROOT_ERROR_TITLE
 
 CFG = {'next':-1, 'prev':-1}
-BANNER = 'data/banner-app-top.png'
-WIZ = Wizard(700, 550, "Canaima Instalador", BANNER)
+BANNER = 'data/img/banner.png'
 
 def aconnect(button, function, bid, params):
     '''
@@ -203,8 +202,7 @@ class PartTodo():
         CFG['tipo'] = WIZ.formulario('PartTodo').metodo
 
         if CFG['tipo'] == 'particion_4':
-            data = [CFG]
-            PartManual(data)
+            PartManual(CFG)
         else:
             Usuario(CFG)
 
@@ -239,13 +237,13 @@ class PartManual():
         if frm_part_manual.raiz == False:
             self.msg_error("Debe existir una partición raiz (/)")
             return
-        Usuario()
+        Usuario(CFG)
 
     def anterior(self, widget=None):
         '''
             Función para el evento del botón anterior
         '''
-        Metodo()
+        Metodo(CFG)
 
     def msg_error(self, mensaje):
         '''
@@ -263,16 +261,16 @@ class Usuario():
     '''
         Inicia el paso que crea el usuario del sistema
     '''
-    def __init__(self):
-        global ID_SIGUIENTE, ID_ANTERIOR, CFG
-        if WIZ.indice(WIZ.nombres, 'UsuarioRoot') == -1:
-            WIZ.agregar('UsuarioRoot', usuario.Main())
-        WIZ.mostrar('UsuarioRoot')
+    def __init__(self, CFG):
 
+        if WIZ.indice(WIZ.nombres, 'UsuarioRoot') == -1:
+            a = WIZ.agregar('UsuarioRoot', usuario.Main())
+
+        m = WIZ.mostrar('UsuarioRoot')
         c = aconnect(WIZ.siguiente, self.siguiente, CFG['next'], CFG)
         c = aconnect(WIZ.anterior, self.anterior, CFG['prev'], CFG)
 
-    def siguiente(self, widget=None):
+    def siguiente(self, CFG):
         '''
             Función para el evento del botón siguiente
         '''
@@ -313,7 +311,7 @@ class Usuario():
                 return
         Accesibilidad()
 
-    def anterior(self, widget=None):
+    def anterior(self, CFG):
         '''
             Función para el evento del botón anterior
         '''
@@ -417,6 +415,7 @@ if __name__ == "__main__":
             c_1=gtk.RESPONSE_OK, f_1=sys.exit, p_1=(1,)
             )
     else:
+        WIZ = Wizard(700, 450, "Canaima Instalador", BANNER)
         app = Bienvenida(CFG)
         gtk.main()
         sys.exit()

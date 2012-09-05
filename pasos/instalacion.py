@@ -50,7 +50,7 @@ class Main(gtk.Fixed):
         #self.lblInfo.show()
 
         path = os.path.realpath(os.path.join(os.path.dirname(__file__),
-                '..', 'data', 'preview', 'carrusel.html'))
+                '..', 'data', 'slider.html'))
         self.visor.open(path)
 
         self.thread = threading.Thread(target=self.instalar, args=())

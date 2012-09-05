@@ -19,12 +19,8 @@ class Main(gtk.Fixed):
     def __init__(self, disco, ini=0, fin=0):
         gtk.Fixed.__init__(self)
         self.disco = disco
-
-        if ini == 0 and fin == 0:
-            self.set_limite()
-        else:
-            self.ini = ini
-            self.fin = fin
+        self.ini = ini
+        self.fin = fin
 
         self.swap = gen.ram() if int(gen.ram()) >= 1048576 else int(gen.ram()) * 2
         self.ini = int(float(str(self.ini).replace(',', '.')))
@@ -110,16 +106,4 @@ class Main(gtk.Fixed):
             self.metodo = data
             self.barra.cambiar(self.metodo)
             self.leyenda.cambiar(self.metodo)
-
-    def set_limite(self):
-        p = self.part.lista_particiones(self.disco)
-        self.ini = float(p[0][1][:-2].replace(',', '.'))
-        self.fin = float(p[0][2][:-2].replace(',', '.'))
-        for t in p:
-            ini = float(t[1][:-2].replace(',', '.'))
-            fin = float(t[2][:-2].replace(',', '.'))
-            if self.ini > ini : self.ini = ini
-            if self.fin < fin : self.fin = fin
-        self.ini = str(self.ini)
-        self.fin = str(self.fin)
 
