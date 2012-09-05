@@ -41,10 +41,6 @@ class Main(gtk.Fixed):
 
         self.fin = int(float(gen.kb(gen.hum(data['fin']))))
 
-        #TODO: Revisar el por qué de esta sentencia, no asigna ni modifica nada
-        float(gen.kb(gen.hum(data['fin']))),
-        int(float(gen.kb(gen.hum(data['fin']))))
-
         if str(data['fin'])[-2:] != 'kB':
             data['fin'] = str(data['fin']) + 'kB'
 
@@ -110,6 +106,7 @@ class Main(gtk.Fixed):
                 if p[4] == 'primary':
                     self.primarias = self.primarias + 1
         self.tabla.liststore.clear()
+
         assert isinstance(data, list) or isinstance(data, tuple)
         for fila in data:
             self.tabla.agregar_fila(fila)
@@ -117,7 +114,7 @@ class Main(gtk.Fixed):
                 self.raiz = True
             if fila[1] == 'Primaria' or fila[1] == 'Extendida':
                 self.primarias = self.primarias + 1
-        print 'Particiones Primarias: ' + str(self.primarias)
+
         if len(data) == 1 and fila[1] == 'Espacio Libre':
             self.btn_deshacer.set_sensitive(False)
         else:
