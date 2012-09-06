@@ -3,7 +3,6 @@
 import gtk
 
 import clases.general as gen
-import clases.particiones
 import clases.particion_nueva as part_nueva
 import clases.tabla_particiones
 from clases import particiones
@@ -309,6 +308,4 @@ class Main(gtk.Fixed):
 #===============================================================================
 
         self.inicializar(self.data)
-
-        self.llenar_tabla(self.lista)
 
