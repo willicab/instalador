@@ -1,6 +1,6 @@
 #-*- coding: UTF-8 -*-
 
-import commands, os
+import commands, os, parted, gudev
 
 class Main():
     def __init__(self):
@@ -22,8 +22,13 @@ class Main():
         '''
             devuelve los discos que están conectados al equipo
         '''
-        cmd = "parted -l -s -m | grep '/dev/' | awk -F: '{print $1}'"
-        return commands.getstatusoutput(cmd)[1].split('\n')
+        l = []
+        d = gudev.Client(['block'])
+        c = d.query_by_subsystem('block')
+        for i in c:
+            if i.get_devtype() == 'disk':
+                l.append(i.get_device_file())
+        return l
 
     def lista_particiones(self, disco):
         '''
@@ -92,13 +97,20 @@ class Main():
         salida = commands.getstatusoutput(cmd)
         return salida[0]
 
+class Drive(parted.Device):
+    """ Wrapper class linked to the parted.Device class and parted.Disk class
+    Will allow us to have a central place to perform operations"""
+    def __init__(self, path):
+        parted.Device.__init__(self, path)
+        self.disk = parted.Disk(self)
+
+    def listPartitions(self):
+        """ Returns a list of existing partitions in the drive
+        (parted.Partition objects)"""
+        return self.disk.partitions
+
 if __name__ == "__main__":
-    print "Iniciado..."
-    obj = Main()
-    print obj.lista_discos()
-
-    for part in obj.lista_particiones('/dev/sda'):
-        print part
-
-    print "Finalizado."
+    d = Main()
+    a = d.lista_discos()
+    print a
 
