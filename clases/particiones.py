@@ -1,19 +1,21 @@
 #-*- coding: UTF-8 -*-
 
-import commands
+import commands, os
 
 class Main():
     def __init__(self):
         pass
 
     def usado(self, particion):
-        commands.getstatusoutput('umount /mnt'.format(particion))
-        commands.getstatusoutput('mount {0} /mnt'.format(particion))
-        cmd = 'df --sync {0}'.format(particion)
-        a, b = commands.getstatusoutput(
-            cmd+" | grep '/' | awk '{print $3,$4}'"
-            )[1].split()
-        commands.getstatusoutput('umount {0}'.format(particion))
+        if os.path.exists(particion):
+            commands.getstatusoutput('umount /mnt'.format(particion))
+            commands.getstatusoutput('mount {0} /mnt'.format(particion))
+            cmd = 'df --sync {0}'.format(particion)
+            a, b = commands.getstatusoutput(
+                cmd+" | grep '/' | awk '{print $3,$4}'"
+                )[1].split()
+            commands.getstatusoutput('umount {0}'.format(particion))
+        else: a,b = ('0', '0')
         return a+'kB', b+'kB'
 
     def lista_discos(self):
@@ -34,6 +36,7 @@ class Main():
         salida = parts[2:]
 
         for l in salida:
+            print l
             l = l.strip(';')
             if len(l.split(':')) == 5:
                 l = l+'::'
@@ -43,24 +46,31 @@ class Main():
             usado = '0kB'
             libre = tam
 
-            if fs.find('swap') != -1:
-                fs = 'swap'
-
             if flags == '':
                 flags = 'none'
 
-            if fs == 'free':
+            if fs == '' and num == '1':
+                fs = 'extended'
+                tipo = 'extended'
+
+            elif fs == 'free' and num == '1':
                 num = 0
                 part = 0
                 tipo = 'free'
-            elif fs == '':
-                tipo = 'extended'
-                fs = 'extended'
+
+            elif fs == '' and num != '1':
+                fs = 'unknown'
+                tipo = 'unknown'
+
+            elif not os.path.exists(part):
+                fs = 'unknown'
+                tipo = 'unknown'
+
             else:
                 tipo = 'primary'
                 usado, libre = self.usado(part)
-#            print 'part, ini, fin, tam, fs, tipo, flags, usado, libre, total, num'
-#            print part, ini, fin, tam, fs, tipo, flags, usado, libre, total, num
+
+            print part, ini, fin, tam, fs, tipo, flags, usado, libre, total, num
             particiones.append(
                 [part, ini, fin, tam, fs, tipo, flags, usado, libre, total, num]
                 )

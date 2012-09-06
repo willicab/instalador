@@ -38,19 +38,19 @@ class Main(gtk.DrawingArea):
             tipo = p[5]
             fs = p[4]
 
-            if tipo == 'logical':
-                y1 = 4
-                y2 = self.alto - 8
-            else:
-                y1 = 1.5
+            if tipo == 'logical' or tipo == 'primary':
+                y1 = 3
                 y2 = self.alto - 3
+            elif tipo == 'extended':
+                y1 = 0
+                y2 = self.alto
 
-            x1 = ((ini * self.ancho) / self.total) + 1.5
-            x2 = ((fin * self.ancho) / self.total) - 3
+            x1 = ((ini * self.ancho) / self.total) + 1
+            x2 = ((fin * self.ancho) / self.total) - 2
 
             if x2 - x1 > 1.5:
                 self.draw_rounded(cr, (x1, y1, x2, y2), 5)
-                cr.set_source(self.set_color(fs, tipo))
+                cr.set_source(self.set_color(fs))
                 cr.fill()
 
     def draw_rounded(self, cr, area, radius):
@@ -79,7 +79,7 @@ class Main(gtk.DrawingArea):
             rgb = float(i[3]), float(i[0])/255, float(i[1])/255, float(i[2])/255
             item.add_color_stop_rgb(*rgb)
 
-    def set_color(self, fs, tipo):
+    def set_color(self, fs):
         libre = cairo.LinearGradient(0, 0, 0, self.alto)
 
         if fs == 'btrfs':
@@ -112,7 +112,7 @@ class Main(gtk.DrawingArea):
             self.process_color(libre, '#e89900', '#e8d000')
         elif fs == 'free':
             self.process_color(libre, '#efefef', '#efefef')
-        elif tipo == 'extended':
-            self.process_color(libre, '#000000', '#000000')
+        elif fs == 'extended':
+            self.process_color(libre, '#c9c9c9', '#c9c9c9')
 
         return libre
