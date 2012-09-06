@@ -9,7 +9,11 @@ import clases.tabla_particiones
 from clases import particiones
 
 class msj:
+    'Clase para administrar los mensajes mostrados al usuario'
+
     class particion:
+        'Mensajes relacionados a las particiones'
+
         libre = 'Espacio Libre'
         primaria = 'Primaria'
         extendida = 'Extendida'
@@ -39,48 +43,54 @@ class msj:
             return disp
 
     class gui:
+        'Mensajes mostrados en la gui'
+
         btn_part_nueva = 'Crear Nueva Partición'
         btn_part_eliminar = 'X'
         btn_deshacer = 'Deshacer Acción'
 
 class Main(gtk.Fixed):
-    part = clases.particiones.Main()
-    ini = 0             #Inicio de la partición
-    fin = 0             #Fin de la partición
-    lista = []          #Lista de las particiones hechas
-    primarias = 0       #Cuenta la cantidad de particiones primarias
-    raiz = False
-    tabla = None
-    # Si se crea una partición extendida se usarán las siguientes variables
-    bext = False        #Si se crea la partición extendida será True
-    ext_ini = 0         #El inicio de la partición extendida
-    ext_fin = 0         #El fin de la partición extendida
 
-    acciones = []
+    def inicializar(self, data):
+        '''
+        Inicializa todas las variables
+        '''
 
-    def iniciar(self, data):
-        '''
-        Inicia el llenado de la tabla
-        '''
+        self.part = clases.particiones.Main()
+        self.ini = 0             #Inicio de la partición
+        self.fin = 0             #Fin de la partición
+        self.lista = []          #Lista de las particiones hechas
+        self.primarias = 0       #Cuenta la cantidad de particiones primarias
+        self.raiz = False
+        self.tabla = None
+        # Si se crea una partición extendida se usarán las siguientes variables
+        self.bext = False        #Si se crea la partición extendida será True
+        self.ext_ini = 0         #El inicio de la partición extendida
+        self.ext_fin = 0         #El fin de la partición extendida
+
+        self.acciones = []
+        self.fila_selec = None
 
         self.data = data
         self.lista = []
-        self.disco = data['disco'] if data['disco'] != '' \
-                     else data['particion'][:-1]
+        self.disco = data['disco']
 
-        if data['metodo'] != 'todo' and data['metodo'] != 'vacio':
-            self.ini = data['nuevo_fin']
-        else:
-            self.ini = 1049                            # Inicio de la partición
+#===============================================================================
+#        if data['metodo'] != 'todo' and data['metodo'] != 'vacio':
+#            self.ini = data['nuevo_fin']
+#        else:
+#            self.ini = 1049                            # Inicio de la partición
+# 
+#        if str(data['fin'])[-2:] != 'kB':
+#            data['fin'] = str(data['fin']) + 'kB'
+# 
+#        self.fin = int(float(gen.kb(gen.hum(data['fin']))))
+# 
+#        if str(data['fin'])[-2:] != 'kB':
+#            data['fin'] = str(data['fin']) + 'kB'
+#===============================================================================
 
-        if str(data['fin'])[-2:] != 'kB':
-            data['fin'] = str(data['fin']) + 'kB'
-
-        self.fin = int(float(gen.kb(gen.hum(data['fin']))))
-
-        if str(data['fin'])[-2:] != 'kB':
-            data['fin'] = str(data['fin']) + 'kB'
-
+        self.ini = data['inicio']
         self.fin = data['fin']
 
         if self.tabla != None:
@@ -122,31 +132,47 @@ class Main(gtk.Fixed):
         self.tabla.show()
         self.scroll.show()
 
-        self.btn_eliminar = gtk.Button("X")
+        # btn_eliminar
+        self.btn_eliminar = gtk.Button(msj.gui.btn_part_eliminar)
         self.btn_eliminar.set_sensitive(False)
         #self.btn_nueva.set_size_request(200, 30)
         self.btn_eliminar.show()
         self.put(self.btn_eliminar, 365, 245)
         self.btn_eliminar.connect("clicked", self.particion_eliminar)
 
+        # btn_nueva
         self.btn_nueva = gtk.Button(msj.gui.btn_part_nueva)
+        self.btn_nueva.set_sensitive(False)
         self.btn_nueva.set_size_request(200, 30)
         self.btn_nueva.show()
         self.put(self.btn_nueva, 0, 245)
         self.btn_nueva.connect("clicked", self.particion_nueva)
 
+        # btn_deshacer
         self.btn_deshacer = gtk.Button(msj.gui.btn_deshacer)
         self.btn_deshacer.set_size_request(160, 30)
         self.btn_deshacer.show()
         self.put(self.btn_deshacer, 205, 245)
         self.btn_deshacer.connect("clicked", self.deshacer)
 
-        self.iniciar(data)
+        # llenar la tabla por primera vez
+        self.inicializar(data)
 
     def seleccionar_fila(self, fila):
         '''Acciones a tomar cuando una fila de la tabla es seleccionada'''
 
+        self.fila_selec = fila
+
+        #TODO: Impedir crear nuevas si hay mas de 4 primarias y 0 extendidas
+        # BTN_NUEVA
+        if fila[1] == msj.particion.libre or fila[1] == \
+        msj.particion.extendida_libre:
+            self.btn_nueva.set_sensitive(True)
+        else:
+            self.btn_nueva.set_sensitive(False)
+
         # Solo se pueden eliminar particiones, no espacios libres
+        # BTN_ELIMINAR
         if fila[1] != msj.particion.libre and fila[1] != \
         msj.particion.extendida_libre:
             self.btn_eliminar.set_sensitive(True)
@@ -158,21 +184,18 @@ class Main(gtk.Fixed):
         '''Llena la tabla con las particiones existentes en el disco'''
         assert isinstance(data, list) or isinstance(data, tuple)
 
-        # Limpia previamente la tabla para iniciar su llenado
+        # Limpia previamente la tabla para inicializar su llenado
         self.tabla.liststore.clear()
-
-        # Contabiliza las particiones primarias para evitar que sean mayor a 4
-        for p in self.part.lista_particiones(self.disco):
-            if p[4] == 'primary':
-                self.primarias = self.primarias + 1
 
         # LLena la tabla con los datos de "data"
         for fila in data:
             self.tabla.agregar_fila(fila)
 
-            # Validaciones
+            # Verifica si hay punto de montaje raiz "/"
             if fila[3] == '/':
                 self.raiz = True
+
+            # Cuenta las particiones primarias
             if fila[1] == msj.particion.primaria or fila[1] == \
             msj.particion.extendida:
                 self.primarias = self.primarias + 1
@@ -185,16 +208,18 @@ class Main(gtk.Fixed):
         #   self.btn_deshacer.set_sensitive(True)
         #=======================================================================
 
-        if self.bext == False and self.primarias == 4:
-            # impide crear una nueva particion si hay 4 primarias y 0 extendidas
-            self.btn_nueva.set_sensitive(False)
-        elif fila[1] != msj.particion.libre and fila[1] != \
-        msj.particion.extendida_libre:
-            # impide crear una nueva particion si no hay espacios libres
-            self.btn_nueva.set_sensitive(False)
-        else:
-            # Permite crear una particion nueva
-            self.btn_nueva.set_sensitive(True)
+        #=======================================================================
+        # if self.bext == False and self.primarias == 4:
+        #    # impide crear una nueva particion si hay 4 primarias y 0 extendidas
+        #    self.btn_nueva.set_sensitive(False)
+        # elif fila[1] != msj.particion.libre and fila[1] != \
+        # msj.particion.extendida_libre:
+        #    # impide crear una nueva particion si no hay espacios libres
+        #    self.btn_nueva.set_sensitive(False)
+        # else:
+        #    # Permite crear una particion nueva
+        #    self.btn_nueva.set_sensitive(True)
+        #=======================================================================
 
     #TODO: Implementar
     def particion_eliminar(self, widget=None):

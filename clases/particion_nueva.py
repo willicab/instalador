@@ -19,12 +19,17 @@ class Main(gtk.Dialog):
         self.add_button(gtk.STOCK_OK, gtk.RESPONSE_OK)
         self.set_default_response(gtk.RESPONSE_CANCEL)
 
-        if self.padre.bext == False:
-            self.inicio = gen.kb(self.padre.lista[-1][5])
-            self.fin = gen.kb(self.padre.fin)
-        else:
-            self.inicio = gen.kb(self.padre.ext_ini)
-            self.fin = gen.kb(self.padre.ext_fin)
+        #=======================================================================
+        # if self.padre.bext == False:
+        #    self.inicio = gen.kb(self.padre.lista[-1][5])
+        #    self.fin = gen.kb(self.padre.fin)
+        # else:
+        #    self.inicio = gen.kb(self.padre.ext_ini)
+        #    self.fin = gen.kb(self.padre.ext_fin)
+        #=======================================================================
+
+        self.inicio = self.padre.fila_selec[5]
+        self.fin = self.padre.fila_selec[6]
 
         # Contenedor General
         self.cont = gtk.Fixed()
@@ -313,7 +318,7 @@ class Main(gtk.Dialog):
             self.cmb_montaje.append_text(punto)
 
     def validar_punto(self, widget=None):
-        '''Valida que el punto de montaje no esté ya asignado a otra 
+        '''Valida que el punto de montaje no esté ya asignado a otra
         partición'''
 
         data = self.padre.lista
