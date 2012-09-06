@@ -23,17 +23,20 @@ class msj:
             if tipo == 'extended':  return self.extendida
             if tipo == 'logical':   return self.logica
 
+            return tipo
+
         @classmethod
         def get_formato(self, formato):
             if formato == 'free':           return ''
-            elif formato == 'extended':     return ''
-            else:                           return formato
+            if formato == 'extended':     return ''
+
+            return formato
 
         @classmethod
         def get_dispositivo(self, disp):
-            print "disp=", disp
             if disp == 0:       return ''
-            else:               return disp
+
+            return disp
 
     class gui:
         btn_part_nueva = 'Crear Nueva Partición'
