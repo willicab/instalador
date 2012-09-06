@@ -53,7 +53,7 @@ class Main(gtk.Fixed):
     ext_ini = 0         #El inicio de la partición extendida
     ext_fin = 0         #El fin de la partición extendida
 
-    acciones = {}
+    acciones = []
 
     def iniciar(self, data):
         '''
@@ -196,6 +196,20 @@ class Main(gtk.Fixed):
     #TODO: Implementar
     def particion_eliminar(self, widget=None):
         print 'Eliminar partición:', self.tabla.ultima_fila_seleccionada[0]
+
+        fila_accion = (
+                        'eliminar',
+                        (
+                            self.disco, #Dispositivo
+                            self.tabla.ultima_fila_seleccionada[0], #Particion
+                            gen.hum(self.tabla.ultima_fila_seleccionada[5]), #Inicio
+                            gen.hum(self.tabla.ultima_fila_seleccionada[6]), #Fin
+                         )
+                     )
+        print fila_accion
+
+        self.acciones.append(fila_accion)
+
 
     def particion_nueva(self, widget=None):
         part_nueva.Main(self)
