@@ -56,24 +56,27 @@ class Main(gtk.Fixed):
         Inicializa todas las variables
         '''
 
-        self.part = clases.particiones.Main()
+        self.data = data
+
         self.ini = 0             #Inicio de la partición
         self.fin = 0             #Fin de la partición
         self.lista = []          #Lista de las particiones hechas
         self.primarias = 0       #Cuenta la cantidad de particiones primarias
         self.raiz = False
-        self.tabla = None
+
         # Si se crea una partición extendida se usarán las siguientes variables
         self.bext = False        #Si se crea la partición extendida será True
         self.ext_ini = 0         #El inicio de la partición extendida
         self.ext_fin = 0         #El fin de la partición extendida
 
-        self.acciones = []
-        self.fila_selec = None
+        self.acciones = []      # Almacena las acciones pendientes a realizar
+        self.fila_selec = None  # Ultima fila seleccionada de la tabla
 
-        self.data = data
+
         self.lista = []
         self.disco = data['disco']
+        self.ini = data['inicio']
+        self.fin = data['fin']
 
 #===============================================================================
 #        if data['metodo'] != 'todo' and data['metodo'] != 'vacio':
@@ -90,9 +93,11 @@ class Main(gtk.Fixed):
 #            data['fin'] = str(data['fin']) + 'kB'
 #===============================================================================
 
-        self.ini = data['inicio']
-        self.fin = data['fin']
+        # Llevar los botones a su estado inicial
+        self.btn_eliminar.set_sensitive(False)
+        self.btn_nueva.set_sensitive(False)
 
+        # Llenar la tabla con el contenido actual del disco
         if self.tabla != None:
 
             l_part = particiones.Main().lista_particiones(self.disco)
@@ -134,7 +139,6 @@ class Main(gtk.Fixed):
 
         # btn_eliminar
         self.btn_eliminar = gtk.Button(msj.gui.btn_part_eliminar)
-        self.btn_eliminar.set_sensitive(False)
         #self.btn_nueva.set_size_request(200, 30)
         self.btn_eliminar.show()
         self.put(self.btn_eliminar, 365, 245)
@@ -142,7 +146,6 @@ class Main(gtk.Fixed):
 
         # btn_nueva
         self.btn_nueva = gtk.Button(msj.gui.btn_part_nueva)
-        self.btn_nueva.set_sensitive(False)
         self.btn_nueva.set_size_request(200, 30)
         self.btn_nueva.show()
         self.put(self.btn_nueva, 0, 245)
@@ -243,65 +246,69 @@ class Main(gtk.Fixed):
         part_nueva.Main(self)
 
     def deshacer(self, widget=None):
-        if self.lista[0][1] == msj.particion.libre:
-            return False
-        if self.lista[-1][1] == msj.particion.libre:
-            self.lista.pop()
-        if self.lista[-1][1] == msj.particion.extendida_libre:
-            self.lista.pop()
-        if self.lista[-1][1] == msj.particion.logica:
-            self.bext = True
-        else:
-            self.bext = False
+#===============================================================================
+#        if self.lista[0][1] == msj.particion.libre:
+#            return False
+#        if self.lista[-1][1] == msj.particion.libre:
+#            self.lista.pop()
+#        if self.lista[-1][1] == msj.particion.extendida_libre:
+#            self.lista.pop()
+#        if self.lista[-1][1] == msj.particion.logica:
+#            self.bext = True
+#        else:
+#            self.bext = False
+# 
+#        tipo = self.lista[-1][1]
+#        fin = self.lista[-1][6]
+# 
+#        self.lista.pop()
+# 
+#        if tipo == msj.particion.extendida:
+#            inicio = self.ext_ini
+#            fin = self.ext_fin
+#        elif tipo == msj.particion.logica and self.bext == True:
+#            if self.lista[-1][1] == msj.particion.extendida:
+#                inicio = self.lista[-1][5]
+#            else:
+#                inicio = self.lista[-1][6]
+#            fin = self.ext_fin
+#        elif tipo == msj.particion.primaria:
+#            try:
+#                inicio = self.lista[-1][6]
+#            except:
+#                inicio = gen.kb(self.ini)
+#            fin = gen.kb(self.fin)
+# 
+#        if self.bext == True:
+#            tamano = gen.hum(fin - inicio)
+#            particion = [self.disco, #Dispositivo
+#                         msj.particion.extendida_libre, #Formato
+#                         '', #Tipo
+#                         '', #Punto de montaje
+#                         tamano, #Tamaño
+#                         inicio, #inicio
+#                         fin]                       #fin
+#            self.lista.append(particion)
+# 
+# 
+#        if fin != self.fin:
+#            try:
+#                inicio = self.lista[-1][6]
+#            except:
+#                inicio = gen.kb(self.ini)
+#            fin = gen.kb(self.fin)
+#            tamano = gen.hum(fin - inicio)
+#            particion = [self.disco, #Dispositivo
+#                         msj.particion.libre, #Formato
+#                         '', #Tipo
+#                         '', #Punto de montaje
+#                         tamano, #Tamaño
+#                         inicio, #inicio
+#                         fin]               #fin
+#            self.lista.append(particion)
+#===============================================================================
 
-        tipo = self.lista[-1][1]
-        fin = self.lista[-1][6]
-
-        self.lista.pop()
-
-        if tipo == msj.particion.extendida:
-            inicio = self.ext_ini
-            fin = self.ext_fin
-        elif tipo == msj.particion.logica and self.bext == True:
-            if self.lista[-1][1] == msj.particion.extendida:
-                inicio = self.lista[-1][5]
-            else:
-                inicio = self.lista[-1][6]
-            fin = self.ext_fin
-        elif tipo == msj.particion.primaria:
-            try:
-                inicio = self.lista[-1][6]
-            except:
-                inicio = gen.kb(self.ini)
-            fin = gen.kb(self.fin)
-
-        if self.bext == True:
-            tamano = gen.hum(fin - inicio)
-            particion = [self.disco, #Dispositivo
-                         msj.particion.extendida_libre, #Formato
-                         '', #Tipo
-                         '', #Punto de montaje
-                         tamano, #Tamaño
-                         inicio, #inicio
-                         fin]                       #fin
-            self.lista.append(particion)
-
-
-        if fin != self.fin:
-            try:
-                inicio = self.lista[-1][6]
-            except:
-                inicio = gen.kb(self.ini)
-            fin = gen.kb(self.fin)
-            tamano = gen.hum(fin - inicio)
-            particion = [self.disco, #Dispositivo
-                         msj.particion.libre, #Formato
-                         '', #Tipo
-                         '', #Punto de montaje
-                         tamano, #Tamaño
-                         inicio, #inicio
-                         fin]               #fin
-            self.lista.append(particion)
+        self.inicializar(self.data)
 
         self.llenar_tabla(self.lista)
 
