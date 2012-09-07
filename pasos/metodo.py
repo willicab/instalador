@@ -20,7 +20,7 @@ class Main(gtk.Fixed):
     libres = []
     metodos = {}
     cfg = {}
-    minimo = '1GB'
+    minimo = gen.h2kb('1GB')
     lbl_info = gtk.Label('')
     cmb_discos = gtk.combo_box_new_text()
     cmb_metodo = gtk.combo_box_new_text()
@@ -101,27 +101,28 @@ class Main(gtk.Fixed):
         i = 0
         self.metodos = {}
         self.cmb_metodo.get_model().clear()
-        total = gen.h2kb(self.total)
-        minimo = gen.h2kb(self.minimo)
-        tini = float(self.particiones[0][1][:-2].replace(',', '.'))
-        tfin = float(self.particiones[0][2][:-2].replace(',', '.'))
+        total = self.total
+        minimo = self.minimo
+        tini = self.particiones[0][1]
+        tfin = self.particiones[0][2]
 
         for t in self.particiones:
-            ini = float(t[1][:-2].replace(',', '.'))
-            fin = float(t[2][:-2].replace(',', '.'))
+            ini = t[1]
+            fin = t[2]
             if tini > ini: tini = ini
             if tfin < fin: tfin = fin
-            if t[5] == 'primary': i += 1
+            if t[5] == 'primary' and t[4] != 'free':
+                i += 1
 
         if total > minimo:
             self.metodos['MANUAL'] = 'Instalar editando particiones manualmente'
 
             if i < 4:
                 for p in self.particiones:
-                    tam = gen.h2kb(p[3])
-                    libre = gen.h2kb(p[8])
-                    ini = gen.h2kb(p[1])
-                    fin = gen.h2kb(p[2])
+                    tam = p[3]
+                    libre = p[8]
+                    ini = p[1]
+                    fin = p[2]
                     part = p[0]
                     fs = p[5]
 
