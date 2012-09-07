@@ -4,11 +4,14 @@ import gtk
 import clases.general as gen
 
 class Main(gtk.Dialog):
+
     inicio = 0
     fin = 0
+
     def __init__(self, padre):
         gtk.Window.__init__(self, gtk.WINDOW_TOPLEVEL)
         gtk.Window.set_position(self, gtk.WIN_POS_CENTER_ALWAYS)
+
         self.set_title("Nueva Partición")
         self.padre = padre
         self.set_size_request(400, 200)
@@ -28,6 +31,7 @@ class Main(gtk.Dialog):
         #    self.fin = gen.kb(self.padre.ext_fin)
         #=======================================================================
 
+        # Toma el inicio y fin de la particion seleccionada
         self.inicio = self.padre.fila_selec[5]
         self.fin = self.padre.fila_selec[6]
 
@@ -74,7 +78,7 @@ class Main(gtk.Dialog):
         self.cmb_tipo.set_size_request(100, 30)
         self.cont.put(self.cmb_tipo, 145, 35)
 
-        if padre.bext == True:
+        if self.padre.bext == True:
             self.cmb_tipo.append_text('Lógica')
             self.cmb_tipo.set_sensitive(False)
         else:
@@ -126,7 +130,7 @@ class Main(gtk.Dialog):
         self.agregar('/usr/local')
         self.cmb_montaje.append_text('Ninguno')
         self.cmb_montaje.append_text('Escoger manualmente')
-        self.cmb_montaje.set_active(0)
+        self.cmb_montaje.set_active(False)
         self.cmb_montaje.connect("changed", self.cmb_montaje_on_changed)
         self.cmb_montaje.show()
 
@@ -309,8 +313,9 @@ class Main(gtk.Dialog):
         agregarlos a la lista del combobox'''
 
         data = self.padre.lista
-        aparece = False
         assert isinstance(data, list) or isinstance(data, tuple)
+
+        aparece = False
         for fila in data:
             if fila[3] == punto:
                 aparece = True
