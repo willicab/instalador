@@ -16,14 +16,20 @@ class Main():
         for i in c:
             if i.get_devtype() == 'disk':
                 if i.get_property('ID_TYPE') == 'disk':
-                    l.append(i.get_device_file())
+                    try:
+                        e = Drive(i.get_device_file())
+                    except Exception as x:
+                        e = False
+                        print x
+                    if e:
+                        l.append(i.get_device_file())
         return l
 
     def usado(self, particion):
         if os.path.exists(particion):
             salida = commands.getstatusoutput('mount {0} /mnt'.format(particion))
             s = os.statvfs('/mnt')
-            used = float(((s.f_blocks - s.f_bfree) * s.f_frsize)/1024)
+            used = float(((s.f_blocks - s.f_bfree) * s.f_frsize) / 1024)
             salida = commands.getstatusoutput('umount {0}'.format(particion))
         else:
             used = 'unknown'
@@ -37,7 +43,7 @@ class Main():
         p = []
         d = Drive(disco)
         sectorsize = d.sectorSize
-        total = float(d.getSize(unit = 'KB'))
+        total = float(d.getSize(unit='KB'))
 
         for j in d.disk.partitions: l.append(j)
         for w in d.disk.getFreeSpacePartitions(): l.append(w)
@@ -45,9 +51,9 @@ class Main():
         for i in l:
             code = i.type
             part = i.path
-            ini = float(i.geometry.start*sectorsize/1024)
-            fin = float(i.geometry.end*sectorsize/1024)
-            tam = float(i.geometry.length*sectorsize/1024)
+            ini = float(i.geometry.start * sectorsize / 1024)
+            fin = float(i.geometry.end * sectorsize / 1024)
+            tam = float(i.geometry.length * sectorsize / 1024)
             num = int(i.number)
             preusado = self.usado(part)
             usado = tam
