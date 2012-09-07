@@ -38,7 +38,6 @@ class Main():
         self.par.accion('Eliminando Particiones')
         gen.desmontar(self.disco)     # Desmonta todas las particiones del disco
         p = self.part.lista_particiones(self.disco)
-        print self.ini, self.fin
         if self.vacio == False:
             for s in p:
                 num = s[10]
@@ -56,7 +55,7 @@ class Main():
         disco = self.disco                  # Ruta del disco
         ram = int(gen.ram())                # Cantidad de Ram
         swap = (ram * 2) if ram < 1048576 else ram #tamaño de la swap
-        fin_ext  = int(fin)                 # Fin de la partición Extendida
+        fin_ext = int(fin)                 # Fin de la partición Extendida
         ini_ext = fin_ext - swap            # Inicio de la partición Extendida
         ini_swap = ini_ext + 32             # Inicio de la partición Swap
         fin_swap = fin_ext                  # Fin de la partición Swap
@@ -66,7 +65,7 @@ class Main():
         self.par.accion('Creando Particiones')
         self.part.particionar(disco, 'primary', 'ext4', ini_root, fin_root)
         self.part.particionar(disco, 'extended', '', ini_ext, fin_ext)
-        self.part.particionar(disco, 'logical', 'linux-swap', ini_swap,fin_swap)
+        self.part.particionar(disco, 'logical', 'linux-swap', ini_swap, fin_swap)
 
         p = self.part.lista_particiones(self.disco)
         for s in p:
@@ -83,7 +82,7 @@ class Main():
                 self.particiones_montadas[s[0]] = '/target'
                 self.particiones_montadas2[s[0]] = '/target'
                 os.system("parted {0} toggle {1} boot".format(s[0][:-1], s[0][-1:]))
-                particion_boot=s[0]
+                particion_boot = s[0]
 
             if str(ini_swap) in l:
                 self.par.accion('Formateando partición {0} como swap'\
@@ -118,7 +117,7 @@ class Main():
         ini_root = int(ini)                   # Inicio de la particion Root
         fin_root = ini_root + int(gen.kb(self.root_p2))#Fin de la partición Root
         ini_ext = (int(fin_root) + 32)        # Inicio de la partición Extendida
-        fin_ext  = (int(fin))                 # Fin de la partición Extendida
+        fin_ext = (int(fin))                 # Fin de la partición Extendida
         ini_home = ini_ext + 32               # Inicio de la partición Home
         fin_home = fin_ext - swap             # Fin de la partición Home
         ini_swap = fin_ext - swap + 32        # Inicio de la partición Swap
@@ -128,7 +127,7 @@ class Main():
         self.part.particionar(disco, 'primary', 'ext4', ini_root, fin_root)
         self.part.particionar(disco, 'extended', '', ini_ext, fin_ext)
         self.part.particionar(disco, 'logical', 'ext4', ini_home, fin_home)
-        self.part.particionar(disco, 'logical', 'linux-swap', ini_swap,fin_swap)
+        self.part.particionar(disco, 'logical', 'linux-swap', ini_swap, fin_swap)
 
         p = self.part.lista_particiones(disco)
         for s in p:
@@ -137,7 +136,6 @@ class Main():
             l = [str(int(float(s[1][:-2].replace(',', '.'))) + 0), \
                 str(int(float(s[1][:-2].replace(',', '.'))) + 1), \
                 str(int(float(s[1][:-2].replace(',', '.'))) - 1)]
-            print  ini_root, ini_home, ini_swap, l
 
             if str(ini_root) in l:
                 self.par.accion('Formateando partición {0} como ext4'\
@@ -146,7 +144,7 @@ class Main():
                 self.particiones_montadas[s[0]] = '/target'
                 self.particiones_montadas2[s[0]] = '/target'
                 os.system("parted {0} toggle {1} boot".format(s[0][:-1], s[0][-1:]))
-                particion_boot=s[0]
+                particion_boot = s[0]
 
             if str(ini_home) in l:
                 self.par.accion('Formateando partición {0} como ext4'\
@@ -188,7 +186,7 @@ class Main():
         ini_boot = int(ini)                 # Inicio de la particion Boot
         fin_boot = int(ini_boot + gen.kb(self.boot)) # Fin de la particion Boot
         ini_ext = int(fin_boot) + 32        # Inicio de la partición Extendida
-        fin_ext  = int(fin)                 # Fin de la partición Extendida
+        fin_ext = int(fin)                 # Fin de la partición Extendida
         ini_root = int(ini_ext + 32)        # Inicio de la particion Root
         fin_root = int(ini_root + int(gen.kb(self.root_p3)))# Fin de la Root
         ini_usr = int(fin_root + 32)        # Inicio de la partición Usr
@@ -204,7 +202,7 @@ class Main():
         self.part.particionar(disco, 'logical', 'ext4', ini_usr, fin_usr)
         self.part.particionar(disco, 'logical', 'ext4', ini_root, fin_root)
         self.part.particionar(disco, 'logical', 'ext4', ini_home, fin_home)
-        self.part.particionar(disco, 'logical', 'linux-swap', ini_swap,fin_swap)
+        self.part.particionar(disco, 'logical', 'linux-swap', ini_swap, fin_swap)
 
         p = self.part.lista_particiones(disco)
         for s in p:
@@ -213,7 +211,6 @@ class Main():
             l = [str(int(float(s[1][:-2].replace(',', '.'))) + 0), \
                 str(int(float(s[1][:-2].replace(',', '.'))) + 1), \
                 str(int(float(s[1][:-2].replace(',', '.'))) - 1)]
-            print  s[0], ini_boot, ini_root, ini_usr, ini_home, ini_swap, l
 
             if str((ini_boot)) in l:
                 self.par.accion('Formateando partición {0} (/boot) como ext2'\
@@ -222,7 +219,7 @@ class Main():
                 self.particiones_montadas[s[0]] = '/target/boot'
                 self.particiones_montadas2[s[0]] = '/target/boot'
                 os.system("parted {0} toggle {1} boot".format(s[0][:-1], s[0][-1:]))
-                particion_boot=s[0]
+                particion_boot = s[0]
 
             if str((ini_root)) in l:
                 self.par.accion('Formateando partición {0} (/) como ext4'\
@@ -251,7 +248,7 @@ class Main():
                 os.system('mkswap {0}'.format(s[0]))
                 os.system('swapon {0}'.format(s[0]))
         gen.montar(self.particiones_montadas)
-        #print self.particiones_montadas2
+
         return [self.particiones_montadas2, particion_boot]
 
     def particion_4(self):

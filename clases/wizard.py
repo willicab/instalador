@@ -58,7 +58,7 @@ class Wizard(gtk.Window):
         # Creo la ventana
         gtk.Window.__init__(self, gtk.WINDOW_TOPLEVEL)
         gtk.Window.set_position(self, gtk.WIN_POS_CENTER_ALWAYS)
-        self.set_icon_from_file('data/canaima.png')
+        self.set_icon_from_file('data/img/icon.png')
         self.titulo = titulo
         self.set_title(titulo)
         self.set_size_request(ancho, alto)
@@ -96,23 +96,21 @@ class Wizard(gtk.Window):
 
         # Anterior
         self.anterior = gtk.Button(stock=gtk.STOCK_GO_BACK)
-        self.botonera.put(self.anterior, (ancho - 180), 10)
-        self.anterior.set_size_request(80, 30)
+        self.botonera.put(self.anterior, (ancho - 210), 10)
+        self.anterior.set_size_request(100, 30)
 
         # Siguiente
         self.siguiente = gtk.Button(stock=gtk.STOCK_GO_FORWARD)
-        self.botonera.put(self.siguiente, (ancho - 90), 10)
-        self.siguiente.set_size_request(80, 30)
+        self.botonera.put(self.siguiente, (ancho - 110), 10)
+        self.siguiente.set_size_request(100, 30)
 
         # Cancelar
         self.cancelar = gtk.Button(stock=gtk.STOCK_CANCEL)
         self.botonera.put(self.cancelar, 10, 10)
-        self.cancelar.set_size_request(80, 30)
+        self.cancelar.set_size_request(100, 30)
         self.cancelar.connect("clicked", self.close)
 
         self.show_all()
-
-	self.show_all()
 
     def mostrar_barra(self):
         '''

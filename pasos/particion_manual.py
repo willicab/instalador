@@ -6,6 +6,7 @@ import clases.general as gen
 import clases.particiones
 import clases.particion_nueva as part_nueva
 import clases.tabla_particiones
+from clases import particiones
 
 class Main(gtk.Fixed):
     part = clases.particiones.Main()
@@ -21,56 +22,56 @@ class Main(gtk.Fixed):
     ext_fin = 0         #El fin de la partición extendida
 
     def iniciar(self, data):
-        data = data[0]
+        '''
+        Inicia el llenado de la tabla
+        '''
+
         self.data = data
         self.lista = []
         self.disco = data['disco'] if data['disco'] != '' \
                      else data['particion'][:-1]
-        if data['metodo'] != 'todo' and data['metodo'] != 'vacio' :
+
+        if data['metodo'] != 'todo' and data['metodo'] != 'vacio':
             self.ini = data['nuevo_fin']
         else:
-            self.ini = 1049                          # Inicio de la partición
+            self.ini = 1049                            # Inicio de la partición
+
         if str(data['fin'])[-2:] != 'kB':
             data['fin'] = str(data['fin']) + 'kB'
+
         self.fin = int(float(gen.kb(gen.hum(data['fin']))))
-        float(gen.kb(gen.hum(data['fin']))), int(float(gen.kb(gen.hum(data['fin']))))
+
         if str(data['fin'])[-2:] != 'kB':
             data['fin'] = str(data['fin']) + 'kB'
+
         self.fin = data['fin']
 
         if self.tabla != None:
-            tamano = gen.hum(gen.kb(self.fin) - gen.kb(self.ini))
-            inicio = self.ini
-            fin = gen.kb(self.fin)
-            libre = [self.disco, #Dispositivo
-                     'Espacio Libre', #Tipo
-                     '', #Formato
-                     '', #Punto de montaje
-                     tamano, #Tamaño
-                     inicio, #inicio
-                     fin]                       #fin
-            self.lista.append(libre)
+
+            l_part = particiones.Main().lista_particiones(self.disco)
+            for particion in l_part:
+                p_disp = particion[0]
+                p_ini = particion[1]
+                p_fin = particion[2]
+                p_tam = particion[3]
+                p_format = particion[4]
+                p_tipo = particion[5]
+
+                fila = [
+                       p_disp,
+                       p_tipo + '',
+                       p_format + '',
+                       '', # Punto de montaje
+                       gen.hum(gen.kb(p_tam)),
+                       gen.kb(p_ini),
+                       gen.kb(p_fin)
+                   ]
+                self.lista.append(fila)
 
             self.llenar_tabla(self.lista)
 
     def __init__(self, data):
         gtk.Fixed.__init__(self)
-        self.iniciar(data)
-        data = data[0]
-#        self.data = data
-#        self.disco = data['disco'] if data['disco'] != '' \
-#                     else data['particion'][:-1]
-#        if data['metodo'] != 'todo' and data['metodo'] != 'vacio' :
-#            self.ini = data['nuevo_fin']
-#        else:
-#            self.ini = 1049                          # Inicio de la partición
-#        if data['fin'][-2:] != 'kB':
-#            data['fin'] = data['fin'] + 'kB'
-#        self.fin = int(float(gen.kb(gen.hum(data['fin']))))
-#        float(gen.kb(gen.hum(data['fin']))), int(float(gen.kb(gen.hum(data['fin']))))
-#        if data['fin'][-2:] != 'kB':
-#            data['fin'] = data['fin'] + 'kB'
-#        self.fin = data['fin']
 
         self.tabla = clases.tabla_particiones.TablaParticiones()
         #self.tabla.set_doble_click(self.activar_tabla);
@@ -78,7 +79,7 @@ class Main(gtk.Fixed):
 
         self.scroll = gtk.ScrolledWindow()
         self.scroll.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
-        self.scroll.set_size_request(590, 240)
+        self.scroll.set_size_request(690, 240)
         self.scroll.add(self.tabla)
         self.put(self.scroll, 0, 0)
         self.tabla.show()
@@ -96,19 +97,7 @@ class Main(gtk.Fixed):
         self.put(self.btn_deshacer, 205, 245)
         self.btn_deshacer.connect("clicked", self.deshacer)
 
-        tamano = gen.hum(gen.kb(self.fin) - gen.kb(self.ini))
-        inicio = self.ini
-        fin = gen.kb(self.fin)
-        libre = [self.disco, # 0 Dispositivo
-                 'Espacio Libre', # 1 Tipo
-                 '', # 2 Formato
-                 '', # 3 Punto de montaje
-                 tamano, # 4 Tamaño
-                 inicio, # 5 inicio
-                 fin]                       # 6 fin
-        self.lista.append(libre)
-
-        self.llenar_tabla(self.lista)
+        self.iniciar(data)
 
     def llenar_tabla(self, data=None):
         if self.data['metodo'] == 'todo':
@@ -118,6 +107,7 @@ class Main(gtk.Fixed):
                 if p[4] == 'primary':
                     self.primarias = self.primarias + 1
         self.tabla.liststore.clear()
+
         assert isinstance(data, list) or isinstance(data, tuple)
         for fila in data:
             self.tabla.agregar_fila(fila)
@@ -125,7 +115,7 @@ class Main(gtk.Fixed):
                 self.raiz = True
             if fila[1] == 'Primaria' or fila[1] == 'Extendida':
                 self.primarias = self.primarias + 1
-        print 'Particiones Primarias: ' + str(self.primarias)
+
         if len(data) == 1 and fila[1] == 'Espacio Libre':
             self.btn_deshacer.set_sensitive(False)
         else:

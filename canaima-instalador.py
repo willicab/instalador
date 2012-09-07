@@ -14,8 +14,13 @@ from clases.wizard import Wizard
 from clases.constructor import UserMessage
 from clases.translator import MAIN_ROOT_ERROR_MSG, MAIN_ROOT_ERROR_TITLE
 
+<<<<<<< HEAD
 CFG = {'next': -1, 'prev': -1}
 BANNER = 'data/banner-app-top.png'
+=======
+CFG = {'next':-1, 'prev':-1}
+BANNER = 'data/img/banner.png'
+>>>>>>> 4d0a2a8ab9b215255cadb077c9047729a130a04f
 
 def aconnect(button, function, bid, params):
     '''
@@ -94,29 +99,38 @@ class Metodo():
         '''
         CFG['metodo'] = WIZ.formulario('Metodo').metodo
         print 'El metodo de instalación escogido es: {0}'.format(CFG['metodo'])
-        
-        if CFG['metodo'] == 'manual':
-            pass
 
-        elif CFG['metodo'] == 'todo':
-            CFG['disco'] = WIZ.formulario('Metodo').disco
-            CFG['inicio'] = 0
-            CFG['fin'] = 0
-            print 'CFG: {0}\n'.format(CFG)
-            PartTodo(CFG)
-
-        elif CFG['metodo'] == 'vacio':
+        if CFG['metodo'].split(':')[0] == 'MANUAL':
             CFG['disco'] = WIZ.formulario('Metodo').disco
             CFG['inicio'] = WIZ.formulario('Metodo').ini
+            CFG['fin'] = WIZ.formulario('Metodo').fin
+            #TODO: Todavía no se por qué hago esto pero ahí va:
+            CFG['nuevo_fin'] = 1049
+
+            print 'CFG: {0}\n'.format(CFG)
+            PartManual(CFG)
+
+        elif CFG['metodo'].split(':')[0] == 'TODO':
+            CFG['disco'] = WIZ.formulario('Metodo').disco
+            CFG['ini'] = WIZ.formulario('Metodo').ini
             CFG['fin'] = WIZ.formulario('Metodo').fin
             print 'CFG: {0}\n'.format(CFG)
             PartTodo(CFG)
 
-        else:
-            CFG['particion'] = WIZ.formulario('Metodo').metodo
-            CFG['disco'] = ''
+        elif CFG['metodo'].split(':')[0] == 'LIBRE':
+            CFG['disco'] = WIZ.formulario('Metodo').disco
+            CFG['ini'] = WIZ.formulario('Metodo').ini
+            CFG['fin'] = WIZ.formulario('Metodo').fin
+            print 'CFG: {0}\n'.format(CFG)
+            PartTodo(CFG)
+
+        elif CFG['metodo'].split(':')[0] == 'REDIM':
+            CFG['particion'] = CFG['metodo'].split(':')[0]
             print 'CFG: {0}\n'.format(CFG)
             PartAuto(CFG)
+
+        else:
+            pass
 
     def anterior(self, CFG):
         '''
@@ -128,7 +142,7 @@ class PartAuto():
     '''
         Inicia el paso que redimensiona la partición
     '''
-    def __init__(self, particion):
+    def __init__(self, CFG):
 
         if WIZ.indice(WIZ.nombres, 'ParticionAuto') == -1:
             a = WIZ.agregar('ParticionAuto', particion_auto.Main(particion))
@@ -169,48 +183,47 @@ class PartTodo():
     '''
         Inicia el paso que particiona el disco
     '''
-    def __init__(self, disco, ini, fin):
-        global ID_SIGUIENTE, ID_ANTERIOR, CFG
-        self.disco = disco
-        if WIZ.indice(WIZ.nombres, 'PartTodo') == -1:
-            WIZ.agregar('PartTodo', particion_todo.Main(disco, ini, fin))
-        WIZ.mostrar('PartTodo')
+    def __init__(self, CFG):
 
+        self.disco = CFG['disco']
+        self.ini = CFG['ini']
+        self.fin = CFG['fin']
+
+        if WIZ.indice(WIZ.nombres, 'PartTodo') == -1:
+            a = WIZ.agregar('PartTodo',
+                particion_todo.Main(self.disco, self.ini, self.fin)
+                )
+
+        m = WIZ.mostrar('PartTodo')
         c = aconnect(WIZ.siguiente, self.siguiente, CFG['next'], CFG)
         c = aconnect(WIZ.anterior, self.anterior, CFG['prev'], CFG)
 
-        WIZ.formulario('PartTodo').iniciar(disco, ini, fin)
-
-    def siguiente(self, widget=None):
+    def siguiente(self, CFG):
         '''
             Función para el evento del botón siguiente
         '''
-        frm_part_todo = WIZ.formulario('PartTodo')
-        CFG['inicio'] = frm_part_todo.ini
-        CFG['fin'] = frm_part_todo.fin
-        CFG['tipo'] = frm_part_todo.metodo
-        if CFG['tipo'] == 'particion_4':
-            data = [CFG]
-            PartManual(data)
-        else:
-            Usuario()
+        CFG['ini'] = WIZ.formulario('PartTodo').ini
+        CFG['fin'] = WIZ.formulario('PartTodo').fin
+        CFG['tipo'] = WIZ.formulario('PartTodo').metodo
 
-    def anterior(self, widget=None):
+        if CFG['tipo'] == 'particion_4':
+            PartManual(CFG)
+        else:
+            Usuario(CFG)
+
+    def anterior(self, CFG):
         '''
             Función para el evento del botón anterior
         '''
-        Metodo()
+        Metodo(CFG)
 
 class PartManual():
     '''
-        Inicia el paso que particiona el disco
+        Inicia el paso que particiona el disco de forma manual
     '''
     def __init__(self, data):
-        global ID_SIGUIENTE, ID_ANTERIOR, CFG
         if WIZ.indice(WIZ.nombres, 'PartManual') == -1:
             WIZ.agregar('PartManual', particion_manual.Main(data))
-        frm_manual = WIZ.formulario('PartManual')
-        frm_manual.iniciar(data)
         WIZ.mostrar('PartManual')
 
         c = aconnect(WIZ.siguiente, self.siguiente, CFG['next'], CFG)
@@ -226,13 +239,13 @@ class PartManual():
         if frm_part_manual.raiz == False:
             self.msg_error("Debe existir una partición raiz (/)")
             return
-        Usuario()
+        Usuario(CFG)
 
     def anterior(self, widget=None):
         '''
             Función para el evento del botón anterior
         '''
-        Metodo()
+        Metodo(CFG)
 
     def msg_error(self, mensaje):
         '''
@@ -250,16 +263,16 @@ class Usuario():
     '''
         Inicia el paso que crea el usuario del sistema
     '''
-    def __init__(self):
-        global ID_SIGUIENTE, ID_ANTERIOR, CFG
-        if WIZ.indice(WIZ.nombres, 'UsuarioRoot') == -1:
-            WIZ.agregar('UsuarioRoot', usuario.Main())
-        WIZ.mostrar('UsuarioRoot')
+    def __init__(self, CFG):
 
+        if WIZ.indice(WIZ.nombres, 'UsuarioRoot') == -1:
+            a = WIZ.agregar('UsuarioRoot', usuario.Main())
+
+        m = WIZ.mostrar('UsuarioRoot')
         c = aconnect(WIZ.siguiente, self.siguiente, CFG['next'], CFG)
         c = aconnect(WIZ.anterior, self.anterior, CFG['prev'], CFG)
 
-    def siguiente(self, widget=None):
+    def siguiente(self, CFG):
         '''
             Función para el evento del botón siguiente
         '''
@@ -300,7 +313,7 @@ class Usuario():
                 return
         Accesibilidad()
 
-    def anterior(self, widget=None):
+    def anterior(self, CFG):
         '''
             Función para el evento del botón anterior
         '''
@@ -399,12 +412,19 @@ class Instalacion():
 if __name__ == "__main__":
     if os.geteuid() != 0:
         dialog = UserMessage(
-            message = MAIN_ROOT_ERROR_MSG, title = MAIN_ROOT_ERROR_TITLE,
-            mtype = gtk.MESSAGE_ERROR, buttons = gtk.BUTTONS_OK,
-            c_1 = gtk.RESPONSE_OK, f_1 = sys.exit, p_1 = (1,)
+            message=MAIN_ROOT_ERROR_MSG, title=MAIN_ROOT_ERROR_TITLE,
+            mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
+            c_1=gtk.RESPONSE_OK, f_1=sys.exit, p_1=(1,)
             )
     else:
+<<<<<<< HEAD
 		WIZ = Wizard(700, 550, "Canaima Instalador", BANNER)
 		app = Bienvenida(CFG)
 		gtk.main()
 		sys.exit()
+=======
+        WIZ = Wizard(700, 450, "Canaima Instalador", BANNER)
+        app = Bienvenida(CFG)
+        gtk.main()
+        sys.exit()
+>>>>>>> 4d0a2a8ab9b215255cadb077c9047729a130a04f

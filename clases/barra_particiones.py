@@ -4,134 +4,117 @@ import gtk
 import cairo
 import clases.general as gen
 import gobject
+from math import pi
 
 class Main(gtk.DrawingArea):
-    #usado = ''
-    #particion = ''
+
     def __init__(self, parent):
         super(Main, self).__init__()
         self.par = parent
-        self.set_events(gtk.gdk.POINTER_MOTION_MASK |
-                      gtk.gdk.POINTER_MOTION_HINT_MASK |
-                      gtk.gdk.BUTTON_PRESS_MASK |
-                	  gtk.gdk.BUTTON_RELEASE_MASK )
+        self.set_events(
+            gtk.gdk.POINTER_MOTION_MASK | gtk.gdk.POINTER_MOTION_HINT_MASK |
+            gtk.gdk.BUTTON_PRESS_MASK | gtk.gdk.BUTTON_RELEASE_MASK
+            )
         self.connect("expose-event", self.expose)
-    
+
     def expose(self, widget=None, event=None):
-        #self.window.clear()
-        cr = self.window.cairo_create()
-        cr.set_line_width(0.8)
-
-        #cr.select_font_face('Verdana', 
-        #    cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_NORMAL)
-        cr.set_font_size(12)
-
-        #establece ancho y alto
-        self.ancho = self.get_size_request()[0]
-        self.alto = self.get_size_request()[1]
-        self.particiones = self.par.particiones
+        # Establece ancho y alto
+        self.ancho = gen.h2kb(self.get_size_request()[0])
+        self.alto = gen.h2kb(self.get_size_request()[1])
         self.total = gen.h2kb(self.par.total)
-        
-        cr.set_source_rgb(1.0, 1.0, 1.0)
+        self.particiones = self.par.particiones
+        w = 0
+
+        cr = self.window.cairo_create()
         cr.rectangle(0, 0, self.ancho, self.alto)
+        cr.set_source_rgb(0.925490196, 0.91372549, 0.847058824)
         cr.fill()
-        
+
+#       print 'part, ini, fin, tam, fs, tipo, flags, usado, libre, total, num'
+
         for p in self.particiones:
-            w = ((float(gen.kb(p[3])) * float(self.ancho)) / float(self.total)) - 2
-            h = self.alto if p[4] != 'logical' else self.alto - 8
-            x = ((float(gen.kb(p[1])) * float(self.ancho)) / float(self.total)) + 1
-            y = 0  if p[4] != 'logical' else 4
-            #print p[0], p[4], p[5], w, h, x, y, self.ancho, gen.kb(self.total)
-            linear = self.color_fs(p[5], p[4])
-            cr.set_source(linear[0])
-            #cr.set_source_rgb(0.8, 0.8, 0.4)
-            cr.rectangle(x, y, w, h)
-            cr.fill()
-    def set_particion(self, particiones, total):
-        self.particion = particion
-        self.total = gen.h2kb(total)
-        
-    def color_fs(self, fs, tipo_part):
-        libre = None
-        usado = None
-        if fs == 'ntfs':
-            libre = cairo.LinearGradient(0, 0, 0, self.alto)
-            libre.add_color_stop_rgb(0, 0.5, 0.5, 0)
-            libre.add_color_stop_rgb(0.3, 0.7, 0.7, 0.3)
-            libre.add_color_stop_rgb(0.7, 1.0, 1.0, 0.7)
-            
-            usado = cairo.LinearGradient(0, 0, 0, self.alto)
-            usado.add_color_stop_rgb(0, 0.3, 0.3, 0)
-            usado.add_color_stop_rgb(0.3, 0.5, 0.5, 0.2)
-            usado.add_color_stop_rgb(0.7, 0.8, 0.8, 0.4)
+            ini = gen.h2kb(p[1])
+            fin = gen.h2kb(p[2])
+            tipo = p[5]
+            fs = p[4]
+
+            if tipo == 'logical':
+                y1 = 3
+                y2 = self.alto - 3
+            elif tipo == 'extended' or tipo == 'primary':
+                y1 = 0
+                y2 = self.alto
+
+            x1 = ((ini * self.ancho) / self.total) + 1
+            x2 = ((fin * self.ancho) / self.total) - 2
+
+            if x2 - x1 > 1.5:
+                self.draw_rounded(cr, (x1, y1, x2, y2), 5)
+                cr.set_source(self.set_color(fs))
+                cr.fill()
+
+    def draw_rounded(self, cr, area, radius):
+        x1, y1, x2, y2 = area
+        cr.arc(x1 + radius, y1 + radius, radius, 2*(pi/2), 3*(pi/2))
+        cr.arc(x2 - radius, y1 + radius, radius, 3*(pi/2), 4*(pi/2))
+        cr.arc(x2 - radius, y2 - radius, radius, 0*(pi/2), 1*(pi/2))
+        cr.arc(x1 + radius, y2 - radius, radius, 1*(pi/2), 2*(pi/2))
+        cr.close_path()
+
+    def hex_to_rgb(self, value):
+        value = value.lstrip('#')
+        lv = len(value)
+        return tuple(int(value[i:i+lv/3], 16) for i in range(0, lv, lv/3))
+
+    def process_color (self, item, start, end):
+        start = self.hex_to_rgb(start)+(0,)
+        end = self.hex_to_rgb(end)+(1,)
+
+        r1, g1, b1, pos = start
+        r3, g3, b3, pos = end
+        r2, g2, b2, pos = (int(r1+r3)/2, int(g1+g3)/2, int(b1+b3)/2, 0.5)
+        mid = (r2, g2, b2, pos)
+
+        for i in start, mid, end:
+            rgb = float(i[3]), float(i[0])/255, float(i[1])/255, float(i[2])/255
+            item.add_color_stop_rgb(*rgb)
+
+    def set_color(self, fs):
+        libre = cairo.LinearGradient(0, 0, 0, self.alto)
+
+        if fs == 'btrfs':
+            self.process_color(libre, '#ff5d2e', '#ff912e')
         elif fs == 'ext2':
-            #colores 0.6, 0.7, 0.8
-            libre = cairo.LinearGradient(0, 0, 0, self.alto)
-            libre.add_color_stop_rgb(0, 0.2, 0.3, 0.4)
-            libre.add_color_stop_rgb(0.3, 0.4, 0.5, 0.6)
-            libre.add_color_stop_rgb(0.7, 0.6, 0.7, 0.8)
-            
-            usado = cairo.LinearGradient(0, 0, 0, self.alto)
-            usado.add_color_stop_rgb(0, 0, 0.1, 0.2)
-            usado.add_color_stop_rgb(0.3, 0.2, 0.3, 0.4)
-            usado.add_color_stop_rgb(0.7, 0.4, 0.5, 0.6)
+            self.process_color(libre, '#2460c8', '#2e7bff')
         elif fs == 'ext3':
-            #colores 0.4, 0.5, 0.6
-            libre = cairo.LinearGradient(0, 0, 0, self.alto)
-            libre.add_color_stop_rgb(0, 0, 0.1, 0.2)
-            libre.add_color_stop_rgb(0.3, 0.2, 0.3, 0.4)
-            libre.add_color_stop_rgb(0.7, 0.4, 0.5, 0.6)
-            
-            usado = cairo.LinearGradient(0, 0, 0, self.alto)
-            usado.add_color_stop_rgb(0, 0.0, 0.05, 0.1)
-            usado.add_color_stop_rgb(0.3, 0.1, 0.2, 0.3)
-            usado.add_color_stop_rgb(0.7, 0.3, 0.4, 0.5)
+            self.process_color(libre, '#1b4794', '#2460c8')
         elif fs == 'ext4':
-            #colores 0.3, 0.4, 0.5
-            libre = cairo.LinearGradient(0, 0, 0, self.alto)
-            libre.add_color_stop_rgb(0, 0.0, 0.05, 0.1)
-            libre.add_color_stop_rgb(0.3, 0.1, 0.2, 0.3)
-            libre.add_color_stop_rgb(0.7, 0.3, 0.4, 0.5)
-            
-            usado = cairo.LinearGradient(0, 0, 0, self.alto)
-            usado.add_color_stop_rgb(0, 0.0, 0.0, 0.05)
-            usado.add_color_stop_rgb(0.3, 0.0, 0.1, 0.2)
-            usado.add_color_stop_rgb(0.7, 0.2, 0.3, 0.4)
-        elif fs == 'linux-swap(v1)':
-            #colores 0.7, 0.4, 0.3
-            libre = cairo.LinearGradient(0, 0, 0, self.alto)
-            libre.add_color_stop_rgb(0, 0.3, 0.05, 0.0)
-            libre.add_color_stop_rgb(0.3, 0.5, 0.2, 0.1)
-            libre.add_color_stop_rgb(0.7, 0.7, 0.4, 0.3)
-            
-            usado = cairo.LinearGradient(0, 0, 0, self.alto)
-            usado.add_color_stop_rgb(0, 0.0, 0.0, 0.05)
-            usado.add_color_stop_rgb(0.3, 0.0, 0.1, 0.2)
-            usado.add_color_stop_rgb(0.7, 0.2, 0.3, 0.4)
-        elif tipo_part == 'extended':
-            #colores 0.5, 0.1, 0.1
-            libre = cairo.LinearGradient(0, 0, 0, self.alto)
-            libre.add_color_stop_rgb(0, 0.5, 1.0, 1.0)
-            
-            usado = cairo.LinearGradient(0, 0, 0, self.alto)
-            usado.add_color_stop_rgb(0, 0.0, 0.0, 0.05)
-        elif fs == 'Free Space':
-            #colores 0.7, 0.4, 0.3
-            libre = cairo.LinearGradient(0, 0, 0, self.alto)
-            libre.add_color_stop_rgb(0.7, 0, 0, 0)
-            
-            usado = cairo.LinearGradient(0, 0, 0, self.alto)
-            usado.add_color_stop_rgb(0, 0.0, 0.0, 0.05)
-            usado.add_color_stop_rgb(0.3, 0.0, 0.1, 0.2)
-            usado.add_color_stop_rgb(0.7, 0.2, 0.3, 0.4)
-        else: 
-            libre = cairo.LinearGradient(0, 0, 0, self.alto)
-            libre.add_color_stop_rgb(0, 0.5, 0.5, 5)
-            libre.add_color_stop_rgb(0.3, 0.7, 0.7, 0.7)
-            libre.add_color_stop_rgb(0.7, 1.0, 1.0, 1.0)
-            
-            usado = cairo.LinearGradient(0, 0, 0, self.alto)
-            usado.add_color_stop_rgb(0, 0.3, 0.3, 0.3)
-            usado.add_color_stop_rgb(0.3, 0.5, 0.5, 0.5)
-            usado.add_color_stop_rgb(0.7, 0.8, 0.8, 0.8)
-        return [libre, usado]
+            self.process_color(libre, '#102b58', '#1b4794')
+        elif fs == 'fat16':
+            self.process_color(libre, '#00b900', '#00ff00')
+        elif fs == 'fat32':
+            self.process_color(libre, '#008100', '#00b900')
+        elif fs == 'ntfs':
+            self.process_color(libre, '#003800', '#008100')
+        elif fs == 'hfs+':
+            self.process_color(libre, '#382720', '#895f4d')
+        elif fs == 'hfs':
+            self.process_color(libre, '#895f4d', '#e49e80')
+        elif fs == 'jfs':
+            self.process_color(libre, '#e49e80', '#ffcfbb')
+        elif fs == 'swap':
+            self.process_color(libre, '#650000', '#cc0000')
+        elif fs == 'reiser4':
+            self.process_color(libre, '#45374f', '#806794')
+        elif fs == 'reiserfs':
+            self.process_color(libre, '#806794', '#b994d5')
+        elif fs == 'xfs':
+            self.process_color(libre, '#e89900', '#e8d000')
+        elif fs == 'free':
+            self.process_color(libre, '#ffffff', '#ffffff')
+        elif fs == 'extended':
+            self.process_color(libre, '#c9c9c9', '#c9c9c9')
+        elif fs == 'unknown':
+            self.process_color(libre, '#000000', '#000000')
+
+        return libre

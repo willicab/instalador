@@ -20,13 +20,13 @@ class Main(gtk.Fixed):
     libres = []
     metodos = {}
     cfg = {}
-    minimo = '1GB'
+    minimo = gen.h2kb('1GB')
     lbl_info = gtk.Label('')
     cmb_discos = gtk.combo_box_new_text()
     cmb_metodo = gtk.combo_box_new_text()
     barra_part = gtk.DrawingArea()
     part = clases.particiones.Main()
-  
+
     def __init__(self, parent):
         gtk.Fixed.__init__(self)
         self.par = parent
@@ -38,42 +38,46 @@ class Main(gtk.Fixed):
         self.discos = self.part.lista_discos()
         print 'Se han encontrado los siguientes discos: {0}'.format(self.discos)
 
-        self.cmb_discos.append_text('Seleccione el disco donde desea instalar')
+        self.lbl1 = gtk.Label('Seleccione el disco donde desea instalar Canaima:')
+        self.lbl1.set_size_request(690, 20)
+        self.lbl1.set_alignment(0, 0)
+        self.put(self.lbl1, 0, 0)
+
         for d in self.discos:
             self.cmb_discos.append_text(d)
         self.cmb_discos.set_active(0)
         self.cmb_discos.set_size_request(690, 30)
-        self.put(self.cmb_discos, 0, 0)
+        self.put(self.cmb_discos, 0, 25)
         self.cmb_discos.connect('changed', self.seleccionar_disco)
 
         self.barra_part = barra.Main(self)
         self.barra_part.set_size_request(690, 100)
-        self.put(self.barra_part, 0, 40)
+        self.put(self.barra_part, 0, 60)
 
-        self.cmb_metodo.append_text('Seleccione el método de instalación')
-        self.cmb_metodo.set_active(0)
+        self.lbl2 = gtk.Label('Seleccione el método de instalación:')
+        self.lbl2.set_size_request(690, 20)
+        self.lbl2.set_alignment(0, 0)
+        self.put(self.lbl2, 0, 165)
+
         self.cmb_metodo.set_size_request(690, 30)
-        self.put(self.cmb_metodo, 0, 150)
+        self.put(self.cmb_metodo, 0, 190)
         self.cmb_metodo.connect('changed', self.establecer_metodo)
 
-        self.lbl1 = gtk.Label('Información')
-        self.lbl1.set_size_request(690, 30)
-        self.lbl1.set_alignment(0, 0)
-        self.put(self.lbl1, 0, 190)
-
-        self.lbl_info = gtk.Label('Info')
-        self.lbl_info.set_size_request(690, 90)
-        self.lbl_info.set_alignment(0, 0)
-        self.put(self.lbl_info, 0, 220)
+        self.lbl4 = gtk.Label()
+        self.lbl4.set_size_request(690, 90)
+        self.lbl4.set_alignment(0, 0)
+        self.lbl4.set_line_wrap(True)
+        self.put(self.lbl4, 0, 225)
 
         self.show_all()
+        self.seleccionar_disco()
 
     def seleccionar_disco(self, widget=None):
         self.disco = self.cmb_discos.get_active_text()
         print '{0} seleccionado'.format(self.disco)
 
         self.particiones = self.part.lista_particiones(self.disco)
-        
+
         if len(self.particiones) == 0:
             MessageBox(self, self.par, self.disco)
         else:
@@ -83,70 +87,99 @@ class Main(gtk.Fixed):
             except:
                 pass
 
-            self.cfg['particion'] = self.particiones[0]
-            self.cfg['disco'] = self.disco
             self.lista_metodos()
             self.establecer_metodo()
             self.barra_part.show()
             self.cmb_metodo.show()
-            self.lbl_info.show()
+            self.lbl4.show()
 
     def lista_metodos(self):
         '''
             Crea una lista de los metodos de instalación disponibles para la
             partición
         '''
+        i = 0
         self.metodos = {}
         self.cmb_metodo.get_model().clear()
-#part, ini, fin, tam, fs, tipo, flags, usado, libre, total, num
-#0      1    2     3   4    5     6       7     8     9     10
-        for p in self.particiones:
-            tam = gen.h2kb(p[3])
-            libre = gen.h2kb(p[8])
-            minimo = gen.h2kb(self.minimo)
-            part = p[0]
-            fs = p[5]
+        total = self.total
+        minimo = self.minimo
+        tini = self.particiones[0][1]
+        tfin = self.particiones[0][2]
 
-            if fs == 'ntfs' or fs == 'fat32':
-                if libre >= minimo:
-                    msg = 'Instalar Canaima en {0} ({1} libres)'
-                    self.metodos[part] = msg.format(part, libre)
+        for t in self.particiones:
+            ini = t[1]
+            fin = t[2]
+            if tini > ini: tini = ini
+            if tfin < fin: tfin = fin
+            if t[5] == 'primary' and t[4] != 'free':
+                i += 1
 
-            if fs == 'free' and tam >= minimo:
-                msg = 'Instalar Canaima en espacio sin particionar ({0} libres)'
-                self.metodos['vacio-{0}-{1}'.format(p[1],
-                                        p[2])] = msg.format(gen.hum(tam))
+        if total > minimo:
+            self.metodos['MANUAL'] = 'Instalar editando particiones manualmente'
 
-        self.metodos['todo'] = ('Usar todo el disco duro')
-        self.metodos['manual'] = ('Particionado Manual')
+            if i < 4:
+                for p in self.particiones:
+                    tam = p[3]
+                    libre = p[8]
+                    ini = p[1]
+                    fin = p[2]
+                    part = p[0]
+                    fs = p[5]
+
+                    if fs != 'free' and libre >= minimo:
+                        msg = 'Instalar redimensionando {0} para liberar espacio ({1} libres)'
+                        met = 'REDIM:{0}:{1}:{2}'.format(part, ini, fin)
+                        self.metodos[met] = msg.format(part, gen.hum(libre))
+
+                    if fs == 'free' and tam >= minimo:
+                        msg = 'Instalar usando espacio libre disponible ({0})'
+                        met = 'LIBRE:{0}:{1}:{2}'.format(part, ini, fin)
+                        self.metodos[met] = msg.format(gen.hum(tam))
+
+            met = 'TODO:{0}:{1}:{2}'.format(self.disco, tini, tfin)
+            msg = 'Instalar usando todo el disco ({0})'
+            self.metodos[met] = msg.format(gen.hum(total))
+
+        else:
+            self.metodos['NONE'] = 'El tamaño del disco no es suficiente'
 
         for l1, l2 in self.metodos.items():
             self.cmb_metodo.append_text(l2)
         self.cmb_metodo.set_active(0)
-        self.cmb_metodo.connect("changed", self.establecer_metodo)
 
     def establecer_metodo(self, widget=None):
         m = self.cmb_metodo.get_model()
         a = self.cmb_metodo.get_active()
+
         if a < 0:
             return None
-        metodo = [k for k, v in self.metodos.iteritems() if v == m[a][0]][0]
-        self.cfg['metodo'] = metodo
-        self.metodo = metodo
-        if self.metodo == 'todo' or self.metodo == 'vacio':
+
+        self.metodo = [k for k, v in self.metodos.iteritems() if v == m[a][0]][0]
+
+        if self.metodo.split(':')[0] == 'TODO':
             msg = 'Si escoge esta opción tenga en cuenta que se borrarán todos \
 los datos en el disco que ha seleccionado, Este borrado no se hará hasta que \
 confirme que realmente quiere hacer los cambios.'
-        elif self.metodo[0:5] == 'vacio':
-            self.ini = gen.h2kb(self.metodo.split('-')[1])
-            self.fin = gen.h2kb(self.metodo.split('-')[2])
+            self.ini = self.metodo.split(':')[2]
+            self.fin = self.metodo.split(':')[3]
+        elif self.metodo.split(':')[0] == 'LIBRE':
             msg = 'Si escoge esta opción se instalará el sistema en la \
-partición sin usar que mide {0}'.format(gen.hum(self.fin - self.ini))
-        else:
+partición sin usar que mide {0}'.format(gen.hum(2))
+            self.ini = self.metodo.split(':')[2]
+            self.fin = self.metodo.split(':')[3]
+        elif self.metodo.split(':')[0] == 'REDIM':
             msg = 'Si escoge esta opción se redimensionará la partición {0} \
 para realizar la instalación.'.format(self.metodo)
-        self.lbl_info.set_text(msg)
+        elif self.metodo == 'MANUAL':
+            msg = 'Si escoge esta opción podrá modificar manualmente el disco \
+{0}'.format(self.disco)
+        elif self.metodo == 'NONE':
+            msg = 'Si escoge esta opción se instalará el sistema en la \
+partición sin usar que mide {0}'.format(gen.hum(2))
+        else:
+            pass
 
+        self.lbl4.set_text(msg)
 
 class MessageBox(gtk.MessageDialog):
     def __init__(self, padre, parent, disco):
