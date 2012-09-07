@@ -235,9 +235,6 @@ class Main(gtk.Fixed):
         for f in self.lista:
             temp.append(f)
 
-            print f
-            print
-
             if len(self.lista) > i + 1 and not agregado:
                 ini_anterior = f[5]
                 ini_siguiente = self.lista[i + 1][5]
@@ -254,16 +251,10 @@ class Main(gtk.Fixed):
 
     #TODO: Implementar
     def particion_eliminar(self, widget=None):
-        print 'Eliminar partición:', self.tabla.ultima_fila_seleccionada[0]
 
         fila_accion = (
                         'eliminar',
-                        (
-                            self.disco, #Dispositivo
-                            self.tabla.ultima_fila_seleccionada[0], #Particion
-                            gen.hum(self.tabla.ultima_fila_seleccionada[5]), #Inicio
-                            gen.hum(self.tabla.ultima_fila_seleccionada[6]), #Fin
-                         )
+                        self.tabla.ultima_fila_seleccionada
                      )
         print fila_accion
 
