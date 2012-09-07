@@ -178,7 +178,8 @@ class Main(gtk.Dialog):
                              tamano, #Tamaño
                              inicio, #inicio
                              fin]               #fin
-                self.padre.lista.append(particion)
+                #self.padre.lista.append(particion)
+                self.padre.agregar_a_lista(particion)
 
             # Si la partición nueva es Extendida
             elif tipo == 'Extendida':
@@ -201,7 +202,8 @@ class Main(gtk.Dialog):
                              tamano, #Tamaño
                              inicio, #inicio
                              fin]               #fin
-                self.padre.lista.append(particion)
+                #self.padre.lista.append(particion)
+                self.padre.agregar_a_lista(particion)
                 # Se crea elemento espacio libre en partición extendida
                 particion = ['', #Dispositivo
                              'Espacio Libre Extendida', #Tipo
@@ -210,7 +212,8 @@ class Main(gtk.Dialog):
                              tamano, #Tamaño
                              inicio, #inicio
                              fin]                                   #fin
-                self.padre.lista.append(particion)
+                #self.padre.lista.append(particion)
+                self.padre.agregar_a_lista(particion)
 
             # Si la partición nueva es Lógica
             elif tipo == 'Lógica':
@@ -227,7 +230,8 @@ class Main(gtk.Dialog):
                              tamano, #Tamaño
                              inicio, #inicio
                              fin]               #fin
-                self.padre.lista.append(particion)
+                #self.padre.lista.append(particion)
+                self.padre.agregar_a_lista(particion)
                 # Si se llega al final de la particion extendida
                 if self.padre.ext_fin == fin:
                     # No se crea elemento espacio libre en partición extendida,
@@ -248,7 +252,8 @@ class Main(gtk.Dialog):
                                  tamano, #Tamaño
                                  ext_ini, #inicio
                                  ext_fin]                                   #fin
-                    self.padre.lista.append(particion)
+                    #self.padre.lista.append(particion)
+                    self.padre.agregar_a_lista(particion)
 
             # Calculamos el tamaño de la partición libre si bext == True 
             # entonces se usará ext_fin como fin
@@ -272,7 +277,8 @@ class Main(gtk.Dialog):
                          tamano, #Tamaño
                          inicio, #inicio
                          fin]               #fin
-                self.padre.lista.append(libre)
+                #self.padre.lista.append(libre)
+                self.padre.agregar_a_lista(libre)
 
             # Se actualiza la tabla
             self.padre.llenar_tabla(self.padre.lista)

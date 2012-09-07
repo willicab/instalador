@@ -50,6 +50,45 @@ class msj:
 
 class Main(gtk.Fixed):
 
+    def __init__(self, data):
+        gtk.Fixed.__init__(self)
+
+        self.tabla = clases.tabla_particiones.TablaParticiones()
+        #self.tabla.set_doble_click(self.activar_tabla);
+        self.tabla.set_seleccionar(self.seleccionar_fila)
+
+        self.scroll = gtk.ScrolledWindow()
+        self.scroll.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
+        self.scroll.set_size_request(690, 240)
+        self.scroll.add(self.tabla)
+        self.put(self.scroll, 0, 0)
+        self.tabla.show()
+        self.scroll.show()
+
+        # btn_eliminar
+        self.btn_eliminar = gtk.Button(msj.gui.btn_part_eliminar)
+        #self.btn_nueva.set_size_request(200, 30)
+        self.btn_eliminar.show()
+        self.put(self.btn_eliminar, 365, 245)
+        self.btn_eliminar.connect("clicked", self.particion_eliminar)
+
+        # btn_nueva
+        self.btn_nueva = gtk.Button(msj.gui.btn_part_nueva)
+        self.btn_nueva.set_size_request(200, 30)
+        self.btn_nueva.show()
+        self.put(self.btn_nueva, 0, 245)
+        self.btn_nueva.connect("clicked", self.particion_nueva)
+
+        # btn_deshacer
+        self.btn_deshacer = gtk.Button(msj.gui.btn_deshacer)
+        self.btn_deshacer.set_size_request(160, 30)
+        self.btn_deshacer.show()
+        self.put(self.btn_deshacer, 205, 245)
+        self.btn_deshacer.connect("clicked", self.deshacer)
+
+        # llenar la tabla por primera vez
+        self.inicializar(data)
+
     def inicializar(self, data):
         '''
         Inicializa todas las variables
@@ -121,45 +160,6 @@ class Main(gtk.Fixed):
 
             self.llenar_tabla(self.lista)
 
-    def __init__(self, data):
-        gtk.Fixed.__init__(self)
-
-        self.tabla = clases.tabla_particiones.TablaParticiones()
-        #self.tabla.set_doble_click(self.activar_tabla);
-        self.tabla.set_seleccionar(self.seleccionar_fila)
-
-        self.scroll = gtk.ScrolledWindow()
-        self.scroll.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
-        self.scroll.set_size_request(690, 240)
-        self.scroll.add(self.tabla)
-        self.put(self.scroll, 0, 0)
-        self.tabla.show()
-        self.scroll.show()
-
-        # btn_eliminar
-        self.btn_eliminar = gtk.Button(msj.gui.btn_part_eliminar)
-        #self.btn_nueva.set_size_request(200, 30)
-        self.btn_eliminar.show()
-        self.put(self.btn_eliminar, 365, 245)
-        self.btn_eliminar.connect("clicked", self.particion_eliminar)
-
-        # btn_nueva
-        self.btn_nueva = gtk.Button(msj.gui.btn_part_nueva)
-        self.btn_nueva.set_size_request(200, 30)
-        self.btn_nueva.show()
-        self.put(self.btn_nueva, 0, 245)
-        self.btn_nueva.connect("clicked", self.particion_nueva)
-
-        # btn_deshacer
-        self.btn_deshacer = gtk.Button(msj.gui.btn_deshacer)
-        self.btn_deshacer.set_size_request(160, 30)
-        self.btn_deshacer.show()
-        self.put(self.btn_deshacer, 205, 245)
-        self.btn_deshacer.connect("clicked", self.deshacer)
-
-        # llenar la tabla por primera vez
-        self.inicializar(data)
-
     def seleccionar_fila(self, fila):
         '''Acciones a tomar cuando una fila de la tabla es seleccionada'''
 
@@ -222,6 +222,26 @@ class Main(gtk.Fixed):
         #    # Permite crear una particion nueva
         #    self.btn_nueva.set_sensitive(True)
         #=======================================================================
+
+    def agregar_a_lista(self, fila):
+        '''Agrega una nueva particion a la lista en el sitio adecuado segun su
+        inicio'''
+
+        print fila
+        print
+
+        i = 0
+        temp = []
+        inicio = fila[5]
+        for f in self.lista:
+            temp.append(f)
+            if len(self.lista) > i + 1:
+                ini_anterior = f[5]
+                ini_siguiente = self.lista[i + 1][5]
+                if inicio >= ini_anterior and inicio < ini_siguiente:
+                    temp.append(fila)
+            i = i + 1
+        self.lista = temp
 
     #TODO: Implementar
     def particion_eliminar(self, widget=None):
