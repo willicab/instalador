@@ -11,10 +11,10 @@ class Main(gtk.DrawingArea):
     def __init__(self, parent):
         super(Main, self).__init__()
         self.par = parent
-        self.set_events(gtk.gdk.POINTER_MOTION_MASK |
-                      gtk.gdk.POINTER_MOTION_HINT_MASK |
-                      gtk.gdk.BUTTON_PRESS_MASK |
-                	  gtk.gdk.BUTTON_RELEASE_MASK )
+        self.set_events(
+            gtk.gdk.POINTER_MOTION_MASK | gtk.gdk.POINTER_MOTION_HINT_MASK |
+            gtk.gdk.BUTTON_PRESS_MASK | gtk.gdk.BUTTON_RELEASE_MASK
+            )
         self.connect("expose-event", self.expose)
 
     def expose(self, widget=None, event=None):
@@ -27,7 +27,7 @@ class Main(gtk.DrawingArea):
 
         cr = self.window.cairo_create()
         cr.rectangle(0, 0, self.ancho, self.alto)
-        cr.set_source_rgb(1.0, 1.0, 1.0)
+        cr.set_source_rgb(0.925490196, 0.91372549, 0.847058824)
         cr.fill()
 
 #       print 'part, ini, fin, tam, fs, tipo, flags, usado, libre, total, num'
@@ -38,10 +38,10 @@ class Main(gtk.DrawingArea):
             tipo = p[5]
             fs = p[4]
 
-            if tipo == 'logical' or tipo == 'primary':
+            if tipo == 'logical':
                 y1 = 3
                 y2 = self.alto - 3
-            elif tipo == 'extended':
+            elif tipo == 'extended' or tipo == 'primary':
                 y1 = 0
                 y2 = self.alto
 
@@ -111,8 +111,10 @@ class Main(gtk.DrawingArea):
         elif fs == 'xfs':
             self.process_color(libre, '#e89900', '#e8d000')
         elif fs == 'free':
-            self.process_color(libre, '#efefef', '#efefef')
+            self.process_color(libre, '#ffffff', '#ffffff')
         elif fs == 'extended':
             self.process_color(libre, '#c9c9c9', '#c9c9c9')
+        elif fs == 'unknown':
+            self.process_color(libre, '#000000', '#000000')
 
         return libre
