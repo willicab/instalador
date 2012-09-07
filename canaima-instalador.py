@@ -16,7 +16,6 @@ from clases.translator import MAIN_ROOT_ERROR_MSG, MAIN_ROOT_ERROR_TITLE
 
 CFG = {'next': -1, 'prev': -1}
 BANNER = 'data/banner-app-top.png'
-WIZ = Wizard(700, 550, "Canaima Instalador", BANNER)
 
 def aconnect(button, function, bid, params):
     '''
@@ -405,6 +404,7 @@ if __name__ == "__main__":
             c_1 = gtk.RESPONSE_OK, f_1 = sys.exit, p_1 = (1,)
             )
     else:
-        app = Bienvenida(CFG)
-        gtk.main()
-        sys.exit()
+		WIZ = Wizard(700, 550, "Canaima Instalador", BANNER)
+		app = Bienvenida(CFG)
+		gtk.main()
+		sys.exit()
