@@ -46,7 +46,7 @@ class msj:
 
         btn_part_nueva = 'Crear Nueva Partición'
         btn_part_eliminar = 'X'
-        btn_deshacer = 'Deshacer Acción'
+        btn_deshacer = 'Deshacer Acciones'
 
 class Main(gtk.Fixed):
 
@@ -227,19 +227,28 @@ class Main(gtk.Fixed):
         '''Agrega una nueva particion a la lista en el sitio adecuado segun su
         inicio'''
 
-        print fila
-        print
-
         i = 0
         temp = []
         inicio = fila[5]
+        agregado = False
+
         for f in self.lista:
             temp.append(f)
-            if len(self.lista) > i + 1:
+
+            print f
+            print
+
+            if len(self.lista) > i + 1 and not agregado:
                 ini_anterior = f[5]
                 ini_siguiente = self.lista[i + 1][5]
                 if inicio >= ini_anterior and inicio < ini_siguiente:
+                    temp.pop()
                     temp.append(fila)
+                    agregado = True
+            elif not agregado:
+                temp.pop()
+                temp.append(fila)
+
             i = i + 1
         self.lista = temp
 

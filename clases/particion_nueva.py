@@ -157,11 +157,13 @@ class Main(gtk.Dialog):
             if montaje == 'Escoger manualmente':
                 montaje = self.entrada.get_text().strip()
 
-            if self.padre.lista[-1][1] == 'Espacio Libre':
-                self.padre.lista.pop()
-            if len(self.padre.lista) > 0:
-                if self.padre.lista[-1][1] == 'Espacio Libre Extendida':
-                    self.padre.lista.pop()
+            #===================================================================
+            # if self.padre.lista[-1][1] == 'Espacio Libre':
+            #    self.padre.lista.pop()
+            # if len(self.padre.lista) > 0:
+            #    if self.padre.lista[-1][1] == 'Espacio Libre Extendida':
+            #        self.padre.lista.pop()
+            #===================================================================
 
             # Si la partición nueva es Primaria
             if tipo == 'Primaria':
@@ -261,13 +263,13 @@ class Main(gtk.Dialog):
                 fin = self.padre.ext_fin
 
             # Si fin == self.fin entonces 
-            if fin == int(gen.kb(self.padre.fin)):
+            if fin == int(gen.kb(self.fin)):
                 pass
                 # No se crea elemento espacio libre
             else:
                 # Se calcula el tamaño de la partición libre
                 inicio = fin
-                fin = int(gen.kb(self.padre.fin))
+                fin = int(gen.kb(self.fin))
                 tamano = gen.hum(fin - inicio)
                 # Se crea elemento espacio libre
                 libre = ['', #Dispositivo
