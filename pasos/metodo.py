@@ -136,6 +136,10 @@ class Main(gtk.Fixed):
                         met = 'LIBRE:{0}:{1}:{2}'.format(part, ini, fin)
                         self.metodos[met] = msg.format(gen.hum(tam))
 
+            #TODO: Revisar xq particionador manual necesita estas variables
+            self.ini = tini
+            self.fin = tfin
+
             met = 'TODO:{0}:{1}:{2}'.format(self.disco, tini, tfin)
             msg = 'Instalar usando todo el disco ({0})'
             self.metodos[met] = msg.format(gen.hum(total))

@@ -52,7 +52,7 @@ class Wizard(gtk.Window):
     __c_principal = gtk.Fixed() # Contenedor Principal
     btn_aplicar = gtk.Button()  # Botón Aplicar
     c_pasos = gtk.VBox()
-    
+
     def __init__(self, ancho, alto, titulo, banner):
 
         # Creo la ventana
@@ -64,7 +64,7 @@ class Wizard(gtk.Window):
         self.set_size_request(ancho, alto)
         self.set_resizable(0)
         self.set_border_width(0)
-        self.connect("destroy", self.close)
+        self.connect("delete-event", self.close)
 
         # Creo el contenedor principal
         self.add(self.__c_principal)
@@ -139,27 +139,24 @@ class Wizard(gtk.Window):
         '''
         self.lbl_info.set_text(info)
 
-    def close(self, widget=None):
+    def close(self, widget=None, event=None):
         '''
             Cierra la ventana
         '''
+
         dialog = gtk.MessageDialog(self, gtk.DIALOG_MODAL,
                                    gtk.MESSAGE_WARNING, gtk.BUTTONS_YES_NO,
                                "¿Está seguro que desea salir del asistente?")
         dialog.set_title("Salir del Instalador")
         response = dialog.run()
         dialog.destroy()
+
         if response == gtk.RESPONSE_YES:
             gtk.main_quit()
             return False
         else:
             return True
-        self.destroy()
-        print widget
-        #self.progreso.hilo = False
-        
-        gtk.main_quit()
-        
+
 
     def agregar(self, nombre, paso):
         '''
