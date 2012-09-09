@@ -184,7 +184,7 @@ class Metodo():
         m = CFG['w'].previous('Teclado', Teclado, (CFG))
 
     def siguiente(self, CFG):
-        CFG['metodo'] = CFG['w'].formulario('Metodo').metodo.metodo.split(':')[0]
+        CFG['metodo'] = CFG['w'].formulario('Metodo').metodo.split(':')[0]
         CFG['disco'] = CFG['w'].formulario('Metodo').disco
         CFG['part'] = CFG['w'].formulario('Metodo').part
         CFG['ini'] = CFG['w'].formulario('Metodo').ini
