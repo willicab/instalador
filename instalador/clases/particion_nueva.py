@@ -141,6 +141,12 @@ class Main(gtk.Dialog):
         self.entrada.connect("changed", self.validar_punto)
 
         response = self.run()
+        self.procesar_respuesta(response)
+
+    def procesar_respuesta(self, response=None):
+
+        if not response:
+            return response
 
         if response == gtk.RESPONSE_OK:
             tipo = gen.get_active_text(self.cmb_tipo)
@@ -286,7 +292,7 @@ class Main(gtk.Dialog):
             self.padre.llenar_tabla()
 
         self.destroy()
-        return None
+        return response
 
     def on_changed(self, widget=None):
         self.lblsize.set_text(gen.hum(widget.get_value() - float(self.inicio)))
