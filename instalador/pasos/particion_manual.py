@@ -127,7 +127,6 @@ class Main(gtk.Fixed):
     def llenar_tabla(self):
         '''Llena la tabla con las particiones existentes en el disco'''
 
-        # Ordena la lista por inicio de la particion
         self.ordenar_lista()
 
         # Limpia previamente la tabla para inicializar su llenado
@@ -147,6 +146,7 @@ class Main(gtk.Fixed):
                 self.primarias = self.primarias + 1
 
     def ordenar_lista(self):
+        'Ordena la lista por el inicio de la particion'
         tamano = len(self.lista)
         for i in range(tamano):
             i = i # Solo para quitar el warning (unused variable)
@@ -175,9 +175,17 @@ class Main(gtk.Fixed):
                 ini_anterior = f[5]
                 ini_siguiente = self.lista[i + 1][5]
                 if inicio >= ini_anterior and inicio < ini_siguiente:
-                    temp.pop()
+
+                    # evita que se borre la particion extendida cuando se crea
+                    # la primera particion logica
+                    if not (fila[1] == msj.particion.extendida \
+                    and fila[2] == msj.particion.libre \
+                    and f[1] == msj.particion.extendida):
+                        temp.pop()
+
                     temp.append(fila)
                     agregado = True
+
             elif not agregado:
                 temp.pop()
                 temp.append(fila)

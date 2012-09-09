@@ -154,12 +154,8 @@ class Main(gtk.Dialog):
             formato = gen.get_active_text(self.cmb_fs)
             montaje = gen.get_active_text(self.cmb_montaje)
 
-            if tipo == msj.particion.extendida:
-                formato = 'Ninguno'
-                montaje = 'Ninguno'
-
             if formato == 'linux-swap':
-                montaje = 'Ninguno'
+                montaje = ''
 
             if montaje == 'Escoger manualmente':
                 montaje = self.entrada.get_text().strip()
@@ -193,7 +189,7 @@ class Main(gtk.Dialog):
                 particion = [self.padre.disco, #Dispositivo
                              tipo, #Tipo
                              '', #Formato
-                             montaje, #Punto de montaje
+                             '', #Punto de montaje
                              tamano, #Tamaño
                              inicio, #inicio
                              fin]               #fin
