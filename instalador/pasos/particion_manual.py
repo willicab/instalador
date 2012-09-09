@@ -53,7 +53,7 @@ class Main(gtk.Fixed):
     def __init__(self, data):
         gtk.Fixed.__init__(self)
 
-        self.tabla = clases.tabla_particiones.TablaParticiones()
+        self.tabla = instalador.clases.tabla_particiones.TablaParticiones()
         #self.tabla.set_doble_click(self.activar_tabla);
         self.tabla.set_seleccionar(self.seleccionar_fila)
 
