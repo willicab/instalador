@@ -96,8 +96,6 @@ class Main(gtk.Fixed):
 
         self.data = data
 
-        self.ini = 0             #Inicio de la partición
-        self.fin = 0             #Fin de la partición
         self.lista = []          #Lista de las particiones hechas
         self.primarias = 0       #Cuenta la cantidad de particiones primarias
         self.raiz = False
@@ -113,8 +111,6 @@ class Main(gtk.Fixed):
 
         self.lista = []
         self.disco = data['disco']
-        self.ini = data['inicio']
-        self.fin = data['fin']
 
         # Llevar los botones a su estado inicial
         self.btn_eliminar.set_sensitive(False)
@@ -193,6 +189,7 @@ class Main(gtk.Fixed):
     def ordenar_lista(self):
         tamano = len(self.lista)
         for i in range(tamano):
+            i = i # Solo para quitar el warning (unused variable)
             for k in range(tamano - 1):
                 ini = self.lista[k][5]
                 ini_sig = self.lista[k + 1][5]
