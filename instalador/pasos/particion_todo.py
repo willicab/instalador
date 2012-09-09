@@ -12,9 +12,9 @@ class Main(gtk.Fixed):
     disco = ''
     swap = ''
     cfg = None
-    part = instalador.clases.particiones.Main()
     barra = None
     button = None
+    part = instalador.clases.particiones.Main()
 
     def __init__(self, disco, ini, fin):
         gtk.Fixed.__init__(self)
@@ -101,7 +101,7 @@ class Main(gtk.Fixed):
 
     def change_option(self, widget, data=None):
         if widget.get_active() == True:
-            self.metodo = data
-            self.barra.cambiar(self.metodo)
-            self.leyenda.cambiar(self.metodo)
+            self.forma = data
+            self.barra.cambiar(self.forma)
+            self.leyenda.cambiar(self.forma)
 

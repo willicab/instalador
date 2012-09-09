@@ -185,8 +185,8 @@ class Metodo():
         m = CFG['w'].previous('Teclado', Teclado, (CFG))
 
     def siguiente(self, CFG):
+        CFG['metodo'] = CFG['w'].formulario('Metodo').metodo.metodo.split(':')[0]
         CFG['disco'] = CFG['w'].formulario('Metodo').disco
-        CFG['metodo'] = CFG['w'].formulario('Metodo').metodo
         CFG['part'] = CFG['w'].formulario('Metodo').part
         CFG['ini'] = CFG['w'].formulario('Metodo').ini
         CFG['fin'] = CFG['w'].formulario('Metodo').fin
@@ -222,7 +222,7 @@ class PartAuto():
         CFG['inicio'] = CFG['w'].formulario('PartAuto').ini
         CFG['fin'] = CFG['w'].formulario('PartAuto').fin
         CFG['nuevo_fin'] = CFG['w'].formulario('PartAuto').cur_value
-        CFG['tipo'] = CFG['w'].formulario('PartAuto').metodo
+        CFG['forma'] = CFG['w'].formulario('PartAuto').forma
         CFG['swap'] = CFG['w'].formulario('PartAuto').swap
         CFG['fs'] = CFG['w'].formulario('PartAuto').fs
 
@@ -245,7 +245,7 @@ class PartTodo():
     def siguiente(self, CFG):
         CFG['ini'] = CFG['w'].formulario('PartTodo').ini
         CFG['fin'] = CFG['w'].formulario('PartTodo').fin
-        CFG['tipo'] = CFG['w'].formulario('PartTodo').metodo
+        CFG['forma'] = CFG['w'].formulario('PartTodo').forma
 
         if CFG['tipo'] == 'particion_4':
             m = CFG['w'].next('PartManual', PartManual, (CFG), particion_manual.Main(CFG))
@@ -264,7 +264,7 @@ class PartManual():
         m = CFG['w'].previous('Metodo', Metodo, (CFG))
 
     def siguiente(self, CFG):
-        if  CFG['w'].formulario('PartManual').raiz == False:
+        if CFG['w'].formulario('PartManual').raiz == False:
             msg_error("Debe existir una partición raiz (/)")
             return False
 

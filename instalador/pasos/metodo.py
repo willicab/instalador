@@ -121,15 +121,15 @@ class Main(gtk.Fixed):
 
                     if fs != 'free' and libre >= minimo:
                         msg = 'Instalar redimensionando {0} para liberar espacio ({1} libres)'
-                        met = 'REDIM:{0}:{1}:{2}'.format(part,ini,fin)
+                        met = 'REDIM:{0}:{1}:{2}'.format(part, ini, fin)
                         self.metodos[met] = msg.format(part, gen.hum(libre))
 
                     if fs == 'free' and tam >= minimo:
                         msg = 'Instalar usando espacio libre disponible ({0})'
-                        met = 'LIBRE:{0}:{1}:{2}'.format(part,ini,fin)
+                        met = 'LIBRE:{0}:{1}:{2}'.format(part, ini, fin)
                         self.metodos[met] = msg.format(gen.hum(tam))
 
-            met = 'TODO:{0}:{1}:{2}'.format(self.disco,tini,tfin)
+            met = 'TODO:{0}:{1}:{2}'.format(self.disco, tini, tfin)
             msg = 'Instalar usando todo el disco ({0})'
             self.metodos[met] = msg.format(gen.hum(total))
 

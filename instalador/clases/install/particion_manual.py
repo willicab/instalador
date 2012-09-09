@@ -10,11 +10,14 @@ class Main():
     particiones_montadas = {}
     particiones_montadas2 = {}
     boot = False
+
     def __init__(self, cfg, parent):
+
         self.cfg = cfg
         self.metodo = cfg['metodo']
         self.tipo = cfg['tipo']
         self.lista = cfg['lista_manual']
+
         if (self.metodo == 'todo' or self.metodo == 'vacio') and \
            self.tipo == 'particion_4':
             self.disco = cfg['disco']
@@ -25,21 +28,21 @@ class Main():
             self.ini = int(gen.kb(cfg['inicio']))
             self.fin = int(gen.kb(cfg['fin']))
 
-            print 'Disco: ', cfg['disco']
             if cfg['metodo'] != 'todo' and cfg['metodo'] != 'vacio' :
                 self.nuevo_fin = int(gen.kb(cfg['nuevo_fin']))
-            print self.nuevo_fin, cfg['nuevo_fin']
+
             self.fs = cfg['fs']
 
     def auto(self):
+
         self.redimensionar(self.particion,
                            self.ini,
                            self.nuevo_fin,
                            self.disco,
                            self.num,
                            self.fs)
-        salida = self.particionar()
-        return salida
+
+        return self.particionar()
 
     def todo(self, vacio):
         p = self.part.lista_particiones(self.disco)
@@ -78,7 +81,6 @@ class Main():
                 format(disco, num, ini_win, fin_win)
 
             print cmd, commands.getstatusoutput(cmd)
-            #commands.getstatusoutput(cmd)
 
     def particionar(self):
         particion = []

@@ -38,12 +38,11 @@ class Main(gtk.Fixed):
         self.put(self.visor, 0, 0)
         self.visor.show()
 
-        msg = 'Ha culminado la instalación, puede reiniciar ahora el sistema\n'
-        msg = msg + 'o seguir probando canaima y reiniciar más tarde.'
+        msg = 'Ha culminado la instalación, puede reiniciar ahora el sistema o \
+        seguir probando canaima y reiniciar más tarde.'
         self.lblInfo = gtk.Label(msg)
         self.lblInfo.set_size_request(590, 280)
         self.put(self.lblInfo, 0, 0)
-        #self.lblInfo.show()
 
         path = os.path.realpath(os.path.join(os.path.dirname(__file__),
                 '..', 'data', 'slider.html'))
@@ -63,8 +62,8 @@ class Main(gtk.Fixed):
         self.par.botonera.move(self.par.btn_anterior, 280, 10)
         self.par.btn_cancelar.hide()
 
-        self.par.info_barra("Creando particiones en el disco duro ...")
         # Comenzando el particionado
+        self.par.info_barra("Creando particiones en el disco duro ...")
         if self.metodo == 'todo':
             part_todo = particion_todo.Main(self.cfg, self.par, False)
             if self.tipo == 'particion_1':
