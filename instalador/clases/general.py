@@ -1,14 +1,7 @@
 #-*- coding: UTF-8 -*-
 
 import commands, re
-
-root1_min = '2.5GB'
-root1_max = '18GB'
-root2_min = '512MB'
-root2_max = '3GB'
-usr_min = '2GB'
-usr_max = '15GB'
-minimo = '5GB'
+from instalador.config import *
 
 def kb(num):
     if type(num) == int or type(num) == float : return float(num)
