@@ -1,11 +1,11 @@
 #-*- coding: UTF-8 -*-
 
 import gtk
-import clases.particiones
-import clases.general as gen
-import clases.barra_auto as widget
-import clases.leyenda_auto as leyenda
-#import mensaje
+
+import instalador.clases.particiones
+import instalador.clases.general as gen
+import instalador.clases.barra_auto as widget
+import instalador.clases.leyenda_auto as leyenda
 
 class Main(gtk.Fixed):
     # Valores para las particiones
@@ -16,8 +16,8 @@ class Main(gtk.Fixed):
     #usr  = '1GB'
     #burning = None
     metodo = "particion_1"
-    part = clases.particiones.Main()
-    gen = clases.general
+    part = instalador.clases.particiones.Main()
+    gen = instalador.clases.general
     particion = ''
     particiones = []
     libre = []

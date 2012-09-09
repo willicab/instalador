@@ -1,7 +1,29 @@
 #!/usr/bin/env python
 #-*- coding: UTF-8 -*-
 
-import gtk
+
+def aconnect(button, signals, function, params):
+    '''
+        desconecta los eventos existentes en signals y conecta con function
+    '''
+    for i in signals:
+        if button.handler_is_connected(i):
+            button.disconnect(i)
+    signals.append(button.connect_object('clicked', function, params))
+
+    return signals
+
+def msg_error(mensaje):
+    '''
+        Función que muestra el mensaje de error
+    '''
+    dialog = gtk.MessageDialog(wizard,
+         gtk.DIALOG_MODAL,
+         gtk.MESSAGE_ERROR,
+         gtk.BUTTONS_OK,
+         mensaje)
+    response = dialog.run()
+    dialog.destroy()
 
 def UserMessage(message, title, mtype, buttons,
                     c_1 = False, f_1 = False, p_1 = '',

@@ -2,10 +2,10 @@
 
 import gtk
 
-import clases.general as gen
-import clases.particion_nueva as part_nueva
-import clases.tabla_particiones
-from clases import particiones
+import instalador.clases.general as gen
+import instalador.clases.particion_nueva as part_nueva
+import instalador.clases.tabla_particiones
+from instalador.clases import particiones
 
 class msj:
     'Clase para administrar los mensajes mostrados al usuario'

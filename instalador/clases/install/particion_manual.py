@@ -1,13 +1,12 @@
 #-*- coding: UTF-8 -*-
 
-import os
-import commands
-import clases.particiones
-import clases.general as gen
+import os, commands
+
+import instalador.clases.particiones
+import instalador.clases.general as gen
 
 class Main():
-
-    part = clases.particiones.Main()
+    part = instalador.clases.particiones.Main()
     particiones_montadas = {}
     particiones_montadas2 = {}
     boot = False

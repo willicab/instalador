@@ -55,7 +55,6 @@ class Main():
 
             if fs == 'swap' and dbus[0] != 'usb' and dtype[0] == 'disk':
                 content += "\n{0}\tnone\tswap\tsw\t0\t0".format(uuid)
-                print part, uuid, fs, dbus, dtype
             elif fs and uuid:
                 for fstype in supported:
                     if fstype == fs:
@@ -69,7 +68,6 @@ class Main():
                             point = '{0}/'.format(mnt)
                         else:
                             point = ''
-                        print part, uuid, fs, dbus, dtype
                 if point:
                     content += '\n{0}\t{1}\t{2}\t{3}'.format(uuid, point, fs, defaults)
             else:

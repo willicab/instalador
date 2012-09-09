@@ -1,10 +1,10 @@
 #-*- coding: UTF-8 -*-
 
 import gtk
-import clases.particiones
-import clases.general as gen
-import clases.barra_todo as barra
-import clases.leyenda_todo as leyenda
+import instalador.clases.particiones
+import instalador.clases.general as gen
+import instalador.clases.barra_todo as barra
+import instalador.clases.leyenda_todo as leyenda
 
 class Main(gtk.Fixed):
     ini = ''
@@ -12,7 +12,7 @@ class Main(gtk.Fixed):
     disco = ''
     swap = ''
     cfg = None
-    part = clases.particiones.Main()
+    part = instalador.clases.particiones.Main()
     barra = None
     button = None
 

@@ -1,16 +1,17 @@
 #-*- coding: UTF-8 -*-
 
-import os
-import commands
-import clases.particiones
-import clases.general as gen
-import clases.install.particion_manual as particion_manual
+import os, commands
+
+import instalador.clases.particiones
+import instalador.clases.general as gen
+import instalador.clases.install.particion_manual as particion_manual
+
 class Main():
     root_p2 = '20GB'
     root_p3 = '3GB'
     usr = '18GB'
     boot = '256MB'
-    part = clases.particiones.Main()
+    part = instalador.clases.particiones.Main()
     particiones_montadas = {}
     particiones_montadas2 = {}
     def __init__(self, cfg, parent):
