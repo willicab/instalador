@@ -141,10 +141,8 @@ class Main(gtk.Fixed):
         self.cmb_metodo.set_active(0)
 
     def establecer_metodo(self, widget=None):
-        m = self.cmb_metodo.get_model()[self.cmb_metodo.get_active()][0]
-
         for c, d in self.metodos.items():
-            if d == m:
+            if d == self.cmb_metodo.get_active_text():
                 self.metodo = c
 
         self.ini = self.metodo.split(':')[2]
@@ -155,13 +153,13 @@ class Main(gtk.Fixed):
         if self.metodo == 'TODO':
             msg = 'Al escoger esta opción el nuevo Sistema Operativo ocupará la \
                 totalidad de su disco duro. Tenga en cuenta que se borrarán \
-                todos los datos anteriores. Puede cancelar la instalación \
-                en este momento y realizar un respaldo antes de continuar.'
+                todos los datos anteriores. Puede aprovechar este momento para \
+                realizar un respaldo antes de proseguir con la instalación.'
         elif self.metodo == 'LIBRE':
             msg = 'Esta opción le permitirá instalar el Sistema Operativo en el \
                 espacio libre de {0} que se encuentra en su disco duro, \
-                conservando los demás datos o sistemas que se encuentran en las \
-                demás porciones del disco.'.format(gen.hum(2))
+                conservando los demás datos y/o sistemas que se encuentren en las \
+                demás porciones del disco.'.format(gen.hum(self.fin - self.ini))
         elif self.metodo == 'REDIM':
             msg = 'Si escoge esta opción se redimensionará la partición {0} \
 para realizar la instalación.'.format(self.metodo)
