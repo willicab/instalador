@@ -7,8 +7,8 @@ import instalador.clases.barra_todo as barra
 import instalador.clases.leyenda_todo as leyenda
 
 class Main(gtk.Fixed):
-    ini = ''
-    fin = ''
+    ini = 0
+    fin = 0
     disco = ''
     swap = ''
     cfg = None
@@ -16,15 +16,13 @@ class Main(gtk.Fixed):
     barra = None
     button = None
 
-    def __init__(self, disco, ini=0, fin=0):
+    def __init__(self, disco, ini, fin):
         gtk.Fixed.__init__(self)
         self.disco = disco
         self.ini = ini
         self.fin = fin
 
         self.swap = gen.ram() if int(gen.ram()) >= 1048576 else int(gen.ram()) * 2
-        self.ini = int(float(str(self.ini).replace(',', '.')))
-        self.fin = int(float(str(self.fin).replace(',', '.')))
         self.metodo = 'particion_2'
         self.conf = (self.disco, self.ini, self.fin, self.swap, self.metodo)
 

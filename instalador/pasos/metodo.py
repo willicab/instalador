@@ -86,7 +86,7 @@ class Main(gtk.Fixed):
             self.lista_metodos()
             self.establecer_metodo()
 
-    def lista_metodos(self):
+    def lista_metodos(self, widget=None):
         '''
             Crea una lista de los metodos de instalación disponibles para la
             partición
@@ -141,34 +141,46 @@ class Main(gtk.Fixed):
         self.cmb_metodo.set_active(0)
 
     def establecer_metodo(self, widget=None):
-        m = self.cmb_metodo.get_model()
-        a = self.cmb_metodo.get_active()
+        m = self.cmb_metodo.get_model()[self.cmb_metodo.get_active()][0]
 
-        if a < 0:
-            return None
-
-        self.metodo = [k for k, v in self.metodos.iteritems() if v == m[a][0]][0]
+        for c, d in self.metodos.items():
+            if d == m:
+                self.metodo = c
 
         if self.metodo.split(':')[0] == 'TODO':
-            msg = 'Si escoge esta opción tenga en cuenta que se borrarán todos \
-los datos en el disco que ha seleccionado, Este borrado no se hará hasta que \
-confirme que realmente quiere hacer los cambios.'
+            msg = 'Al escoger esta opción el nuevo Sistema Operativo ocupará la \
+                totalidad de su disco duro. Tenga en cuenta que se borrarán \
+                todos los datos anteriores. Puede cancelar la instalación \
+                en este momento y realizar un respaldo antes de continuar.'
             self.ini = self.metodo.split(':')[2]
             self.fin = self.metodo.split(':')[3]
+            self.part = self.metodo.split(':')[1]
         elif self.metodo.split(':')[0] == 'LIBRE':
-            msg = 'Si escoge esta opción se instalará el sistema en la \
-partición sin usar que mide {0}'.format(gen.hum(2))
+            msg = 'Esta opción le permitirá instalar el Sistema Operativo en el \
+                espacio libre de {0} que se encuentra en su disco duro, \
+                conservando los demás datos o sistemas que se encuentran en las \
+                demás porciones del disco.'.format(gen.hum(2))
             self.ini = self.metodo.split(':')[2]
             self.fin = self.metodo.split(':')[3]
+            self.part = self.metodo.split(':')[1]
         elif self.metodo.split(':')[0] == 'REDIM':
             msg = 'Si escoge esta opción se redimensionará la partición {0} \
 para realizar la instalación.'.format(self.metodo)
+            self.ini = self.metodo.split(':')[2]
+            self.fin = self.metodo.split(':')[3]
+            self.part = self.metodo.split(':')[1]
         elif self.metodo == 'MANUAL':
             msg = 'Si escoge esta opción se instalará el sistema en la \
 partición sin usar que mide {0}'.format(gen.hum(2))
+            self.ini = 0
+            self.fin = 0
+            self.part = None
         elif self.metodo == 'NONE':
             msg = 'Si escoge esta opción se instalará el sistema en la \
 partición sin usar que mide {0}'.format(gen.hum(2))
+            self.ini = 0
+            self.fin = 0
+            self.part = None
         else:
             pass
 

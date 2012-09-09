@@ -185,11 +185,12 @@ class Metodo():
         m = CFG['w'].previous('Teclado', Teclado, (CFG))
 
     def siguiente(self, CFG):
-        CFG['metodo'] = CFG['w'].formulario('Metodo').metodo
-        CFG['particion'] = CFG['w'].formulario('Metodo').particion
         CFG['disco'] = CFG['w'].formulario('Metodo').disco
+        CFG['metodo'] = CFG['w'].formulario('Metodo').metodo
+        CFG['part'] = CFG['w'].formulario('Metodo').part
         CFG['ini'] = CFG['w'].formulario('Metodo').ini
         CFG['fin'] = CFG['w'].formulario('Metodo').fin
+        print CFG['disco'], CFG['metodo'], CFG['part'], CFG['ini'], CFG['fin']
 
         print 'El metodo de instalación escogido es: {0}'.format(CFG['metodo'])
         print 'CFG: {0}\n'.format(CFG)
