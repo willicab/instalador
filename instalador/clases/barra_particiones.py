@@ -9,27 +9,25 @@ class Main(gtk.DrawingArea):
 
     def __init__(self, parent):
         super(Main, self).__init__()
-        self.par = parent
         self.set_events(
             gtk.gdk.POINTER_MOTION_MASK | gtk.gdk.POINTER_MOTION_HINT_MASK |
             gtk.gdk.BUTTON_PRESS_MASK | gtk.gdk.BUTTON_RELEASE_MASK
             )
         self.connect("expose-event", self.expose)
+        self.p = parent
 
     def expose(self, widget=None, event=None):
         # Establece ancho y alto
         self.ancho = gen.h2kb(self.get_size_request()[0])
         self.alto = gen.h2kb(self.get_size_request()[1])
-        self.total = gen.h2kb(self.par.total)
-        self.particiones = self.par.particiones
+        self.total = gen.h2kb(self.p.total)
+        self.particiones = self.p.particiones
         w = 0
 
         cr = self.window.cairo_create()
+        cr.set_source_rgb(1.0, 1.0, 1.0)
         cr.rectangle(0, 0, self.ancho, self.alto)
-        cr.set_source_rgb(0.925490196, 0.91372549, 0.847058824)
         cr.fill()
-
-#       print 'part, ini, fin, tam, fs, tipo, flags, usado, libre, total, num'
 
         for p in self.particiones:
             ini = gen.h2kb(p[1])

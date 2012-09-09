@@ -108,7 +108,7 @@ class Main(gtk.Fixed):
                 i += 1
 
         if total > minimo:
-            self.metodos['MANUAL'] = 'Instalar editando particiones manualmente'
+            self.metodos['MANUAL:None:0:0'] = 'Instalar editando particiones manualmente'
 
             if i < 4:
                 for p in self.particiones:
@@ -129,16 +129,12 @@ class Main(gtk.Fixed):
                         met = 'LIBRE:{0}:{1}:{2}'.format(part, ini, fin)
                         self.metodos[met] = msg.format(gen.hum(tam))
 
-            #TODO: Revisar xq particionador manual necesita estas variables
-            self.ini = tini
-            self.fin = tfin
-
             met = 'TODO:{0}:{1}:{2}'.format(self.disco, tini, tfin)
             msg = 'Instalar usando todo el disco ({0})'
             self.metodos[met] = msg.format(gen.hum(total))
 
         else:
-            self.metodos['NONE'] = 'El tamaño del disco no es suficiente'
+            self.metodos['NONE:None:0:0'] = 'El tamaño del disco no es suficiente'
 
         for l1, l2 in self.metodos.items():
             self.cmb_metodo.append_text(l2)
@@ -151,40 +147,30 @@ class Main(gtk.Fixed):
             if d == m:
                 self.metodo = c
 
-        if self.metodo.split(':')[0] == 'TODO':
+        self.ini = self.metodo.split(':')[2]
+        self.fin = self.metodo.split(':')[3]
+        self.particion = self.metodo.split(':')[1]
+        self.metodo = self.metodo.split(':')[0]
+
+        if self.metodo == 'TODO':
             msg = 'Al escoger esta opción el nuevo Sistema Operativo ocupará la \
                 totalidad de su disco duro. Tenga en cuenta que se borrarán \
                 todos los datos anteriores. Puede cancelar la instalación \
                 en este momento y realizar un respaldo antes de continuar.'
-            self.ini = self.metodo.split(':')[2]
-            self.fin = self.metodo.split(':')[3]
-            self.part = self.metodo.split(':')[1]
-        elif self.metodo.split(':')[0] == 'LIBRE':
+        elif self.metodo == 'LIBRE':
             msg = 'Esta opción le permitirá instalar el Sistema Operativo en el \
                 espacio libre de {0} que se encuentra en su disco duro, \
                 conservando los demás datos o sistemas que se encuentran en las \
                 demás porciones del disco.'.format(gen.hum(2))
-            self.ini = self.metodo.split(':')[2]
-            self.fin = self.metodo.split(':')[3]
-            self.part = self.metodo.split(':')[1]
-        elif self.metodo.split(':')[0] == 'REDIM':
+        elif self.metodo == 'REDIM':
             msg = 'Si escoge esta opción se redimensionará la partición {0} \
 para realizar la instalación.'.format(self.metodo)
-            self.ini = self.metodo.split(':')[2]
-            self.fin = self.metodo.split(':')[3]
-            self.part = self.metodo.split(':')[1]
         elif self.metodo == 'MANUAL':
             msg = 'Si escoge esta opción se instalará el sistema en la \
 partición sin usar que mide {0}'.format(gen.hum(2))
-            self.ini = 0
-            self.fin = 0
-            self.part = None
         elif self.metodo == 'NONE':
             msg = 'Si escoge esta opción se instalará el sistema en la \
 partición sin usar que mide {0}'.format(gen.hum(2))
-            self.ini = 0
-            self.fin = 0
-            self.part = None
         else:
             pass
 
@@ -260,28 +246,3 @@ instalación.".format(self.disco)
         #def handle_clicked(self, widget=None):
         #    self.destroy()
 
-class ThreadGenerator(threading.Thread):
-    def __init__(self, reference, function, params,
-                    gtk=False, window=False, event=False):
-        threading.Thread.__init__(self)
-        self._gtk = gtk
-        self._window = window
-        self._function = function
-        self._params = params
-        self._event = event
-        self.start()
-
-    def run(self):
-        if self._gtk:
-            gtk.gdk.threads_enter()
-
-        if self._event:
-            self._event.wait()
-
-        self._function(**self._params)
-
-        if self._gtk:
-            gtk.gdk.threads_leave()
-
-        if self._window:
-            self._window.hide()

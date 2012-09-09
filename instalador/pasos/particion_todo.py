@@ -16,15 +16,13 @@ class Main(gtk.Fixed):
     button = None
     part = instalador.clases.particiones.Main()
 
-    def __init__(self, disco, ini, fin):
+    def __init__(self, CFG):
         gtk.Fixed.__init__(self)
-        self.disco = disco
-        self.ini = ini
-        self.fin = fin
-
+        self.disco = CFG['disco']
+        self.ini = CFG['ini']
+        self.fin = CFG['fin']
+        self.forma = 'particion_2'
         self.swap = gen.ram() if int(gen.ram()) >= 1048576 else int(gen.ram()) * 2
-        self.metodo = 'particion_2'
-        self.conf = (self.disco, self.ini, self.fin, self.swap, self.metodo)
 
         txt_info = "Seleccione tipo de instalación que desea realizar"
         self.lbl1 = gtk.Label(txt_info)
@@ -33,7 +31,7 @@ class Main(gtk.Fixed):
         self.put(self.lbl1, 0, 0)
 
         self.barra = None
-        self.barra = barra.Main(self.conf)
+        self.barra = barra.Main(self)
         self.barra.set_size_request(690, 100)
         self.put(self.barra, 0, 30)
 
