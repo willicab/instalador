@@ -202,7 +202,7 @@ class Main(gtk.Dialog):
                              tamano, #Tamaño
                              inicio, #inicio
                              fin]                                   #fin
-                self.padre.agregar_a_lista(particion)
+                self.padre.agregar_a_lista(particion, False)
 
             # Lógica
             elif tipo == msj.particion.logica:
@@ -235,31 +235,28 @@ class Main(gtk.Dialog):
                                  tamano, #Tamaño
                                  ext_ini, #inicio
                                  ext_fin]                                   #fin
-                    self.padre.agregar_a_lista(particion)
+                    self.padre.agregar_a_lista(particion, False)
 
-            # Calculamos el tamaño de la partición libre si bext == True 
-            # entonces se usará ext_fin como fin
+            # Calculamos el tamaño de la partición libre
+            # si bext == True entonces se usará ext_fin como fin
             if self.padre.bext == True:
                 fin = self.padre.ext_fin
 
-            # Si fin == self.fin entonces 
-            if fin == int(gen.kb(self.fin)):
-                pass
-                # No se crea elemento espacio libre
-            else:
+            # Si fin != self.fin entonces 
+            if fin != int(gen.kb(self.fin)):
                 # Se calcula el tamaño de la partición libre
                 inicio = fin
                 fin = int(gen.kb(self.fin))
                 tamano = gen.hum(fin - inicio)
                 # Se crea elemento espacio libre
                 libre = ['', #Dispositivo
-                         'Espacio Libre', #Tipo
-                         '', #Formato
+                         '', #Tipo
+                         msj.particion.libre, #Formato
                          '', #Punto de montaje
                          tamano, #Tamaño
                          inicio, #inicio
                          fin]               #fin
-                self.padre.agregar_a_lista(libre)
+                self.padre.agregar_a_lista(libre, False)
 
             # Se actualiza la tabla
             self.padre.llenar_tabla()

@@ -159,7 +159,7 @@ class Main(gtk.Fixed):
                     self.lista[k + 1] = f_temp
 
 
-    def agregar_a_lista(self, fila):
+    def agregar_a_lista(self, fila, pop=True):
         '''Agrega una nueva particion a la lista en el sitio adecuado segun su
         inicio'''
 
@@ -176,18 +176,12 @@ class Main(gtk.Fixed):
                 ini_siguiente = self.lista[i + 1][5]
                 if inicio >= ini_anterior and inicio < ini_siguiente:
 
-                    # evita que se borre la particion extendida cuando se crea
-                    # la primera particion logica
-                    if not (fila[1] == msj.particion.extendida \
-                    and fila[2] == msj.particion.libre \
-                    and f[1] == msj.particion.extendida):
-                        temp.pop()
-
+                    if pop: temp.pop()
                     temp.append(fila)
                     agregado = True
 
             elif not agregado:
-                temp.pop()
+                if pop: temp.pop()
                 temp.append(fila)
 
             i = i + 1
