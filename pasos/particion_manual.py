@@ -30,14 +30,14 @@ class msj:
 
         @classmethod
         def get_formato(self, formato):
-            if formato == 'free':           return ''
+            if formato == 'free':           return self.libre
             if formato == 'extended':     return ''
 
             return formato
 
         @classmethod
-        def get_dispositivo(self, disp):
-            if disp == 0:       return ''
+        def get_dispositivo(self, disp, num):
+            if num == -1:       return ''
 
             return disp
 
@@ -146,9 +146,10 @@ class Main(gtk.Fixed):
                 p_tam = particion[3]
                 p_format = particion[4]
                 p_tipo = particion[5]
+                p_num = particion[10]
 
                 fila = [
-                       msj.particion.get_dispositivo(p_disp),
+                       msj.particion.get_dispositivo(p_disp, p_num),
                        msj.particion.get_tipo(p_tipo),
                        msj.particion.get_formato(p_format),
                        '', # Punto de montaje
@@ -167,7 +168,7 @@ class Main(gtk.Fixed):
 
         #TODO: Impedir crear nuevas si hay mas de 4 primarias y 0 extendidas
         # BTN_NUEVA
-        if fila[1] == msj.particion.libre or fila[1] == \
+        if fila[2] == msj.particion.libre or fila[2] == \
         msj.particion.extendida_libre:
             self.btn_nueva.set_sensitive(True)
         else:
@@ -175,7 +176,7 @@ class Main(gtk.Fixed):
 
         # Solo se pueden eliminar particiones, no espacios libres
         # BTN_ELIMINAR
-        if fila[1] != msj.particion.libre and fila[1] != \
+        if fila[2] != msj.particion.libre and fila[2] != \
         msj.particion.extendida_libre:
             self.btn_eliminar.set_sensitive(True)
         else:
