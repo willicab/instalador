@@ -283,7 +283,7 @@ class Main(gtk.Dialog):
                 self.padre.agregar_a_lista(libre)
 
             # Se actualiza la tabla
-            self.padre.llenar_tabla(self.padre.lista)
+            self.padre.llenar_tabla()
 
         self.destroy()
         return None

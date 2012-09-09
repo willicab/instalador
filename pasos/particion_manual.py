@@ -159,7 +159,7 @@ class Main(gtk.Fixed):
                    ]
                 self.lista.append(fila)
 
-            self.llenar_tabla(self.lista)
+            self.llenar_tabla()
 
     def seleccionar_fila(self, fila):
         '''Acciones a tomar cuando una fila de la tabla es seleccionada'''
@@ -183,15 +183,17 @@ class Main(gtk.Fixed):
             self.btn_eliminar.set_sensitive(False)
 
 
-    def llenar_tabla(self, data=None):
+    def llenar_tabla(self):
         '''Llena la tabla con las particiones existentes en el disco'''
-        assert isinstance(data, list) or isinstance(data, tuple)
+
+        # Ordena la lista por inicio de la particion
+        self.ordenar_lista()
 
         # Limpia previamente la tabla para inicializar su llenado
         self.tabla.liststore.clear()
 
-        # LLena la tabla con los datos de "data"
-        for fila in data:
+        # LLena la tabla con los datos
+        for fila in self.lista:
             self.tabla.agregar_fila(fila)
 
             # Verifica si hay punto de montaje raiz "/"
@@ -203,26 +205,17 @@ class Main(gtk.Fixed):
             msj.particion.extendida:
                 self.primarias = self.primarias + 1
 
-        #=======================================================================
-        # # Desactiva el boton deshacer si en el disco hay sólo un espacio libre
-        # if len(data) == 1 and fila[1] == msj.particion.libre:
-        #   self.btn_deshacer.set_sensitive(False)
-        # else:
-        #   self.btn_deshacer.set_sensitive(True)
-        #=======================================================================
+    def ordenar_lista(self):
+        tamano = len(self.lista)
+        for i in range(tamano):
+            for k in range(tamano - 1):
+                ini = self.lista[k][5]
+                ini_sig = self.lista[k + 1][5]
+                if ini > ini_sig:
+                    f_temp = self.lista[k]
+                    self.lista[k] = self.lista[k + 1]
+                    self.lista[k + 1] = f_temp
 
-        #=======================================================================
-        # if self.bext == False and self.primarias == 4:
-        #    # impide crear una nueva particion si hay 4 primarias y 0 extendidas
-        #    self.btn_nueva.set_sensitive(False)
-        # elif fila[1] != msj.particion.libre and fila[1] != \
-        # msj.particion.extendida_libre:
-        #    # impide crear una nueva particion si no hay espacios libres
-        #    self.btn_nueva.set_sensitive(False)
-        # else:
-        #    # Permite crear una particion nueva
-        #    self.btn_nueva.set_sensitive(True)
-        #=======================================================================
 
     def agregar_a_lista(self, fila):
         '''Agrega una nueva particion a la lista en el sitio adecuado segun su
