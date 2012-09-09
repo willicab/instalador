@@ -1,6 +1,6 @@
 #-*- coding: UTF-8 -*-
 
-import gtk
+import os, gtk
 
 class Main(gtk.Label):
     def __init__(self):
