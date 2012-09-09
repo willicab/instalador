@@ -23,7 +23,7 @@ class Wizard(gtk.Window):
     __c_principal = gtk.Fixed() # Contenedor Principal
     btn_aplicar = gtk.Button()  # Botón Aplicar
     c_pasos = gtk.VBox()
-    
+
     def __init__(self, ancho, alto, titulo, banner):
         # Creo la ventana
         gtk.Window.__init__(self, gtk.WINDOW_TOPLEVEL)
@@ -34,7 +34,7 @@ class Wizard(gtk.Window):
         self.set_size_request(ancho, alto)
         self.set_resizable(0)
         self.set_border_width(0)
-        self.connect("destroy", self.close)
+        self.connect("delete-event", self.close)
 
         # Creo el contenedor principal
         self.add(self.__c_principal)
@@ -120,7 +120,7 @@ class Wizard(gtk.Window):
         '''
         return self.pasos[nombre]
 
-    def close(self, widget=None):
+    def close(self, widget=None, event=None):
         '''
             Cierra la ventana
         '''
@@ -132,13 +132,12 @@ class Wizard(gtk.Window):
         dialog.set_title("Salir del Instalador")
         response = dialog.run()
         dialog.destroy()
+
         if response == gtk.RESPONSE_YES:
             gtk.main_quit()
             return False
         else:
             return True
-        self.destroy()
-        gtk.main_quit()
 
 class Bienvenida():
     '''
@@ -268,7 +267,7 @@ class PartManual():
             return False
 
         CFG['lista_manual'] = CFG['w'].formulario('PartManual').lista
-        CFG['disco'] =  CFG['w'].formulario('PartManual').disco
+        CFG['disco'] = CFG['w'].formulario('PartManual').disco
         m = CFG['w'].next('Usuario', Usuario, (CFG), particion_manual.Main(CFG))
 
 class Usuario():
