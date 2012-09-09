@@ -38,7 +38,7 @@ class TablaParticiones (gtk.TreeView):
         gtk.TreeView.__init__(self, model=self.liststore)
         self.set_headers_clickable(False)
         #self.connect("row-activated", self._accion_doble_click)
-        #self.connect("cursor-changed", self._accion_seleccionar)
+        self.connect("cursor-changed", self._accion_seleccionar)
 
         self.armar_tabla()
 
