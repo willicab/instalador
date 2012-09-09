@@ -2,6 +2,7 @@
 
 import gtk
 import instalador.clases.general as gen
+from instalador.translator import msj
 
 class Main(gtk.Dialog):
 
@@ -79,11 +80,11 @@ class Main(gtk.Dialog):
         self.cont.put(self.cmb_tipo, 145, 35)
 
         if self.padre.bext == True:
-            self.cmb_tipo.append_text('Lógica')
+            self.cmb_tipo.append_text(msj.particion.logica)
             self.cmb_tipo.set_sensitive(False)
         else:
-            self.cmb_tipo.append_text('Primaria')
-            self.cmb_tipo.append_text('Extendida')
+            self.cmb_tipo.append_text(msj.particion.primaria)
+            self.cmb_tipo.append_text(msj.particion.extendida)
 
         self.cmb_tipo.set_active(False)
         self.cmb_tipo.connect("changed", self.cmb_tipo_on_changed)
@@ -153,7 +154,7 @@ class Main(gtk.Dialog):
             formato = gen.get_active_text(self.cmb_fs)
             montaje = gen.get_active_text(self.cmb_montaje)
 
-            if tipo == 'Extendida':
+            if tipo == msj.particion.extendida:
                 formato = 'Ninguno'
                 montaje = 'Ninguno'
 
@@ -163,21 +164,13 @@ class Main(gtk.Dialog):
             if montaje == 'Escoger manualmente':
                 montaje = self.entrada.get_text().strip()
 
-            #===================================================================
-            # if self.padre.lista[-1][1] == 'Espacio Libre':
-            #    self.padre.lista.pop()
-            # if len(self.padre.lista) > 0:
-            #    if self.padre.lista[-1][1] == 'Espacio Libre Extendida':
-            #        self.padre.lista.pop()
-            #===================================================================
+            # Calculo el tamaño
+            inicio = int(self.inicio)
+            fin = int(self.escala.get_value())
+            tamano = gen.hum(fin - inicio)
 
-            # Si la partición nueva es Primaria
-            if tipo == 'Primaria':
-                # Calculo el tamaño
-                inicio = int(self.inicio)
-                fin = int(self.escala.get_value())
-                tamano = gen.hum(fin - inicio)
-
+            # Primaria
+            if tipo == msj.particion.primaria:
                 # Se crea elemento particion primaria y se agrega a la lista
                 particion = [self.padre.disco, #Dispositivo
                              tipo, #Tipo
@@ -186,22 +179,16 @@ class Main(gtk.Dialog):
                              tamano, #Tamaño
                              inicio, #inicio
                              fin]               #fin
-                #self.padre.lista.append(particion)
                 self.padre.agregar_a_lista(particion)
 
-            # Si la partición nueva es Extendida
-            elif tipo == 'Extendida':
-                # Calculo el tamaño
-                inicio = int(self.inicio)
-                fin = int(self.escala.get_value())
-                tamano = gen.hum(fin - inicio)
+            # Extendida
+            elif tipo == msj.particion.extendida:
                 # Cambia variable bext a True
                 self.padre.bext = True
                 # Establece las variables ext_ini y ext_fin
                 self.padre.ext_ini = inicio
                 self.padre.ext_fin = fin
-                # Elimina ultimo elemento de la lista
-                #self.padre.lista.pop()
+
                 # Se crea elemento particion extendida y se agrega a la lista
                 particion = [self.padre.disco, #Dispositivo
                              tipo, #Tipo
@@ -210,26 +197,19 @@ class Main(gtk.Dialog):
                              tamano, #Tamaño
                              inicio, #inicio
                              fin]               #fin
-                #self.padre.lista.append(particion)
                 self.padre.agregar_a_lista(particion)
                 # Se crea elemento espacio libre en partición extendida
                 particion = ['', #Dispositivo
-                             'Espacio Libre Extendida', #Tipo
-                             '', #Formato
+                             tipo, #Tipo
+                             msj.particion.libre, #Formato
                              '', #Punto de montaje
                              tamano, #Tamaño
                              inicio, #inicio
                              fin]                                   #fin
-                #self.padre.lista.append(particion)
                 self.padre.agregar_a_lista(particion)
 
-            # Si la partición nueva es Lógica
-            elif tipo == 'Lógica':
-                # Calculo el tamaño
-                inicio = int(self.padre.ext_ini)
-                fin = int(self.escala.get_value())
-                tamano = gen.hum(fin - inicio)
-
+            # Lógica
+            elif tipo == msj.particion.logica:
                 # Se crea elemento particion lógica y se agrega a la lista
                 particion = [self.padre.disco, #Dispositivo
                              tipo, #Tipo
@@ -238,7 +218,6 @@ class Main(gtk.Dialog):
                              tamano, #Tamaño
                              inicio, #inicio
                              fin]               #fin
-                #self.padre.lista.append(particion)
                 self.padre.agregar_a_lista(particion)
                 # Si se llega al final de la particion extendida
                 if self.padre.ext_fin == fin:
@@ -254,13 +233,12 @@ class Main(gtk.Dialog):
                     self.padre.ext_ini = ext_ini
                     # Se crea elemento espacio libre en partición extendida
                     particion = ['', #Dispositivo
-                                 'Espacio Libre Extendida', #Tipo
-                                 '', #Formato
+                                 msj.particion.extendida, #Tipo
+                                 msj.particion.libre, #Formato
                                  '', #Punto de montaje
                                  tamano, #Tamaño
                                  ext_ini, #inicio
                                  ext_fin]                                   #fin
-                    #self.padre.lista.append(particion)
                     self.padre.agregar_a_lista(particion)
 
             # Calculamos el tamaño de la partición libre si bext == True 
@@ -285,7 +263,6 @@ class Main(gtk.Dialog):
                          tamano, #Tamaño
                          inicio, #inicio
                          fin]               #fin
-                #self.padre.lista.append(libre)
                 self.padre.agregar_a_lista(libre)
 
             # Se actualiza la tabla
