@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 
-import gtk
-import cairo
-import clases.general as gen
-import gobject
+import gtk, cairo, gobject
 from math import pi
+
+import instalador.clases.general as gen
 
 class Main(gtk.DrawingArea):
 

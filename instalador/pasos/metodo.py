@@ -7,32 +7,26 @@
 import gtk, os, threading
 
 # Módulos locales
-import clases.particiones
-import clases.general as gen
-import clases.barra_particiones as barra
+import instalador.clases.particiones
+import instalador.clases.general as gen
+import instalador.clases.barra_particiones as barra
 
 class Main(gtk.Fixed):
-    disco = ''
-    total = ''
-    metodo = ''
-    discos = []
-    particiones = []
-    libres = []
-    metodos = {}
-    cfg = {}
-    minimo = gen.h2kb('1GB')
-    lbl_info = gtk.Label('')
-    cmb_discos = gtk.combo_box_new_text()
-    cmb_metodo = gtk.combo_box_new_text()
-    barra_part = gtk.DrawingArea()
-    part = clases.particiones.Main()
 
-    def __init__(self, parent):
+    def __init__(self):
         gtk.Fixed.__init__(self)
-        self.par = parent
-        self.Iniciar()
 
-    def Iniciar(self):
+        self.disco = ''
+        self.total = ''
+        self.metodo = ''
+        self.particion = ''
+        self.discos = []
+        self.particiones = []
+        self.libres = []
+        self.metodos = {}
+        self.cfg = {}
+        self.minimo = gen.h2kb('1GB')
+        self.part = instalador.clases.particiones.Main()
 
         # Listar Discos
         self.discos = self.part.lista_discos()
@@ -43,6 +37,7 @@ class Main(gtk.Fixed):
         self.lbl1.set_alignment(0, 0)
         self.put(self.lbl1, 0, 0)
 
+        self.cmb_discos = gtk.combo_box_new_text()
         for d in self.discos:
             self.cmb_discos.append_text(d)
         self.cmb_discos.set_active(0)
@@ -59,6 +54,7 @@ class Main(gtk.Fixed):
         self.lbl2.set_alignment(0, 0)
         self.put(self.lbl2, 0, 165)
 
+        self.cmb_metodo = gtk.combo_box_new_text()
         self.cmb_metodo.set_size_request(690, 30)
         self.put(self.cmb_metodo, 0, 190)
         self.cmb_metodo.connect('changed', self.establecer_metodo)
@@ -79,7 +75,7 @@ class Main(gtk.Fixed):
         self.particiones = self.part.lista_particiones(self.disco)
 
         if len(self.particiones) == 0:
-            MessageBox(self, self.par, self.disco)
+            MessageBox(self, self, self.disco)
         else:
             self.total = self.particiones[0][9]
             try:
@@ -89,9 +85,6 @@ class Main(gtk.Fixed):
 
             self.lista_metodos()
             self.establecer_metodo()
-            self.barra_part.show()
-            self.cmb_metodo.show()
-            self.lbl4.show()
 
     def lista_metodos(self):
         '''
@@ -194,12 +187,8 @@ instalación.".format(self.disco)
                                    gtk.MESSAGE_INFO, gtk.BUTTONS_OK_CANCEL,
                                    msg)
         self.connect('response', self._handle_clicked)
-        #self.add_button("Cancelar", gtk.RESPONSE_CANCEL)
-        #self.set_default_response(gtk.RESPONSE_OK)
         self.set_title("Disco {0} sin tabla de particiones".format(self.disco))
-        #self.set_size_request(400, 200)
-        #self.set_resizable(0)
-        #self.set_border_width(0)
+
         # Contenedor General
         self.cont = gtk.Fixed()
         self.cont.show()

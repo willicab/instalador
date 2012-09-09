@@ -1,15 +1,11 @@
 #-*- coding: UTF-8 -*-
 
-import os
-import gtk
-import threading
-import commands
-import webkit
-import clases.particiones
-import clases.install.fstab
-import clases.install.particion_todo as particion_todo
-import clases.install.particion_auto as particion_auto
-import re
+import os, gtk, threading, commands, webkit, re
+
+import instalador.clases.particiones
+import instalador.clases.install.fstab
+import instalador.clases.install.particion_todo as particion_todo
+import instalador.clases.install.particion_auto as particion_auto
 
 gtk.gdk.threads_init()
 
@@ -18,7 +14,7 @@ class Main(gtk.Fixed):
     root2 = '3GB'
     usr = '18GB'
     boot = '256MB'
-    part = clases.particiones.Main()
+    part = instalador.clases.particiones.Main()
     particiones_montadas = {}
 
     def __init__(self, cfg, parent):

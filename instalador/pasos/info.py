@@ -1,7 +1,7 @@
 #-*- coding: UTF-8 -*-
 
 import gtk
-import clases.general as gen
+import instalador.clases.general as gen
 
 class Main(gtk.Fixed):
     cfg = []

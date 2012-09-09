@@ -2,14 +2,14 @@
 
 import gtk
 
-import clases.general as gen
-import clases.particiones
-import clases.particion_nueva as part_nueva
-import clases.tabla_particiones
-from clases import particiones
+import instalador.clases.general as gen
+import instalador.clases.particiones
+import instalador.clases.particion_nueva as part_nueva
+import instalador.clases.tabla_particiones
+from instalador.clases import particiones
 
 class Main(gtk.Fixed):
-    part = clases.particiones.Main()
+    part = instalador.clases.particiones.Main()
     ini = 0             #Inicio de la partición
     fin = 0             #Fin de la partición
     lista = []          #Lista de las particiones hechas

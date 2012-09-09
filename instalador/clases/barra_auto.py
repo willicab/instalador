@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 
-import gtk
-import cairo
-import clases.general as gen
-import gobject
+import gtk, cairo, gobject
+
+import instalador.clases.general as gen
 
 class Barra(gtk.DrawingArea):
     pos = []

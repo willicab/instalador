@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-import gtk
-import cairo
-import clases.general as gen
+import gtk, cairo
+
+import instalador.clases.general as gen
 
 class Main(gtk.DrawingArea):
 #    root1_min = '2.5GB'
