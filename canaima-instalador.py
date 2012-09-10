@@ -14,13 +14,8 @@ from clases.wizard import Wizard
 from clases.constructor import UserMessage
 from clases.translator import MAIN_ROOT_ERROR_MSG, MAIN_ROOT_ERROR_TITLE
 
-<<<<<<< HEAD
-CFG = {'next': -1, 'prev': -1}
-BANNER = 'data/banner-app-top.png'
-=======
 CFG = {'next':-1, 'prev':-1}
 BANNER = 'data/img/banner.png'
->>>>>>> 4d0a2a8ab9b215255cadb077c9047729a130a04f
 
 def aconnect(button, function, bid, params):
     '''
@@ -417,14 +412,9 @@ if __name__ == "__main__":
             c_1=gtk.RESPONSE_OK, f_1=sys.exit, p_1=(1,)
             )
     else:
-<<<<<<< HEAD
-		WIZ = Wizard(700, 550, "Canaima Instalador", BANNER)
-		app = Bienvenida(CFG)
-		gtk.main()
-		sys.exit()
-=======
+
         WIZ = Wizard(700, 450, "Canaima Instalador", BANNER)
         app = Bienvenida(CFG)
         gtk.main()
         sys.exit()
->>>>>>> 4d0a2a8ab9b215255cadb077c9047729a130a04f
+
