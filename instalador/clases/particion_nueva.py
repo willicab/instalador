@@ -75,7 +75,9 @@ class Main(gtk.Dialog):
             self.cmb_tipo.set_sensitive(False)
         else:
             self.cmb_tipo.append_text(msj.particion.primaria)
-            self.cmb_tipo.append_text(msj.particion.extendida)
+            # Solo se permite una particion extendida en el disco
+            if not self.padre.existe_extendida():
+                self.cmb_tipo.append_text(msj.particion.extendida)
 
         self.cmb_tipo.set_active(False)
         self.cmb_tipo.connect("changed", self.cmb_tipo_on_changed)
@@ -114,14 +116,14 @@ class Main(gtk.Dialog):
         self.agregar('/')
         self.agregar('/boot')
         self.agregar('/home')
+        self.agregar('/opt')
+        self.agregar('/srv')
         self.agregar('/tmp')
         self.agregar('/usr')
-        self.agregar('/var')
-        self.agregar('/srv')
-        self.agregar('/opt')
         self.agregar('/usr/local')
+        self.agregar('/var')
         self.cmb_montaje.append_text('Ninguno')
-        self.cmb_montaje.append_text('Escoger manualmente')
+        self.cmb_montaje.append_text('Escoger manualmente...')
         self.cmb_montaje.set_active(False)
         self.cmb_montaje.connect("changed", self.cmb_montaje_on_changed)
         self.cmb_montaje.show()
@@ -148,7 +150,7 @@ class Main(gtk.Dialog):
             if formato == 'linux-swap':
                 montaje = ''
 
-            if montaje == 'Escoger manualmente':
+            if montaje == 'Escoger manualmente...':
                 montaje = self.entrada.get_text().strip()
 
             # Calculo el tamaño
@@ -276,7 +278,7 @@ class Main(gtk.Dialog):
 
     def cmb_montaje_on_changed(self, widget=None):
         montaje = gen.get_active_text(self.cmb_montaje)
-        if montaje == 'Escoger manualmente':
+        if montaje == 'Escoger manualmente...':
             self.entrada.show()
             self.validar_punto()
         else:

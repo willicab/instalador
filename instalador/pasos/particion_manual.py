@@ -107,21 +107,53 @@ class Main(gtk.Fixed):
 
         self.fila_selec = fila
 
-        #TODO: Impedir crear nuevas si hay mas de 4 primarias y 0 extendidas
+        # Es particion extendida?
+        if fila[1] == msj.particion.extendida:
+            self.bext = True
+        else:
+            self.bext = False
+
         # BTN_NUEVA
-        if fila[2] == msj.particion.libre or fila[2] == \
-        msj.particion.extendida_libre:
-            self.btn_nueva.set_sensitive(True)
+        if fila[2] == msj.particion.libre:
+            # Activar solo si hay menos de 4 particiones primarias
+            if self.contar_primarias() < 4:
+                self.btn_nueva.set_sensitive(True)
+            # o si la part. libre pertenece a una part. extendida
+            elif fila[1] == msj.particion.extendida:
+                self.btn_nueva.set_sensitive(True)
         else:
             self.btn_nueva.set_sensitive(False)
 
         # Solo se pueden eliminar particiones, no espacios libres
         # BTN_ELIMINAR
-        if fila[2] != msj.particion.libre and fila[2] != \
-        msj.particion.extendida_libre:
+        if fila[2] != msj.particion.libre:
             self.btn_eliminar.set_sensitive(True)
         else:
             self.btn_eliminar.set_sensitive(False)
+
+    def contar_primarias(self):
+        '''Cuenta la cantidad de particiones primarias. Las particiones
+        extendidas cuentan como primarias'''
+        total = 0
+        for fila in self.lista:
+            # Los espacios libres no se cuentan
+            if fila[2] == msj.particion.libre:
+                continue
+            # Si es una particion extendida
+            if fila[1] == msj.particion.extendida:
+                total = total + 1
+            # Si la particion es primaria
+            elif fila[1] == msj.particion.primaria:
+                total = total + 1
+
+        return total
+
+    def existe_extendida(self):
+        'Determina si existe por lo menos una particion extandida'
+        for fila in self.lista:
+            if fila[1] == msj.particion.extendida:
+                return True
+        return False
 
 
     def llenar_tabla(self):
@@ -190,6 +222,8 @@ class Main(gtk.Fixed):
     #TODO: Implementar
     def particion_eliminar(self, widget=None):
 
+        widget.set_sensitive(False)
+
         fila_accion = (
                         'eliminar',
                         self.tabla.ultima_fila_seleccionada
@@ -200,9 +234,9 @@ class Main(gtk.Fixed):
 
 
     def particion_nueva(self, widget=None):
+        widget.set_sensitive(False)
         part_nueva.Main(self)
 
     def deshacer(self, widget=None):
-
         self.inicializar(self.data)
 

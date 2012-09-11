@@ -16,7 +16,6 @@ class msj:
         primaria = 'Primaria'
         extendida = 'Extendida'
         logica = 'Lógica'
-        extendida_libre = 'Espacio Libre Extendida'
 
         @classmethod
         def get_tipo(self, tipo):
