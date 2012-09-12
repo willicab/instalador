@@ -140,7 +140,8 @@ class PasoPartManual(gtk.Fixed):
 
         #BTN_REDIMENSION
         print floatify(fila[TblCol.TAMANO])
-        if floatify(fila[TblCol.TAMANO]) > floatify(fila[TblCol.USADO]):
+        if floatify(fila[TblCol.TAMANO]) > floatify(fila[TblCol.USADO]) \
+        and fila[TblCol.FORMATO] != msj.particion.libre:
             self.btn_redimension.set_sensitive(True)
         else:
             self.btn_redimension.set_sensitive(False)
