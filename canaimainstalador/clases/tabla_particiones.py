@@ -17,12 +17,6 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 import gtk
-import canaimainstalador.clases.common as gen
-
-program = {
-	'name'	: 'Particiones',
-	'version':'1.0',
-}
 
 class TablaParticiones (gtk.TreeView):
 
@@ -33,7 +27,7 @@ class TablaParticiones (gtk.TreeView):
     def __init__(self):
 
         # Tipos de valores a mostrar en la tabla
-        self.liststore = gtk.ListStore(str, str, str, str, str, int, int)
+        self.liststore = gtk.ListStore(str, str, str, str, str, str, int, int)
 
         gtk.TreeView.__init__(self, model=self.liststore)
         self.set_headers_clickable(False)
@@ -59,8 +53,7 @@ class TablaParticiones (gtk.TreeView):
 
     def _accion_doble_click(self, treeview, path, column):
         modelo = treeview.get_model()
-        iter = modelo.get_iter(path)
-        fila = modelo.get(iter, 0, 1, 2, 3, 4, 5, 6)
+        fila = modelo.get(modelo.get_iter(path), 0, 1, 2, 3, 4, 5, 6, 7)
 
         self.doble_click(fila)
 
@@ -73,7 +66,7 @@ class TablaParticiones (gtk.TreeView):
         iterador = obj_seleccion[1]
 
         if iterador != None:
-            return modelo.get(iterador, 0, 1, 2, 3, 4, 5, 6)
+            return modelo.get(iterador, 0, 1, 2, 3, 4, 5, 6, 7)
         else:
             return None
 
@@ -86,12 +79,13 @@ class TablaParticiones (gtk.TreeView):
         self.nueva_columna_texto("Formato", 2)
         self.nueva_columna_texto("Punto de Montaje", 3)
         self.nueva_columna_texto("Tamaño", 4)
-        self.nueva_columna_texto("Inicio", 5)
-        self.nueva_columna_texto("Fin", 6)
+        self.nueva_columna_texto("Usado", 5)
+        self.nueva_columna_texto("Inicio", 6)
+        self.nueva_columna_texto("Fin", 7)
 
         # Ocultar las columnas que no se desean mostrar
+        #self.columnas[6].set_visible(False)
         #self.columnas[7].set_visible(False)
-        #self.columnas[8].set_visible(False)
         #self.columnas[9].set_visible(False)
 
     def nueva_columna_color(self, title, index):
@@ -139,22 +133,15 @@ class TablaParticiones (gtk.TreeView):
     #def agregar_fila(self, color='', dispositivo='', tipo='', formato='', montaje='', tamano='', formatear=False, inicio='', fin='', num=''):
     def agregar_fila(self, lista):
         'Agrega los datos a las filas'
-        self.liststore.append([lista[0],
-                               lista[1],
-                               lista[2],
-                               lista[3],
-                               lista[4],
-                               lista[5],
-                               lista[6]])
-        #self.liststore.append([color, 
-        #                       dispositivo, 
-        #                       tipo, 
-        #                       formato, 
-        #                       montaje, 
-        #                       gen.hum(gen.kb(tamano)), 
-        #                       formatear, 
-        #                       inicio, 
-        #                       fin])
+        self.liststore.append([lista[0], # Dispositivo
+                               lista[1], # Tipo
+                               lista[2], # Formato
+                               lista[3], # Punto de Montaje
+                               lista[4], # Tamaño
+                               lista[5], # Usado
+                               lista[6], # Inicio
+                               lista[7]] # Fin
+                              )
 
 datos_ejemplo = [
     ['#ff0000', '/dev/sda1', 'Primaria', 'fat32', '', '32 GB', False, 1],
@@ -186,7 +173,7 @@ class Ventana:
 
         # Crea una ventana
         self.ventana = gtk.Window(gtk.WINDOW_TOPLEVEL)
-        self.ventana.set_title(program['name'] + " " + program['version'])
+        self.ventana.set_title("Tabla de Particiones")
         self.ventana.add(self.vbox)
         self.ventana.connect("destroy", self.destroy)
         self.ventana.show()

@@ -38,10 +38,3 @@ class msj:
             if num == -1:       return ''
 
             return disp
-
-    class gui:
-        'Mensajes mostrados en la gui'
-
-        btn_part_nueva = 'Crear Nueva Partición'
-        btn_part_eliminar = 'X'
-        btn_deshacer = 'Deshacer Acciones'
