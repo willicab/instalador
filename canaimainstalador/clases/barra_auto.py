@@ -1,63 +1,38 @@
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
 
 import gtk, cairo, gobject
 
-import instalador.clases.general as gen
+from canaimainstalador.clases.common import humanize
 
-class Barra(gtk.DrawingArea):
-    pos = []
+class BarraAuto(gtk.DrawingArea):
+
     presionado = False
-    cur = 0
-    w = 0
-    h = 0
-    def __init__(self, parent, total, usado, libre, minimo, particion, cur_value):
-        super(Barra, self).__init__()
-        self.inicio(parent, total, usado, libre, minimo, particion, cur_value)
-        self.set_events(gtk.gdk.POINTER_MOTION_MASK |
-                      gtk.gdk.POINTER_MOTION_HINT_MASK |
-                      gtk.gdk.BUTTON_PRESS_MASK |
-                	  gtk.gdk.BUTTON_RELEASE_MASK )
+
+    def __init__(self, parent):
+        super(BarraAuto, self).__init__()
+        self.set_events(
+            gtk.gdk.POINTER_MOTION_MASK | gtk.gdk.POINTER_MOTION_HINT_MASK |
+            gtk.gdk.BUTTON_PRESS_MASK | gtk.gdk.BUTTON_RELEASE_MASK
+            )
         self.connect("expose-event", self.expose)
         self.connect("button-press-event", self.press)
         self.connect("button-release-event", self.release)
         self.connect("motion-notify-event", self.draw_cursor)
+        self.p = parent
 
-    def inicio(self, parent, total, usado, libre, minimo, particion, cur_value):
-        self.total = total
-        self.usado = usado
-        self.minimo = minimo
-        self.libre = libre
-        self.particion = particion
-        self.par = parent
-        self.cur = cur_value #usado + (((total - minimo) - usado) / 2)
-        #self.par.cur_value = self.cur
-        print self.usado, self.cur, self.minimo
-    
-    def press(self, widget, event):
-        if event.x >= self.pos[0] and event.x <= self.pos[2] and \
-            event.y >= self.pos[1] and event.y <= self.pos[3]:
-            self.presionado = True
-        
-    def release(self, widget, event):
-        self.presionado = False
-    
-    def draw_cursor(self, widget, event):
-        if event.x >= self.pos[0] and event.x <= self.pos[2] and \
-            event.y >= self.pos[1] and event.y <= self.pos[3]:
-            cursor = gtk.gdk.Cursor(gtk.gdk.HAND2)    #esto crea un cursor que mostrara un lápiz
-            self.window.set_cursor(cursor)           #se lo asignamos a nuestro dibujable
-        else:
-            cursor = gtk.gdk.Cursor(gtk.gdk.LEFT_PTR)    #esto crea un cursor que mostrara un lápiz
-            self.window.set_cursor(cursor)           #se lo asignamos a nuestro dibujable            
-        if self.presionado == True:
-            x = (event.x * self.total) / self.w
-            if x >= self.total - self.minimo: x = self.total - self.minimo
-            if x <= self.usado + self.libre : x = self.usado + self.libre
-            self.cur = x
-            self.expose(self, event)
-            self.par.on_changed()
+    def cambiar(self, forma):
+        self.forma = forma
+        self.expose()
 
-    def expose(self, widget, event):
+    def expose(self, widget = None, event = None):
+        self.total = self.p.total
+        self.usado = self.p.usado
+        self.minimo = self.p.minimo
+        self.libre = self.p.libre
+        self.particion = self.p.particion
+        self.cur = self.p.current
+
         cr = widget.window.cairo_create()
         cr.set_line_width(0.8)
 
@@ -121,12 +96,12 @@ class Barra(gtk.DrawingArea):
         cr.rectangle(x_particion, 0, w_particion, alto)
         cr.fill()
 
-        canaima = gen.hum(self.total - self.cur)
-        otra = gen.hum(self.cur)
+        canaima = humanize(self.total - self.cur)
+        otra = humanize(self.cur)
         msg = 'Espacio que se usará para instalar Canaima GNU/Linux'
-        self.par.lbl_canaima.set_text('{1} ({0})'.format(canaima, msg))
+        self.p.lbl_canaima.set_text('{1} ({0})'.format(canaima, msg))
         msg = 'Espacio que quedará despues de redimensionar la particion'
-        self.par.lbl_otra.set_text('{2} {0} ({1})'.format(self.particion, otra, msg))
+        self.p.lbl_otra.set_text('{2} {0} ({1})'.format(self.particion, otra, msg))
 
         cr.set_source_rgb(0, 0, 0)
         area = (x1_barra, x2_barra, y1_barra, y2_barra)
@@ -150,5 +125,28 @@ class Barra(gtk.DrawingArea):
             cr.move_to(a + 1, i)
             cr.rel_line_to(8, 0)
             cr.stroke()
-            
+
+    def press(self, widget, event):
+        if event.x >= self.pos[0] and event.x <= self.pos[2] and \
+            event.y >= self.pos[1] and event.y <= self.pos[3]:
+            self.presionado = True
         
+    def release(self, widget, event):
+        self.presionado = False
+    
+    def draw_cursor(self, widget, event):
+        if event.x >= self.pos[0] and event.x <= self.pos[2] and \
+            event.y >= self.pos[1] and event.y <= self.pos[3]:
+            cursor = gtk.gdk.Cursor(gtk.gdk.HAND2)    #esto crea un cursor que mostrara un lápiz
+            self.window.set_cursor(cursor)           #se lo asignamos a nuestro dibujable
+        else:
+            cursor = gtk.gdk.Cursor(gtk.gdk.LEFT_PTR)    #esto crea un cursor que mostrara un lápiz
+            self.window.set_cursor(cursor)           #se lo asignamos a nuestro dibujable            
+        if self.presionado == True:
+            x = (event.x * self.total) / self.w
+            if x >= self.total - self.minimo: x = self.total - self.minimo
+            if x <= self.usado + self.libre : x = self.usado + self.libre
+            self.cur = x
+            self.expose(self, event)
+            self.p.on_changed()
+

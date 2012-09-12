@@ -1,8 +1,9 @@
+#!/usr/bin/env python
 #-*- coding: UTF-8 -*-
 
-import commands, os, parted, gudev
+import commands, os, parted, gudev, hashlib
 
-class Main():
+class Particiones():
     def __init__(self):
         pass
 
@@ -14,16 +15,18 @@ class Main():
         d = gudev.Client(['block'])
         c = d.query_by_subsystem('block')
         for i in c:
-            if i.get_devtype() == 'disk':
-                if i.get_property('ID_TYPE') == 'disk':
+            _type = i.get_devtype()
+            _bus = i.get_property('ID_BUS')
+            _name = i.get_device_file()
+            if _type == 'disk':
+                if _bus == 'ata' or _bus == 'usb' or _bus == 'memstick':
                     try:
-                        e = Drive(i.get_device_file())
+                        e = Drive(_name)
                     except Exception as x:
                         e = False
-                        print x
                     if e:
-                        l.append(i.get_device_file())
-        return l
+                        l.append(_name)
+        return sorted(l)
 
     def usado(self, particion):
         if os.path.exists(particion):
@@ -94,11 +97,16 @@ class Main():
                 tipo = 'logical'
             elif code == 2:
                 tipo = 'extended'
-            print part, ini, fin, tam, fs, tipo, flags, usado, libre, total, num
+
+            code = hashlib.sha1(
+                        str(ini)+str(fin)+fs+tipo+str(usado)+str(num)
+                        ).hexdigest()[:7]
+
             p.append(
-                [part, ini, fin, tam, fs, tipo, flags, usado, libre, total, num]
+                [part, ini, fin, tam, fs, tipo, flags, usado, libre, total, num, code]
                 )
-        return p
+
+        return sorted(p, key=lambda particiones: particiones[1])
 
     def particionar(self, disco, tipo, formato, inicio, fin):
         '''

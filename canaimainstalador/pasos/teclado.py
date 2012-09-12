@@ -1,13 +1,15 @@
-#-*- coding: UTF-8 -*-
+#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
 '''Configuración de la distribución del teclado'''
 # Autor: William Cabrera
 # Fecha: 11/10/2011
 
 import gtk, os
-import instalador.clases.distribuciones as distribuciones
 
-class Main(gtk.Fixed):
-    def __init__(self):
+from canaimainstalador.config import TECLADOS
+
+class PasoTeclado(gtk.Fixed):
+    def __init__(self, CFG):
         gtk.Fixed.__init__(self)
 
         self.lst_distribuciones = []             # distribuciones disponibles
@@ -18,7 +20,7 @@ class Main(gtk.Fixed):
         self.put(self.lbl1, 0, 0)
 
         self.cmb_dist = gtk.combo_box_new_text()
-        for l1, l2 in distribuciones.lista_distribuciones.items():
+        for l1, l2 in TECLADOS.items():
             self.cmb_dist.append_text(l1)
             self.lst_distribuciones.append(l2)
 
@@ -43,6 +45,6 @@ class Main(gtk.Fixed):
 
     def change_distribucion(self, widget=None):
         self.distribucion = self.lst_distribuciones[self.cmb_dist.get_active()]
-        path = 'instalador/data/img/key_' + self.distribucion + '.png'
+        path = 'canaimainstalador/data/img/key_' + self.distribucion + '.png'
         os.system("setxkbmap {0}".format(self.distribucion))
         self.img_distribucion.set_from_file(path)

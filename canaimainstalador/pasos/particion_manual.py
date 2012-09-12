@@ -2,10 +2,10 @@
 
 import gtk
 
-import instalador.clases.general as gen
-import instalador.clases.particion_nueva as part_nueva
-import instalador.clases.tabla_particiones
-from instalador.clases import particiones
+import canaimainstalador.clases.particion_nueva as part_nueva
+from canaimainstalador.clases.common import floatify, humanize
+from canaimainstalador.clases.tabla_particiones import TablaParticiones
+from canaimainstalador.clases.particiones import Particiones
 
 class msj:
     'Clase para administrar los mensajes mostrados al usuario'
@@ -48,12 +48,12 @@ class msj:
         btn_part_eliminar = 'X'
         btn_deshacer = 'Deshacer Acciones'
 
-class Main(gtk.Fixed):
+class PasoPartManual(gtk.Fixed):
 
     def __init__(self, data):
         gtk.Fixed.__init__(self)
 
-        self.tabla = instalador.clases.tabla_particiones.TablaParticiones()
+        self.tabla = TablaParticiones()
         #self.tabla.set_doble_click(self.activar_tabla);
         self.tabla.set_seleccionar(self.seleccionar_fila)
 
@@ -119,7 +119,7 @@ class Main(gtk.Fixed):
         # Llenar la tabla con el contenido actual del disco
         if self.tabla != None:
 
-            l_part = particiones.Main().lista_particiones(self.disco)
+            l_part = Particiones().lista_particiones(self.disco)
             for particion in l_part:
                 p_disp = particion[0]
                 p_ini = particion[1]
@@ -134,9 +134,9 @@ class Main(gtk.Fixed):
                        msj.particion.get_tipo(p_tipo),
                        msj.particion.get_formato(p_format),
                        '', # Punto de montaje
-                       gen.hum(gen.kb(p_tam)),
-                       gen.kb(p_ini),
-                       gen.kb(p_fin)
+                       humanize(floatify(p_tam)),
+                       floatify(p_ini),
+                       floatify(p_fin)
                    ]
                 self.lista.append(fila)
 

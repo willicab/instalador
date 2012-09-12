@@ -1,7 +1,7 @@
 #-*- coding: UTF-8 -*-
 
 import gtk
-import instalador.clases.general as gen
+from canaimainstalador.clases.common import floatify, humanize
 
 class Main(gtk.Dialog):
 
@@ -24,11 +24,11 @@ class Main(gtk.Dialog):
 
         #=======================================================================
         # if self.padre.bext == False:
-        #    self.inicio = gen.kb(self.padre.lista[-1][5])
-        #    self.fin = gen.kb(self.padre.fin)
+        #    self.inicio = floatify(self.padre.lista[-1][5])
+        #    self.fin = floatify(self.padre.fin)
         # else:
-        #    self.inicio = gen.kb(self.padre.ext_ini)
-        #    self.fin = gen.kb(self.padre.ext_fin)
+        #    self.inicio = floatify(self.padre.ext_ini)
+        #    self.fin = floatify(self.padre.ext_fin)
         #=======================================================================
 
         # Toma el inicio y fin de la particion seleccionada
@@ -60,7 +60,7 @@ class Main(gtk.Dialog):
         self.escala.connect("value-changed", self.on_changed)
         self.cont.put(self.escala, 60, 5)
         self.escala.show()
-        self.lblsize = gtk.Label(gen.hum(self.escala.get_value() - \
+        self.lblsize = gtk.Label(humanize(self.escala.get_value() - \
                                  float(self.inicio)))
         self.lblsize.set_alignment(0, 0.5)
         self.lblsize.set_size_request(100, 30)
@@ -170,7 +170,7 @@ class Main(gtk.Dialog):
                 # Calculo el tamaño
                 inicio = int(self.inicio)
                 fin = int(self.escala.get_value())
-                tamano = gen.hum(fin - inicio)
+                tamano = humanize(fin - inicio)
 
                 # Se crea elemento particion primaria y se agrega a la lista
                 particion = [self.padre.disco, #Dispositivo
@@ -188,7 +188,7 @@ class Main(gtk.Dialog):
                 # Calculo el tamaño
                 inicio = int(self.inicio)
                 fin = int(self.escala.get_value())
-                tamano = gen.hum(fin - inicio)
+                tamano = humanize(fin - inicio)
                 # Cambia variable bext a True
                 self.padre.bext = True
                 # Establece las variables ext_ini y ext_fin
@@ -222,7 +222,7 @@ class Main(gtk.Dialog):
                 # Calculo el tamaño
                 inicio = int(self.padre.ext_ini)
                 fin = int(self.escala.get_value())
-                tamano = gen.hum(fin - inicio)
+                tamano = humanize(fin - inicio)
 
                 # Se crea elemento particion lógica y se agrega a la lista
                 particion = [self.padre.disco, #Dispositivo
@@ -244,7 +244,7 @@ class Main(gtk.Dialog):
                     # se calcula el tamaño de la partición libre
                     ext_ini = fin
                     ext_fin = self.padre.ext_fin
-                    tamano = gen.hum(ext_fin - ext_ini)
+                    tamano = humanize(ext_fin - ext_ini)
                     self.padre.ext_ini = ext_ini
                     # Se crea elemento espacio libre en partición extendida
                     particion = ['', #Dispositivo
@@ -263,14 +263,14 @@ class Main(gtk.Dialog):
                 fin = self.padre.ext_fin
 
             # Si fin == self.fin entonces 
-            if fin == int(gen.kb(self.fin)):
+            if fin == int(floatify(self.fin)):
                 pass
                 # No se crea elemento espacio libre
             else:
                 # Se calcula el tamaño de la partición libre
                 inicio = fin
-                fin = int(gen.kb(self.fin))
-                tamano = gen.hum(fin - inicio)
+                fin = int(floatify(self.fin))
+                tamano = humanize(fin - inicio)
                 # Se crea elemento espacio libre
                 libre = ['', #Dispositivo
                          'Espacio Libre', #Tipo
@@ -289,7 +289,7 @@ class Main(gtk.Dialog):
         return None
 
     def on_changed(self, widget=None):
-        self.lblsize.set_text(gen.hum(widget.get_value() - float(self.inicio)))
+        self.lblsize.set_text(humanize(widget.get_value() - float(self.inicio)))
 
     def cmb_tipo_on_changed(self, widget=None):
         tipo = gen.get_active_text(self.cmb_tipo)

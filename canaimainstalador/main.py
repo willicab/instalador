@@ -1,15 +1,23 @@
 #!/usr/bin/env python
-#-*- coding: UTF-8 -*-
+# -*- coding: UTF-8 -*-
 
 # Módulos globales
 import gtk, os, sys, re, Image
 
 # Módulos locales
-from instalador.pasos import bienvenida, teclado, metodo, particion_auto, particion_todo
-from instalador.pasos import particion_manual, instalacion, usuario, accesibilidad, info
-from instalador.constructor import UserMessage, aconnect
-from instalador.translator import MAIN_ROOT_ERROR_MSG, MAIN_ROOT_ERROR_TITLE
-from instalador.config import *
+from canaimainstalador.pasos.bienvenida import PasoBienvenida
+from canaimainstalador.pasos.teclado import PasoTeclado
+from canaimainstalador.pasos.metodo import PasoMetodo
+from canaimainstalador.pasos.particion_auto import PasoPartAuto
+from canaimainstalador.pasos.particion_todo import PasoPartTodo
+from canaimainstalador.pasos.particion_manual import PasoPartManual
+from canaimainstalador.pasos.instalacion import PasoInstalacion
+from canaimainstalador.pasos.usuario import PasoUsuario
+from canaimainstalador.pasos.accesibilidad import PasoAccesibilidad
+from canaimainstalador.pasos.info import PasoInfo
+from canaimainstalador.clases.common import UserMessage, aconnect
+from canaimainstalador.translator import MAIN_ROOT_ERROR_MSG, MAIN_ROOT_ERROR_TITLE
+from canaimainstalador.config import *
 
 class Wizard(gtk.Window):
     '''
@@ -28,7 +36,7 @@ class Wizard(gtk.Window):
         # Creo la ventana
         gtk.Window.__init__(self, gtk.WINDOW_TOPLEVEL)
         gtk.Window.set_position(self, gtk.WIN_POS_CENTER_ALWAYS)
-        self.set_icon_from_file('instalador/data/img/icon.png')
+        self.set_icon_from_file('canaimainstalador/data/img/icon.png')
         self.titulo = titulo
         self.set_title(titulo)
         self.set_size_request(ancho, alto)
@@ -92,9 +100,8 @@ class Wizard(gtk.Window):
             self.actual = nombre
 
         if not nombre in self.pasos:
-            print nombre, paso, self.pasos
-            self.pasos[nombre] = paso
             init(params)
+            self.pasos[nombre] = paso
             self.c_pasos.add(self.pasos[nombre])
             self.pasos[nombre].show_all()
 
@@ -110,7 +117,6 @@ class Wizard(gtk.Window):
             self.actual = nombre
 
         if nombre in self.pasos:
-            print nombre, self.pasos[nombre], self.pasos
             init(params)
             self.pasos[nombre].show_all()
 
@@ -148,11 +154,10 @@ class Bienvenida():
         s = CFG['w'].anterior.set_sensitive(False)
 
     def init(self, CFG):
-        m = CFG['w'].next('Bienvenida', Bienvenida, (CFG), bienvenida.Main())
+        m = CFG['w'].next('Bienvenida', Bienvenida, (CFG), PasoBienvenida(CFG))
 
     def siguiente(self, CFG):
-        n = CFG['w'].next('Teclado', Teclado, (CFG), teclado.Main())
-        print 'CFG: {0}'.format(CFG)
+        n = CFG['w'].next('Teclado', Teclado, (CFG), PasoTeclado(CFG))
 
 class Teclado():
     '''
@@ -168,9 +173,9 @@ class Teclado():
 
     def siguiente(self, CFG):
         CFG['teclado'] = CFG['w'].formulario('Teclado').distribucion
-        m = CFG['w'].next('Metodo', Metodo, (CFG), metodo.Main())
         print 'Distribución de teclado seleccionada: {0}'.format(CFG['teclado'])
-        print 'CFG: {0}'.format(CFG)
+
+        m = CFG['w'].next('Metodo', Metodo, (CFG), PasoMetodo(CFG))
 
 class Metodo():
     '''
@@ -186,22 +191,21 @@ class Metodo():
     def siguiente(self, CFG):
         CFG['metodo'] = CFG['w'].formulario('Metodo').metodo
         CFG['disco'] = CFG['w'].formulario('Metodo').disco
+        CFG['particiones'] = CFG['w'].formulario('Metodo').particiones
         CFG['particion'] = CFG['w'].formulario('Metodo').particion
         CFG['ini'] = CFG['w'].formulario('Metodo').ini
         CFG['fin'] = CFG['w'].formulario('Metodo').fin
-        print CFG['disco'], CFG['metodo'], CFG['particion'], CFG['ini'], CFG['fin']
-
         print 'El metodo de instalación escogido es: {0}'.format(CFG['metodo'])
-        print 'CFG: {0}\n'.format(CFG)
+        print CFG
 
         if CFG['metodo'] == 'MANUAL':
-            m = CFG['w'].next('PartManual', PartManual, (CFG), particion_manual.Main(CFG))
+            m = CFG['w'].next('PartManual', PartManual, (CFG), PasoPartManual(CFG))
         elif CFG['metodo'] == 'TODO':
-            m = CFG['w'].next('PartTodo', PartTodo, (CFG), particion_todo.Main(CFG))
+            m = CFG['w'].next('PartTodo', PartTodo, (CFG), PasoPartTodo(CFG))
         elif CFG['metodo'] == 'LIBRE':
-            m = CFG['w'].next('PartTodo', PartTodo, (CFG), particion_todo.Main(CFG))
+            m = CFG['w'].next('PartTodo', PartTodo, (CFG), PasoPartTodo(CFG))
         elif CFG['metodo'] == 'REDIM':
-            m = CFG['w'].next('PartAuto', PartAuto, (CFG), particion_auto.Main(CFG))
+            m = CFG['w'].next('PartAuto', PartAuto, (CFG), PasoPartAuto(CFG))
         else:
             pass
 
@@ -225,10 +229,10 @@ class PartAuto():
         CFG['swap'] = CFG['w'].formulario('PartAuto').swap
         CFG['fs'] = CFG['w'].formulario('PartAuto').fs
 
-        if CFG['tipo'] == 'particion_4':
-            m = CFG['w'].next('PartManual', PartManual, (CFG), particion_manual.Main(CFG))
+        if CFG['forma'] == 'MANUAL':
+            m = CFG['w'].next('PartManual', PartManual, (CFG), PasoPartManual(CFG))
         else:
-            m = CFG['w'].next('Usuario', Usuario, (CFG), particion_manual.Main(CFG))
+            m = CFG['w'].next('Usuario', Usuario, (CFG), PasoUsuario(CFG))
 
 class PartTodo():
     '''
@@ -246,10 +250,10 @@ class PartTodo():
         CFG['fin'] = CFG['w'].formulario('PartTodo').fin
         CFG['forma'] = CFG['w'].formulario('PartTodo').forma
 
-        if CFG['tipo'] == 'particion_4':
-            m = CFG['w'].next('PartManual', PartManual, (CFG), particion_manual.Main(CFG))
+        if CFG['forma'] == 'MANUAL':
+            m = CFG['w'].next('PartManual', PartManual, (CFG), PasoPartManual(CFG))
         else:
-            m = CFG['w'].next('Usuario', Usuario, (CFG), particion_manual.Main(CFG))
+            m = CFG['w'].next('Usuario', Usuario, (CFG), PasoUsuario(CFG))
 
 class PartManual():
     '''
@@ -269,7 +273,7 @@ class PartManual():
 
         CFG['lista_manual'] = CFG['w'].formulario('PartManual').lista
         CFG['disco'] = CFG['w'].formulario('PartManual').disco
-        m = CFG['w'].next('Usuario', Usuario, (CFG), particion_manual.Main(CFG))
+        m = CFG['w'].next('Usuario', Usuario, (CFG), PasoUsuario(CFG))
 
 class Usuario():
     '''
@@ -294,30 +298,38 @@ class Usuario():
 
         if CFG['oem'] == False:
             if CFG['passroot'].strip() == '':
-                msg_error("Debe escribir una contraseña para root")
+                message = "Debe escribir una contraseña para el administrador."
+                UserMessage(message, 'ERROR', gtk.MESSAGE_ERROR, gtk.BUTTONS_OK)
                 return
             if CFG['passroot'] != CFG['passroot2']:
-                msg_error("Las contraseñas de root no coinciden")
+                message = "Las contraseñas de administrador no coinciden."
+                UserMessage(message, 'ERROR', gtk.MESSAGE_ERROR, gtk.BUTTONS_OK)
                 return
             if CFG['nombre'].strip() == '':
-                msg_error("Debe escribir un nombre")
+                message = "Debe escribir un nombre."
+                UserMessage(message, 'ERROR', gtk.MESSAGE_ERROR, gtk.BUTTONS_OK)
                 return
             if CFG['usuario'].strip() == '':
-                msg_error("Debe escribir un nombre de usuario")
+                message = "Debe escribir un nombre de usuario."
+                UserMessage(message, 'ERROR', gtk.MESSAGE_ERROR, gtk.BUTTONS_OK)
                 return
             if re.compile('^[a-z][-a-z-0-9]*$').search(CFG['usuario']) == None:
-                msg_error("El nombre de usuario tiene caracteres inválidos")
+                message = "El nombre de usuario tiene caracteres inválidos."
+                UserMessage(message, 'ERROR', gtk.MESSAGE_ERROR, gtk.BUTTONS_OK)
                 return
             if CFG['passuser'].strip() == '':
-                msg_error("Debe escribir una contraseña para el usuario")
+                message = "Debe escribir una contraseña para el usuario."
+                UserMessage(message, 'ERROR', gtk.MESSAGE_ERROR, gtk.BUTTONS_OK)
                 return
             if CFG['passuser'] != CFG['passuser2']:
-                msg_error("Las contraseñas del usuario no coinciden")
+                message = "Las contraseñas de usuario no coinciden."
+                UserMessage(message, 'ERROR', gtk.MESSAGE_ERROR, gtk.BUTTONS_OK)
                 return
             if re.compile("^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$").search(CFG['maquina']) == None:
-                msg_error("El nombre de la máquina no está correctamente escrito")
+                message = "El nombre de la máquina no está correctamente escrito."
+                UserMessage(message, 'ERROR', gtk.MESSAGE_ERROR, gtk.BUTTONS_OK)
                 return
-            m = CFG['w'].next('Accesibilidad', Accesibilidad, (CFG), accesibilidad.Main(CFG))
+            m = CFG['w'].next('Accesibilidad', Accesibilidad, (CFG), PasoAccesibilidad(CFG))
 
 class Accesibilidad():
     '''
@@ -332,7 +344,7 @@ class Accesibilidad():
 
     def siguiente(self, widget=None):
         CFG['chkgdm'] = CFG['w'].formulario('Accesibilidad').chkgdm.get_active()
-        m = CFG['w'].next('Info', Info, (CFG), info.Main(CFG))
+        m = CFG['w'].next('Info', Info, (CFG), PasoInfo(CFG))
 
 class Info():
     '''
@@ -346,7 +358,7 @@ class Info():
         m = CFG['w'].previous('Accesibilidad', Accesibilidad, (CFG))
 
     def siguiente(self, CFG):
-        m = CFG['w'].next('Instalacion', Instalacion, (CFG), instalacion.Main(CFG))
+        m = CFG['w'].next('Instalacion', Instalacion, (CFG), PasoInstalacion(CFG))
 
 class Instalacion():
     '''

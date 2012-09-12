@@ -1,4 +1,5 @@
-#-*- coding: UTF-8 -*-
+#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
 '''Clase que configura las particiones'''
 # Autor: William Cabrera
 # Fecha: 13/10/2011
@@ -7,13 +8,13 @@
 import gtk, os, threading
 
 # Módulos locales
-import instalador.clases.particiones
-import instalador.clases.general as gen
-import instalador.clases.barra_particiones as barra
+from canaimainstalador.clases.particiones import Particiones
+from canaimainstalador.clases.common import floatify, humanize
+from canaimainstalador.clases.barra_particiones import BarraParticiones
+from canaimainstalador.config import *
 
-class Main(gtk.Fixed):
-
-    def __init__(self):
+class PasoMetodo(gtk.Fixed):
+    def __init__(self, CFG):
         gtk.Fixed.__init__(self)
 
         self.disco = ''
@@ -25,14 +26,14 @@ class Main(gtk.Fixed):
         self.libres = []
         self.metodos = {}
         self.cfg = {}
-        self.minimo = gen.h2kb('1GB')
-        self.part = instalador.clases.particiones.Main()
+        self.minimo = ESPACIO_TOTAL
+        self.part = Particiones()
 
         # Listar Discos
         self.discos = self.part.lista_discos()
         print 'Se han encontrado los siguientes discos: {0}'.format(self.discos)
 
-        self.lbl1 = gtk.Label('Seleccione el disco donde desea instalar Canaima:')
+        self.lbl1 = gtk.Label('Seleccione el disco donde desea instalar el sistema:')
         self.lbl1.set_size_request(690, 20)
         self.lbl1.set_alignment(0, 0)
         self.put(self.lbl1, 0, 0)
@@ -45,7 +46,7 @@ class Main(gtk.Fixed):
         self.put(self.cmb_discos, 0, 25)
         self.cmb_discos.connect('changed', self.seleccionar_disco)
 
-        self.barra_part = barra.Main(self)
+        self.barra_part = BarraParticiones(self)
         self.barra_part.set_size_request(690, 100)
         self.put(self.barra_part, 0, 60)
 
@@ -98,6 +99,8 @@ class Main(gtk.Fixed):
         minimo = self.minimo
         tini = self.particiones[0][1]
         tfin = self.particiones[0][2]
+        CFG['w'].siguiente.set_sensitive(True)
+        self.cmb_metodo.set_sensitive(True)
 
         for t in self.particiones:
             ini = t[1]
@@ -117,58 +120,51 @@ class Main(gtk.Fixed):
                     ini = p[1]
                     fin = p[2]
                     part = p[0]
-                    fs = p[5]
+                    fs = p[4]
 
                     if fs != 'free' and libre >= minimo:
                         msg = 'Instalar redimensionando {0} para liberar espacio ({1} libres)'
                         met = 'REDIM:{0}:{1}:{2}'.format(part, ini, fin)
-                        self.metodos[met] = msg.format(part, gen.hum(libre))
+                        self.metodos[met] = msg.format(part, humanize(libre))
 
                     if fs == 'free' and tam >= minimo:
                         msg = 'Instalar usando espacio libre disponible ({0})'
                         met = 'LIBRE:{0}:{1}:{2}'.format(part, ini, fin)
-                        self.metodos[met] = msg.format(gen.hum(tam))
+                        self.metodos[met] = msg.format(humanize(tam))
 
             met = 'TODO:{0}:{1}:{2}'.format(self.disco, tini, tfin)
             msg = 'Instalar usando todo el disco ({0})'
-            self.metodos[met] = msg.format(gen.hum(total))
+            self.metodos[met] = msg.format(humanize(total))
 
         else:
             self.metodos['NONE:None:0:0'] = 'El tamaño del disco no es suficiente'
+            CFG['w'].siguiente.set_sensitive(False)
+            self.cmb_metodo.set_sensitive(False)
 
-        for l1, l2 in self.metodos.items():
+        for l1, l2 in sorted(self.metodos.items()):
             self.cmb_metodo.append_text(l2)
         self.cmb_metodo.set_active(0)
 
     def establecer_metodo(self, widget=None):
         for c, d in self.metodos.items():
             if d == self.cmb_metodo.get_active_text():
-                self.metodo = c
+                self.met = c
 
-        self.ini = self.metodo.split(':')[2]
-        self.fin = self.metodo.split(':')[3]
-        self.particion = self.metodo.split(':')[1]
-        self.metodo = self.metodo.split(':')[0]
+        self.metodo = self.met.split(':')[0]
+        self.particion = self.met.split(':')[1]
+        self.ini = floatify(self.met.split(':')[2])
+        self.fin = floatify(self.met.split(':')[3])
 
         if self.metodo == 'TODO':
-            msg = 'Al escoger esta opción el nuevo Sistema Operativo ocupará la \
-                totalidad de su disco duro. Tenga en cuenta que se borrarán \
-                todos los datos anteriores. Puede aprovechar este momento para \
-                realizar un respaldo antes de proseguir con la instalación.'
+            msg = 'Al escoger esta opción el nuevo Sistema Operativo ocupará la totalidad de su disco duro. Tenga en cuenta que se borrarán todos los datos y/o sistemas presentes. Puede aprovechar este momento para realizar un respaldo antes de proseguir con la instalación.'
         elif self.metodo == 'LIBRE':
-            msg = 'Esta opción le permitirá instalar el Sistema Operativo en el \
-                espacio libre de {0} que se encuentra en su disco duro, \
-                conservando los demás datos y/o sistemas que se encuentren en las \
-                demás porciones del disco.'.format(gen.hum(self.fin - self.ini))
+            msg = 'Esta opción le permitirá instalar el Sistema Operativo en el espacio libre de {0} que se encuentra en su disco duro, conservando los demás datos y/o sistemas que se encuentren en las demás porciones del disco.'.format(humanize(self.fin - self.ini))
         elif self.metodo == 'REDIM':
-            msg = 'Si escoge esta opción se redimensionará la partición {0} \
-para realizar la instalación.'.format(self.metodo)
+            msg = 'Esta opción permitirá utilizar el espacio libre presente en la partición {0} para instalar el Sistema Operativo. Se redimensionará la partición para liberar el espacio, manteniendo los datos y/o sistemas presentes'.format(self.particion)
         elif self.metodo == 'MANUAL':
-            msg = 'Si escoge esta opción se instalará el sistema en la \
-partición sin usar que mide {0}'.format(gen.hum(2))
+            msg = 'Si escoge esta opción se abrirá el editor de particiones, que le permitirá ajustar las particiones según más le convenga. No le recomendamos que utilice esta opción a menos que sepa lo que está haciendo.'
         elif self.metodo == 'NONE':
-            msg = 'Si escoge esta opción se instalará el sistema en la \
-partición sin usar que mide {0}'.format(gen.hum(2))
+            msg = 'El sistema operativo necesita al menos 6GB libres para poder instalar. Seleccione otro disco duro.'
         else:
             pass
 

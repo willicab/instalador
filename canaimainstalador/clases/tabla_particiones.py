@@ -17,7 +17,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 import gtk
-import instalador.clases.general as gen
+import canaimainstalador.clases.common as gen
 
 program = {
 	'name'	: 'Particiones',

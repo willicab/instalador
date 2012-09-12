@@ -2,11 +2,11 @@
 
 import os, commands
 
-import instalador.clases.particiones
-import instalador.clases.general as gen
+from canaimainstalador.clases.particiones import Particiones
+import canaimainstalador.clases.common as gen
 
 class Main():
-    part = instalador.clases.particiones.Main()
+    part = Particiones()
     particiones_montadas = {}
     particiones_montadas2 = {}
     boot = False

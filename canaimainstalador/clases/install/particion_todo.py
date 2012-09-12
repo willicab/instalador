@@ -2,16 +2,16 @@
 
 import os, commands
 
-import instalador.clases.particiones
-import instalador.clases.general as gen
-import instalador.clases.install.particion_manual as particion_manual
+from  canaimainstalador.clases.particiones import Particiones
+import canaimainstalador.clases.common as gen
+import canaimainstalador.clases.install.particion_manual as particion_manual
 
 class Main():
     #root_p2 = '20GB'
     #root_p3 = '3GB'
     #usr = '18GB'
     boot = '256MB'
-    part = instalador.clases.particiones.Main()
+    part = Particiones()
     particiones_montadas = {}
     particiones_montadas2 = {}
 

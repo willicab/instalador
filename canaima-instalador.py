@@ -6,10 +6,10 @@
 
 import os, gtk, sys
 
-from instalador.main import Bienvenida, Wizard
-from instalador.constructor import UserMessage
-from instalador.translator import MAIN_ROOT_ERROR_MSG, MAIN_ROOT_ERROR_TITLE
-from instalador.config import CFG, BANNER
+from canaimainstalador.main import Bienvenida, Wizard
+from canaimainstalador.clases.common import UserMessage
+from canaimainstalador.translator import MAIN_ROOT_ERROR_MSG, MAIN_ROOT_ERROR_TITLE
+from canaimainstalador.config import CFG, BANNER
 
 if __name__ == "__main__":
     if os.geteuid() != 0:

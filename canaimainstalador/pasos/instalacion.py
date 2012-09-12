@@ -2,19 +2,17 @@
 
 import os, gtk, threading, commands, webkit, re
 
-import instalador.clases.particiones
-import instalador.clases.install.fstab
-import instalador.clases.install.particion_todo as particion_todo
-import instalador.clases.install.particion_auto as particion_auto
+from canaimainstalador.clases.particiones import Particiones
+import canaimainstalador.clases.install.fstab
+import canaimainstalador.clases.install.particion_todo as particion_todo
+import canaimainstalador.clases.install.particion_auto as particion_auto
 
-gtk.gdk.threads_init()
-
-class Main(gtk.Fixed):
+class PasoInstalacion(gtk.Fixed):
     root1 = '20GB'
     root2 = '3GB'
     usr = '18GB'
     boot = '256MB'
-    part = instalador.clases.particiones.Main()
+    part = Particiones()
     particiones_montadas = {}
 
     def __init__(self, cfg, parent):
