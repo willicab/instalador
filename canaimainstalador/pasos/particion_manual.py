@@ -2,51 +2,11 @@
 
 import gtk
 
-import canaimainstalador.clases.particion_nueva as part_nueva
 from canaimainstalador.clases.common import floatify, humanize
-from canaimainstalador.clases.tabla_particiones import TablaParticiones
-from canaimainstalador.clases.particiones import Particiones
-
-class msj:
-    'Clase para administrar los mensajes mostrados al usuario'
-
-    class particion:
-        'Mensajes relacionados a las particiones'
-
-        libre = 'Espacio Libre'
-        primaria = 'Primaria'
-        extendida = 'Extendida'
-        logica = 'Lógica'
-        extendida_libre = 'Espacio Libre Extendida'
-
-        @classmethod
-        def get_tipo(self, tipo):
-            if tipo == 'free':      return self.libre
-            if tipo == 'primary':   return self.primaria
-            if tipo == 'extended':  return self.extendida
-            if tipo == 'logical':   return self.logica
-
-            return tipo
-
-        @classmethod
-        def get_formato(self, formato):
-            if formato == 'free':           return self.libre
-            if formato == 'extended':     return ''
-
-            return formato
-
-        @classmethod
-        def get_dispositivo(self, disp, num):
-            if num == -1:       return ''
-
-            return disp
-
-    class gui:
-        'Mensajes mostrados en la gui'
-
-        btn_part_nueva = 'Crear Nueva Partición'
-        btn_part_eliminar = 'X'
-        btn_deshacer = 'Deshacer Acciones'
+import canaimainstalador.clases.particion_nueva as part_nueva
+import canaimainstalador.clases.tabla_particiones
+from canaimainstalador.clases import particiones
+from canaimainstalador.translator import msj
 
 class PasoPartManual(gtk.Fixed):
 
@@ -147,27 +107,58 @@ class PasoPartManual(gtk.Fixed):
 
         self.fila_selec = fila
 
-        #TODO: Impedir crear nuevas si hay mas de 4 primarias y 0 extendidas
+        # Es particion extendida?
+        if fila[1] == msj.particion.extendida:
+            self.bext = True
+        else:
+            self.bext = False
+
         # BTN_NUEVA
-        if fila[2] == msj.particion.libre or fila[2] == \
-        msj.particion.extendida_libre:
-            self.btn_nueva.set_sensitive(True)
+        if fila[2] == msj.particion.libre:
+            # Activar solo si hay menos de 4 particiones primarias
+            if self.contar_primarias() < 4:
+                self.btn_nueva.set_sensitive(True)
+            # o si la part. libre pertenece a una part. extendida
+            elif fila[1] == msj.particion.extendida:
+                self.btn_nueva.set_sensitive(True)
         else:
             self.btn_nueva.set_sensitive(False)
 
         # Solo se pueden eliminar particiones, no espacios libres
         # BTN_ELIMINAR
-        if fila[2] != msj.particion.libre and fila[2] != \
-        msj.particion.extendida_libre:
+        if fila[2] != msj.particion.libre:
             self.btn_eliminar.set_sensitive(True)
         else:
             self.btn_eliminar.set_sensitive(False)
+
+    def contar_primarias(self):
+        '''Cuenta la cantidad de particiones primarias. Las particiones
+        extendidas cuentan como primarias'''
+        total = 0
+        for fila in self.lista:
+            # Los espacios libres no se cuentan
+            if fila[2] == msj.particion.libre:
+                continue
+            # Si es una particion extendida
+            if fila[1] == msj.particion.extendida:
+                total = total + 1
+            # Si la particion es primaria
+            elif fila[1] == msj.particion.primaria:
+                total = total + 1
+
+        return total
+
+    def existe_extendida(self):
+        'Determina si existe por lo menos una particion extandida'
+        for fila in self.lista:
+            if fila[1] == msj.particion.extendida:
+                return True
+        return False
 
 
     def llenar_tabla(self):
         '''Llena la tabla con las particiones existentes en el disco'''
 
-        # Ordena la lista por inicio de la particion
         self.ordenar_lista()
 
         # Limpia previamente la tabla para inicializar su llenado
@@ -187,6 +178,7 @@ class PasoPartManual(gtk.Fixed):
                 self.primarias = self.primarias + 1
 
     def ordenar_lista(self):
+        'Ordena la lista por el inicio de la particion'
         tamano = len(self.lista)
         for i in range(tamano):
             i = i # Solo para quitar el warning (unused variable)
@@ -199,7 +191,7 @@ class PasoPartManual(gtk.Fixed):
                     self.lista[k + 1] = f_temp
 
 
-    def agregar_a_lista(self, fila):
+    def agregar_a_lista(self, fila, pop=True):
         '''Agrega una nueva particion a la lista en el sitio adecuado segun su
         inicio'''
 
@@ -215,11 +207,13 @@ class PasoPartManual(gtk.Fixed):
                 ini_anterior = f[5]
                 ini_siguiente = self.lista[i + 1][5]
                 if inicio >= ini_anterior and inicio < ini_siguiente:
-                    temp.pop()
+
+                    if pop: temp.pop()
                     temp.append(fila)
                     agregado = True
+
             elif not agregado:
-                temp.pop()
+                if pop: temp.pop()
                 temp.append(fila)
 
             i = i + 1
@@ -227,6 +221,8 @@ class PasoPartManual(gtk.Fixed):
 
     #TODO: Implementar
     def particion_eliminar(self, widget=None):
+
+        widget.set_sensitive(False)
 
         fila_accion = (
                         'eliminar',
@@ -238,9 +234,9 @@ class PasoPartManual(gtk.Fixed):
 
 
     def particion_nueva(self, widget=None):
+        widget.set_sensitive(False)
         part_nueva.Main(self)
 
     def deshacer(self, widget=None):
-
         self.inicializar(self.data)
 
