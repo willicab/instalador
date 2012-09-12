@@ -22,5 +22,7 @@ if __name__ == "__main__":
         CFG['w'] = Wizard(700, 450, "Canaima Instalador", BANNER)
         b = Bienvenida(CFG)
         a = b.init(CFG)
+
         gtk.main()
         sys.exit()
+
