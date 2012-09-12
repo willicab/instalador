@@ -4,8 +4,8 @@ import gtk
 
 from canaimainstalador.clases.common import floatify, humanize
 import canaimainstalador.clases.particion_nueva as part_nueva
-import canaimainstalador.clases.tabla_particiones
-from canaimainstalador.clases import particiones
+from canaimainstalador.clases.tabla_particiones import TablaParticiones
+from canaimainstalador.clases.particiones import Particiones
 from canaimainstalador.translator import msj
 
 class PasoPartManual(gtk.Fixed):
