@@ -13,8 +13,9 @@ class TblCol:
     MONTAJE = 3
     TAMANO = 4
     USADO = 5
-    INICIO = 6
-    FIN = 7
+    LIBRE = 6
+    INICIO = 7
+    FIN = 8
 
 def givemeswap():
     r = ram()

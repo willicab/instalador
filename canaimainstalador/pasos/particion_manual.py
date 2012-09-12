@@ -82,16 +82,15 @@ class PasoPartManual(gtk.Fixed):
         self.lista = []
 
         # Llevar los botones a su estado inicial
-        self.btn_eliminar.set_sensitive(False)
         self.btn_nueva.set_sensitive(False)
+        self.btn_redimension.set_sensitive(False)
+        self.btn_eliminar.set_sensitive(False)
 
         # Llenar la tabla con el contenido actual del disco
         if self.tabla != None:
 
             #l_part = Particiones().lista_particiones(self.disco)
-            print "--PARTICIONES--"
             for particion in self.particiones:
-                print particion
                 p_disp = particion[0]
                 p_ini = particion[1]
                 p_fin = particion[2]
@@ -99,6 +98,7 @@ class PasoPartManual(gtk.Fixed):
                 p_format = particion[4]
                 p_tipo = particion[5]
                 p_usado = particion[7]
+                p_libre = particion[8]
                 p_num = particion[10]
 
                 fila = [
@@ -108,11 +108,11 @@ class PasoPartManual(gtk.Fixed):
                        '', # Punto de montaje
                        humanize(floatify(p_tam)),
                        humanize(p_usado),
+                       humanize(p_libre),
                        floatify(p_ini),
                        floatify(p_fin)
                    ]
                 self.lista.append(fila)
-            print "---------------"
 
             self.llenar_tabla()
 
@@ -138,8 +138,15 @@ class PasoPartManual(gtk.Fixed):
         else:
             self.btn_nueva.set_sensitive(False)
 
-        # Solo se pueden eliminar particiones, no espacios libres
+        #BTN_REDIMENSION
+        print floatify(fila[TblCol.TAMANO])
+        if floatify(fila[TblCol.TAMANO]) > floatify(fila[TblCol.USADO]):
+            self.btn_redimension.set_sensitive(True)
+        else:
+            self.btn_redimension.set_sensitive(False)
+
         # BTN_ELIMINAR
+        # Solo se pueden eliminar particiones, no espacios libres
         if fila[TblCol.FORMATO] != msj.particion.libre:
             self.btn_eliminar.set_sensitive(True)
         else:
@@ -248,7 +255,7 @@ class PasoPartManual(gtk.Fixed):
 
     #TODO: Implementar
     def particion_redimensionar(self, widget=None):
-        pass
+        widget.set_sensitive(False)
 
 
     def particion_nueva(self, widget=None):

@@ -17,6 +17,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 import gtk
+from canaimainstalador.clases.common import TblCol
 
 class TablaParticiones (gtk.TreeView):
 
@@ -27,7 +28,7 @@ class TablaParticiones (gtk.TreeView):
     def __init__(self):
 
         # Tipos de valores a mostrar en la tabla
-        self.liststore = gtk.ListStore(str, str, str, str, str, str, int, int)
+        self.liststore = gtk.ListStore(str, str, str, str, str, str, str, int, int)
 
         gtk.TreeView.__init__(self, model=self.liststore)
         self.set_headers_clickable(False)
@@ -53,7 +54,17 @@ class TablaParticiones (gtk.TreeView):
 
     def _accion_doble_click(self, treeview, path, column):
         modelo = treeview.get_model()
-        fila = modelo.get(modelo.get_iter(path), 0, 1, 2, 3, 4, 5, 6, 7)
+        fila = modelo.get(modelo.get_iter(path),
+
+                          TblCol.DISPOSITIVO,
+                          TblCol.TIPO,
+                          TblCol.FORMATO,
+                          TblCol.MONTAJE,
+                          TblCol.TAMANO,
+                          TblCol.USADO,
+                          TblCol.LIBRE,
+                          TblCol.INICIO,
+                          TblCol.FIN)
 
         self.doble_click(fila)
 
@@ -66,7 +77,16 @@ class TablaParticiones (gtk.TreeView):
         iterador = obj_seleccion[1]
 
         if iterador != None:
-            return modelo.get(iterador, 0, 1, 2, 3, 4, 5, 6, 7)
+            return modelo.get(iterador,
+                              TblCol.DISPOSITIVO,
+                              TblCol.TIPO,
+                              TblCol.FORMATO,
+                              TblCol.MONTAJE,
+                              TblCol.TAMANO,
+                              TblCol.USADO,
+                              TblCol.LIBRE,
+                              TblCol.INICIO,
+                              TblCol.FIN)
         else:
             return None
 
@@ -74,19 +94,19 @@ class TablaParticiones (gtk.TreeView):
         'Crea la tabla'
 
         # Columnas
-        self.nueva_columna_texto("Dispositivo", 0)
-        self.nueva_columna_texto("Tipo", 1)
-        self.nueva_columna_texto("Formato", 2)
-        self.nueva_columna_texto("Punto de Montaje", 3)
-        self.nueva_columna_texto("Tamaño", 4)
-        self.nueva_columna_texto("Usado", 5)
-        self.nueva_columna_texto("Inicio", 6)
-        self.nueva_columna_texto("Fin", 7)
+        self.nueva_columna_texto("Dispositivo", TblCol.DISPOSITIVO)
+        self.nueva_columna_texto("Tipo", TblCol.TIPO)
+        self.nueva_columna_texto("Formato", TblCol.FORMATO)
+        self.nueva_columna_texto("Montaje", TblCol.MONTAJE)
+        self.nueva_columna_texto("Tamaño", TblCol.TAMANO)
+        self.nueva_columna_texto("Usado", TblCol.USADO)
+        self.nueva_columna_texto("Libre", TblCol.LIBRE)
+        self.nueva_columna_texto("Inicio", TblCol.INICIO)
+        self.nueva_columna_texto("Fin", TblCol.FIN)
 
         # Ocultar las columnas que no se desean mostrar
-        #self.columnas[6].set_visible(False)
-        #self.columnas[7].set_visible(False)
-        #self.columnas[9].set_visible(False)
+        self.columnas[TblCol.INICIO].set_visible(False)
+        self.columnas[TblCol.FIN].set_visible(False)
 
     def nueva_columna_color(self, title, index):
         'Crea nueva columna de color en el TreeView'
@@ -130,17 +150,17 @@ class TablaParticiones (gtk.TreeView):
         celda.set_property('text', None)
         return
 
-    #def agregar_fila(self, color='', dispositivo='', tipo='', formato='', montaje='', tamano='', formatear=False, inicio='', fin='', num=''):
     def agregar_fila(self, lista):
         'Agrega los datos a las filas'
-        self.liststore.append([lista[0], # Dispositivo
-                               lista[1], # Tipo
-                               lista[2], # Formato
-                               lista[3], # Punto de Montaje
-                               lista[4], # Tamaño
-                               lista[5], # Usado
-                               lista[6], # Inicio
-                               lista[7]] # Fin
+        self.liststore.append([lista[TblCol.DISPOSITIVO],
+                               lista[TblCol.TIPO],
+                               lista[TblCol.FORMATO],
+                               lista[TblCol.MONTAJE],
+                               lista[TblCol.TAMANO],
+                               lista[TblCol.USADO],
+                               lista[TblCol.LIBRE],
+                               lista[TblCol.INICIO],
+                               lista[TblCol.FIN]]
                               )
 
 datos_ejemplo = [
