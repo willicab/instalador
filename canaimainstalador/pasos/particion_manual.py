@@ -3,7 +3,7 @@
 import gtk
 
 from canaimainstalador.clases.common import floatify, humanize, TblCol
-from canaimainstalador.clases import particion_nueva
+from canaimainstalador.clases import particion_nueva, particion_redimensionar
 from canaimainstalador.clases.tabla_particiones import TablaParticiones
 from canaimainstalador.translator import msj
 
@@ -139,7 +139,6 @@ class PasoPartManual(gtk.Fixed):
             self.btn_nueva.set_sensitive(False)
 
         #BTN_REDIMENSION
-        print floatify(fila[TblCol.TAMANO])
         if floatify(fila[TblCol.TAMANO]) > floatify(fila[TblCol.USADO]) \
         and fila[TblCol.FORMATO] != msj.particion.libre:
             self.btn_redimension.set_sensitive(True)
@@ -250,12 +249,15 @@ class PasoPartManual(gtk.Fixed):
                         'eliminar',
                         self.tabla.ultima_fila_seleccionada
                      )
-        print fila_accion
 
         self.acciones.append(fila_accion)
 
     #TODO: Implementar
     def particion_redimensionar(self, widget=None):
+        fila = self.tabla.ultima_fila_seleccionada
+        particion_redimensionar.Main(fila[TblCol.DISPOSITIVO], \
+                                     fila[TblCol.INICIO], fila[TblCol.FIN], \
+                                     floatify(fila[TblCol.USADO]))
         widget.set_sensitive(False)
 
 

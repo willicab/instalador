@@ -15,19 +15,18 @@ class Main(gtk.Dialog):
         gtk.Window.__init__(self, gtk.WINDOW_TOPLEVEL)
         gtk.Window.set_position(self, gtk.WIN_POS_CENTER_ALWAYS)
 
-        self.set_title("Nueva Partición")
         self.padre = padre
+        # Toma el inicio y fin de la particion seleccionada
+        self.inicio = self.padre.fila_selec[TblCol.INICIO]
+        self.fin = self.padre.fila_selec[TblCol.FIN]
+
+        self.set_title("Nueva Partición")
         self.set_size_request(400, 200)
         self.set_resizable(0)
-        self.set_border_width(0)
 
         self.add_button(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL)
         self.add_button(gtk.STOCK_OK, gtk.RESPONSE_OK)
         self.set_default_response(gtk.RESPONSE_CANCEL)
-
-        # Toma el inicio y fin de la particion seleccionada
-        self.inicio = self.padre.fila_selec[TblCol.INICIO]
-        self.fin = self.padre.fila_selec[TblCol.FIN]
 
         # Contenedor General
         self.cont = gtk.Fixed()
