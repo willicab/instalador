@@ -111,12 +111,13 @@ class PasoMetodo(gtk.Fixed):
                 i += 1
 
         if total > minimo:
-            self.metodos['MANUAL:None:0:0'] = 'Instalar editando particiones manualmente'
+            self.metodos['MANUAL:None:0:0:0'] = 'Instalar editando particiones manualmente'
 
             if i < 4:
                 for p in self.particiones:
                     tam = p[3]
                     libre = p[8]
+                    usado = p[7]
                     ini = p[1]
                     fin = p[2]
                     part = p[0]
@@ -124,20 +125,20 @@ class PasoMetodo(gtk.Fixed):
 
                     if fs != 'free' and libre >= minimo:
                         msg = 'Instalar redimensionando {0} para liberar espacio ({1} libres)'
-                        met = 'REDIM:{0}:{1}:{2}'.format(part, ini, fin)
+                        met = 'REDIM:{0}:{1}:{2}:{3}'.format(part, ini, fin, usado)
                         self.metodos[met] = msg.format(part, humanize(libre))
 
                     if fs == 'free' and tam >= minimo:
                         msg = 'Instalar usando espacio libre disponible ({0})'
-                        met = 'LIBRE:{0}:{1}:{2}'.format(part, ini, fin)
+                        met = 'LIBRE:{0}:{1}:{2}:0'.format(part, ini, fin)
                         self.metodos[met] = msg.format(humanize(tam))
 
-            met = 'TODO:{0}:{1}:{2}'.format(self.disco, tini, tfin)
+            met = 'TODO:{0}:{1}:{2}:0'.format(self.disco, tini, tfin)
             msg = 'Instalar usando todo el disco ({0})'
             self.metodos[met] = msg.format(humanize(total))
 
         else:
-            self.metodos['NONE:None:0:0'] = 'El tamaño del disco no es suficiente'
+            self.metodos['NONE:None:0:0:0'] = 'El tamaño del disco no es suficiente'
             CFG['w'].siguiente.set_sensitive(False)
             self.cmb_metodo.set_sensitive(False)
 
@@ -154,6 +155,7 @@ class PasoMetodo(gtk.Fixed):
         self.particion = self.met.split(':')[1]
         self.ini = floatify(self.met.split(':')[2])
         self.fin = floatify(self.met.split(':')[3])
+        self.usado = floatify(self.met.split(':')[4])
 
         if self.metodo == 'TODO':
             msg = 'Al escoger esta opción el nuevo Sistema Operativo ocupará la totalidad de su disco duro. Tenga en cuenta que se borrarán todos los datos y/o sistemas presentes. Puede aprovechar este momento para realizar un respaldo antes de proseguir con la instalación.'

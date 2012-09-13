@@ -98,12 +98,8 @@ class Particiones():
             elif code == 2:
                 tipo = 'extended'
 
-            code = hashlib.sha1(
-                        str(ini)+str(fin)+fs+tipo+str(usado)+str(num)
-                        ).hexdigest()[:7]
-
             p.append(
-                [part, ini, fin, tam, fs, tipo, flags, usado, libre, total, num, code]
+                [part, ini, fin, tam, fs, tipo, flags, usado, libre, total, num]
                 )
 
         return sorted(p, key=lambda particiones: particiones[1])
