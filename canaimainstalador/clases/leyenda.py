@@ -9,6 +9,7 @@ class Leyenda(gtk.Fixed):
     def __init__(self, parent):
         gtk.Fixed.__init__(self)
         self.p = parent
+        self.forma = self.p.forma
 
         label = ''
         self.lbl_1 = gtk.Label(label)
@@ -80,7 +81,10 @@ class Leyenda(gtk.Fixed):
                 exec "self.lbl_"+str(j)+".set_text('Espacio de arranque (/boot): '+size)"
             elif part == 'VAR':
                 exec "self.lbl_"+str(j)+".set_text('Espacio de variables (/var): '+size)"
-            elif part == 'MANUAL':
+            elif part == 'LIBRE':
                 exec "self.lbl_"+str(j)+".set_text('Espacio Libre: '+size)"
+            elif part == 'PART':
+                exec "self.lbl_"+str(j)+".set_text('Partición redimensionada: '+size)"
+
             j += 1
 

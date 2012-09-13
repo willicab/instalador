@@ -31,6 +31,7 @@ def draw_rounded(cr, area, radius):
     cr.arc(x2 - radius, y2 - radius, radius, 0*(math.pi/2), 1*(math.pi/2))
     cr.arc(x1 + radius, y2 - radius, radius, 1*(math.pi/2), 2*(math.pi/2))
     cr.close_path()
+    return cr
 
 def hex_to_rgb(value):
     value = value.lstrip('#')
@@ -87,6 +88,8 @@ def set_color(fs, alto):
         process_color(libre, '#7dfcfe', '#7dfcfe')
     elif fs == 'unknown':
         process_color(libre, '#000000', '#000000')
+    elif fs == 'part':
+        process_color(libre, '#b8b598', '#b8b598')
 
     return libre
 
@@ -109,7 +112,7 @@ def floatify(num):
         Salida: el valor en kB de tipo float
     '''
     if not num:
-        print 'num vacío'
+        num = 0
 
     num = str(num)
     unidad = re.sub('[0123456789.]', '', num.replace(',', '.').upper())

@@ -19,7 +19,7 @@ if __name__ == "__main__":
             c_1=gtk.RESPONSE_OK, f_1=sys.exit, p_1=(1,)
             )
     else:
-        CFG['w'] = Wizard(700, 450, "Canaima Instalador", BANNER)
+        CFG['w'] = Wizard(700, 470, "Canaima Instalador", BANNER)
         b = Bienvenida(CFG)
         a = b.init(CFG)
 

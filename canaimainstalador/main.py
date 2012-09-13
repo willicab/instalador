@@ -42,7 +42,6 @@ class Wizard(gtk.Window):
         self.set_size_request(ancho, alto)
         self.set_resizable(0)
         self.set_border_width(0)
-        self.connect("delete-event", self.close)
 
         # Creo el contenedor principal
         self.add(self.__c_principal)
@@ -86,20 +85,32 @@ class Wizard(gtk.Window):
         self.cancelar = gtk.Button(stock=gtk.STOCK_QUIT)
         self.botonera.put(self.cancelar, 10, 10)
         self.cancelar.set_size_request(100, 30)
-        self.cancelar.connect("clicked", self.close)
+
+        self.cancelar.connect('clicked', self.close)
+        self.connect("delete-event", self.close)
 
         self.show_all()
+
+    def close(self, widget=None, event=None):
+        '''
+            Cierra la ventana
+        '''
+        return UserMessage(
+            '¿Está seguro que desea cancelar la instalación?', 'Salir',
+            gtk.MESSAGE_WARNING, gtk.BUTTONS_YES_NO, c_1 = gtk.RESPONSE_YES,
+            f_1 = gtk.main_quit, p_1 = ()
+            )
 
     def next(self, nombre, init, params, paso):
         '''
             muestra el paso especificado en nombre
         '''
-        if self.actual != nombre:
-            if self.actual != '':
-                self.pasos[self.actual].hide_all()
-            self.actual = nombre
-
         if not nombre in self.pasos:
+            if self.actual != nombre:
+                if self.actual != '':
+                    self.pasos[self.actual].hide_all()
+                self.actual = nombre
+
             init(params)
             self.pasos[nombre] = paso
             self.c_pasos.add(self.pasos[nombre])
@@ -109,14 +120,14 @@ class Wizard(gtk.Window):
         '''
             muestra el paso especificado en nombre
         '''
-        if self.actual != nombre:
-            if self.actual != '':
-                self.pasos[self.actual].hide_all()
-                self.c_pasos.remove(self.pasos[self.actual])
-                del self.pasos[self.actual]
-            self.actual = nombre
-
         if nombre in self.pasos:
+            if self.actual != nombre:
+                if self.actual != '':
+                    self.pasos[self.actual].hide_all()
+                    self.c_pasos.remove(self.pasos[self.actual])
+                    del self.pasos[self.actual]
+                self.actual = nombre
+
             init(params)
             self.pasos[nombre].show_all()
 
@@ -124,26 +135,10 @@ class Wizard(gtk.Window):
         '''
             devulve el objeto asociado al paso
         '''
-        return self.pasos[nombre]
-
-    def close(self, widget=None, event=None):
-        '''
-            Cierra la ventana
-        '''
-        message = '¿Está seguro que desea cancelar la instalación?'
-        dialog = gtk.MessageDialog(
-                self, gtk.DIALOG_MODAL, gtk.MESSAGE_WARNING,
-                gtk.BUTTONS_YES_NO, message
-                )
-        dialog.set_title("Salir del Instalador")
-        response = dialog.run()
-        dialog.destroy()
-
-        if response == gtk.RESPONSE_YES:
-            gtk.main_quit()
-            return False
+        if nombre in self.pasos:
+            return self.pasos[nombre]
         else:
-            return True
+            return False
 
 class Bienvenida():
     '''
@@ -195,8 +190,9 @@ class Metodo():
         CFG['particion'] = CFG['w'].formulario('Metodo').particion
         CFG['ini'] = CFG['w'].formulario('Metodo').ini
         CFG['fin'] = CFG['w'].formulario('Metodo').fin
+        CFG['usado'] = CFG['w'].formulario('Metodo').usado
         print 'El metodo de instalación escogido es: {0}'.format(CFG['metodo'])
-        print CFG
+        print 'CFG: {0}'.format(CFG)
 
         if CFG['metodo'] == 'MANUAL':
             m = CFG['w'].next('PartManual', PartManual, (CFG), PasoPartManual(CFG))
@@ -208,31 +204,6 @@ class Metodo():
             m = CFG['w'].next('PartAuto', PartAuto, (CFG), PasoPartAuto(CFG))
         else:
             pass
-
-class PartAuto():
-    '''
-        Inicia el paso que redimensiona la partición
-    '''
-    def __init__(self, CFG):
-        CFG['s'] = aconnect(CFG['w'].siguiente, CFG['s'], self.siguiente, CFG)
-        CFG['s'] = aconnect(CFG['w'].anterior, CFG['s'], self.anterior, CFG)
-
-    def anterior(self, CFG):
-        m = CFG['w'].previous('Metodo', Metodo, (CFG))
-
-    def siguiente(self, CFG):
-        CFG['particion'] = CFG['w'].formulario('PartAuto').particion
-        CFG['inicio'] = CFG['w'].formulario('PartAuto').ini
-        CFG['fin'] = CFG['w'].formulario('PartAuto').fin
-        CFG['nuevo_fin'] = CFG['w'].formulario('PartAuto').cur_value
-        CFG['forma'] = CFG['w'].formulario('PartAuto').forma
-        CFG['swap'] = CFG['w'].formulario('PartAuto').swap
-        CFG['fs'] = CFG['w'].formulario('PartAuto').fs
-
-        if CFG['forma'] == 'MANUAL':
-            m = CFG['w'].next('PartManual', PartManual, (CFG), PasoPartManual(CFG))
-        else:
-            m = CFG['w'].next('Usuario', Usuario, (CFG), PasoUsuario(CFG))
 
 class PartTodo():
     '''
@@ -246,9 +217,26 @@ class PartTodo():
         m = CFG['w'].previous('Metodo', Metodo, (CFG))
 
     def siguiente(self, CFG):
-        CFG['ini'] = CFG['w'].formulario('PartTodo').ini
-        CFG['fin'] = CFG['w'].formulario('PartTodo').fin
-        CFG['forma'] = CFG['w'].formulario('PartTodo').forma
+        CFG['acciones'] = CFG['w'].formulario('PartAuto').acciones
+
+        if CFG['forma'] == 'MANUAL':
+            m = CFG['w'].next('PartManual', PartManual, (CFG), PasoPartManual(CFG))
+        else:
+            m = CFG['w'].next('Usuario', Usuario, (CFG), PasoUsuario(CFG))
+
+class PartAuto():
+    '''
+        Inicia el paso que redimensiona la partición
+    '''
+    def __init__(self, CFG):
+        CFG['s'] = aconnect(CFG['w'].siguiente, CFG['s'], self.siguiente, CFG)
+        CFG['s'] = aconnect(CFG['w'].anterior, CFG['s'], self.anterior, CFG)
+
+    def anterior(self, CFG):
+        m = CFG['w'].previous('Metodo', Metodo, (CFG))
+
+    def siguiente(self, CFG):
+        CFG['acciones'] = CFG['w'].formulario('PartAuto').acciones
 
         if CFG['forma'] == 'MANUAL':
             m = CFG['w'].next('PartManual', PartManual, (CFG), PasoPartManual(CFG))
@@ -284,6 +272,9 @@ class Usuario():
         CFG['s'] = aconnect(CFG['w'].anterior, CFG['s'], self.anterior, CFG)
 
     def anterior(self, CFG):
+        m = CFG['w'].previous('PartAuto', PartAuto, (CFG))
+        m = CFG['w'].previous('PartTodo', PartTodo, (CFG))
+        m = CFG['w'].previous('PartManual', PartManual, (CFG))
         m = CFG['w'].previous('Metodo', Metodo, (CFG))
 
     def siguiente(self, CFG):
