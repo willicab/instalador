@@ -2,7 +2,8 @@
 
 import gtk
 
-from canaimainstalador.clases.common import floatify, humanize
+from canaimainstalador.clases.common import floatify, humanize, get_active_text, \
+    TblCol
 from canaimainstalador.translator import msj
 
 class Main(gtk.Dialog):
@@ -25,8 +26,8 @@ class Main(gtk.Dialog):
         self.set_default_response(gtk.RESPONSE_CANCEL)
 
         # Toma el inicio y fin de la particion seleccionada
-        self.inicio = self.padre.fila_selec[5]
-        self.fin = self.padre.fila_selec[6]
+        self.inicio = self.padre.fila_selec[TblCol.INICIO]
+        self.fin = self.padre.fila_selec[TblCol.FIN]
 
         # Contenedor General
         self.cont = gtk.Fixed()
@@ -96,10 +97,11 @@ class Main(gtk.Dialog):
         self.cmb_fs.append_text('ext2')
         self.cmb_fs.append_text('ext3')
         self.cmb_fs.append_text('ext4')
-        self.cmb_fs.append_text('linux-swap')
-        self.cmb_fs.append_text('reiserfs')
         self.cmb_fs.append_text('fat16')
         self.cmb_fs.append_text('fat32')
+        self.cmb_fs.append_text('linux-swap')
+        self.cmb_fs.append_text('reiserfs')
+        self.cmb_fs.append_text('xfs')
         self.cmb_fs.set_active(True)
         self.cmb_fs.connect("changed", self.cmb_fs_on_changed)
         self.cmb_fs.show()
@@ -144,9 +146,9 @@ class Main(gtk.Dialog):
             return response
 
         if response == gtk.RESPONSE_OK:
-            tipo = gen.get_active_text(self.cmb_tipo)
-            formato = gen.get_active_text(self.cmb_fs)
-            montaje = gen.get_active_text(self.cmb_montaje)
+            tipo = get_active_text(self.cmb_tipo)
+            formato = get_active_text(self.cmb_fs)
+            montaje = get_active_text(self.cmb_montaje)
 
             if formato == 'linux-swap':
                 montaje = ''
@@ -262,7 +264,7 @@ class Main(gtk.Dialog):
         self.lblsize.set_text(humanize(widget.get_value() - float(self.inicio)))
 
     def cmb_tipo_on_changed(self, widget=None):
-        tipo = gen.get_active_text(self.cmb_tipo)
+        tipo = get_active_text(self.cmb_tipo)
         if tipo == 'Extendida':
             self.cmb_fs.set_sensitive(False)
             self.cmb_montaje.set_sensitive(False)
@@ -271,14 +273,14 @@ class Main(gtk.Dialog):
             self.cmb_montaje.set_sensitive(True)
 
     def cmb_fs_on_changed(self, widget=None):
-        fs = gen.get_active_text(self.cmb_fs)
+        fs = get_active_text(self.cmb_fs)
         if fs == 'linux-swap':
             self.cmb_montaje.set_sensitive(False)
         else:
             self.cmb_montaje.set_sensitive(True)
 
     def cmb_montaje_on_changed(self, widget=None):
-        montaje = gen.get_active_text(self.cmb_montaje)
+        montaje = get_active_text(self.cmb_montaje)
         if montaje == 'Escoger manualmente...':
             self.entrada.show()
             self.validar_punto()
@@ -295,7 +297,7 @@ class Main(gtk.Dialog):
 
         aparece = False
         for fila in data:
-            if fila[3] == punto:
+            if fila[TblCol.MONTAJE] == punto:
                 aparece = True
         if aparece == False:
             self.cmb_montaje.append_text(punto)
@@ -308,7 +310,7 @@ class Main(gtk.Dialog):
         aparece = False
         assert isinstance(data, list) or isinstance(data, tuple)
         for fila in data:
-            if fila[3] == self.entrada.get_text().strip():
+            if fila[TblCol.MONTAJE] == self.entrada.get_text().strip():
                 aparece = True
         if aparece == False:
             self.set_response_sensitive(gtk.RESPONSE_OK, True)

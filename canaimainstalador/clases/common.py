@@ -5,6 +5,18 @@ import commands, re, subprocess, math, cairo, gtk
 
 from canaimainstalador.config import *
 
+# Orden de las columnas en la tabla de particiones
+class TblCol:
+    DISPOSITIVO = 0
+    TIPO = 1
+    FORMATO = 2
+    MONTAJE = 3
+    TAMANO = 4
+    USADO = 5
+    LIBRE = 6
+    INICIO = 7
+    FIN = 8
+
 def givemeswap():
     r = ram()
     if r >= float(1024 * 1024):
