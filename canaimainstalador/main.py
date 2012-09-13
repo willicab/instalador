@@ -83,7 +83,7 @@ class Wizard(gtk.Window):
         self.siguiente.set_size_request(100, 30)
 
         # Cancelar
-        self.cancelar = gtk.Button(stock=gtk.STOCK_CANCEL)
+        self.cancelar = gtk.Button(stock=gtk.STOCK_QUIT)
         self.botonera.put(self.cancelar, 10, 10)
         self.cancelar.set_size_request(100, 30)
         self.cancelar.connect("clicked", self.close)
