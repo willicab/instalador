@@ -105,8 +105,10 @@ class TablaParticiones (gtk.TreeView):
         self.nueva_columna_texto("Fin", TblCol.FIN)
 
         # Ocultar las columnas que no se desean mostrar
-        self.columnas[TblCol.INICIO].set_visible(False)
-        self.columnas[TblCol.FIN].set_visible(False)
+        #=======================================================================
+        # self.columnas[TblCol.INICIO].set_visible(False)
+        # self.columnas[TblCol.FIN].set_visible(False)
+        #=======================================================================
 
     def nueva_columna_color(self, title, index):
         'Crea nueva columna de color en el TreeView'

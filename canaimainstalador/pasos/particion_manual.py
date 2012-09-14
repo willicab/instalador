@@ -254,11 +254,12 @@ class PasoPartManual(gtk.Fixed):
 
     #TODO: Implementar
     def particion_redimensionar(self, widget=None):
-        fila = self.tabla.ultima_fila_seleccionada
-        particion_redimensionar.Main(fila[TblCol.DISPOSITIVO], \
-                                     fila[TblCol.INICIO], fila[TblCol.FIN], \
-                                     floatify(fila[TblCol.USADO]))
         widget.set_sensitive(False)
+        fila = self.tabla.ultima_fila_seleccionada
+        w_redim = particion_redimensionar.Main(self.lista, fila, self.acciones)
+        self.acciones = w_redim.acciones
+        self.lista = w_redim.lista
+        self.llenar_tabla()
 
 
     def particion_nueva(self, widget=None):
