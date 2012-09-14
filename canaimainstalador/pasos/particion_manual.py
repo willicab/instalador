@@ -184,6 +184,7 @@ class PasoPartManual(gtk.Fixed):
 
         # Limpia previamente la tabla para inicializar su llenado
         self.tabla.liststore.clear()
+        self.tabla.get_selection().unselect_all()
 
         # LLena la tabla con los datos
         for fila in self.lista:
