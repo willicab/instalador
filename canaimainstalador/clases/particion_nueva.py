@@ -2,23 +2,28 @@
 
 import gtk
 
-from canaimainstalador.clases.common import floatify, humanize, get_active_text, \
-    TblCol
+from canaimainstalador.clases.common import humanize, get_active_text, TblCol, \
+    get_next_row, get_row_index, is_extended
 from canaimainstalador.translator import msj
 
 class Main(gtk.Dialog):
 
-    inicio = 0
-    fin = 0
+    inicio_part = 0
+    fin_part = 0
 
     def __init__(self, padre):
         gtk.Window.__init__(self, gtk.WINDOW_TOPLEVEL)
         gtk.Window.set_position(self, gtk.WIN_POS_CENTER_ALWAYS)
 
+        self.lista = padre.lista
+        self.particion_act = padre.fila_selec
+        self.num_fila_act = get_row_index(self.lista, self.particion_act)
+        self.particion_sig = get_next_row(self.lista, self.particion_act,
+                                          self.num_fila_act)
         self.padre = padre
-        # Toma el inicio y fin de la particion seleccionada
-        self.inicio = self.padre.fila_selec[TblCol.INICIO]
-        self.fin = self.padre.fila_selec[TblCol.FIN]
+        # Toma el inicio_part y fin_part de la particion seleccionada
+        self.inicio_part = self.padre.fila_selec[TblCol.INICIO]
+        self.fin_part = self.padre.fila_selec[TblCol.FIN]
 
         self.set_title("Nueva Partición")
         self.set_size_request(400, 200)
@@ -39,13 +44,14 @@ class Main(gtk.Dialog):
         self.lbl.set_size_request(200, 30)
         self.lbl.show()
         self.cont.put(self.lbl, 5, 5)
-        adj = gtk.Adjustment(float(self.fin),
-                             float(self.inicio),
-                             float(self.fin),
+        adj = gtk.Adjustment(self.fin_part,
+                             self.inicio_part,
+                             self.fin_part,
                              1.0,
                              5.0,
                              0.0)
         self.escala = gtk.HScale()
+        self.escala.set_digits(0)
         self.escala.set_draw_value(False)
         self.escala.set_adjustment(adj)
         self.escala.set_property('value-pos', gtk.POS_RIGHT)
@@ -54,7 +60,7 @@ class Main(gtk.Dialog):
         self.cont.put(self.escala, 60, 5)
         self.escala.show()
         self.lblsize = gtk.Label(humanize(self.escala.get_value() - \
-                                 float(self.inicio)))
+                                          self.inicio_part))
         self.lblsize.set_alignment(0, 0.5)
         self.lblsize.set_size_request(100, 30)
         self.lblsize.show()
@@ -71,7 +77,7 @@ class Main(gtk.Dialog):
         self.cmb_tipo.set_size_request(100, 30)
         self.cont.put(self.cmb_tipo, 145, 35)
 
-        if self.padre.bext == True:
+        if is_extended(self.particion_act):
             self.cmb_tipo.append_text(msj.particion.logica)
             self.cmb_tipo.set_sensitive(False)
         else:
@@ -148,6 +154,7 @@ class Main(gtk.Dialog):
             tipo = get_active_text(self.cmb_tipo)
             formato = get_active_text(self.cmb_fs)
             montaje = get_active_text(self.cmb_montaje)
+            usado = humanize(0)
 
             if formato == 'linux-swap':
                 montaje = ''
@@ -156,102 +163,57 @@ class Main(gtk.Dialog):
                 montaje = self.entrada.get_text().strip()
 
             # Calculo el tamaño
-            inicio = int(self.inicio)
-            fin = int(self.escala.get_value())
+            inicio = self.inicio_part
+            fin = self.escala.get_value()
             tamano = humanize(fin - inicio)
+            libre = tamano
 
+            print "---NUEVA----"
             # Primaria
             if tipo == msj.particion.primaria:
-                # Se crea elemento particion primaria y se agrega a la lista
-                particion = [self.padre.disco, #Dispositivo
-                             tipo, #Tipo
-                             formato, #Formato
-                             montaje, #Punto de montaje
-                             tamano, #Tamaño
-                             inicio, #inicio
-                             fin]               #fin
-                self.padre.agregar_a_lista(particion)
-
+                print "Partición primaria"
+                self.crear_particion(tipo, formato, montaje, tamano, usado, \
+                                     libre, inicio, fin)
+                if fin != self.fin_part:
+                    print "Que deja espacio libre"
+                    inicio = self.escala.get_value()
+                    fin = self.fin_part
+                    tamano = humanize(fin - inicio)
+                    libre = tamano
+                    self.crear_particion(tipo, msj.particion.libre, montaje, \
+                                         tamano, usado, libre, inicio, fin)
             # Extendida
             elif tipo == msj.particion.extendida:
-                # Cambia variable bext a True
-                self.padre.bext = True
-                # Establece las variables ext_ini y ext_fin
-                self.padre.ext_ini = inicio
-                self.padre.ext_fin = fin
-
-                # Se crea elemento particion extendida y se agrega a la lista
-                particion = [self.padre.disco, #Dispositivo
-                             tipo, #Tipo
-                             '', #Formato
-                             '', #Punto de montaje
-                             tamano, #Tamaño
-                             inicio, #inicio
-                             fin]               #fin
-                self.padre.agregar_a_lista(particion)
-                # Se crea elemento espacio libre en partición extendida
-                particion = ['', #Dispositivo
-                             tipo, #Tipo
-                             msj.particion.libre, #Formato
-                             '', #Punto de montaje
-                             tamano, #Tamaño
-                             inicio, #inicio
-                             fin]                                   #fin
-                self.padre.agregar_a_lista(particion, False)
-
+                print "Partición Extendida"
+                self.crear_particion(tipo, formato, montaje, tamano, usado, \
+                                     libre, inicio, fin)
+                print "Crea vacio interno"
+                self.crear_particion(tipo, msj.particion.libre, montaje, \
+                                     tamano, usado, libre, inicio + 1, fin)
+                if fin != self.fin_part:
+                    print "Y deja espacio libre"
+                    inicio = self.escala.get_value()
+                    fin = self.fin_part
+                    tamano = humanize(fin - inicio)
+                    libre = tamano
+                    self.crear_particion(msj.particion.primaria, \
+                                         msj.particion.libre, montaje, tamano, \
+                                         usado, libre, inicio + 1, fin)
             # Lógica
             elif tipo == msj.particion.logica:
-                # Se crea elemento particion lógica y se agrega a la lista
-                particion = [self.padre.disco, #Dispositivo
-                             tipo, #Tipo
-                             formato, #Formato
-                             montaje, #Punto de montaje
-                             tamano, #Tamaño
-                             inicio, #inicio
-                             fin]               #fin
-                self.padre.agregar_a_lista(particion)
-                # Si se llega al final de la particion extendida
-                if self.padre.ext_fin == fin:
-                    # No se crea elemento espacio libre en partición extendida,
-                    # solo cambia variable bext a False
-                    self.padre.bext = False
-                # Si no
-                else:
-                    # se calcula el tamaño de la partición libre
-                    ext_ini = fin
-                    ext_fin = self.padre.ext_fin
-                    tamano = humanize(ext_fin - ext_ini)
-                    self.padre.ext_ini = ext_ini
-                    # Se crea elemento espacio libre en partición extendida
-                    particion = ['', #Dispositivo
-                                 msj.particion.extendida, #Tipo
-                                 msj.particion.libre, #Formato
-                                 '', #Punto de montaje
-                                 tamano, #Tamaño
-                                 ext_ini, #inicio
-                                 ext_fin]                                   #fin
-                    self.padre.agregar_a_lista(particion, False)
-
-            # Calculamos el tamaño de la partición libre
-            # si bext == True entonces se usará ext_fin como fin
-            if self.padre.bext == True:
-                fin = self.padre.ext_fin
-
-            # Si fin != self.fin entonces 
-            if fin != int(floatify(self.fin)):
-                # Se calcula el tamaño de la partición libre
-                inicio = fin
-                fin = int(floatify(self.fin))
-                tamano = humanize(fin - inicio)
-                # Se crea elemento espacio libre
-                libre = ['', #Dispositivo
-                         '', #Tipo
-                         msj.particion.libre, #Formato
-                         '', #Punto de montaje
-                         tamano, #Tamaño
-                         inicio, #inicio
-                         fin]               #fin
-                self.padre.agregar_a_lista(libre, False)
+                print "Partición Logica"
+                self.crear_particion(tipo, formato, montaje, tamano, usado, \
+                                     libre, inicio, fin)
+                if fin != self.fin_part:
+                    print "Que deja espacio extendido libre"
+                    inicio = self.escala.get_value()
+                    fin = self.fin_part
+                    tamano = humanize(fin - inicio)
+                    libre = tamano
+                    self.crear_particion(msj.particion.extendida, \
+                                         msj.particion.libre, montaje, tamano, \
+                                         usado, libre, inicio + 1, fin)
+            print "------------"
 
             # Se actualiza la tabla
             self.padre.llenar_tabla()
@@ -259,8 +221,35 @@ class Main(gtk.Dialog):
         self.destroy()
         return response
 
+    def crear_particion(self, tipo, formato, montaje, tamano, usado,
+                        libre, inicio, fin):
+        disp = self.padre.disco
+        # Si es espacio libre
+        if formato == msj.particion.libre:
+            pop = False
+            disp = ''
+            montaje = ''
+        # Si NO es espacio libre
+        else:
+            pop = True
+            if tipo == msj.particion.extendida:
+                formato = ''
+                montaje = ''
+
+        particion = [disp, #Dispositivo
+                tipo, #Tipo
+                formato, #Formato
+                montaje, #Punto de montaje
+                tamano, #Tamaño
+                usado,
+                libre,
+                int(inicio), #inicio_part
+                int(fin)]               #fin_part
+
+        self.padre.agregar_a_lista(particion, pop)
+
     def on_changed(self, widget=None):
-        self.lblsize.set_text(humanize(widget.get_value() - float(self.inicio)))
+        self.lblsize.set_text(humanize(widget.get_value() - self.inicio_part))
 
     def cmb_tipo_on_changed(self, widget=None):
         tipo = get_active_text(self.cmb_tipo)

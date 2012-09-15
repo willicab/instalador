@@ -4,6 +4,7 @@
 import commands, re, subprocess, math, cairo, gtk
 
 from canaimainstalador.config import *
+from canaimainstalador.translator import msj
 
 # Orden de las columnas en la tabla de particiones
 class TblCol:
@@ -248,3 +249,39 @@ def UserMessage(message, title, mtype, buttons,
         f_3(*p_3)
 
     return response
+
+def debug_list(the_list):
+    data = "List [\n"
+    for fila in the_list:
+        data = data + '  ' + str(fila) + '\n'
+    data = data + ']'
+
+    return data
+
+def get_row_index(the_list, row):
+        '''Obtiene el numero de la fila seleccionada en la tabla'''
+        try:
+            return the_list.index(list(row))
+        except ValueError:
+            return None
+
+def has_next_row(the_list, row_index):
+    'Verifica si la lista contiene una fila siguiente'
+    if  row_index < len(the_list) - 1:
+        return True
+    else:
+        return False
+
+def get_next_row(the_list, row, row_index=None):
+    '''Retorna la fila siguiente si existe'''
+    if not row_index:
+        row_index = get_row_index(the_list, row)
+
+    if row_index != None and has_next_row(the_list, row_index):
+        return the_list[row_index + 1]
+    else:
+        return None
+
+def is_extended(row):
+        'Determina si una fila pertenece a una particion extendida'
+        return row[TblCol.TIPO] == msj.particion.extendida

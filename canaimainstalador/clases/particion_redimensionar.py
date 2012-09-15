@@ -98,7 +98,7 @@ class Main(gtk.Dialog):
         return self.inicio + self.usado
     def get_maximo(self):
         'El tamaño maximo al que se puede redimensionar la partición'
-        return self.fin + self.get_espacio_libre()
+        return self.fin + self.get_espacio_sin_particionar()
     def get_libre(self):
         'Retorna el espacio libre de la partición'
         return self.escala.get_value() - self.get_minimo()
@@ -131,7 +131,7 @@ class Main(gtk.Dialog):
             and fila_siguiente[TblCol.FORMATO] == msj.particion.libre:
                 return fila_siguiente
         return None
-    def get_espacio_libre(self):
+    def get_espacio_sin_particionar(self):
         'Retona la cantidad de espacio libre que hay luego de la particion'
         fila_siguiente = self.get_fila_siguiente()
         if fila_siguiente != None:

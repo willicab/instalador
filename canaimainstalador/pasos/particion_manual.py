@@ -2,7 +2,8 @@
 
 import gtk
 
-from canaimainstalador.clases.common import floatify, humanize, TblCol
+from canaimainstalador.clases.common import floatify, humanize, TblCol, \
+    get_row_index
 from canaimainstalador.clases import particion_nueva, particion_redimensionar
 from canaimainstalador.clases.tabla_particiones import TablaParticiones
 from canaimainstalador.translator import msj
@@ -62,6 +63,7 @@ class PasoPartManual(gtk.Fixed):
         Inicializa todas las variables
         '''
 
+        #TODO: Eliminar esto si no es necesario en ningun modulo
         self.data = data
         self.disco = data['disco']
         self.particiones = data['particiones']
@@ -71,15 +73,9 @@ class PasoPartManual(gtk.Fixed):
         self.raiz = False
 
         # Si se crea una partición extendida se usarán las siguientes variables
-        self.bext = False        #Si se crea la partición extendida será True
-        self.ext_ini = 0         #El inicio de la partición extendida
-        self.ext_fin = 0         #El fin de la partición extendida
 
         self.acciones = []      # Almacena las acciones pendientes a realizar
         self.fila_selec = None  # Ultima fila seleccionada de la tabla
-
-
-        self.lista = []
 
         # Llevar los botones a su estado inicial
         self.btn_nueva.set_sensitive(False)
@@ -121,12 +117,6 @@ class PasoPartManual(gtk.Fixed):
 
         self.fila_selec = fila
 
-        # Es particion extendida?
-        if fila[TblCol.TIPO] == msj.particion.extendida:
-            self.bext = True
-        else:
-            self.bext = False
-
         # BTN_NUEVA
         if fila[TblCol.FORMATO] == msj.particion.libre:
             # Activar solo si hay menos de 4 particiones primarias
@@ -135,10 +125,15 @@ class PasoPartManual(gtk.Fixed):
             # o si la part. libre pertenece a una part. extendida
             elif fila[TblCol.TIPO] == msj.particion.extendida:
                 self.btn_nueva.set_sensitive(True)
+            else:
+                self.btn_nueva.set_sensitive(False)
         else:
             self.btn_nueva.set_sensitive(False)
-
+        self.bext = False        #Si se crea la partición extendida será True
+        self.ext_ini = 0         #El inicio de la partición extendida
+        self.ext_fin = 0         #El fin de la partición extendida
         #BTN_REDIMENSION
+        #TODO: Validar que no se redimensionen particiones extendidas
         if floatify(fila[TblCol.TAMANO]) > floatify(fila[TblCol.USADO]) \
         and fila[TblCol.FORMATO] != msj.particion.libre:
             self.btn_redimension.set_sensitive(True)
@@ -166,7 +161,6 @@ class PasoPartManual(gtk.Fixed):
             # Si la particion es primaria
             elif fila[TblCol.TIPO] == msj.particion.primaria:
                 total = total + 1
-
         return total
 
     def existe_extendida(self):
@@ -200,7 +194,7 @@ class PasoPartManual(gtk.Fixed):
                 self.primarias = self.primarias + 1
 
     def ordenar_lista(self):
-        'Ordena la lista por el inicio de la particion'
+        'Ordena la lista por el inicio de la particion (metodo burbuja)'
         tamano = len(self.lista)
         for i in range(tamano):
             i = i # Solo para quitar el warning (unused variable)
@@ -212,46 +206,21 @@ class PasoPartManual(gtk.Fixed):
                     self.lista[k] = self.lista[k + 1]
                     self.lista[k + 1] = f_temp
 
-
     def agregar_a_lista(self, fila, pop=True):
         '''Agrega una nueva particion a la lista en el sitio adecuado segun su
         inicio'''
 
-        i = 0
-        temp = []
-        inicio = fila[TblCol.INICIO]
-        agregado = False
+        index = get_row_index(self.lista, self.tabla.ultima_fila_seleccionada)
+        if pop:
+            self.lista[index] = fila
+        else:
+            self.lista.append(fila)
 
-        for f in self.lista:
-            temp.append(f)
-
-            if len(self.lista) > i + 1 and not agregado:
-                ini_anterior = f[TblCol.INICIO]
-                ini_siguiente = self.lista[i + 1][TblCol.INICIO]
-                if inicio >= ini_anterior and inicio < ini_siguiente:
-
-                    if pop: temp.pop()
-                    temp.append(fila)
-                    agregado = True
-
-            elif not agregado:
-                if pop: temp.pop()
-                temp.append(fila)
-
-            i = i + 1
-        self.lista = temp
+        self.ordenar_lista()
 
     #TODO: Implementar
     def particion_eliminar(self, widget=None):
-
         widget.set_sensitive(False)
-
-        fila_accion = (
-                        'eliminar',
-                        self.tabla.ultima_fila_seleccionada
-                     )
-
-        self.acciones.append(fila_accion)
 
     #TODO: Implementar
     def particion_redimensionar(self, widget=None):
