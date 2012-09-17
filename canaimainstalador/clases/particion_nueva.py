@@ -3,7 +3,7 @@
 import gtk
 
 from canaimainstalador.clases.common import humanize, get_active_text, TblCol, \
-    get_next_row, get_row_index, is_extended, has_extended
+    get_next_row, get_row_index, is_extended, has_extended, set_partition
 from canaimainstalador.translator import msj
 
 class Main(gtk.Dialog):
@@ -244,16 +244,8 @@ class Main(gtk.Dialog):
             self.acciones.append(['crear', disp, montaje, inicio, fin, \
                                   formato, tipo])
 
-        self.agregar_a_lista(particion, pop)
-
-    def agregar_a_lista(self, fila, pop=True):
-        '''Agrega una nueva particion a la lista en el sitio adecuado segun su
-        inicio'''
-        index = get_row_index(self.lista, self.particion_act)
-        if pop:
-            self.lista[index] = fila
-        else:
-            self.lista.append(fila)
+        self.lista = set_partition(self.lista, self.particion_act, particion, \
+                                   pop)
 
     def on_changed(self, widget=None):
         self.lblsize.set_text(humanize(widget.get_value() - self.inicio_part))

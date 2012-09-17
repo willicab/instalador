@@ -292,3 +292,14 @@ def has_extended(lista):
             if fila[TblCol.TIPO] == msj.particion.extendida:
                 return True
         return False
+
+def set_partition(the_list, selected_row, new_row, pop=True):
+        '''Agrega una nueva particion a la lista en el sitio adecuado segun su
+        inicio'''
+        index = get_row_index(the_list, selected_row)
+        if pop:
+            the_list[index] = new_row
+        else:
+            the_list.append(new_row)
+
+        return the_list
