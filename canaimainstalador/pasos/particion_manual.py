@@ -109,7 +109,11 @@ class PasoPartManual(gtk.Fixed):
     def seleccionar_fila(self, fila):
         '''Acciones a tomar cuando una fila de la tabla es seleccionada'''
 
-        self.fila_selec = fila
+        if fila == None:
+            print "Nada seleccionado."
+            return
+        else:
+            self.fila_selec = fila
 
         # BTN_NUEVA
         if fila[TblCol.FORMATO] == msj.particion.libre:
@@ -211,9 +215,9 @@ class PasoPartManual(gtk.Fixed):
         w_nueva = particion_nueva.Main(self)
         # Se actualiza la tabla
         self.lista = w_nueva.lista
-        self.llenar_tabla()
         self.acciones = w_nueva.acciones
         print debug_list(self.acciones)
+        self.llenar_tabla()
 
     def deshacer(self, widget=None):
         self.inicializar(self.data)
