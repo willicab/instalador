@@ -285,3 +285,10 @@ def get_next_row(the_list, row, row_index=None):
 def is_extended(row):
         'Determina si una fila pertenece a una particion extendida'
         return row[TblCol.TIPO] == msj.particion.extendida
+
+def has_extended(lista):
+        'Determina si existe por lo menos una particion extendida en la lista'
+        for fila in lista:
+            if fila[TblCol.TIPO] == msj.particion.extendida:
+                return True
+        return False

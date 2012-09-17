@@ -3,7 +3,7 @@
 import gtk
 
 from canaimainstalador.clases.common import floatify, humanize, TblCol, \
-    get_row_index
+    get_row_index, debug_list
 from canaimainstalador.clases import particion_nueva, particion_redimensionar
 from canaimainstalador.clases.tabla_particiones import TablaParticiones
 from canaimainstalador.translator import msj
@@ -12,6 +12,9 @@ class PasoPartManual(gtk.Fixed):
 
     def __init__(self, data):
         gtk.Fixed.__init__(self)
+
+        self.data = data
+        self.disco = self.data['disco']
 
         self.tabla = TablaParticiones()
         #self.tabla.set_doble_click(self.activar_tabla);
@@ -62,20 +65,11 @@ class PasoPartManual(gtk.Fixed):
         '''
         Inicializa todas las variables
         '''
-
-        #TODO: Eliminar esto si no es necesario en ningun modulo
-        self.data = data
-        self.disco = data['disco']
-        self.particiones = data['particiones']
-
         self.lista = []          #Lista de las particiones hechas
-        self.primarias = 0       #Cuenta la cantidad de particiones primarias
-        self.raiz = False
-
-        # Si se crea una partición extendida se usarán las siguientes variables
-
         self.acciones = []      # Almacena las acciones pendientes a realizar
         self.fila_selec = None  # Ultima fila seleccionada de la tabla
+        self.primarias = 0       #Cuenta la cantidad de particiones primarias
+        self.raiz = False
 
         # Llevar los botones a su estado inicial
         self.btn_nueva.set_sensitive(False)
@@ -86,7 +80,7 @@ class PasoPartManual(gtk.Fixed):
         if self.tabla != None:
 
             #l_part = Particiones().lista_particiones(self.disco)
-            for particion in self.particiones:
+            for particion in self.data['particiones']:
                 p_disp = particion[0]
                 p_ini = particion[1]
                 p_fin = particion[2]
@@ -163,14 +157,6 @@ class PasoPartManual(gtk.Fixed):
                 total = total + 1
         return total
 
-    def existe_extendida(self):
-        'Determina si existe por lo menos una particion extandida'
-        for fila in self.lista:
-            if fila[TblCol.TIPO] == msj.particion.extendida:
-                return True
-        return False
-
-
     def llenar_tabla(self):
         '''Llena la tabla con las particiones existentes en el disco'''
 
@@ -206,18 +192,6 @@ class PasoPartManual(gtk.Fixed):
                     self.lista[k] = self.lista[k + 1]
                     self.lista[k + 1] = f_temp
 
-    def agregar_a_lista(self, fila, pop=True):
-        '''Agrega una nueva particion a la lista en el sitio adecuado segun su
-        inicio'''
-
-        index = get_row_index(self.lista, self.tabla.ultima_fila_seleccionada)
-        if pop:
-            self.lista[index] = fila
-        else:
-            self.lista.append(fila)
-
-        self.ordenar_lista()
-
     #TODO: Implementar
     def particion_eliminar(self, widget=None):
         widget.set_sensitive(False)
@@ -225,8 +199,8 @@ class PasoPartManual(gtk.Fixed):
     #TODO: Implementar
     def particion_redimensionar(self, widget=None):
         widget.set_sensitive(False)
-        fila = self.tabla.ultima_fila_seleccionada
-        w_redim = particion_redimensionar.Main(self.lista, fila, self.acciones)
+        w_redim = particion_redimensionar.Main(self.lista, self.fila_selec, \
+                                               self.acciones)
         self.acciones = w_redim.acciones
         self.lista = w_redim.lista
         self.llenar_tabla()
@@ -234,7 +208,12 @@ class PasoPartManual(gtk.Fixed):
 
     def particion_nueva(self, widget=None):
         widget.set_sensitive(False)
-        particion_nueva.Main(self)
+        w_nueva = particion_nueva.Main(self)
+        # Se actualiza la tabla
+        self.lista = w_nueva.lista
+        self.llenar_tabla()
+        self.acciones = w_nueva.acciones
+        print debug_list(self.acciones)
 
     def deshacer(self, widget=None):
         self.inicializar(self.data)

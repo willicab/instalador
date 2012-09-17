@@ -3,7 +3,7 @@
 import gtk
 
 from canaimainstalador.clases.common import humanize, get_active_text, TblCol, \
-    get_next_row, get_row_index, is_extended
+    get_next_row, get_row_index, is_extended, has_extended
 from canaimainstalador.translator import msj
 
 class Main(gtk.Dialog):
@@ -14,16 +14,16 @@ class Main(gtk.Dialog):
     def __init__(self, padre):
         gtk.Window.__init__(self, gtk.WINDOW_TOPLEVEL)
         gtk.Window.set_position(self, gtk.WIN_POS_CENTER_ALWAYS)
-
+        self.disco = padre.disco
         self.lista = padre.lista
+        self.acciones = padre.acciones
         self.particion_act = padre.fila_selec
+        # Toma el inicio_part y fin_part de la particion seleccionada
+        self.inicio_part = self.particion_act[TblCol.INICIO]
+        self.fin_part = self.particion_act[TblCol.FIN]
         self.num_fila_act = get_row_index(self.lista, self.particion_act)
         self.particion_sig = get_next_row(self.lista, self.particion_act,
                                           self.num_fila_act)
-        self.padre = padre
-        # Toma el inicio_part y fin_part de la particion seleccionada
-        self.inicio_part = self.padre.fila_selec[TblCol.INICIO]
-        self.fin_part = self.padre.fila_selec[TblCol.FIN]
 
         self.set_title("Nueva Partición")
         self.set_size_request(400, 200)
@@ -83,7 +83,7 @@ class Main(gtk.Dialog):
         else:
             self.cmb_tipo.append_text(msj.particion.primaria)
             # Solo se permite una particion extendida en el disco
-            if not self.padre.existe_extendida():
+            if not has_extended(self.lista):
                 self.cmb_tipo.append_text(msj.particion.extendida)
 
         self.cmb_tipo.set_active(False)
@@ -121,15 +121,15 @@ class Main(gtk.Dialog):
         self.cmb_montaje = gtk.combo_box_new_text()
         self.cmb_montaje.set_size_request(200, 30)
         self.cont.put(self.cmb_montaje, 145, 95)
-        self.agregar('/')
-        self.agregar('/boot')
-        self.agregar('/home')
-        self.agregar('/opt')
-        self.agregar('/srv')
-        self.agregar('/tmp')
-        self.agregar('/usr')
-        self.agregar('/usr/local')
-        self.agregar('/var')
+        self.agregar_p_montaje('/')
+        self.agregar_p_montaje('/boot')
+        self.agregar_p_montaje('/home')
+        self.agregar_p_montaje('/opt')
+        self.agregar_p_montaje('/srv')
+        self.agregar_p_montaje('/tmp')
+        self.agregar_p_montaje('/usr')
+        self.agregar_p_montaje('/usr/local')
+        self.agregar_p_montaje('/var')
         self.cmb_montaje.append_text('Ninguno')
         self.cmb_montaje.append_text('Escoger manualmente...')
         self.cmb_montaje.set_active(False)
@@ -181,7 +181,7 @@ class Main(gtk.Dialog):
                     tamano = humanize(fin - inicio)
                     libre = tamano
                     self.crear_particion(tipo, msj.particion.libre, montaje, \
-                                         tamano, usado, libre, inicio, fin)
+                                         tamano, usado, libre, inicio + 1, fin)
             # Extendida
             elif tipo == msj.particion.extendida:
                 print "Partición Extendida"
@@ -215,17 +215,16 @@ class Main(gtk.Dialog):
                                          usado, libre, inicio + 1, fin)
             print "------------"
 
-            # Se actualiza la tabla
-            self.padre.llenar_tabla()
-
         self.destroy()
         return response
 
     def crear_particion(self, tipo, formato, montaje, tamano, usado,
                         libre, inicio, fin):
-        disp = self.padre.disco
+        disp = self.disco
+        crear_accion = True
         # Si es espacio libre
         if formato == msj.particion.libre:
+            crear_accion = False
             pop = False
             disp = ''
             montaje = ''
@@ -236,17 +235,25 @@ class Main(gtk.Dialog):
                 formato = ''
                 montaje = ''
 
-        particion = [disp, #Dispositivo
-                tipo, #Tipo
-                formato, #Formato
-                montaje, #Punto de montaje
-                tamano, #Tamaño
-                usado,
-                libre,
-                int(inicio), #inicio_part
-                int(fin)]               #fin_part
+        # Entrada de la particion para la tabla
+        particion = [disp, tipo, formato, montaje, tamano, usado, libre, \
+                     int(inicio), int(fin)]
 
-        self.padre.agregar_a_lista(particion, pop)
+        # Crea la acción correspondiente que va ejecutarse
+        if crear_accion:
+            self.acciones.append(['crear', disp, montaje, inicio, fin, \
+                                  formato, tipo])
+
+        self.agregar_a_lista(particion, pop)
+
+    def agregar_a_lista(self, fila, pop=True):
+        '''Agrega una nueva particion a la lista en el sitio adecuado segun su
+        inicio'''
+        index = get_row_index(self.lista, self.particion_act)
+        if pop:
+            self.lista[index] = fila
+        else:
+            self.lista.append(fila)
 
     def on_changed(self, widget=None):
         self.lblsize.set_text(humanize(widget.get_value() - self.inicio_part))
@@ -276,11 +283,11 @@ class Main(gtk.Dialog):
             self.entrada.hide()
             self.set_response_sensitive(gtk.RESPONSE_OK, True)
 
-    def agregar(self, punto):
+    def agregar_p_montaje(self, punto):
         '''Filtra los puntos de montaje que ya están siendo usados para no
         agregarlos a la lista del combobox'''
 
-        data = self.padre.lista
+        data = self.lista
         assert isinstance(data, list) or isinstance(data, tuple)
 
         aparece = False
@@ -294,7 +301,7 @@ class Main(gtk.Dialog):
         '''Valida que el punto de montaje no esté ya asignado a otra
         partición'''
 
-        data = self.padre.lista
+        data = self.lista
         aparece = False
         assert isinstance(data, list) or isinstance(data, tuple)
         for fila in data:
