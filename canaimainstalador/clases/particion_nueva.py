@@ -185,6 +185,8 @@ class Main(gtk.Dialog):
             # Extendida
             elif tipo == msj.particion.extendida:
                 print "Partición Extendida"
+                usado = tamano
+                libre = humanize(0)
                 self.crear_particion(tipo, formato, montaje, tamano, usado, \
                                      libre, inicio, fin)
                 print "Crea vacio interno"

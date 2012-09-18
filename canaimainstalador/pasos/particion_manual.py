@@ -3,7 +3,7 @@
 import gtk
 
 from canaimainstalador.clases.common import floatify, humanize, TblCol, \
-    get_row_index, debug_list
+    get_row_index, debug_list, is_primary, has_next_row, is_logic, get_next_row
 from canaimainstalador.clases import particion_nueva, particion_redimensionar
 from canaimainstalador.clases.tabla_particiones import TablaParticiones
 from canaimainstalador.translator import msj
@@ -130,8 +130,8 @@ class PasoPartManual(gtk.Fixed):
         self.bext = False        #Si se crea la partición extendida será True
         self.ext_ini = 0         #El inicio de la partición extendida
         self.ext_fin = 0         #El fin de la partición extendida
+
         #BTN_REDIMENSION
-        #TODO: Validar que no se redimensionen particiones extendidas
         if floatify(fila[TblCol.TAMANO]) > floatify(fila[TblCol.USADO]) \
         and fila[TblCol.FORMATO] != msj.particion.libre:
             self.btn_redimension.set_sensitive(True)
@@ -140,7 +140,10 @@ class PasoPartManual(gtk.Fixed):
 
         # BTN_ELIMINAR
         # Solo se pueden eliminar particiones, no espacios libres
-        if fila[TblCol.FORMATO] != msj.particion.libre:
+        #TODO: Eliminar part. extendidas (necesita verificar part. logicas)
+        if fila[TblCol.FORMATO] != msj.particion.libre \
+        and (fila[TblCol.TIPO] != msj.particion.extendida \
+            and fila[TblCol.FORMATO] != ''):
             self.btn_eliminar.set_sensitive(True)
         else:
             self.btn_eliminar.set_sensitive(False)
@@ -153,12 +156,10 @@ class PasoPartManual(gtk.Fixed):
             # Los espacios libres no se cuentan
             if fila[TblCol.FORMATO] == msj.particion.libre:
                 continue
-            # Si es una particion extendida
-            if fila[TblCol.TIPO] == msj.particion.extendida:
+
+            if is_primary(fila):
                 total = total + 1
-            # Si la particion es primaria
-            elif fila[TblCol.TIPO] == msj.particion.primaria:
-                total = total + 1
+
         return total
 
     def llenar_tabla(self):
@@ -178,11 +179,6 @@ class PasoPartManual(gtk.Fixed):
             if fila[TblCol.MONTAJE] == '/':
                 self.raiz = True
 
-            # Cuenta las particiones primarias
-            if fila[TblCol.TIPO] == msj.particion.primaria or fila[TblCol.TIPO] == \
-            msj.particion.extendida:
-                self.primarias = self.primarias + 1
-
     def ordenar_lista(self):
         'Ordena la lista por el inicio de la particion (metodo burbuja)'
         tamano = len(self.lista)
@@ -196,11 +192,74 @@ class PasoPartManual(gtk.Fixed):
                     self.lista[k] = self.lista[k + 1]
                     self.lista[k + 1] = f_temp
 
-    #TODO: Implementar
+    def _sumar_tamano(self, otra, actual):
+        '''Indica si se puede sumar el tamaño de las particiones si se trata \
+        del mismo tipo (primaria o lógica)'''
+        # Si la particion es libre
+        if otra[TblCol.FORMATO] == msj.particion.libre:
+            # Si ambas son primarias
+            # o ambas son logicas
+            if (is_primary(actual) and is_primary(otra)) \
+            or (is_logic(actual) and is_logic(otra)):
+                return True
+
+        return False
+
     def particion_eliminar(self, widget=None):
         widget.set_sensitive(False)
 
-    #TODO: Implementar
+        print self.fila_selec
+        print debug_list(self.lista)
+        print "####"
+        print
+        i = get_row_index(self.lista, self.fila_selec)
+        particion = self.lista[i]
+        inicio = particion[TblCol.INICIO]
+        fin = particion[TblCol.FIN]
+        del_sig = del_ant = False
+
+        # Si tiene una fila anterior
+        if i > 0:
+            p_anterior = self.lista[i - 1]
+            if self._sumar_tamano(p_anterior, particion):
+                del_ant = True
+                inicio = p_anterior[TblCol.INICIO]
+        # si tiene una fila siguiente
+        if has_next_row(self.lista, i):
+            p_siguiente = self.lista[i + 1]
+            if self._sumar_tamano(p_siguiente, particion):
+                del_sig = True
+                fin = p_siguiente[TblCol.FIN]
+        tamano = fin - inicio
+
+        temp = particion
+        temp[TblCol.DISPOSITIVO] = ''
+        # Validar de que tipo quedará la particion libre
+        if is_primary(temp):
+            temp[TblCol.TIPO] = msj.particion.primaria
+        elif is_logic(temp):
+            temp[TblCol.TIPO] = msj.particion.extendida
+        temp[TblCol.FORMATO] = msj.particion.libre
+        temp[TblCol.MONTAJE] = ''
+        temp[TblCol.TAMANO] = humanize(tamano)
+        temp[TblCol.USADO] = humanize(0)
+        temp[TblCol.LIBRE] = humanize(tamano)
+        temp[TblCol.INICIO] = inicio
+        temp[TblCol.FIN] = fin
+
+        # Sustituimos con los nuevos valores
+        self.lista[i] = temp
+        # Borramos los esṕacios vacios cobntiguos si existieren
+        if del_sig:
+            del self.lista[i + 1]
+        if del_ant:
+            del self.lista[i - 1]
+
+        # Agregamos la accion correspondiente
+        self.acciones.append(['borrar', self.disco, None, particion[TblCol.INICIO], particion[TblCol.FIN], None, None])
+
+        self.llenar_tabla()
+
     def particion_redimensionar(self, widget=None):
         widget.set_sensitive(False)
         w_redim = particion_redimensionar.Main(self.lista, self.fila_selec, \

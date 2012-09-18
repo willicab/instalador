@@ -303,3 +303,23 @@ def set_partition(the_list, selected_row, new_row, pop=True):
             the_list.append(new_row)
 
         return the_list
+
+def is_primary(fila):
+    'Determina si una particion es primaria'
+    p_type = fila[TblCol.TIPO]
+    p_format = fila[TblCol.FORMATO]
+    if p_type == msj.particion.primaria \
+    or (p_type == msj.particion.extendida and p_format == ''):
+        return True
+    else:
+        return False
+
+def is_logic(fila):
+    'Determina si una particion es lógica'
+    p_type = fila[TblCol.TIPO]
+    p_format = fila[TblCol.FORMATO]
+    if p_type == msj.particion.logica \
+    or (p_type == msj.particion.extendida and p_format != ''):
+        return True
+    else:
+        return False
