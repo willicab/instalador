@@ -3,7 +3,7 @@
 import gtk
 
 from canaimainstalador.clases.common import floatify, humanize, TblCol, \
-    get_row_index, debug_list, is_primary, has_next_row, is_logic, get_next_row
+    get_row_index, debug_list, is_primary, has_next_row, is_logic
 from canaimainstalador.clases import particion_nueva, particion_redimensionar
 from canaimainstalador.clases.tabla_particiones import TablaParticiones
 from canaimainstalador.translator import msj
@@ -65,10 +65,9 @@ class PasoPartManual(gtk.Fixed):
         '''
         Inicializa todas las variables
         '''
-        self.lista = []          #Lista de las particiones hechas
+        self.lista = []         #Lista de las particiones hechas
         self.acciones = []      # Almacena las acciones pendientes a realizar
         self.fila_selec = None  # Ultima fila seleccionada de la tabla
-        self.primarias = 0       #Cuenta la cantidad de particiones primarias
         self.raiz = False
 
         # Llevar los botones a su estado inicial
@@ -127,9 +126,6 @@ class PasoPartManual(gtk.Fixed):
                 self.btn_nueva.set_sensitive(False)
         else:
             self.btn_nueva.set_sensitive(False)
-        self.bext = False        #Si se crea la partición extendida será True
-        self.ext_ini = 0         #El inicio de la partición extendida
-        self.ext_fin = 0         #El fin de la partición extendida
 
         #BTN_REDIMENSION
         if floatify(fila[TblCol.TAMANO]) > floatify(fila[TblCol.USADO]) \
@@ -139,7 +135,7 @@ class PasoPartManual(gtk.Fixed):
             self.btn_redimension.set_sensitive(False)
 
         # BTN_ELIMINAR
-        # Solo se pueden eliminar particiones, no espacios libres
+        # Solo se pueden eliminar particiones, no los espacios libres
         #TODO: Eliminar part. extendidas (necesita verificar part. logicas)
         if fila[TblCol.FORMATO] != msj.particion.libre \
         and (fila[TblCol.TIPO] != msj.particion.extendida \
