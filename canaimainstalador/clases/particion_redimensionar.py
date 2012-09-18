@@ -183,7 +183,10 @@ class Main(gtk.Dialog):
                 else:
                     part_sig = list(range(len(part_actual)))
                     part_sig[TblCol.DISPOSITIVO] = ''
-                    part_sig[TblCol.TIPO] = part_actual[TblCol.TIPO]
+                    if part_actual[TblCol.TIPO] == msj.particion.logica:
+                        part_sig[TblCol.TIPO] = msj.particion.extendida
+                    else:
+                        part_sig[TblCol.TIPO] = part_actual[TblCol.TIPO]
                     part_sig[TblCol.FORMATO] = msj.particion.libre
                     part_sig[TblCol.MONTAJE] = ''
                     part_sig[TblCol.TAMANO] = humanize(self.get_sin_particion())
