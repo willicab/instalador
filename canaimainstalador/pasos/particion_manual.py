@@ -178,6 +178,10 @@ class PasoPartManual(gtk.Fixed):
             # Verifica si hay punto de montaje raiz "/"
             if fila[TblCol.MONTAJE] == '/':
                 self.raiz = True
+        if len(self.acciones) > 0:
+            self.btn_deshacer.set_sensitive(True)
+        else:
+            self.btn_deshacer.set_sensitive(False)
 
     def ordenar_lista(self):
         'Ordena la lista por el inicio de la particion (metodo burbuja)'
