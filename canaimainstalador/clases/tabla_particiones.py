@@ -47,7 +47,7 @@ class TablaParticiones (gtk.TreeView):
         fila = self.get_fila_seleccionada()
         if fila != self.ultima_fila_seleccionada:
             self.ultima_fila_seleccionada = fila
-            self.seleccionar(fila)
+        self.seleccionar(fila)
 
     def set_doble_click(self, callback):
         self.doble_click = callback
