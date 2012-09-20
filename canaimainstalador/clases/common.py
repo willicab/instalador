@@ -4,6 +4,7 @@
 import commands, re, subprocess, math, cairo, gtk
 
 from canaimainstalador.config import *
+from canaimainstalador.translator import msj
 
 # Orden de las columnas en la tabla de particiones
 class TblCol:
@@ -253,3 +254,77 @@ def UserMessage(message, title, mtype, buttons,
         f_5(*p_5)
 
     return response
+
+def debug_list(the_list):
+    data = "List [\n"
+    for fila in the_list:
+        data = data + '  ' + str(fila) + '\n'
+    data = data + ']'
+
+    return data
+
+def get_row_index(the_list, row):
+        '''Obtiene el numero de la fila seleccionada en la tabla'''
+        try:
+            return the_list.index(list(row))
+        except ValueError:
+            return None
+
+def has_next_row(the_list, row_index):
+    'Verifica si la lista contiene una fila siguiente'
+    if  row_index < len(the_list) - 1:
+        return True
+    else:
+        return False
+
+def get_next_row(the_list, row, row_index=None):
+    '''Retorna la fila siguiente si existe'''
+    if not row_index:
+        row_index = get_row_index(the_list, row)
+
+    if row_index != None and has_next_row(the_list, row_index):
+        return the_list[row_index + 1]
+    else:
+        return None
+
+def is_extended(row):
+        'Determina si una fila pertenece a una particion extendida'
+        return row[TblCol.TIPO] == msj.particion.extendida
+
+def has_extended(lista):
+        'Determina si existe por lo menos una particion extendida en la lista'
+        for fila in lista:
+            if fila[TblCol.TIPO] == msj.particion.extendida:
+                return True
+        return False
+
+def set_partition(the_list, selected_row, new_row, pop=True):
+        '''Agrega una nueva particion a la lista en el sitio adecuado segun su
+        inicio'''
+        index = get_row_index(the_list, selected_row)
+        if pop:
+            the_list[index] = new_row
+        else:
+            the_list.append(new_row)
+
+        return the_list
+
+def is_primary(fila):
+    'Determina si una particion es primaria'
+    p_type = fila[TblCol.TIPO]
+    p_format = fila[TblCol.FORMATO]
+    if p_type == msj.particion.primaria \
+    or (p_type == msj.particion.extendida and p_format == ''):
+        return True
+    else:
+        return False
+
+def is_logic(fila):
+    'Determina si una particion es lógica'
+    p_type = fila[TblCol.TIPO]
+    p_format = fila[TblCol.FORMATO]
+    if p_type == msj.particion.logica \
+    or (p_type == msj.particion.extendida and p_format != ''):
+        return True
+    else:
+        return False
