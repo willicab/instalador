@@ -9,7 +9,6 @@ class Leyenda(gtk.Fixed):
     def __init__(self, parent):
         gtk.Fixed.__init__(self)
         self.p = parent
-        self.forma = self.p.forma
 
         label = ''
         self.lbl_1 = gtk.Label(label)
@@ -51,12 +50,12 @@ class Leyenda(gtk.Fixed):
 
     def cambiar(self, forma):
         self.forma = forma
+        self.p.forma = forma
         self.expose()
 
     def expose(self, widget=None, event=None):
-        render = self.p.render
-        j = 1
-
+        self.forma = self.p.forma
+        self.nuevas = self.p.nuevas
         self.lbl_1.set_text('')
         self.lbl_2.set_text('')
         self.lbl_3.set_text('')
@@ -65,9 +64,10 @@ class Leyenda(gtk.Fixed):
         self.lbl_6.set_text('')
         self.lbl_7.set_text('')
 
-        for i in render:
-            part = i.split(':')[0]
-            size = humanize(i.split(':')[1])
+        j = 1
+        for i in self.nuevas:
+            part = i[0]
+            size = humanize(i[2] - i[1])
 
             if part == 'ROOT':
                 exec "self.lbl_"+str(j)+".set_text('Espacio principal (/): '+size)"

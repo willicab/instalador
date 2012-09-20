@@ -8,19 +8,13 @@ from canaimainstalador.clases.leyenda import Leyenda
 from canaimainstalador.config import *
 
 class PasoPartTodo(gtk.Fixed):
-
-    render = []
-    forma = 'ROOT:HOME:SWAP:LIBRE'
-
     def __init__(self, CFG):
         gtk.Fixed.__init__(self)
         self.metodo = CFG['metodo']
         self.particiones = CFG['particiones']
-        self.ini = CFG['ini']
-        self.fin = CFG['fin']
-        self.total = self.fin - self.ini
-        self.current = self.total
+        self.forma = 'ROOT:HOME:SWAP:LIBRE'
         self.minimo = ESPACIO_TOTAL
+        self.nuevas = []
         self.acciones = []
         self.libre = 0
 
@@ -42,7 +36,6 @@ class PasoPartTodo(gtk.Fixed):
 
         msg_2 = "Separar la partición /home (Recomendado)."
         self.option_2 = gtk.RadioButton(self.option_1, msg_2)
-        self.option_2.set_active(True)
         self.option_2.connect("toggled", self.change_option, "ROOT:HOME:SWAP:LIBRE")
         self.option_2.set_size_request(350, 20)
         self.put(self.option_2, 0, 195)
@@ -63,9 +56,22 @@ class PasoPartTodo(gtk.Fixed):
         self.leyenda.set_size_request(270, 150)
         self.put(self.leyenda, 390, 170)
 
-    def change_option(self, widget, data):
-        if widget.get_active() == True:
-            self.forma = data
-            self.barra.cambiar(self.forma)
-            self.leyenda.cambiar(self.forma)
+        self.option_2.set_active(True)
 
+        if self.metodo['tipo'] != 'TODO':
+            if self.metodo['disco'][4] > 0:
+                if self.metodo['disco'][3] == 0:
+                    # Disponibles: root+swap, root+home+swap
+                    self.option_3.set_sensitive(False)
+                    self.option_4.set_sensitive(False)
+                elif self.metodo['disco'][3] == 1:
+                    # Disponibles: root+swap
+                    self.option_1.set_active(True)
+                    self.option_2.set_sensitive(False)
+                    self.option_3.set_sensitive(False)
+                    self.option_4.set_sensitive(False)
+
+    def change_option(self, widget, forma):
+        if widget.get_active() == True:
+            self.barra.cambiar(forma)
+            self.leyenda.cambiar(forma)

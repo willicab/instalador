@@ -185,22 +185,15 @@ class Metodo():
 
     def siguiente(self, CFG):
         CFG['metodo'] = CFG['w'].formulario('Metodo').metodo
-        CFG['disco'] = CFG['w'].formulario('Metodo').disco
         CFG['particiones'] = CFG['w'].formulario('Metodo').particiones
-        CFG['particion'] = CFG['w'].formulario('Metodo').particion
-        CFG['ini'] = CFG['w'].formulario('Metodo').ini
-        CFG['fin'] = CFG['w'].formulario('Metodo').fin
-        CFG['usado'] = CFG['w'].formulario('Metodo').usado
-        print 'El metodo de instalación escogido es: {0}'.format(CFG['metodo'])
+        print 'El metodo de instalación escogido es: {0}'.format(CFG['metodo']['tipo'])
         print 'CFG: {0}'.format(CFG)
 
-        if CFG['metodo'] == 'MANUAL':
+        if CFG['metodo']['tipo'] == 'MANUAL':
             m = CFG['w'].next('PartManual', PartManual, (CFG), PasoPartManual(CFG))
-        elif CFG['metodo'] == 'TODO':
+        elif CFG['metodo']['tipo'] == 'TODO' or CFG['metodo']['tipo'] == 'LIBRE':
             m = CFG['w'].next('PartTodo', PartTodo, (CFG), PasoPartTodo(CFG))
-        elif CFG['metodo'] == 'LIBRE':
-            m = CFG['w'].next('PartTodo', PartTodo, (CFG), PasoPartTodo(CFG))
-        elif CFG['metodo'] == 'REDIM':
+        elif CFG['metodo']['tipo'] == 'REDIM':
             m = CFG['w'].next('PartAuto', PartAuto, (CFG), PasoPartAuto(CFG))
         else:
             pass
@@ -218,11 +211,7 @@ class PartTodo():
 
     def siguiente(self, CFG):
         CFG['acciones'] = CFG['w'].formulario('PartAuto').acciones
-
-        if CFG['forma'] == 'MANUAL':
-            m = CFG['w'].next('PartManual', PartManual, (CFG), PasoPartManual(CFG))
-        else:
-            m = CFG['w'].next('Usuario', Usuario, (CFG), PasoUsuario(CFG))
+        m = CFG['w'].next('Usuario', Usuario, (CFG), PasoUsuario(CFG))
 
 class PartAuto():
     '''
@@ -237,11 +226,7 @@ class PartAuto():
 
     def siguiente(self, CFG):
         CFG['acciones'] = CFG['w'].formulario('PartAuto').acciones
-
-        if CFG['forma'] == 'MANUAL':
-            m = CFG['w'].next('PartManual', PartManual, (CFG), PasoPartManual(CFG))
-        else:
-            m = CFG['w'].next('Usuario', Usuario, (CFG), PasoUsuario(CFG))
+        m = CFG['w'].next('Usuario', Usuario, (CFG), PasoUsuario(CFG))
 
 class PartManual():
     '''

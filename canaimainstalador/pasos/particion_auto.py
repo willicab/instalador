@@ -8,21 +8,17 @@ from canaimainstalador.clases.leyenda import Leyenda
 from canaimainstalador.config import *
 
 class PasoPartAuto(gtk.Fixed):
-
-    render = []
-    forma = 'PART:ROOT:HOME:SWAP'
-
     def __init__(self, CFG):
         gtk.Fixed.__init__(self)
+        self.metodo = CFG['metodo']
         self.particiones = CFG['particiones']
-        self.usado = CFG['usado']
-        self.ini = CFG['ini']
-        self.fin = CFG['fin']
-        self.total = self.fin - self.ini
-        self.libre = self.total - self.usado
-        self.current = self.usado
+        self.current = self.metodo['part'][7]
+        self.usado = self.metodo['part'][7]
+        self.forma = 'PART:ROOT:HOME:SWAP'
         self.minimo = ESPACIO_TOTAL
+        self.nuevas = []
         self.acciones = []
+        self.libre = 0
 
         txt_info = "Seleccione el tamaño que desea usar para la instalación"
         self.lbl1 = gtk.Label(txt_info)
@@ -42,7 +38,6 @@ class PasoPartAuto(gtk.Fixed):
 
         msg_2 = "Separar la partición /home (Recomendado)."
         self.option_2 = gtk.RadioButton(self.option_1, msg_2)
-        self.option_2.set_active(True)
         self.option_2.connect("toggled", self.change_option, "PART:ROOT:HOME:SWAP")
         self.option_2.set_size_request(350, 20)
         self.put(self.option_2, 0, 195)
@@ -63,9 +58,21 @@ class PasoPartAuto(gtk.Fixed):
         self.leyenda.set_size_request(270, 150)
         self.put(self.leyenda, 390, 170)
 
-    def change_option(self, widget, data):
-        if widget.get_active() == True:
-            self.forma = data
-            self.barra.cambiar(self.forma)
-            self.leyenda.cambiar(self.forma)
+        self.option_2.set_active(True)
 
+        if self.metodo['disco'][4] > 0:
+            if self.metodo['disco'][3] == 0:
+                # Disponibles: root+swap, root+home+swap
+                self.option_3.set_sensitive(False)
+                self.option_4.set_sensitive(False)
+            elif self.metodo['disco'][3] == 1:
+                # Disponibles: root+swap
+                self.option_1.set_active(True)
+                self.option_2.set_sensitive(False)
+                self.option_3.set_sensitive(False)
+                self.option_4.set_sensitive(False)
+
+    def change_option(self, widget, forma):
+        if widget.get_active() == True:
+            self.barra.cambiar(forma)
+            self.leyenda.cambiar(forma)

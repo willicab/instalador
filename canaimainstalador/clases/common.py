@@ -93,16 +93,6 @@ def set_color(fs, alto):
 
     return libre
 
-def kb(num):
-    if type(num) == int or type(num) == float : return float(num)
-    unidad = num[-2:]
-    num = num[:-2].replace(',', '.')
-    num = (float(num))
-    if unidad == 'GB': return num * 1048576.0 # Gb a Kb
-    if unidad == 'MB': return num * 1024.0    # Mb a Kb
-    if unidad == 'kB': return num             # Kb a Kb
-    return num / 1024.0                       # Bytes a Kb
-
 def floatify(num):
     '''
         Convierte un número escrito en formato para lectura por humanos a 
@@ -146,74 +136,83 @@ def ram():
         shell = True, stdout = subprocess.PIPE, stderr = subprocess.STDOUT,
     ).communicate()[0].split('\n')[0])
 
-def montados(disco=''):
-    p = []
-    salida = commands.getstatusoutput('mount')[1].split('\n')
-    for m in salida:
-        #print m, disco, m.split(' ')[0][:-1], m.split(' ')[2]
-        if disco == '': 
-            p.append(m.split(' ')[2])
-        elif disco == m.split(' ')[0][:-1]:
-            p.append(m.split(' ')[2])
-    return p         
+#def kb(num):
+#    if type(num) == int or type(num) == float : return float(num)
+#    unidad = num[-2:]
+#    num = num[:-2].replace(',', '.')
+#    num = (float(num))
+#    if unidad == 'GB': return num * 1048576.0 # Gb a Kb
+#    if unidad == 'MB': return num * 1024.0    # Mb a Kb
+#    if unidad == 'kB': return num             # Kb a Kb
+#    return num / 1024.0                       # Bytes a Kb
 
-def part_root1(total):
-    root = (kb(total) * kb(root1_min)) / kb(minimo)
-    if root < kb(root1_min): 
-        root = kb(root1_min)
-    if root > kb(root1_max): 
-        root = kb(root1_max)
-    return root
+#def montados(disco=''):
+#    p = []
+#    salida = commands.getstatusoutput('mount')[1].split('\n')
+#    for m in salida:
+#        #print m, disco, m.split(' ')[0][:-1], m.split(' ')[2]
+#        if disco == '': 
+#            p.append(m.split(' ')[2])
+#        elif disco == m.split(' ')[0][:-1]:
+#            p.append(m.split(' ')[2])
+#    return p         
 
-def part_root2(total):
-    root = (kb(total) * kb(root2_min)) / kb(minimo)
-    if root < kb(root2_min): 
-        root = kb(root2_min)
-    if root > kb(root2_max): 
-        root = kb(root2_max)
-    return root
+#def part_root1(total):
+#    root = (kb(total) * kb(root1_min)) / kb(minimo)
+#    if root < kb(root1_min): 
+#        root = kb(root1_min)
+#    if root > kb(root1_max): 
+#        root = kb(root1_max)
+#    return root
 
-def part_usr(total):
-    usr = (kb(total) * kb(usr_min)) / kb(minimo)
-    if usr < kb(usr_min): 
-        usr = kb(usr_min)
-    if usr > kb(usr_max): 
-        usr = kb(usr_max)
-    return usr
+#def part_root2(total):
+#    root = (kb(total) * kb(root2_min)) / kb(minimo)
+#    if root < kb(root2_min): 
+#        root = kb(root2_min)
+#    if root > kb(root2_max): 
+#        root = kb(root2_max)
+#    return root
 
-def desmontar(disco):
-    m = montados(disco)
-    # Desmonto todas las particiones del disco
-    while len(m) > 0:
-        for s in m:
-            cmd = 'umount -f -l {0}'.format(s)
-            salida = commands.getstatusoutput(cmd)
-            #print cmd, salida
-            if salida[0] == 0 and salida[1].find('Error:') != -1 : m.remove(s)
-            if salida[1].find('not found') != -1: m.remove(s)
-    commands.getstatusoutput('rm -Rf /target')
-    
+#def part_usr(total):
+#    usr = (kb(total) * kb(usr_min)) / kb(minimo)
+#    if usr < kb(usr_min): 
+#        usr = kb(usr_min)
+#    if usr > kb(usr_max): 
+#        usr = kb(usr_max)
+#    return usr
 
-def montar(particiones):    
-    part = particiones
-    while len(part) > 0:
-        for p, d in part.items():
-            cmd = 'mkdir {0}'.format(d)
-            print cmd
-            commands.getstatusoutput(cmd)
-            cmd = 'mount {0} {1}'.format(p, d)
-            print cmd
-            salida = commands.getstatusoutput(cmd)
-            if salida[0] == 0: del part[p]
+#def desmontar(disco):
+#    m = montados(disco)
+#    # Desmonto todas las particiones del disco
+#    while len(m) > 0:
+#        for s in m:
+#            cmd = 'umount -f -l {0}'.format(s)
+#            salida = commands.getstatusoutput(cmd)
+#            #print cmd, salida
+#            if salida[0] == 0 and salida[1].find('Error:') != -1 : m.remove(s)
+#            if salida[1].find('not found') != -1: m.remove(s)
+#    commands.getstatusoutput('rm -Rf /target')
+#    
 
-# Muesta el texto seleccionado del combobox
-def get_active_text(combobox):
-    model = combobox.get_model()
-    active = combobox.get_active()
-    if active < 0:
-        return None
-    return model[active][0]
+#def montar(particiones):
+#    part = particiones
+#    while len(part) > 0:
+#        for p, d in part.items():
+#            cmd = 'mkdir {0}'.format(d)
+#            print cmd
+#            commands.getstatusoutput(cmd)
+#            cmd = 'mount {0} {1}'.format(p, d)
+#            print cmd
+#            salida = commands.getstatusoutput(cmd)
+#            if salida[0] == 0: del part[p]
 
+## Muesta el texto seleccionado del combobox
+#def get_active_text(combobox):
+#    model = combobox.get_model()
+#    active = combobox.get_active()
+#    if active < 0:
+#        return None
+#    return model[active][0]
 
 def aconnect(button, signals, function, params):
     '''
@@ -229,7 +228,9 @@ def aconnect(button, signals, function, params):
 def UserMessage(message, title, mtype, buttons,
                     c_1 = False, f_1 = False, p_1 = '',
                     c_2 = False, f_2 = False, p_2 = '',
-                    c_3 = False, f_3 = False, p_3 = ''
+                    c_3 = False, f_3 = False, p_3 = '',
+                    c_4 = False, f_4 = False, p_4 = '',
+                    c_5 = False, f_5 = False, p_5 = ''
                     ):
 
     dialog = gtk.MessageDialog(
@@ -246,5 +247,9 @@ def UserMessage(message, title, mtype, buttons,
         f_2(*p_2)
     if response == c_3:
         f_3(*p_3)
+    if response == c_4:
+        f_4(*p_4)
+    if response == c_5:
+        f_5(*p_5)
 
     return response

@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 #-*- coding: UTF-8 -*-
 
-import commands, os, parted, gudev, hashlib
+import commands, os, parted, _ped
+
+from canaimainstalador.config import *
 
 class Particiones():
     def __init__(self):
@@ -12,24 +14,14 @@ class Particiones():
             devuelve los discos que están conectados al equipo
         '''
         l = []
-        d = gudev.Client(['block'])
-        c = d.query_by_subsystem('block')
-        for i in c:
-            _type = i.get_devtype()
-            _bus = i.get_property('ID_BUS')
-            _name = i.get_device_file()
-            if _type == 'disk':
-                if _bus == 'ata' or _bus == 'usb' or _bus == 'memstick':
-                    try:
-                        e = Drive(_name)
-                    except Exception as x:
-                        e = False
-                    if e:
-                        l.append(_name)
+        dev = parted.getAllDevices()
+        for d in dev:
+            l.append(d.path)
         return sorted(l)
 
     def usado(self, particion):
         if os.path.exists(particion):
+            salida = commands.getstatusoutput('umount /mnt')
             salida = commands.getstatusoutput('mount {0} /mnt'.format(particion))
             s = os.statvfs('/mnt')
             used = float(((s.f_blocks - s.f_bfree) * s.f_frsize) / 1024)
@@ -44,7 +36,12 @@ class Particiones():
         '''
         l = []
         p = []
-        d = Drive(disco)
+
+        try:
+            d = Drive(disco)
+        except _ped.DiskLabelException as x:
+            return p
+
         sectorsize = d.sectorSize
         total = float(d.getSize(unit='KB'))
 
@@ -104,20 +101,31 @@ class Particiones():
 
         return sorted(p, key=lambda particiones: particiones[1])
 
-    def particionar(self, disco, tipo, formato, inicio, fin):
+    def crear_particion(self, drive, start, end, fs, ptype):
         '''
-            Argumentos:
-            - disco: el disco donde se realizará la partición. Ej: /dev/sda
-            - tipo: el tipo de partición a realizar {primary, extended, logical}
-            - formato: el formato que usará la partición {ext2, ext4, linux-swap
-            ,fat32, ntfs}
-            - inicio: donde comenzará la partición, en kB
-            - fin: donde terminará la partición, en kB
+        Argumentos:
+        - disco: el disco donde se realizará la partición. Ej: /dev/sda
+        - tipo: el tipo de partición a realizar {primary, extended, logical}
+        - formato: el formato que usará la partición {ext2, ext4, linux-swap,fat32, ntfs}
+        - inicio: donde comenzará la partición, en kB
+        - fin: donde terminará la partición, en kB
         '''
-        cmd = 'echo y | parted -s {0} mkpart {1} {2} {3}k {4}k'. \
-        format(disco, tipo, formato, inicio, fin)
-        salida = commands.getstatusoutput(cmd)
-        return salida[0]
+        dev = parted.Device(drive)
+        disk = parted.Disk(dev)
+        geometry = parted.Geometry(device = dev, start = start, end = end)
+        partition = parted.Partition(disk = disk, type = ptype, geometry = geometry)
+        constraint = parted.Constraint(exactGeom = geometry)
+        disk.addPartition(partition = partition, constraint = constraint)
+        disk.commit()
+
+    def nueva_tabla_particiones(self, drive, t):
+        dev = parted.Device(drive)
+        new = parted.freshDisk(dev, t)
+        try:
+            new.commit()
+        except _ped.IOException as x:
+            print x
+
 
 class Drive(parted.Device):
     def __init__(self, path):

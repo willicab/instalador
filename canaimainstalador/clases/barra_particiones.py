@@ -17,10 +17,10 @@ class BarraParticiones(gtk.DrawingArea):
         self.p = parent
 
     def expose(self, widget=None, event=None):
-        self.ancho = floatify(self.get_size_request()[0])
-        self.alto = floatify(self.get_size_request()[1])
-        self.total = floatify(self.p.total)
+        self.ancho = self.get_size_request()[0]
+        self.alto = self.get_size_request()[1]
         self.particiones = self.p.particiones
+        self.total = self.p.particiones[0][9]
 
         cr = self.window.cairo_create()
         cr.set_source_rgb(0.925490196, 0.91372549, 0.847058824)
@@ -28,8 +28,8 @@ class BarraParticiones(gtk.DrawingArea):
         cr.fill()
 
         for p in self.particiones:
-            ini = floatify(p[1])
-            fin = floatify(p[2])
+            ini = p[1]
+            fin =  p[2]
             tipo = p[5]
             fs = p[4]
 
