@@ -78,6 +78,11 @@ class frame_fs(gtk.Table):
         self.attach(self.entrada, 1, 2, 2, 3)
         self.entrada.connect("changed", self.validar_punto)
 
+        self.formatear = gtk.CheckButton("Formatear esta partición")
+        self.attach(self.formatear, 1, 2, 3, 4)
+        self.formatear.show()
+        self.formatear.set_visible(self.mostrar_formatear())
+
         self.show()
 
 
@@ -150,6 +155,14 @@ class frame_fs(gtk.Table):
         else:
             self.parent_diag.set_response_sensitive(gtk.RESPONSE_OK, False)
 
+    def mostrar_formatear(self):
+        disco = self.part_act[TblCol.DISPOSITIVO]
+        try:
+            int(disco[-1])
+            return True
+        except (ValueError, IndexError):
+            return False
+
 if __name__ == "__main__":
     lst = [
           ['/dev/sda1', 'Primaria', 'ext3', '', '31.28GB', '22.85GB', '8.43GB', 31.0, 32804729.0, False],
@@ -158,7 +171,7 @@ if __name__ == "__main__":
           ['/dev/sda3', 'Primaria', 'ext3', '', '42.24GB', '36.37GB', '5.86GB', 33853440.0, 78150655.0, False],
           ]
 
-    pa = ['', 'Primaria', 'Espacio Libre', '', '31.28GB', '0.0KB', '31.28GB', 31, 32804863, False]
+    pa = ['/dev/sda3', 'Primaria', 'Espacio Libre', '', '31.28GB', '0.0KB', '31.28GB', 31, 32804863, False]
 
     w = gtk.Dialog()
     frame = frame_fs(w, lst, pa)
