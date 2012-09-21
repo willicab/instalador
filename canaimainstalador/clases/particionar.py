@@ -2,9 +2,9 @@
 
 import os, commands
 
-#from  canaimainstalador.clases.particiones import Particiones
-#import canaimainstalador.clases.common as gen
-#import canaimainstalador.clases.install.particion_manual as particion_manual
+from  canaimainstalador.clases.particiones import Particiones
+import canaimainstalador.clases.common as gen
+import canaimainstalador.clases.particion_manual as particion_manual
 
 class Particionar():
     def __init__(self, parent, acciones):
@@ -19,8 +19,8 @@ class Particionar():
             fin = a[4]
             fs = a[5]
             tipo = a[6]
-            
-            
+
+
 
     def particion_1(self):
         particion_boot = ''

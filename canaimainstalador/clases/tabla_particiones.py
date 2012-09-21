@@ -7,13 +7,13 @@
 # the Free Software Foundation; either version 2 of the License, or
 # (at your option) any later version.
 #
-# Ucumari is distributed in the hope that it will be useful,
+# TablaParticiones is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with Ucumari; if not, write to the Free Software Foundation, Inc.,
+# along with TablaParticiones; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 import gtk
@@ -28,7 +28,8 @@ class TablaParticiones (gtk.TreeView):
     def __init__(self):
 
         # Tipos de valores a mostrar en la tabla
-        self.liststore = gtk.ListStore(str, str, str, str, str, str, str, int, int)
+        self.liststore = gtk.ListStore(str, str, str, str, str, str, str, int, \
+                                       int, bool)
 
         gtk.TreeView.__init__(self, model=self.liststore)
         self.set_headers_clickable(False)
@@ -64,7 +65,8 @@ class TablaParticiones (gtk.TreeView):
                           TblCol.USADO,
                           TblCol.LIBRE,
                           TblCol.INICIO,
-                          TblCol.FIN)
+                          TblCol.FIN,
+                          TblCol.FORMATEAR)
 
         self.doble_click(fila)
 
@@ -86,7 +88,8 @@ class TablaParticiones (gtk.TreeView):
                               TblCol.USADO,
                               TblCol.LIBRE,
                               TblCol.INICIO,
-                              TblCol.FIN)
+                              TblCol.FIN,
+                              TblCol.FORMATEAR)
         else:
             return None
 
@@ -103,6 +106,7 @@ class TablaParticiones (gtk.TreeView):
         self.nueva_columna_texto("Libre", TblCol.LIBRE)
         self.nueva_columna_texto("Inicio", TblCol.INICIO)
         self.nueva_columna_texto("Fin", TblCol.FIN)
+        self.nueva_columna_check("Formatear", TblCol.FORMATEAR)
 
         # Ocultar las columnas que no se desean mostrar
         self.columnas[TblCol.INICIO].set_visible(False)
@@ -160,63 +164,6 @@ class TablaParticiones (gtk.TreeView):
                                lista[TblCol.USADO],
                                lista[TblCol.LIBRE],
                                lista[TblCol.INICIO],
-                               lista[TblCol.FIN]]
-                              )
-
-datos_ejemplo = [
-    ['#ff0000', '/dev/sda1', 'Primaria', 'fat32', '', '32 GB', False, 1],
-    ['#00ff00', '/dev/sdb1', 'Primaria', 'ext2', '/boot', '512 MB', True, 1],
-    ['#0000ff', 'Nueva', 'Extendida', '', '', '100 GB', False, 30],
-    ['#0f0f0f', 'Nueva', 'Logica', 'ext4', '/', '20 GB', True, 45],
-    ['#f0f0f0', 'Nueva', 'Logica', 'ext4', '/home', '78 GB', True, 70],
-    ['#0f00f0', 'Nueva', 'Logica', 'Swap', '', '1.8 GB', True, 100],
-]
-
-class Ventana:
-
-    def __init__(self):
-
-        self.tabla = TablaParticiones()
-        self.llenar_tabla(datos_ejemplo)
-        self.tabla.set_doble_click(self.funcion_prueba);
-        self.tabla.show()
-
-        # Marco para la tabla
-        self.marco = gtk.Frame()
-        self.marco.add(self.tabla)
-        self.marco.show()
-
-        # Contenedor VBox
-        self.vbox = gtk.VBox(False, 0)
-        self.vbox.pack_start(self.marco, True, True, 0)
-        self.vbox.show()
-
-        # Crea una ventana
-        self.ventana = gtk.Window(gtk.WINDOW_TOPLEVEL)
-        self.ventana.set_title("Tabla de Particiones")
-        self.ventana.add(self.vbox)
-        self.ventana.connect("destroy", self.destroy)
-        self.ventana.show()
-
-    def llenar_tabla(self, data=None):
-        assert isinstance(data, list) or isinstance(data, tuple)
-
-        for fila in datos_ejemplo:
-            self.tabla.agregar_fila(fila[0], fila[1], fila[2], fila[3], \
-                                    fila[4], fila[5], fila[6], fila[7], fila[8])
-
-    def funcion_prueba(self, tupla):
-        print "Hola, acabas de accionar una fila:";
-        print "\t", tupla
-
-    def destroy(self, widget, data=None):
-        gtk.main_quit()
-
-    def main(self):
-        'Funcion Principal'
-        gtk.main()
-
-
-if __name__ == "__main__":
-    v = Ventana()
-    v.main()
+                               lista[TblCol.FIN],
+                               lista[TblCol.FORMATEAR]
+                              ])

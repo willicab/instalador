@@ -14,7 +14,7 @@ class PasoPartManual(gtk.Fixed):
         gtk.Fixed.__init__(self)
 
         self.data = data
-        self.disco = self.data['disco']
+        self.disco = self.data['metodo']['disco'][0]
 
         self.tabla = TablaParticiones()
         #self.tabla.set_doble_click(self.activar_tabla);
@@ -99,7 +99,8 @@ class PasoPartManual(gtk.Fixed):
                        humanize(p_usado),
                        humanize(p_libre),
                        floatify(p_ini),
-                       floatify(p_fin)
+                       floatify(p_fin),
+                       False
                    ]
                 self.lista.append(fila)
 
@@ -208,10 +209,6 @@ class PasoPartManual(gtk.Fixed):
     def particion_eliminar(self, widget=None):
         widget.set_sensitive(False)
 
-        print self.fila_selec
-        print debug_list(self.lista)
-        print "####"
-        print
         i = get_row_index(self.lista, self.fila_selec)
         particion = self.lista[i]
         inicio = particion[TblCol.INICIO]
@@ -275,7 +272,7 @@ class PasoPartManual(gtk.Fixed):
         # Se actualiza la tabla
         self.lista = w_nueva.lista
         self.acciones = w_nueva.acciones
-        print debug_list(self.acciones)
+        self.acciones
         self.llenar_tabla()
 
     def deshacer(self, widget=None):

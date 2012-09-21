@@ -2,8 +2,8 @@
 
 import gtk
 
-from canaimainstalador.clases.common import humanize, TblCol, \
-    get_next_row, get_row_index, is_extended, has_extended, set_partition
+from canaimainstalador.clases.common import humanize, TblCol, get_next_row, \
+    get_row_index, is_extended, has_extended, set_partition
 from canaimainstalador.translator import msj
 
 class Main(gtk.Dialog):
@@ -151,9 +151,9 @@ class Main(gtk.Dialog):
             return response
 
         if response == gtk.RESPONSE_OK:
-            tipo = get_active_text(self.cmb_tipo)
-            formato = get_active_text(self.cmb_fs)
-            montaje = get_active_text(self.cmb_montaje)
+            tipo = self.cmb_tipo.get_active_text()
+            formato = self.cmb_fs.get_active_text()
+            montaje = self.cmb_montaje.get_active_text()
             usado = humanize(0)
 
             if formato == 'linux-swap':
@@ -224,6 +224,7 @@ class Main(gtk.Dialog):
                         libre, inicio, fin):
         disp = self.disco
         crear_accion = True
+        formatear = False
         # Si es espacio libre
         if formato == msj.particion.libre:
             crear_accion = False
@@ -233,13 +234,14 @@ class Main(gtk.Dialog):
         # Si NO es espacio libre
         else:
             pop = True
+            formatear = True
             if tipo == msj.particion.extendida:
                 formato = ''
                 montaje = ''
 
         # Entrada de la particion para la tabla
         particion = [disp, tipo, formato, montaje, tamano, usado, libre, \
-                     int(inicio), int(fin)]
+                     int(inicio), int(fin), formatear]
 
         # Crea la acción correspondiente que va ejecutarse
         if crear_accion:
@@ -253,7 +255,7 @@ class Main(gtk.Dialog):
         self.lblsize.set_text(humanize(widget.get_value() - self.inicio_part))
 
     def cmb_tipo_on_changed(self, widget=None):
-        tipo = get_active_text(self.cmb_tipo)
+        tipo = self.cmb_tipo.get_active_text()
         if tipo == 'Extendida':
             self.cmb_fs.set_sensitive(False)
             self.cmb_montaje.set_sensitive(False)
@@ -262,14 +264,14 @@ class Main(gtk.Dialog):
             self.cmb_montaje.set_sensitive(True)
 
     def cmb_fs_on_changed(self, widget=None):
-        fs = get_active_text(self.cmb_fs)
+        fs = self.cmb_fs.get_active_text()
         if fs == 'linux-swap':
             self.cmb_montaje.set_sensitive(False)
         else:
             self.cmb_montaje.set_sensitive(True)
 
     def cmb_montaje_on_changed(self, widget=None):
-        montaje = get_active_text(self.cmb_montaje)
+        montaje = self.cmb_montaje.get_active_text()
         if montaje == 'Escoger manualmente...':
             self.entrada.show()
             self.validar_punto()
