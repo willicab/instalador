@@ -2,7 +2,7 @@
 
 import os, commands, glob, re
 
-class Main():
+class Fstab():
     def __init__(self, particiones):
         self.particiones = particiones
 

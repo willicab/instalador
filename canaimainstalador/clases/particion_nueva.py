@@ -2,7 +2,7 @@
 
 import gtk
 
-from canaimainstalador.clases.common import humanize, get_active_text, TblCol, \
+from canaimainstalador.clases.common import humanize, TblCol, \
     get_next_row, get_row_index, is_extended, has_extended, set_partition
 from canaimainstalador.translator import msj
 

@@ -21,18 +21,18 @@ ESPACIO_TOTAL = 1024*1024*1             # 6GB
 
 FSPROGS = {
 'btrfs': ['mkfs.btrfs', 'btrfsctl'],
-'ext2': ['mkfs.ext2', 'resize2fs'],
-'ext3': ['mkfs.ext3', 'resize2fs'],
-'ext4': ['mkfs.ext4', 'resize2fs'],
-'fat16': ['mkdosfs', ''],
-'fat32': ['mkdosfs', ''],
-'ntfs': ['mkfs.ntfs', 'ntfsresize'],
-'hfs+': ['mkfs.hfsplus', ''],
-'hfs': ['hformat', ''],
-'jfs': ['mkfs.jfs', ''],
-'swap': ['mkswap', ''],
-'reiser4': ['mkfs.reiser4', ''],
-'reiserfs': ['mkfs.reiserfs', 'resize_reiserfs'],
-'xfs': ['mkfs.xfs', '']
+'ext2': ['mkfs.ext2 -q -j -F -F', 'resize2fs'],
+'ext3': ['mkfs.ext3 -q -j -F -F', 'resize2fs'],
+'ext4': ['mkfs.ext4 -q -j -F -F', 'resize2fs'],
+'fat16': ['mkfs.vfat', 'fatresize'],
+'fat32': ['mkfs.vfat', 'fatresize'],
+'ntfs': ['mkfs.ntfs -q -F', 'ntfsresize'],
+'hfs+': ['mkfs.hfsplus', 'parted'],
+'hfs': ['hformat -f', 'parted'],
+'jfs': ['mkfs.jfs -q', ''],
+'swap': ['mkswap -f', ''],
+'reiser4': ['mkfs.reiser4 -y -f', ''],
+'reiserfs': ['mkfs.reiserfs -q -f -f', 'resize_reiserfs'],
+'xfs': ['mkfs.xfs -q -f', '']
 }
 

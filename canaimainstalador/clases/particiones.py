@@ -38,15 +38,16 @@ class Particiones():
         p = []
 
         try:
-            d = Drive(disco)
+            dev = parted.Device(disco)
+            disk = parted.Disk(dev)
         except _ped.DiskLabelException as x:
             return p
 
-        sectorsize = d.sectorSize
-        total = float(d.getSize(unit='KB'))
+        sectorsize = dev.sectorSize
+        total = float(dev.getSize(unit='KB'))
 
-        for j in d.disk.partitions: l.append(j)
-        for w in d.disk.getFreeSpacePartitions(): l.append(w)
+        for j in disk.partitions: l.append(j)
+        for w in disk.getFreeSpacePartitions(): l.append(w)
 
         for i in l:
             code = i.type
@@ -112,11 +113,58 @@ class Particiones():
         '''
         dev = parted.Device(drive)
         disk = parted.Disk(dev)
+        partlist = self.lista_particiones(drive)
         geometry = parted.Geometry(device = dev, start = start, end = end)
         partition = parted.Partition(disk = disk, type = ptype, geometry = geometry)
         constraint = parted.Constraint(exactGeom = geometry)
         disk.addPartition(partition = partition, constraint = constraint)
-        disk.commit()
+
+        if disk.commit():
+            for p in partlist:
+                if p[1] == start:
+                    part = p[0]
+                    cmd = '{0} {1}'.format(FSPROGS[fs][0], part)
+                    process = subprocess.Popen(
+                        cmd, shell = True, stdout = subprocess.PIPE,
+                        stderr = subprocess.STDOUT
+                        )
+            return part
+        else:
+            return False
+
+    def borrar_particion(self, drive, partnum):
+        '''
+        Argumentos:
+        - disco: el disco donde se realizará la partición. Ej: /dev/sda
+        - tipo: el tipo de partición a realizar {primary, extended, logical}
+        - formato: el formato que usará la partición {ext2, ext4, linux-swap,fat32, ntfs}
+        - inicio: donde comenzará la partición, en kB
+        - fin: donde terminará la partición, en kB
+        '''
+        dev = parted.Device(drive)
+        disk = parted.Disk(dev)
+        disk.deletePartition(partition = drive+partnum)
+        if disk.commit():
+            return True
+        else:
+            return False
+
+    def redimensionar_particion(self, drive, partnum):
+        '''
+        Argumentos:
+        - disco: el disco donde se realizará la partición. Ej: /dev/sda
+        - tipo: el tipo de partición a realizar {primary, extended, logical}
+        - formato: el formato que usará la partición {ext2, ext4, linux-swap,fat32, ntfs}
+        - inicio: donde comenzará la partición, en kB
+        - fin: donde terminará la partición, en kB
+        '''
+        dev = parted.Device(drive)
+        disk = parted.Disk(dev)
+        disk.deletePartition(partition = drive+partnum)
+        if disk.commit():
+            return True
+        else:
+            return False
 
     def nueva_tabla_particiones(self, drive, t):
         dev = parted.Device(drive)
@@ -125,11 +173,4 @@ class Particiones():
             new.commit()
         except _ped.IOException as x:
             print x
-
-
-class Drive(parted.Device):
-    def __init__(self, path):
-        parted.Device.__init__(self, path)
-        self.disk = parted.Disk(self)
-
 

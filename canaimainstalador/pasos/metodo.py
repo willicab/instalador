@@ -165,6 +165,8 @@ class PasoMetodo(gtk.Fixed):
                 self.metodos.append({
                     'tipo': 'MANUAL',
                     'msg': 'Instalar editando particiones manualmente'.format(humanize(tam)),
+                    'part': disco_array,
+                    'disco': disco_array
                 })
 
             else:
