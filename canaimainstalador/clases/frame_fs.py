@@ -17,7 +17,7 @@ class frame_fs(gtk.Table):
     sistema de archivos e indicar si se formateará o no la particion
     '''
 
-    def __init__(self, lista, part_act, parent_diag):
+    def __init__(self, parent_diag, lista, part_act):
         '''
         Constructor
         '''
@@ -133,7 +133,7 @@ class frame_fs(gtk.Table):
         montaje = widget.get_active_text()
         if montaje == 'Escoger manualmente...':
             self.entrada.show()
-            self.validar_punto()
+            self.validar_punto(self.entrada)
         else:
             self.entrada.hide()
             self.set_response_sensitive(gtk.RESPONSE_OK, True)
@@ -161,7 +161,7 @@ if __name__ == "__main__":
     pa = ['', 'Primaria', 'Espacio Libre', '', '31.28GB', '0.0KB', '31.28GB', 31, 32804863, False]
 
     w = gtk.Dialog()
-    frame = frame_fs(lst, pa, w)
+    frame = frame_fs(w, lst, pa)
     w.vbox.pack_start(frame)
     w.show()
     gtk.main()
