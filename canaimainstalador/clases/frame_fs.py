@@ -5,7 +5,8 @@ Created on 21/09/2012
 @author: erick
 '''
 import gtk
-from canaimainstalador.clases.common import is_extended, has_extended, TblCol
+from canaimainstalador.clases.common import is_extended, has_extended, TblCol, \
+    is_usable
 from canaimainstalador.translator import msj
 from canaimainstalador.config import FSPROGS
 
@@ -81,7 +82,7 @@ class frame_fs(gtk.Table):
         self.formatear = gtk.CheckButton("Formatear esta partición")
         self.attach(self.formatear, 1, 2, 3, 4)
         self.formatear.show()
-        self.formatear.set_visible(self.mostrar_formatear())
+        self.formatear.set_visible(is_usable(self.part_act))
 
         self.show()
 
@@ -154,14 +155,6 @@ class frame_fs(gtk.Table):
             self.parent_diag.set_response_sensitive(gtk.RESPONSE_OK, True)
         else:
             self.parent_diag.set_response_sensitive(gtk.RESPONSE_OK, False)
-
-    def mostrar_formatear(self):
-        disco = self.part_act[TblCol.DISPOSITIVO]
-        try:
-            int(disco[-1])
-            return True
-        except (ValueError, IndexError):
-            return False
 
 if __name__ == "__main__":
     lst = [

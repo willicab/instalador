@@ -3,7 +3,7 @@
 import gtk
 
 from canaimainstalador.clases.common import floatify, humanize, TblCol, \
-    get_row_index, debug_list, is_primary, has_next_row, is_logic
+    get_row_index, debug_list, is_primary, has_next_row, is_logic, is_usable
 from canaimainstalador.clases import particion_nueva, particion_redimensionar
 from canaimainstalador.clases.tabla_particiones import TablaParticiones
 from canaimainstalador.translator import msj
@@ -33,11 +33,15 @@ class PasoPartManual(gtk.Fixed):
         self.btn_nueva.show()
         self.btn_nueva.connect("clicked", self.particion_nueva)
 
+        # btn_usar
+        self.btn_usar = gtk.Button("Usar")
+        self.btn_usar.show()
+        self.btn_usar.connect("clicked", self.particion_usar)
+
         # btn_eliminar
         self.btn_eliminar = gtk.Button("Eliminar")
         self.btn_eliminar.show()
         self.btn_eliminar.connect("clicked", self.particion_eliminar)
-
 
         # btn_redimension
         self.btn_redimension = gtk.Button("Redimensionar")
@@ -53,6 +57,7 @@ class PasoPartManual(gtk.Fixed):
         self.botonera1.set_layout(gtk.BUTTONBOX_START)
         self.botonera1.set_homogeneous(False)
         self.botonera1.add(self.btn_nueva)
+        self.botonera1.add(self.btn_usar)
         self.botonera1.add(self.btn_redimension)
         self.botonera1.add(self.btn_eliminar)
         self.botonera1.add(self.btn_deshacer)
@@ -72,6 +77,7 @@ class PasoPartManual(gtk.Fixed):
 
         # Llevar los botones a su estado inicial
         self.btn_nueva.set_sensitive(False)
+        self.btn_usar.set_sensitive(False)
         self.btn_redimension.set_sensitive(False)
         self.btn_eliminar.set_sensitive(False)
 
@@ -127,6 +133,12 @@ class PasoPartManual(gtk.Fixed):
                 self.btn_nueva.set_sensitive(False)
         else:
             self.btn_nueva.set_sensitive(False)
+
+        # BTN_USAR
+        if is_usable(self.fila_selec):
+            self.btn_usar.set_sensitive(True)
+        else:
+            self.btn_usar.set_sensitive(False)
 
         #BTN_REDIMENSION
         if floatify(fila[TblCol.TAMANO]) > floatify(fila[TblCol.USADO]) \
@@ -206,7 +218,7 @@ class PasoPartManual(gtk.Fixed):
 
         return False
 
-    def particion_eliminar(self, widget=None):
+    def particion_eliminar(self, widget):
         widget.set_sensitive(False)
 
         i = get_row_index(self.lista, self.fila_selec)
@@ -257,7 +269,7 @@ class PasoPartManual(gtk.Fixed):
 
         self.llenar_tabla()
 
-    def particion_redimensionar(self, widget=None):
+    def particion_redimensionar(self, widget):
         widget.set_sensitive(False)
         w_redim = particion_redimensionar.Main(self.lista, self.fila_selec, \
                                                self.acciones)
@@ -266,7 +278,7 @@ class PasoPartManual(gtk.Fixed):
         self.llenar_tabla()
 
 
-    def particion_nueva(self, widget=None):
+    def particion_nueva(self, widget):
         widget.set_sensitive(False)
         w_nueva = particion_nueva.Main(self)
         # Se actualiza la tabla
@@ -274,6 +286,9 @@ class PasoPartManual(gtk.Fixed):
         self.acciones = w_nueva.acciones
         self.acciones
         self.llenar_tabla()
+
+    def particion_usar(self, widget):
+        pass
 
     def deshacer(self, widget=None):
         self.inicializar(self.data)

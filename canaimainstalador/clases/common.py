@@ -329,3 +329,11 @@ def is_logic(fila):
         return True
     else:
         return False
+
+def is_usable(selected_row):
+    disp = selected_row[TblCol.DISPOSITIVO]
+    try:
+        int(disp[-1])
+        return True
+    except (ValueError, IndexError):
+        return False
