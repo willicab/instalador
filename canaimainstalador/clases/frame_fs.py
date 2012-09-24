@@ -142,7 +142,7 @@ class frame_fs(gtk.Table):
             self.validar_punto(self.entrada)
         else:
             self.entrada.hide()
-            self.set_response_sensitive(gtk.RESPONSE_OK, True)
+            self.parent_diag.set_response_sensitive(gtk.RESPONSE_OK, True)
 
     def validar_punto(self, widget=None):
         '''Valida que el punto de montaje no esté ya asignado a otra

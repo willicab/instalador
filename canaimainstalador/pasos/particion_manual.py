@@ -5,7 +5,7 @@ import gtk
 from canaimainstalador.clases.common import floatify, humanize, TblCol, \
     is_primary, is_usable
 from canaimainstalador.clases import particion_nueva, particion_redimensionar, \
-    particion_eliminar
+    particion_eliminar, particion_usar
 from canaimainstalador.clases.tabla_particiones import TablaParticiones
 from canaimainstalador.translator import msj
 
@@ -52,7 +52,7 @@ class PasoPartManual(gtk.Fixed):
         # btn_deshacer
         self.btn_deshacer = gtk.Button("Deshacer todo")
         self.btn_deshacer.show()
-        self.btn_deshacer.connect("clicked", self.deshacer)
+        self.btn_deshacer.connect("clicked", self.deshacer_todo)
 
         self.botonera1 = gtk.HButtonBox()
         self.botonera1.set_layout(gtk.BUTTONBOX_START)
@@ -232,8 +232,11 @@ class PasoPartManual(gtk.Fixed):
         self.llenar_tabla()
 
     def particion_usar(self, widget):
-        pass
+        w_usar = particion_usar.Main(self.lista, self.fila_selec, self.acciones)
+        self.lista = w_usar.lista
+        self.acciones = w_usar.acciones
+        self.llenar_tabla()
 
-    def deshacer(self, widget=None):
+    def deshacer_todo(self, widget=None):
         self.inicializar(self.data)
 
