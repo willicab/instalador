@@ -332,8 +332,17 @@ def is_logic(fila):
 
 def is_usable(selected_row):
     disp = selected_row[TblCol.DISPOSITIVO]
+    tipo = selected_row[TblCol.TIPO]
+    fs = selected_row[TblCol.FORMATO]
     try:
+        # Esta linea comprueba que el dispositivo termine en un entero, esto
+        # para comprobar que tiene un formato similar a /dev/sdb3 por ejemplo.
         int(disp[-1])
-        return True
+
+        # No se susan las particiones extendidas, sino las logicas
+        if tipo == msj.particion.extendida and fs == '':
+            return False
+        else:
+            return True
     except (ValueError, IndexError):
         return False
