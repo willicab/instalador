@@ -1,10 +1,156 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 
-import commands, re, subprocess, math, cairo, gtk
+import commands, re, subprocess, math, cairo, gtk, hashlib, random, urllib2
 
 from canaimainstalador.config import *
 from canaimainstalador.translator import msj
+
+def espacio_usado(particion):
+    if os.path.exists(particion):
+        p = ProcessGenerator('umount /mnt')
+        p = ProcessGenerator('mount {0} /mnt'.format(particion))
+        s = os.statvfs('/mnt')
+        used = float(((s.f_blocks - s.f_bfree) * s.f_frsize) / 1024)
+        p = ProcessGenerator('umount /mnt')
+    else:
+        used = 'unknown'
+    return used
+
+def instalar_paquete(place, name):
+    
+    
+
+def desinstalar_paquete(place, name):
+    
+    
+
+def reconfigurar_paquete(place, name):
+    
+    
+
+def crear_etc_network_interfaces(mnt, cfg):
+    content = ''
+    destination = mnt+cfg
+    interdir = '/sys/class/net/'
+    interlist = next(os.walk(interdir))[1]
+
+    for i in interlist:
+        if i == 'lo':
+            content += '\nauto lo'
+            content += '\niface lo inet loopback\n'
+        elif re.sub('\d', '', i) == 'eth':
+            content += '\nallow-hotplug {0}'.format(i)
+            content += '\niface {0} inet dhcp\n'.format(i)
+
+    f = open(destination, 'w')
+    f.write(content)
+    f.close()
+
+def crear_etc_hostname(mnt, cfg, maq):
+    f = open(mnt+cfg, 'w')
+    f.write(maq+'\n')
+    f.close()
+
+def crear_etc_hosts(mnt, cfg, maq):
+    content = '127.0.0.1\t\t{0}\t\tlocalhost\n'.format(maq)
+    content += '::1\t\tlocalhost\t\tip6-localhost ip6-loopback\n'
+    content += 'fe00::0\t\tip6-localnet\n'
+    content += 'ff00::0\t\tip6-mcastprefix\n'
+    content += 'ff02::1\t\tip6-allnodes\n'
+    content += 'ff02::2\t\tip6-allrouters\n'
+    content += 'ff02::3\t\tip6-allhosts'
+
+    f = open(mnt+cfg, 'w')
+    f.write(content)
+    f.close()
+
+def crear_etc_default_keyboard(mnt, cfg, key):
+    pattern = "^XKBLAYOUT=*"
+    re_obj = re.compile(pattern)
+    new_value = "XKBLAYOUT=\"" + key + "\"\n"
+
+    file_path = mnt+cfg
+    infile = open(file_path, "r")
+    string = ''
+
+    # Busca el valor del pattern
+    is_match = False
+    for line in infile:
+        match = re_obj.search(line)
+        if match :
+            is_match = True
+            string += new_value
+        else:
+            string += line
+    infile.close()
+
+    # Si no encuentra el pattern lo agrega al final con el valor asignado
+    if not is_match:
+        string += new_value
+
+    # Escribe el archivo modificado
+    outfile = open(file_path, "w")
+    outfile.write(string)
+    outfile.close()
+
+def crear_fstab(mnt, cfg, particiones, cdroms):
+    content = ''
+    content += '#<filesystem>\t<mountpoint>\t<type>\t<options>\t<dump>\t<pass>\n'
+    content += '\nproc\t/proc\tproc\tdefaults\t0\t0'
+    defaults = 'defaults\t0\t0'
+
+    for part in particiones:
+        uuid = get_uuid(part)
+
+        if fs == 'swap':
+            content += "\n{0}\tnone\tswap\tsw\t0\t0".format(uuid)
+        else:
+            for fstype in SUPPORTED_FS:
+                if fstype == fs:
+                    if self.particiones.has_key(part):
+                        mnt = self.particiones[part].split('/target')[1]
+                        point = '{0}/'.format(mnt)
+                    elif dbus[0] != 'usb' and dtype[0] == 'disk':
+                        fldr = '/target/media/{0}'.format(part.split('/dev/')[1])
+                        os.system('mkdir -p {0}'.format(fldr))
+                        mnt = fldr.split('/target')[1]
+                        point = '{0}/'.format(mnt)
+                    else:
+                        point = ''
+            if point:
+                content += '\n{0}\t{1}\t{2}\t{3}'.format(uuid, point, fs, defaults)
+        else:
+            content += '\n# DISABLED: {0}, TYPE: ?, UUID: ?'.format(part)
+
+    for cd in cdroms:
+        num = cd[-1:]
+        os.system('mkdir -p /target/media/cdrom{0}'.format(num))
+        content += '\n/dev/{0}\t/media/cdrom{1}\tudf,iso9660\tuser,noauto\t0\t0'.format(cd, num)
+
+    f = open(mnt+cfg, 'w')
+    f.write(content)
+    f.close()
+
+def lista_cdroms():
+    info = '/proc/sys/dev/cdrom/info'
+    cmd = 'cat {0}| grep "drive name:" | sed "s/drive name://g"'.format(info)
+    salida = commands.getstatusoutput(cmd)[1].split()
+
+    if salida:
+        return salida
+    else:
+        return False
+
+def get_uuid(particion):
+    cmd = '/sbin/blkid -p {0}'.format(particion)
+    salida = commands.getstatusoutput(cmd)[1].split()
+    uid = [i for i, item in enumerate(salida) if re.search('^UUID=*', item)]
+
+    if uid:
+        return salida[uid[0]].replace('"', '')
+    else:
+        return False
 
 # Orden de las columnas en la tabla de particiones
 class TblCol:
@@ -24,6 +170,10 @@ def givemeswap():
         return r
     else:
         return r * 2
+
+class HeadRequest(urllib2.Request):
+    def get_method(self):
+        return "HEAD"
 
 def draw_rounded(cr, area, radius):
     x1, y1, x2, y2 = area
@@ -136,84 +286,6 @@ def ram():
         'echo "scale=1;$( cat "/proc/meminfo" | grep "MemFree:" | awk \'{print $2}\' )/(10^3)" | bc',
         shell = True, stdout = subprocess.PIPE, stderr = subprocess.STDOUT,
     ).communicate()[0].split('\n')[0])
-
-#def kb(num):
-#    if type(num) == int or type(num) == float : return float(num)
-#    unidad = num[-2:]
-#    num = num[:-2].replace(',', '.')
-#    num = (float(num))
-#    if unidad == 'GB': return num * 1048576.0 # Gb a Kb
-#    if unidad == 'MB': return num * 1024.0    # Mb a Kb
-#    if unidad == 'kB': return num             # Kb a Kb
-#    return num / 1024.0                       # Bytes a Kb
-
-#def montados(disco=''):
-#    p = []
-#    salida = commands.getstatusoutput('mount')[1].split('\n')
-#    for m in salida:
-#        #print m, disco, m.split(' ')[0][:-1], m.split(' ')[2]
-#        if disco == '': 
-#            p.append(m.split(' ')[2])
-#        elif disco == m.split(' ')[0][:-1]:
-#            p.append(m.split(' ')[2])
-#    return p         
-
-#def part_root1(total):
-#    root = (kb(total) * kb(root1_min)) / kb(minimo)
-#    if root < kb(root1_min): 
-#        root = kb(root1_min)
-#    if root > kb(root1_max): 
-#        root = kb(root1_max)
-#    return root
-
-#def part_root2(total):
-#    root = (kb(total) * kb(root2_min)) / kb(minimo)
-#    if root < kb(root2_min): 
-#        root = kb(root2_min)
-#    if root > kb(root2_max): 
-#        root = kb(root2_max)
-#    return root
-
-#def part_usr(total):
-#    usr = (kb(total) * kb(usr_min)) / kb(minimo)
-#    if usr < kb(usr_min): 
-#        usr = kb(usr_min)
-#    if usr > kb(usr_max): 
-#        usr = kb(usr_max)
-#    return usr
-
-#def desmontar(disco):
-#    m = montados(disco)
-#    # Desmonto todas las particiones del disco
-#    while len(m) > 0:
-#        for s in m:
-#            cmd = 'umount -f -l {0}'.format(s)
-#            salida = commands.getstatusoutput(cmd)
-#            #print cmd, salida
-#            if salida[0] == 0 and salida[1].find('Error:') != -1 : m.remove(s)
-#            if salida[1].find('not found') != -1: m.remove(s)
-#    commands.getstatusoutput('rm -Rf /target')
-#    
-
-#def montar(particiones):
-#    part = particiones
-#    while len(part) > 0:
-#        for p, d in part.items():
-#            cmd = 'mkdir {0}'.format(d)
-#            print cmd
-#            commands.getstatusoutput(cmd)
-#            cmd = 'mount {0} {1}'.format(p, d)
-#            print cmd
-#            salida = commands.getstatusoutput(cmd)
-#            if salida[0] == 0: del part[p]
-
-## Muesta el texto seleccionado del combobox
-#def get_active_text(combobox):
-#    model = combobox.get_model()
-#    active = combobox.get_active()
-#    if active < 0:
-#        return None
-#    return model[active][0]
 
 def aconnect(button, signals, function, params):
     '''
@@ -328,3 +400,44 @@ def is_logic(fila):
         return True
     else:
         return False
+
+def ProcessGenerator(command, terminal = False, bar = False):
+
+    filename = '/tmp/cs-command-'+hashlib.sha1(
+        str(random.getrandbits(random.getrandbits(10)))
+        ).hexdigest()
+
+    if isinstance(command, list):
+        strcmd = ' '.join(command)
+    elif isinstance(command, str):
+        strcmd = command
+
+    cmd = '{0} 1>{1} 2>&1'.format(strcmd, filename)
+
+    try:
+        os.mkfifo(filename)
+        fifo = os.fdopen(os.open(filename, os.O_RDONLY | os.O_NONBLOCK))
+
+        process = subprocess.Popen(
+                cmd, shell = True, stdout = subprocess.PIPE,
+                stderr = subprocess.STDOUT
+                )
+
+        if bar:
+            timer = gobject.timeout_add(100, ProgressPulse, bar)
+
+        while process.returncode == None:
+            process.poll()
+            try:
+                line = fifo.readline().strip()
+                if terminal:
+                    terminal.feed(line+'\r\n')
+            except:
+                continue
+
+    finally:
+        os.unlink(filename)
+        if bar:
+            gobject.source_remove(timer)
+
+    return process

@@ -3,3 +3,11 @@
 - Separar la busqueda de discos de la clase de paso
 - hacer que la barra de progreso en el proceso de instalación sea incremental
 - calcular el tamaño minimo y el máximo de cada partición (Resuelto)
+
+- Arreglar alineación de particiones lógicas dentro de las extendidas.
+- arreglar instalación/desinstalacion/reconfiguración de paquetes.
+- hacer banner de bienvenida y renovar los otros banners.
+- arreglar instalación de burg.
+- arreglar montaje y desmontaje de particiones antes de la instalación.
+- arreglar disco de instalación y puntos de montaje fuera del disco.
+- verificar conexión a internet antes de hacer actualización.

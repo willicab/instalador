@@ -1,9 +1,13 @@
-#-*- coding: UTF-8 -*-
+#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
 
 import os, gtk, threading, commands, webkit, re
 
 from canaimainstalador.clases.fstab import Fstab
-from canaimainstalador.clases.particionar import Particionar
+from canaimainstalador.clases.particiones import Particiones
+from canaimainstalador.common import crear_etc_default_keyboard, crear_etc_hostname
+from canaimainstalador.common import crear_etc_hosts, crear_etc_network_interfaces
+from canaimainstalador.common import crear_fstab, lista_cdroms, ProcessGenerator, UserMessage
 
 class PasoInstalacion(gtk.Fixed):
     def __init__(self, CFG):
@@ -11,9 +15,7 @@ class PasoInstalacion(gtk.Fixed):
         self.w = CFG['wizard']
         self.metodo = CFG['metodo']
         self.acciones = CFG['acciones']
-        self.forma = CFG['forma']
         self.teclado = CFG['teclado']
-        self.disco = CFG['disco']
         self.passroot = CFG['passroot']
         self.nombre = CFG['nombre']
         self.usuario = CFG['usuario']
@@ -21,6 +23,15 @@ class PasoInstalacion(gtk.Fixed):
         self.maquina = CFG['maquina']
         self.oem = CFG['oem']
         self.chkgdm = CFG['chkgdm']
+        self.p = Particiones()
+        self.paquetesreconf = [
+            'cunaguaro', 'guacharo', 'canaima-estilo-visual', 'canaima-plymouth',
+            'canaima-chat-gnome', 'canaima-bienvenido-gnome', 'canaima-escritorio-gnome',
+            'canaima-base'
+            ]
+        self.mountpoint = '/target'
+        self.squashfs = '/live/image/live/filesystem.squashfs'
+        self.connection = True
 
         path = os.path.realpath(
             os.path.join(os.path.dirname(__file__), '..', 'data', 'slider.html')
@@ -36,240 +47,219 @@ class PasoInstalacion(gtk.Fixed):
         self.lblInfo.set_size_request(690, 280)
         self.put(self.lblInfo, 0, 0)
 
-        self.thread = threading.Thread(target = self.instalar, args=())
+        self.lblDesc = gtk.Label()
+        self.lblDesc.set_size_request(690, 30)
+        self.put(self.lblDesc, 0, 290)
+
+        self.w.siguiente.set_label('Reiniciar más tarde')
+        self.w.siguiente.set_size_request(150, 30)
+
+        self.w.anterior.set_label('Reiniciar ahora')
+        self.w.anterior.set_size_request(150, 30)
+
+        self.w.anterior.hide()
+        self.w.siguiente.hide()
+        self.w.cancelar.hide()
+
+        self.thread = threading.Thread(target = self.instalar, args = ())
         self.thread.start()
 
     def instalar(self):
-        particionar = Particionar(self.acciones)
-#        self.p.mostrar_barra()
+        try:
+            response = urllib2.urlopen(HeadRequest(requesturl))
+        except:
+            self.connection = False
 
-#        self.p.btn_siguiente.set_label('Reiniciar más tarde')
-#        self.p.btn_siguiente.set_size_request(150, 30)
-#        self.p.botonera.move(self.p.btn_siguiente, 440, 10)
-#        self.p.btn_anterior.set_label('Reiniciar Ahora')
-#        self.p.btn_anterior.set_size_request(150, 30)
-#        self.p.botonera.move(self.p.btn_anterior, 280, 10)
-#        self.p.btn_cancelar.hide()
+        self.lblDesc.set_text('Creando particiones en disco ...')
+        for a in self.acciones:
+            nombre = a[0]
+            particion = a[1]
+            montaje = a[2]
+            inicio = a[3]
+            fin = a[4]
+            fs = a[5]
+            tipo = a[6]
 
-#        # Comenzando el particionado
-#        self.p.info_barra("Creando particiones en el disco duro ...")
-#        if self.metodo[tipo] == 'TODO':
-#            part_todo = particion_todo.Main(self.cfg, self.par, False)
-#            if self.tipo == 'particion_1':
-#                self.salida = part_todo.particion_1()
-#            if self.tipo == 'particion_2':
-#                self.salida = part_todo.particion_2()
-#            if self.tipo == 'particion_3':
-#                self.salida = part_todo.particion_3()
-#            if self.tipo == 'particion_4':
-#                self.salida = part_todo.particion_4()
-#        elif self.metodo == 'vacio':
-#            part_todo = particion_todo.Main(self.cfg, self.par, True)
-#            if self.tipo == 'particion_1':
-#                self.salida = part_todo.particion_1()
-#            if self.tipo == 'particion_2':
-#                self.salida = part_todo.particion_2()
-#            if self.tipo == 'particion_3':
-#                self.salida = part_todo.particion_3()
-#            if self.tipo == 'particion_4':
-#                self.salida = part_todo.particion_4()
-#        else:
-#            part_auto = particion_auto.Main(self.cfg, self.par)
-#            if self.tipo == 'particion_1':
-#                self.salida = part_auto.particion_1()
-#            if self.tipo == 'particion_2':
-#                self.salida = part_auto.particion_2()
-#            if self.tipo == 'particion_3':
-#                self.salida = part_auto.particion_3()
-#            if self.tipo == 'particion_4':
-#                self.salida = part_auto.particion_4()
-#        print '-----Salida: ', self.salida
-#        self.particiones_montadas = self.salida[0]
-#        self.particion_boot = self.salida[1]
-#        if self.disco == '':
-#            self.disco = self.particion_boot[:-1]
-# Aumenta la Barra 10
+            if nombre == 'crear':
+                if not self.p.crear_particion(
+                    drive = self.metodo['disco'][0], start = inicio,
+                    end = fin, fs = fs, partype = tipo
+                    ):
+                    e = UserMessage(
+                        message = 'Ocurrió un error creando una partición.',
+                        title = 'ERROR',
+                        mtype = gtk.MESSAGE_ERROR, buttons = gtk.BUTTONS_OK,
+                        c_1 = gtk.RESPONSE_OK, f_1 = sys.exit, p_1 = (1,)
+                    )
 
+            elif nombre == 'borrar':
+                if not self.p.borrar_particion(
+                    particion = particion
+                    ):
+                    e = UserMessage(
+                        message = 'Ocurrió un error borrando una partición.',
+                        title = 'ERROR',
+                        mtype = gtk.MESSAGE_ERROR, buttons = gtk.BUTTONS_OK,
+                        c_1 = gtk.RESPONSE_OK, f_1 = sys.exit, p_1 = (1,)
+                    )
 
-#        # Copiando los archivos
-#        self.p.info_barra("Instalando Canaima GNU/Linux ...")
-#        self.p.accion('Copiando los archivos al disco')
-#        self.copiar()
-#        # Aumenta la Barra 30
-#        fstab = clases.install.fstab.Main(self.particiones_montadas)
-#        fstab.crear_archivo()
-#        # Aumenta la Barra 40
-#        self.p.accion('Copiando archivos group y etc')
-#        os.system('cp /etc/passwd /etc/group /target/etc')
-#        os.system('mount -o bind /dev /target/dev')
-#        os.system('mount -o bind /dev/pts /target/dev/pts')
-#        os.system('mount -o bind /proc /target/proc')
-#        os.system('mount -o bind /sys /target/sys')
-#        os.system('mkdir -p /target/boot/burg')
-## Aumenta la Barra 50
-#        self.p.accion('Instalando burg')
-#        script = os.path.realpath(os.path.join(os.path.dirname(__file__),
-#                '..', 'scripts', 'install-grub-ini.sh'))
-#        os.system('echo "0" > /proc/sys/kernel/printk')
-#        os.system('chmod +x {0}'.format(script))
-#        print '-----Script: ', 'sh {0} {1}'.format(script, self.particion_boot)
-#        os.system('sh {0} {1}'.format(script, self.particion_boot))
-#        cmd = "burg-install --force --root-directory=/target {0}".format(self.disco)
-#        print '-----Burg Install: ' + cmd
-#        os.system(cmd)
-#        uname_r = commands.getstatusoutput('echo $(uname -r)')[1]
-#        #vmlinuz = 'vmlinuz-' + uname_r
-#        initrd = 'initrd.img-' + uname_r
-#        script = os.path.realpath(os.path.join(os.path.dirname(__file__),
-#                '..', 'scripts', 'install-grub.sh'))
-#        os.system('chmod +x {0}'.format(script))
-#        os.system('sh {0} /target {1} '.format(script, self.disco))
-#        os.system('echo "6" > /proc/sys/kernel/printk')
-## Aumenta la Barra 70
-#        self.p.accion('Generando initrd')
-#        os.system('rm -f /target/boot/{0}'.format(initrd))
-#        os.system('chroot /target /usr/sbin/mkinitramfs -o /boot/{0} {1}'. \
-#            format(initrd, uname_r))
-## Aumenta la Barra 80
-#        if self.oem == True:
-#            self.p.accion('Creando usuarios')
-#            script = os.path.realpath(os.path.join(os.path.dirname(__file__),
-#                    '..', 'scripts', 'make-user.sh'))
-#            os.system('sh {0} "root" "root" "/target"'. \
-#                format(script))
-#            os.system('sh {0} "canaima" "canaima" "/target" "Mantenimiento"'. \
-#                format(script))
-#            self.instalar_primeros_pasos()
-#        else:
-#            self.p.accion('Creando usuarios')
-#            script = os.path.realpath(os.path.join(os.path.dirname(__file__),
-#                    '..', 'scripts', 'make-user.sh'))
-#            os.system('sh {0} "root" "{1}" "/target"'. \
-#                format(script, self.passroot))
-#            os.system('sh {0} "{1}" "{2}" "/target" "{3}"'. \
-#                format(script, self.usuario, self.passuser, self.nombre))
-#        os.system('chroot /target aptitude purge canaima-instalador --assume-yes')
-#        if self.chkgdm == True:
-#            self.instalar_accesibilidad()
-#            #clave = "/desktop/gnome/applications/at/screen_reader_enabled true"
-#            #ruta = "/usr/share/gconf/defaults/30-canaima-instalador"
-#            #os.system('chroot /target echo {0} > {1}'.format(clave, ruta))
+            elif nombre == 'redimensionar':
+                if not self.p.redimensionar_particion(
+                    part = particion, newend = fin
+                    ):
+                    e = UserMessage(
+                        message = 'Ocurrió un error redimensionando una partición.',
+                        title = 'ERROR',
+                        mtype = gtk.MESSAGE_ERROR, buttons = gtk.BUTTONS_OK,
+                        c_1 = gtk.RESPONSE_OK, f_1 = sys.exit, p_1 = (1,)
+                    )
 
-## Aumenta la Barra 90
-#        self.p.accion('Ejecutando últimas configuraciones')
-#        os.system('rm -f /target/etc/mtab')
-#        os.system('touch /target/etc/mtab')
-#        os.system('cp -f /etc/inittab /target/etc/inittab')
-#        #os.system('chroot /target install-keymap {0}'.format(self.teclado))
-#        self.interfaces()
-#        self.hostname()
-#        os.system('chroot /target dhclient -v')
-#        os.system('chroot /target aptitude update')
-#        os.system('chroot /target dpkg-reconfigure canaima-base \
-#        canaima-escritorio-gnome canaima-estilo-visual-gnome \
-#        canaima-chat-gnome canaima-bienvenido-gnome')
-#        self.keyboard()
-## Aumenta la Barra 100
-#        #os.system('chroot /target aptitude remove canaima-instalador')
-#        #os.system('chroot /target aptitude install canaima-contrasena -y')
-#        #os.system('umount -l /target/dev')
-#        #os.system('umount -l /target/proc')
-#        #os.system('umount -l /target/sys ')
-#        #os.system('umount -l /target/boot ')
-#        #os.system('umount -l /target/usr ')
-#        #os.system('umount -l /target/home ')
-#        os.system('umount -l /target ')
-#        os.system('sync > /dev/null')
-#        self.visor.hide()
-#        self.lblInfo.show()
-#        self.p.ocultar_barra()
-#        gtk.gdk.threads_leave()
+        self.lblDesc.set_text('Copiando archivos en disco ...')
+        if not ProcessGenerator(
+            'unsquashfs -f -i -d {0} {1}'.format(self.mountpoint, self.squashfs)
+            ):
+            e = UserMessage(
+                message = 'Ocurrió un error copiando los archivos al disco.',
+                title = 'ERROR',
+                mtype = gtk.MESSAGE_ERROR, buttons = gtk.BUTTONS_OK,
+                c_1 = gtk.RESPONSE_OK, f_1 = sys.exit, p_1 = (1,)
+            )
 
-#    def copiar(self):
-#        cmd = 'unsquashfs -f -i -d /target /live/image/live/filesystem.squashfs'
-#        salida = os.popen(cmd)
-##        while 1:
-##            linea = salida.readline()
-##            if not linea: break
-##            cmd = linea.split('\n')[0]
-##            self.p.accion('Copiando los archivos al disco...\n{0}'.format(cmd))
+        self.lblDesc.set_text('Configurando detalles del sistema operativo ...')
+        for pkg in self.paquetesreconf:
+            if not reconfigurar_paquete(pkg):
+                e = UserMessage(
+                    message = 'Ocurrió un error reconfigurando un paquete.',
+                    title = 'ERROR',
+                    mtype = gtk.MESSAGE_ERROR, buttons = gtk.BUTTONS_OK,
+                    c_1 = gtk.RESPONSE_OK, f_1 = sys.exit, p_1 = (1,)
+                )
 
-#    def interfaces(self):
-#        content = ''
-#        destination = '/target/etc/network/interfaces'
-#        interdir = '/sys/class/net/'
-#        interlist = next(os.walk(interdir))[1]
+        self.lblDesc.set_text('Removiendo instalador del sistema de archivos ...')
+        if not desinstalar_paquete('canaima-instalador'):
+            e = UserMessage(
+                message = 'Ocurrió un error desinstalando un paquete.',
+                title = 'ERROR',
+                mtype = gtk.MESSAGE_ERROR, buttons = gtk.BUTTONS_OK,
+                c_1 = gtk.RESPONSE_OK, f_1 = sys.exit, p_1 = (1,)
+            )
 
-#        for i in interlist:
-#            if i == 'lo':
-#                content += '\nauto lo'
-#                content += '\niface lo inet loopback\n'
-#            elif re.sub('\d', '', i) == 'eth':
-#                content += '\nallow-hotplug {0}'.format(i)
-#                content += '\niface {0} inet dhcp\n'.format(i)
+        self.lblDesc.set_text('Instalando gestor de arranque ...')
+        c = ProcessGenerator('mount -o bind /dev {0}/dev'.format(self.mountpoint))
+        c = ProcessGenerator('mount -o bind /dev/pts {0}/dev/pts'.format(self.mountpoint))
+        c = ProcessGenerator('mount -o bind /proc {0}/proc'.format(self.mountpoint))
+        c = ProcessGenerator('mount -o bind /sys {0}/sys'.format(self.mountpoint))
+        c = ProcessGenerator(
+            'chroot {0} echo "burg-pc burg/linux_cmdline string quiet splash" > /tmp/debconf'.format(self.mountpoint)
+            )
+        c = ProcessGenerator(
+            'chroot {0} echo "burg-pc burg/linux_cmdline_default string quiet splash vga=791" > /tmp/debconf'.format(self.mountpoint)
+            )
+        c = ProcessGenerator(
+            'chroot {0} echo "burg-pc burg-pc/install_devices multiselect {1}" > /tmp/debconf'.format(self.mountpoint, self.metodo['disco'][0])
+            )
+        c = ProcessGenerator(
+            'chroot {0} debconf-set-selections < /tmp/debconf'.format(self.mountpoint)
+            )
+        c = ProcessGenerator(
+            'rm -rf {0}/tmp/debconf'.format(self.mountpoint)
+            )
+        burg = instalar_paquete('/live/image/pool/main/b/burg/', 'burg')
+        burg = instalar_paquete('/live/image/pool/main/b/burg/', 'burg')
+        burg = instalar_paquete('/live/image/pool/main/b/burg/', 'burg')
+        burg = instalar_paquete('/live/image/pool/main/b/burg/', 'burg')
+        burg = instalar_paquete('/live/image/pool/main/b/burg/', 'burg')
+        burg = instalar_paquete('/live/image/pool/main/b/burg/', 'burg')
+        c = ProcessGenerator(
+            'burg-install --force --root-directory="{0}" {1}'.format(
+                self.mountpoint, self.metodo['disco'][0]
+                )
+            )
+        c = ProcessGenerator(
+            'chroot {0} update-burg'.format(self.mountpoint)
+            )
 
-#        f = open(destination, 'w')
-#        f.write(content)
-#        f.close()
+        self.lblDesc.set_text('Generando imagen de arranque ...')
+        uname_r = commands.getstatusoutput('echo $(uname -r)')[1]
+        initrd = 'initrd.img-' + uname_r
+        c = ProcessGenerator(
+            'chroot {0} /usr/sbin/mkinitramfs -o /boot/{1} {2}'.format(self.mountpoint, initrd, uname_r)
+            )
 
-#    def hostname(self):
-#        cmd = 'echo "{0}" > /target/etc/hostname'.format(self.maquina)
-#        print cmd
-#        os.system('{0}'.format(cmd))
+        self.lblDesc.set_text('Configurando particiones, usuarios y grupos ...')
+        self.cdroms = lista_cdroms()
+        self.particiones = self.p.lista_particiones()
+        fstab = crear_fstab(
+            mnt = self.mountpoint, cfg = '/etc/fstab',
+            particiones = self.particiones, cdroms = self.cdroms
+            )
+        c = ProcessGenerator('cp -f /etc/passwd {0}/etc/passwd'.format(self.mountpoint))
+        c = ProcessGenerator('cp -f /etc/group {0}/etc/group'.format(self.mountpoint))
+        c = ProcessGenerator('cp -f /etc/inittab {0}/etc/inittab'.format(self.mountpoint))
+        c = ProcessGenerator('rm -rf {0}/etc/mtab'.format(self.mountpoint))
+        c = ProcessGenerator('touch {0}/etc/mtab'.format(self.mountpoint))
 
-#        cmd = 'echo "127.0.0.1\t\t{0}\t\tlocalhost\n'.format(self.maquina)
-#        cmd = cmd + '::1\t\tlocalhost\t\tip6-localhost ip6-loopback\n'
-#        cmd = cmd + 'fe00::0\t\tip6-localnet\n'
-#        cmd = cmd + 'ff00::0\t\tip6-mcastprefix\n'
-#        cmd = cmd + 'ff02::1\t\tip6-allnodes\n'
-#        cmd = cmd + 'ff02::2\t\tip6-allrouters\n'
-#        cmd = cmd + 'ff02::3\t\tip6-allhosts" > /target/etc/hosts    '
-#        print cmd
-#        os.system('{0}'.format(cmd))
+        self.lblDesc.set_text('Configurando teclado ...')
+        a = crear_etc_default_keyboard(
+            mnt = self.mountpoint, cfg = '/etc/canaima-base/alternatives/keyboard',
+            key = self.teclado
+            )
 
-#    def keyboard(self):
+        self.lblDesc.set_text('Configurando interfaces de red ...')
+        a = crear_etc_hostname(mnt = self.mountpoint, cfg = '/etc/hostname', maq = self.maquina)
+        a = crear_etc_hosts(mnt = self.mountpoint, cfg = '/etc/hosts', maq = self.maquina)
+        a = crear_etc_network_interfaces(mnt = self.mountpoint, cfg = '/etc/network/interfaces')
 
-#        pattern = "^XKBLAYOUT=*"
-#        re_obj = re.compile(pattern)
-#        new_value = "XKBLAYOUT=\"" + self.teclado + "\"\n"
+        if self.oem:
+            self.adm_user = 'root'
+            self.adm_password = 'root'
+            self.nml_user = 'canaima'
+            self.nml_password = 'canaima'
+            self.nml_name = 'Mantenimiento'
+            burg = instalar_paquete(
+                '/live/image/pool/main/c/canaima-primeros-pasos/',
+                'canaima-primeros-pasos'
+                )
+        else:
+            self.adm_user = 'root'
+            self.adm_password = self.passroot
+            self.nml_user = self.usuario
+            self.nml_password = self.passuser
+            self.nml_name = self.nombre
 
-#        file_path = "/target/etc/canaima-base/alternatives/keyboard"
-#        infile = open (file_path, "r")
-#        string = ''
+        if self.chkgdm:
+            pkg_accessibilidad = instalar_paquete(
+                '/live/image/pool/main/c/canaima-accesibilidad-gdm-gnome/',
+                'canaima-accesibilidad-gdm-gnome'
+                )
 
-#        # Busca el valor del pattern
-#        is_match = False
-#        for line in infile:
-#            match = re_obj.search(line)
-#            if match :
-#                is_match = True
-#                string += new_value
-#            else:
-#                string += line
-#        infile.close()
+        self.lblDesc.set_text('Creando usuario administrador ...')
+        c = ProcessGenerator('chroot {0} echo "{1}:{2}" > /tmp/passwd'.format(self.mountpoint, self.adm_user, self.adm_password))
+        c = ProcessGenerator('chroot {0} /usr/sbin/chpasswd < /tmp/passwd'.format(self.mountpoint))
+        c = ProcessGenerator('rm -rf {0}/tmp/passwd'.format(self.mountpoint))
 
-#        # Si no encuentra el pattern lo agrega al final con el valor asignado
-#        if not is_match:
-#            string += new_value
+        self.lblDesc.set_text('Creando usuario "{0}" ...'.format(self.nml_user))
+        c = ProcessGenerator('chroot {0} /usr/sbin/userdel -r canaima'.format(self.mountpoint))
+        c = ProcessGenerator('chroot {0} /usr/sbin/useradd -m -d /home/{1} {2} -s /bin/bash -c "{3}"'.format(self.mountpoint, self.nml_user, self.nml_user, self.nml_name))
+        c = ProcessGenerator('chroot {0} echo "{1}:{2}" > /tmp/passwd'.format(self.mountpoint, self.nml_user, self.nml_password))
+        c = ProcessGenerator('chroot {0} /usr/sbin/chpasswd < /tmp/passwd'.format(self.mountpoint))
+        c = ProcessGenerator('rm -rf {0}/tmp/passwd'.format(self.mountpoint))
 
-#        # Escribe el archivo modificado
-#        outfile = open(file_path, "w")
-#        outfile.write(string)
-#        outfile.close()
+        if connection:
+            self.lblDesc.set_text('Actualizando sistema operativo desde repositorios ...')
+            c = ProcessGenerator('chroot {0} dhclient'.format(self.mountpoint))
+            c = ProcessGenerator('chroot {0} aptitude update'.format(self.mountpoint))
+            c = ProcessGenerator('chroot {0} aptitude full-upgrade'.format(self.mountpoint))
 
-#    def instalar_primeros_pasos(self):
-#        deb_orig = "/live/image/pool/main/c/canaima-primeros-pasos/*.deb"
-#        deb_dest = "/target/root/debs/"
-#        #chroot_dest = "/root/debs/*.deb"
-#        os.system('mkdir -p {0}'.format(deb_dest))
-#        os.system('cp {0} {1}'.format(deb_orig, deb_dest))
-#        os.system('for deb in $(ls -1 /target/root/debs/); do chroot /target dpkg -i /root/debs/${deb}; done')
-#        #os.system('rm -rf {0}'.format(deb_dest))
+        self.lblDesc.set_text('Desmontando sistema de ficheros ...')
+        c = ProcessGenerator('umount -l {0}/dev/pts'.format(self.mountpoint))
+        c = ProcessGenerator('umount -l {0}/dev'.format(self.mountpoint))
+        c = ProcessGenerator('umount -l {0}/proc'.format(self.mountpoint))
+        c = ProcessGenerator('umount -l {0}/sys'.format(self.mountpoint))
+        c = ProcessGenerator('umount -l {0}'.format(self.mountpoint))
+        c = ProcessGenerator('sync > /dev/null')
 
-#    def instalar_accesibilidad(self):
-#        deb_orig = "/live/image/pool/main/c/canaima-accesibilidad-gdm-gnome/*.deb"
-#        deb_dest = "/target/root/debs/"
-#        #chroot_dest = "/root/debs/*.deb"
-#        os.system('mkdir -p {0}'.format(deb_dest))
-#        os.system('cp {0} {1}'.format(deb_orig, deb_dest))
-#        os.system('for deb in $(ls -1 /target/root/debs/); do chroot /target dpkg -i /root/debs/${deb}; done')
+        self.visor.hide()
+        self.w.anterior.show()
+        self.w.siguiente.show()
+
