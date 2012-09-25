@@ -3,7 +3,7 @@
 
 import parted, _ped
 
-from canaimainstalador.clases.common import ProcessGenerator
+from canaimainstalador.clases.common import ProcessGenerator, espacio_usado
 from canaimainstalador.config import FSPROGS
 
 
@@ -62,7 +62,7 @@ class Particiones():
                 if i.fileSystem != None:
                     if code != 2:
                         fs = i.fileSystem.type
-                        usado = self.usado(part)
+                        usado = espacio_usado(part)
                         libre = tam - usado
                         if fs == 'linux-swap(v1)':
                             fs = 'swap'
