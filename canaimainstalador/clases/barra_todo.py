@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 
-import gtk, cairo, gobject
+import gtk
 
-from canaimainstalador.clases.common import floatify, givemeswap
-from canaimainstalador.clases.common import set_color, process_color
-from canaimainstalador.clases.common import hex_to_rgb, draw_rounded
-from canaimainstalador.config import *
+from canaimainstalador.clases.common import set_color
+from canaimainstalador.clases.common import draw_rounded
+from canaimainstalador.config import ESPACIO_TOTAL, ESPACIO_SWAP, ESPACIO_ROOT, \
+    ESPACIO_BOOT, ESPACIO_VAR, ESPACIO_USR
 
 class BarraTodo(gtk.DrawingArea):
     def __init__(self, parent):
@@ -27,7 +27,7 @@ class BarraTodo(gtk.DrawingArea):
         self.forma = forma
         self.expose()
 
-    def expose(self, widget = None, event = None):
+    def expose(self, widget=None, event=None):
         self.metodo = self.p.metodo
         self.ini = self.p.metodo['part'][1]
         self.fin = self.p.metodo['part'][2]
@@ -63,7 +63,7 @@ class BarraTodo(gtk.DrawingArea):
             p_1 = [self.forma.split(':')[0], ini_1, fin_1, 0, 'ext4', 'primary', '', 0, 0, 0, 1]
             p_2 = [self.forma.split(':')[1], ini_2, fin_2, 0, 'swap', 'primary', '', 0, 0, 0, 1]
             p_3 = [self.forma.split(':')[2], ini_3, fin_3, 0, 'free', 'primary', '', 0, 0, 0, 1]
-            self.p.nuevas = [p_1,p_2,p_3]
+            self.p.nuevas = [p_1, p_2, p_3]
 
         elif self.forma == 'ROOT:HOME:SWAP:LIBRE':
             ini_1 = 0
@@ -78,7 +78,7 @@ class BarraTodo(gtk.DrawingArea):
             p_2 = [self.forma.split(':')[1], ini_2, fin_2, 0, 'xfs', 'primary', '', 0, 0, 0, 1]
             p_3 = [self.forma.split(':')[2], ini_3, fin_3, 0, 'swap', 'primary', '', 0, 0, 0, 1]
             p_4 = [self.forma.split(':')[3], ini_4, fin_4, 0, 'free', 'primary', '', 0, 0, 0, 1]
-            self.p.nuevas = [p_1,p_2,p_3,p_4]
+            self.p.nuevas = [p_1, p_2, p_3, p_4]
 
         elif self.forma == 'BOOT:ROOT:HOME:SWAP:LIBRE':
             ini_1 = 0
@@ -96,7 +96,7 @@ class BarraTodo(gtk.DrawingArea):
             p_3 = [self.forma.split(':')[2], ini_3, fin_3, 0, 'xfs', 'primary', '', 0, 0, 0, 1]
             p_4 = [self.forma.split(':')[3], ini_4, fin_4, 0, 'swap', 'primary', '', 0, 0, 0, 1]
             p_5 = [self.forma.split(':')[4], ini_5, fin_5, 0, 'free', 'primary', '', 0, 0, 0, 1]
-            self.p.nuevas = [p_1,p_2,p_3,p_4,p_5]
+            self.p.nuevas = [p_1, p_2, p_3, p_4, p_5]
 
         elif self.forma == 'BOOT:ROOT:VAR:USR:HOME:SWAP:LIBRE':
             ini_1 = 0
@@ -120,7 +120,7 @@ class BarraTodo(gtk.DrawingArea):
             p_5 = [self.forma.split(':')[4], ini_5, fin_5, 0, 'xfs', 'primary', '', 0, 0, 0, 1]
             p_6 = [self.forma.split(':')[5], ini_6, fin_6, 0, 'swap', 'primary', '', 0, 0, 0, 1]
             p_7 = [self.forma.split(':')[6], ini_7, fin_7, 0, 'free', 'primary', '', 0, 0, 0, 1]
-            self.p.nuevas = [p_1,p_2,p_3,p_4,p_5,p_6,p_7]
+            self.p.nuevas = [p_1, p_2, p_3, p_4, p_5, p_6, p_7]
 
         else:
             pass

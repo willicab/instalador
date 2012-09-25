@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import gtk, cairo, gobject, math
+import gtk
 
-from canaimainstalador.clases.common import floatify, set_color, process_color
-from canaimainstalador.clases.common import hex_to_rgb, draw_rounded
+from canaimainstalador.clases.common import set_color
+from canaimainstalador.clases.common import draw_rounded
 
 class BarraParticiones(gtk.DrawingArea):
     def __init__(self, parent):
@@ -29,7 +29,7 @@ class BarraParticiones(gtk.DrawingArea):
 
         for p in self.particiones:
             ini = p[1]
-            fin =  p[2]
+            fin = p[2]
             tipo = p[5]
             fs = p[4]
 

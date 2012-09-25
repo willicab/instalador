@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 
-import gtk, cairo, gobject
+import gtk
 
 from canaimainstalador.clases.common import humanize
 
@@ -70,21 +70,21 @@ class Leyenda(gtk.Fixed):
             size = humanize(i[2] - i[1])
 
             if part == 'ROOT':
-                exec "self.lbl_"+str(j)+".set_text('Espacio principal (/): '+size)"
+                exec "self.lbl_" + str(j) + ".set_text('Espacio principal (/): '+size)"
             elif part == 'SWAP':
-                exec "self.lbl_"+str(j)+".set_text('Espacio de intercambio (swap): '+size)"
+                exec "self.lbl_" + str(j) + ".set_text('Espacio de intercambio (swap): '+size)"
             elif part == 'HOME':
-                exec "self.lbl_"+str(j)+".set_text('Espacio de usuarios (/home): '+size)"
+                exec "self.lbl_" + str(j) + ".set_text('Espacio de usuarios (/home): '+size)"
             elif part == 'USR':
-                exec "self.lbl_"+str(j)+".set_text('Espacio de aplicaciones (/usr): '+size)"
+                exec "self.lbl_" + str(j) + ".set_text('Espacio de aplicaciones (/usr): '+size)"
             elif part == 'BOOT':
-                exec "self.lbl_"+str(j)+".set_text('Espacio de arranque (/boot): '+size)"
+                exec "self.lbl_" + str(j) + ".set_text('Espacio de arranque (/boot): '+size)"
             elif part == 'VAR':
-                exec "self.lbl_"+str(j)+".set_text('Espacio de variables (/var): '+size)"
+                exec "self.lbl_" + str(j) + ".set_text('Espacio de variables (/var): '+size)"
             elif part == 'LIBRE':
-                exec "self.lbl_"+str(j)+".set_text('Espacio Libre: '+size)"
+                exec "self.lbl_" + str(j) + ".set_text('Espacio Libre: '+size)"
             elif part == 'PART':
-                exec "self.lbl_"+str(j)+".set_text('Partición redimensionada: '+size)"
+                exec "self.lbl_" + str(j) + ".set_text('Partición redimensionada: '+size)"
 
             j += 1
 

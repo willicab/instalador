@@ -3,8 +3,6 @@
 
 import gtk
 
-from canaimainstalador.clases.common import floatify, humanize
-
 class PasoInfo(gtk.Fixed):
     def __init__(self, CFG):
         gtk.Fixed.__init__(self)

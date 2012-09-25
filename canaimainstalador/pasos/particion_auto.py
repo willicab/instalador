@@ -5,7 +5,7 @@ import gtk
 
 from canaimainstalador.clases.barra_auto import BarraAuto
 from canaimainstalador.clases.leyenda import Leyenda
-from canaimainstalador.config import *
+from canaimainstalador.config import ESPACIO_TOTAL
 
 class PasoPartAuto(gtk.Fixed):
     def __init__(self, CFG):

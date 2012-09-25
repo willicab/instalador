@@ -3,10 +3,8 @@
 
 import commands, re, subprocess, math, cairo, gtk, hashlib, random, urllib2
 
-from canaimainstalador.config import *
 from canaimainstalador.translator import msj
 import os
-import gobject
 
 def espacio_usado(particion):
     if os.path.exists(particion):

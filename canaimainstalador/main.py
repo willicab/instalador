@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 # Módulos globales
-import gtk, os, sys, re, Image
+import gtk, os, re, Image
 
 # Módulos locales
 from canaimainstalador.pasos.bienvenida import PasoBienvenida
@@ -16,8 +16,7 @@ from canaimainstalador.pasos.usuario import PasoUsuario
 from canaimainstalador.pasos.accesibilidad import PasoAccesibilidad
 from canaimainstalador.pasos.info import PasoInfo
 from canaimainstalador.clases.common import UserMessage, aconnect
-from canaimainstalador.translator import MAIN_ROOT_ERROR_MSG, MAIN_ROOT_ERROR_TITLE
-from canaimainstalador.config import *
+from canaimainstalador.config import CFG
 
 class Wizard(gtk.Window):
     '''
@@ -97,8 +96,8 @@ class Wizard(gtk.Window):
         '''
         return UserMessage(
             '¿Está seguro que desea cancelar la instalación?', 'Salir',
-            gtk.MESSAGE_WARNING, gtk.BUTTONS_YES_NO, c_1 = gtk.RESPONSE_YES,
-            f_1 = gtk.main_quit, p_1 = ()
+            gtk.MESSAGE_WARNING, gtk.BUTTONS_YES_NO, c_1=gtk.RESPONSE_YES,
+            f_1=gtk.main_quit, p_1=()
             )
 
     def next(self, nombre, init, params, paso):
@@ -146,13 +145,13 @@ class Bienvenida():
     '''
     def __init__(self, CFG):
         CFG['s'] = aconnect(CFG['w'].siguiente, CFG['s'], self.siguiente, (CFG))
-        s = CFG['w'].anterior.set_sensitive(False)
+        CFG['w'].anterior.set_sensitive(False)
 
     def init(self, CFG):
-        m = CFG['w'].next('Bienvenida', Bienvenida, (CFG), PasoBienvenida(CFG))
+        CFG['w'].next('Bienvenida', Bienvenida, (CFG), PasoBienvenida(CFG))
 
     def siguiente(self, CFG):
-        n = CFG['w'].next('Teclado', Teclado, (CFG), PasoTeclado(CFG))
+        CFG['w'].next('Teclado', Teclado, (CFG), PasoTeclado(CFG))
 
 class Teclado():
     '''
@@ -161,16 +160,16 @@ class Teclado():
     def __init__(self, CFG):
         CFG['s'] = aconnect(CFG['w'].siguiente, CFG['s'], self.siguiente, CFG)
         CFG['s'] = aconnect(CFG['w'].anterior, CFG['s'], self.anterior, CFG)
-        s = CFG['w'].anterior.set_sensitive(True)
+        CFG['w'].anterior.set_sensitive(True)
 
     def anterior(self, CFG):
-        m = CFG['w'].previous('Bienvenida', Bienvenida, (CFG))
+        CFG['w'].previous('Bienvenida', Bienvenida, (CFG))
 
     def siguiente(self, CFG):
         CFG['teclado'] = CFG['w'].formulario('Teclado').distribucion
         print 'Distribución de teclado seleccionada: {0}'.format(CFG['teclado'])
 
-        m = CFG['w'].next('Metodo', Metodo, (CFG), PasoMetodo(CFG))
+        CFG['w'].next('Metodo', Metodo, (CFG), PasoMetodo(CFG))
 
 class Metodo():
     '''
@@ -181,7 +180,7 @@ class Metodo():
         CFG['s'] = aconnect(CFG['w'].anterior, CFG['s'], self.anterior, CFG)
 
     def anterior(self, CFG):
-        m = CFG['w'].previous('Teclado', Teclado, (CFG))
+        CFG['w'].previous('Teclado', Teclado, (CFG))
 
     def siguiente(self, CFG):
         CFG['metodo'] = CFG['w'].formulario('Metodo').metodo
@@ -190,11 +189,11 @@ class Metodo():
         print 'CFG: {0}'.format(CFG)
 
         if CFG['metodo']['tipo'] == 'MANUAL':
-            m = CFG['w'].next('PartManual', PartManual, (CFG), PasoPartManual(CFG))
+            CFG['w'].next('PartManual', PartManual, (CFG), PasoPartManual(CFG))
         elif CFG['metodo']['tipo'] == 'TODO' or CFG['metodo']['tipo'] == 'LIBRE':
-            m = CFG['w'].next('PartTodo', PartTodo, (CFG), PasoPartTodo(CFG))
+            CFG['w'].next('PartTodo', PartTodo, (CFG), PasoPartTodo(CFG))
         elif CFG['metodo']['tipo'] == 'REDIM':
-            m = CFG['w'].next('PartAuto', PartAuto, (CFG), PasoPartAuto(CFG))
+            CFG['w'].next('PartAuto', PartAuto, (CFG), PasoPartAuto(CFG))
         else:
             pass
 
@@ -207,11 +206,11 @@ class PartTodo():
         CFG['s'] = aconnect(CFG['w'].anterior, CFG['s'], self.anterior, CFG)
 
     def anterior(self, CFG):
-        m = CFG['w'].previous('Metodo', Metodo, (CFG))
+        CFG['w'].previous('Metodo', Metodo, (CFG))
 
     def siguiente(self, CFG):
         CFG['acciones'] = CFG['w'].formulario('PartAuto').acciones
-        m = CFG['w'].next('Usuario', Usuario, (CFG), PasoUsuario(CFG))
+        CFG['w'].next('Usuario', Usuario, (CFG), PasoUsuario(CFG))
 
 class PartAuto():
     '''
@@ -222,11 +221,11 @@ class PartAuto():
         CFG['s'] = aconnect(CFG['w'].anterior, CFG['s'], self.anterior, CFG)
 
     def anterior(self, CFG):
-        m = CFG['w'].previous('Metodo', Metodo, (CFG))
+        CFG['w'].previous('Metodo', Metodo, (CFG))
 
     def siguiente(self, CFG):
         CFG['acciones'] = CFG['w'].formulario('PartAuto').acciones
-        m = CFG['w'].next('Usuario', Usuario, (CFG), PasoUsuario(CFG))
+        CFG['w'].next('Usuario', Usuario, (CFG), PasoUsuario(CFG))
 
 class PartManual():
     '''
@@ -237,16 +236,17 @@ class PartManual():
         CFG['s'] = aconnect(CFG['w'].anterior, CFG['s'], self.anterior, CFG)
 
     def anterior(self, CFG):
-        m = CFG['w'].previous('Metodo', Metodo, (CFG))
+        CFG['w'].previous('Metodo', Metodo, (CFG))
 
     def siguiente(self, CFG):
         if CFG['w'].formulario('PartManual').raiz == False:
-            msg_error("Debe existir una partición raiz (/)")
+            print "Debe existir una partición raiz (/)"
+            #msg_error("Debe existir una partición raiz (/)")
             return False
 
         CFG['lista_manual'] = CFG['w'].formulario('PartManual').lista
         CFG['disco'] = CFG['w'].formulario('PartManual').disco
-        m = CFG['w'].next('Usuario', Usuario, (CFG), PasoUsuario(CFG))
+        CFG['w'].next('Usuario', Usuario, (CFG), PasoUsuario(CFG))
 
 class Usuario():
     '''
@@ -257,10 +257,10 @@ class Usuario():
         CFG['s'] = aconnect(CFG['w'].anterior, CFG['s'], self.anterior, CFG)
 
     def anterior(self, CFG):
-        m = CFG['w'].previous('PartAuto', PartAuto, (CFG))
-        m = CFG['w'].previous('PartTodo', PartTodo, (CFG))
-        m = CFG['w'].previous('PartManual', PartManual, (CFG))
-        m = CFG['w'].previous('Metodo', Metodo, (CFG))
+        CFG['w'].previous('PartAuto', PartAuto, (CFG))
+        CFG['w'].previous('PartTodo', PartTodo, (CFG))
+        CFG['w'].previous('PartManual', PartManual, (CFG))
+        CFG['w'].previous('Metodo', Metodo, (CFG))
 
     def siguiente(self, CFG):
         CFG['passroot'] = CFG['w'].formulario('Usuario').txt_passroot.get_text()
@@ -305,7 +305,7 @@ class Usuario():
                 message = "El nombre de la máquina no está correctamente escrito."
                 UserMessage(message, 'ERROR', gtk.MESSAGE_ERROR, gtk.BUTTONS_OK)
                 return
-            m = CFG['w'].next('Accesibilidad', Accesibilidad, (CFG), PasoAccesibilidad(CFG))
+            CFG['w'].next('Accesibilidad', Accesibilidad, (CFG), PasoAccesibilidad(CFG))
 
 class Accesibilidad():
     '''
@@ -316,11 +316,11 @@ class Accesibilidad():
         CFG['s'] = aconnect(CFG['w'].anterior, CFG['s'], self.anterior, CFG)
 
     def anterior(self, CFG):
-        m = CFG['w'].previous('Usuario', Usuario, (CFG))
+        CFG['w'].previous('Usuario', Usuario, (CFG))
 
     def siguiente(self, widget=None):
         CFG['chkgdm'] = CFG['w'].formulario('Accesibilidad').chkgdm.get_active()
-        m = CFG['w'].next('Info', Info, (CFG), PasoInfo(CFG))
+        CFG['w'].next('Info', Info, (CFG), PasoInfo(CFG))
 
 class Info():
     '''
@@ -331,10 +331,10 @@ class Info():
         CFG['s'] = aconnect(CFG['w'].anterior, CFG['s'], self.anterior, CFG)
 
     def anterior(self, CFG):
-        m = CFG['w'].previous('Accesibilidad', Accesibilidad, (CFG))
+        CFG['w'].previous('Accesibilidad', Accesibilidad, (CFG))
 
     def siguiente(self, CFG):
-        m = CFG['w'].next('Instalacion', Instalacion, (CFG), PasoInstalacion(CFG))
+        CFG['w'].next('Instalacion', Instalacion, (CFG), PasoInstalacion(CFG))
 
 class Instalacion():
     '''

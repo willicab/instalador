@@ -29,7 +29,7 @@ class TablaParticiones (gtk.TreeView):
 
         # Tipos de valores a mostrar en la tabla
         self.liststore = gtk.ListStore(str, str, str, str, str, str, str, int, \
-                                       int, bool)
+                                       int, bool, str)
 
         gtk.TreeView.__init__(self, model=self.liststore)
         self.set_headers_clickable(False)
@@ -66,7 +66,8 @@ class TablaParticiones (gtk.TreeView):
                           TblCol.LIBRE,
                           TblCol.INICIO,
                           TblCol.FIN,
-                          TblCol.FORMATEAR)
+                          TblCol.FORMATEAR,
+                          TblCol.ESTADO)
 
         self.doble_click(fila)
 
@@ -89,7 +90,8 @@ class TablaParticiones (gtk.TreeView):
                               TblCol.LIBRE,
                               TblCol.INICIO,
                               TblCol.FIN,
-                              TblCol.FORMATEAR)
+                              TblCol.FORMATEAR,
+                              TblCol.ESTADO)
         else:
             return None
 
@@ -107,6 +109,7 @@ class TablaParticiones (gtk.TreeView):
         self.nueva_columna_texto("Inicio", TblCol.INICIO)
         self.nueva_columna_texto("Fin", TblCol.FIN)
         self.nueva_columna_check("Formatear", TblCol.FORMATEAR)
+        self.nueva_columna_check("Estado", TblCol.ESTADO)
 
         # Ocultar las columnas que no se desean mostrar
         self.columnas[TblCol.INICIO].set_visible(False)
@@ -148,11 +151,10 @@ class TablaParticiones (gtk.TreeView):
 
         self.insert_column(self.columnas[index], index)
 
-    def colorear_celda(self, columna, celda, modelo, iter):
-        color = modelo.get_value(iter, 0)
+    def colorear_celda(self, columna, celda, modelo, iterad):
+        color = modelo.get_value(iterad, 0)
         celda.set_property('background', color)
         celda.set_property('text', None)
-        return
 
     def agregar_fila(self, lista):
         'Agrega los datos a las filas'
@@ -165,5 +167,6 @@ class TablaParticiones (gtk.TreeView):
                                lista[TblCol.LIBRE],
                                lista[TblCol.INICIO],
                                lista[TblCol.FIN],
-                               lista[TblCol.FORMATEAR]
+                               lista[TblCol.FORMATEAR],
+                               lista[TblCol.ESTADO],
                               ])

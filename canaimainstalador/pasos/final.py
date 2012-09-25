@@ -1,6 +1,6 @@
 #-*- coding: UTF-8 -*-
 
-import os, gtk
+import gtk
 
 class PasoFinal(gtk.Label):
     def __init__(self):

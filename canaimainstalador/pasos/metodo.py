@@ -5,13 +5,13 @@
 # Fecha: 13/10/2011
 
 # Módulos globales
-import gtk, os, threading
+import gtk
 
 # Módulos locales
-from canaimainstalador.config import *
 from canaimainstalador.clases.particiones import Particiones
-from canaimainstalador.clases.common import floatify, humanize, UserMessage
+from canaimainstalador.clases.common import humanize, UserMessage
 from canaimainstalador.clases.barra_particiones import BarraParticiones
+from canaimainstalador.config import ESPACIO_TOTAL, CFG
 
 class PasoMetodo(gtk.Fixed):
     def __init__(self, CFG):
@@ -77,12 +77,12 @@ class PasoMetodo(gtk.Fixed):
         self.particiones = self.part.lista_particiones(self.disco)
 
         if len(self.particiones) == 0:
-            r = UserMessage(
-                    message = 'El disco {0} necesita una tabla de particiones para poder continuar con la instalación. ¿Desea crear una tabla de particiones ahora?.\n\nSi presiona cancelar no podrá utilizar este disco para instalar Canaima.'.format(self.disco),
-                    title = 'Tabla de particiones no encontrada'.format(self.disco),
-                    mtype = gtk.MESSAGE_INFO, buttons = gtk.BUTTONS_OK_CANCEL,
-                    c_1 = gtk.RESPONSE_OK, f_1 = self.part.nueva_tabla_particiones, p_1 = (self.disco, 'msdos'),
-                    c_2 = gtk.RESPONSE_OK, f_2 = self.seleccionar_disco, p_2 = ()
+            UserMessage(
+                    message='El disco {0} necesita una tabla de particiones para poder continuar con la instalación. ¿Desea crear una tabla de particiones ahora?.\n\nSi presiona cancelar no podrá utilizar este disco para instalar Canaima.'.format(self.disco),
+                    title='Tabla de particiones no encontrada'.format(self.disco),
+                    mtype=gtk.MESSAGE_INFO, buttons=gtk.BUTTONS_OK_CANCEL,
+                    c_1=gtk.RESPONSE_OK, f_1=self.part.nueva_tabla_particiones, p_1=(self.disco, 'msdos'),
+                    c_2=gtk.RESPONSE_OK, f_2=self.seleccionar_disco, p_2=()
                     )
         else:
             try:
@@ -116,7 +116,7 @@ class PasoMetodo(gtk.Fixed):
                     tam = p[3]
                     fs = p[4]
                     tipo = p[5]
-                    usado = p[7]
+                    #usado = p[7] Unused Variable
                     libre = p[8]
 
                     if fs != 'free' and libre >= self.minimo:
@@ -178,7 +178,7 @@ class PasoMetodo(gtk.Fixed):
                 CFG['w'].siguiente.set_sensitive(False)
                 self.cmb_metodo.set_sensitive(False)
 
-            for k in sorted(self.metodos, key = lambda ordn: ordn['tipo'], reverse = True):
+            for k in sorted(self.metodos, key=lambda ordn: ordn['tipo'], reverse=True):
                 self.cmb_metodo.append_text(k['msg'])
 
             self.cmb_metodo.set_active(0)
