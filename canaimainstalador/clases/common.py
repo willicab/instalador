@@ -5,33 +5,35 @@ import commands, re, subprocess, math, cairo, gtk, hashlib, random, urllib2
 
 from canaimainstalador.config import *
 from canaimainstalador.translator import msj
+import os
+import gobject
 
 def espacio_usado(particion):
     if os.path.exists(particion):
-        p = ProcessGenerator('umount /mnt')
-        p = ProcessGenerator('mount {0} /mnt'.format(particion))
+        ProcessGenerator('umount /mnt')
+        ProcessGenerator('mount {0} /mnt'.format(particion))
         s = os.statvfs('/mnt')
         used = float(((s.f_blocks - s.f_bfree) * s.f_frsize) / 1024)
-        p = ProcessGenerator('umount /mnt')
+        ProcessGenerator('umount /mnt')
     else:
         used = 'unknown'
     return used
 
 def instalar_paquete(place, name):
-    
-    
+    pass
+
 
 def desinstalar_paquete(place, name):
-    
-    
+    pass
+
 
 def reconfigurar_paquete(place, name):
-    
-    
+    pass
+
 
 def crear_etc_network_interfaces(mnt, cfg):
     content = ''
-    destination = mnt+cfg
+    destination = mnt + cfg
     interdir = '/sys/class/net/'
     interlist = next(os.walk(interdir))[1]
 
@@ -48,8 +50,8 @@ def crear_etc_network_interfaces(mnt, cfg):
     f.close()
 
 def crear_etc_hostname(mnt, cfg, maq):
-    f = open(mnt+cfg, 'w')
-    f.write(maq+'\n')
+    f = open(mnt + cfg, 'w')
+    f.write(maq + '\n')
     f.close()
 
 def crear_etc_hosts(mnt, cfg, maq):
@@ -61,7 +63,7 @@ def crear_etc_hosts(mnt, cfg, maq):
     content += 'ff02::2\t\tip6-allrouters\n'
     content += 'ff02::3\t\tip6-allhosts'
 
-    f = open(mnt+cfg, 'w')
+    f = open(mnt + cfg, 'w')
     f.write(content)
     f.close()
 
@@ -70,7 +72,7 @@ def crear_etc_default_keyboard(mnt, cfg, key):
     re_obj = re.compile(pattern)
     new_value = "XKBLAYOUT=\"" + key + "\"\n"
 
-    file_path = mnt+cfg
+    file_path = mnt + cfg
     infile = open(file_path, "r")
     string = ''
 
@@ -94,43 +96,45 @@ def crear_etc_default_keyboard(mnt, cfg, key):
     outfile.write(string)
     outfile.close()
 
-def crear_fstab(mnt, cfg, particiones, cdroms):
-    content = ''
-    content += '#<filesystem>\t<mountpoint>\t<type>\t<options>\t<dump>\t<pass>\n'
-    content += '\nproc\t/proc\tproc\tdefaults\t0\t0'
-    defaults = 'defaults\t0\t0'
-
-    for part in particiones:
-        uuid = get_uuid(part)
-
-        if fs == 'swap':
-            content += "\n{0}\tnone\tswap\tsw\t0\t0".format(uuid)
-        else:
-            for fstype in SUPPORTED_FS:
-                if fstype == fs:
-                    if self.particiones.has_key(part):
-                        mnt = self.particiones[part].split('/target')[1]
-                        point = '{0}/'.format(mnt)
-                    elif dbus[0] != 'usb' and dtype[0] == 'disk':
-                        fldr = '/target/media/{0}'.format(part.split('/dev/')[1])
-                        os.system('mkdir -p {0}'.format(fldr))
-                        mnt = fldr.split('/target')[1]
-                        point = '{0}/'.format(mnt)
-                    else:
-                        point = ''
-            if point:
-                content += '\n{0}\t{1}\t{2}\t{3}'.format(uuid, point, fs, defaults)
-        else:
-            content += '\n# DISABLED: {0}, TYPE: ?, UUID: ?'.format(part)
-
-    for cd in cdroms:
-        num = cd[-1:]
-        os.system('mkdir -p /target/media/cdrom{0}'.format(num))
-        content += '\n/dev/{0}\t/media/cdrom{1}\tudf,iso9660\tuser,noauto\t0\t0'.format(cd, num)
-
-    f = open(mnt+cfg, 'w')
-    f.write(content)
-    f.close()
+#===============================================================================
+# def crear_fstab(mnt, cfg, particiones, cdroms):
+#    content = ''
+#    content += '#<filesystem>\t<mountpoint>\t<type>\t<options>\t<dump>\t<pass>\n'
+#    content += '\nproc\t/proc\tproc\tdefaults\t0\t0'
+#    defaults = 'defaults\t0\t0'
+# 
+#    for part in particiones:
+#        uuid = get_uuid(part)
+# 
+#        if fs == 'swap':
+#            content += "\n{0}\tnone\tswap\tsw\t0\t0".format(uuid)
+#        else:
+#            for fstype in SUPPORTED_FS:
+#                if fstype == fs:
+#                    if self.particiones.has_key(part):
+#                        mnt = self.particiones[part].split('/target')[1]
+#                        point = '{0}/'.format(mnt)
+#                    elif dbus[0] != 'usb' and dtype[0] == 'disk':
+#                        fldr = '/target/media/{0}'.format(part.split('/dev/')[1])
+#                        os.system('mkdir -p {0}'.format(fldr))
+#                        mnt = fldr.split('/target')[1]
+#                        point = '{0}/'.format(mnt)
+#                    else:
+#                        point = ''
+#            if point:
+#                content += '\n{0}\t{1}\t{2}\t{3}'.format(uuid, point, fs, defaults)
+#        else:
+#            content += '\n# DISABLED: {0}, TYPE: ?, UUID: ?'.format(part)
+# 
+#    for cd in cdroms:
+#        num = cd[-1:]
+#        os.system('mkdir -p /target/media/cdrom{0}'.format(num))
+#        content += '\n/dev/{0}\t/media/cdrom{1}\tudf,iso9660\tuser,noauto\t0\t0'.format(cd, num)
+# 
+#    f = open(mnt+cfg, 'w')
+#    f.write(content)
+#    f.close()
+#===============================================================================
 
 def lista_cdroms():
     info = '/proc/sys/dev/cdrom/info'
@@ -164,6 +168,7 @@ class TblCol:
     INICIO = 7
     FIN = 8
     FORMATEAR = 9
+    ESTADO = 10
 
 def givemeswap():
     r = ram()
@@ -402,9 +407,9 @@ def is_logic(fila):
     else:
         return False
 
-def ProcessGenerator(command, terminal = False, bar = False):
+def ProcessGenerator(command, terminal=False, bar=False):
 
-    filename = '/tmp/cs-command-'+hashlib.sha1(
+    filename = '/tmp/cs-command-' + hashlib.sha1(
         str(random.getrandbits(random.getrandbits(10)))
         ).hexdigest()
 
@@ -420,26 +425,30 @@ def ProcessGenerator(command, terminal = False, bar = False):
         fifo = os.fdopen(os.open(filename, os.O_RDONLY | os.O_NONBLOCK))
 
         process = subprocess.Popen(
-                cmd, shell = True, stdout = subprocess.PIPE,
-                stderr = subprocess.STDOUT
+                cmd, shell=True, stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT
                 )
 
-        if bar:
-            timer = gobject.timeout_add(100, ProgressPulse, bar)
+        #=======================================================================
+        # if bar:
+        #    timer = gobject.timeout_add(100, ProgressPulse, bar)
+        #=======================================================================
 
         while process.returncode == None:
             process.poll()
             try:
                 line = fifo.readline().strip()
                 if terminal:
-                    terminal.feed(line+'\r\n')
+                    terminal.feed(line + '\r\n')
             except:
                 continue
 
     finally:
         os.unlink(filename)
-        if bar:
-            gobject.source_remove(timer)
+        #=======================================================================
+        # if bar:
+        #    gobject.source_remove(timer)
+        #=======================================================================
 
     return process
 
@@ -452,7 +461,7 @@ def is_usable(selected_row):
         # para comprobar que tiene un formato similar a /dev/sdb3 por ejemplo.
         int(disp[-1])
 
-        # No se susan las particiones extendidas, sino las logicas
+        # No se usan las particiones extendidas, sino las logicas
         if tipo == msj.particion.extendida and fs == '':
             return False
         else:
