@@ -1,14 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 
-CFG = {'s': []}
-BANNER = 'canaimainstalador/data/img/banner.png'
 
-TECLADOS = {
-    'Español, España' : 'es',
-    'Español, Latinoamérica' : 'latam',
-    'Ingles, Estados Unidos' : 'us'
-}
+BANNER = 'canaimainstalador/data/img/banner.png'
 
 ESPACIO_ROOT = 1024*1024                # 1GB
 ESPACIO_VAR = 1024*896                  # 896MB
@@ -18,6 +12,13 @@ ESPACIO_BOOT = 1024*128                 # 128MB
 ESPACIO_SWAP = 1024*1024                # 1GB
 # --------------------------------------# -------
 ESPACIO_TOTAL = 1024*1024*6             # 6GB
+
+CFG = {'s': []}
+TECLADOS = {
+    'Español, España' : 'es',
+    'Español, Latinoamérica' : 'latam',
+    'Ingles, Estados Unidos' : 'us'
+}
 
 FSPROGS = {
 'btrfs': ['mkfs.btrfs {0}', 'btrfs filesystem resize {0} {1}'],
@@ -35,8 +36,3 @@ FSPROGS = {
 'reiserfs': ['mkfs.reiserfs -q -f -f {0}', 'resize_reiserfs -q -f -s {0} {1}'],
 'xfs': ['mkfs.xfs -q -f {0}', '']
 }
-
-SUPPORTED_FS = [
-'btrfs', 'ext2', 'ext3', 'ext4', 'vfat', 'hfs',
-'hfsplus', 'jfs', 'ntfs', 'xfs', 'reiser4', 'reiserfs'
-]

@@ -1,13 +1,14 @@
-- Particionado Manual
-- Instalación OEM
-- Separar la busqueda de discos de la clase de paso
-- hacer que la barra de progreso en el proceso de instalación sea incremental
-- calcular el tamaño minimo y el máximo de cada partición (Resuelto)
+[ LISTO ] - Particionado Manual
+[ LISTO ] - Instalación OEM
+[ LISTO ] - Separar la busqueda de discos de la clase de paso
+[ DESCARTADO ] - hacer que la barra de progreso en el proceso de instalación sea incremental
+[ LISTO ] - calcular el tamaño minimo y el máximo de cada partición
 
 - Arreglar alineación de particiones lógicas dentro de las extendidas.
-- arreglar instalación/desinstalacion/reconfiguración de paquetes.
+[ LISTO ] - arreglar instalación/desinstalacion/reconfiguración de paquetes.
 - hacer banner de bienvenida y renovar los otros banners.
-- arreglar instalación de burg.
-- arreglar montaje y desmontaje de particiones antes de la instalación.
+[ LISTO ] - arreglar instalación de burg.
+[ LISTO ] - arreglar montaje y desmontaje de particiones antes de la instalación.
 - arreglar disco de instalación y puntos de montaje fuera del disco.
-- verificar conexión a internet antes de hacer actualización.
+[ LISTO ] - verificar conexión a internet antes de hacer actualización.
+[ LISTO ] - hacer la acción "usar"
