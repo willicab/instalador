@@ -159,6 +159,7 @@ class Main(gtk.Dialog):
             return response
 
         part_actual = self.lista[self.num_fila_act]
+        original = part_actual
         part_sig = self.get_fila_siguiente()
 
         if response == gtk.RESPONSE_OK:
@@ -212,9 +213,10 @@ class Main(gtk.Dialog):
                                   part_actual[TblCol.DISPOSITIVO],
                                   part_actual[TblCol.MONTAJE],
                                   part_actual[TblCol.INICIO],
-                                  part_actual[TblCol.FIN],
+                                  original[TblCol.FIN], # Fin original
                                   part_actual[TblCol.FORMATO],
-                                  part_actual[TblCol.TIPO]
+                                  part_actual[TblCol.TIPO],
+                                  part_actual[TblCol.FIN], # Nuevo Fin
                                   ])
         self.destroy()
         return response
