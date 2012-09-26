@@ -37,7 +37,7 @@ class PasoPartManual(gtk.Fixed):
         # btn_usar
         self.btn_usar = gtk.Button("Editar")
         self.btn_usar.show()
-        self.btn_usar.connect("clicked", self.particion_usar)
+        self.btn_usar.connect("clicked", self.particion_editar)
 
         # btn_eliminar
         self.btn_eliminar = gtk.Button("Eliminar")
@@ -235,7 +235,7 @@ class PasoPartManual(gtk.Fixed):
         self.acciones
         self.llenar_tabla()
 
-    def particion_usar(self, widget):
+    def particion_editar(self, widget):
         widget.set_sensitive(False)
         w_usar = particion_usar.Main(self.lista, self.fila_selec, self.acciones)
         self.lista = w_usar.lista
