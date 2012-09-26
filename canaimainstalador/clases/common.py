@@ -4,6 +4,7 @@
 import commands, re, subprocess, math, cairo, gtk, hashlib, random, urllib2, os
 
 from canaimainstalador.translator import msj
+from canaimainstalador.config import FSPROGS
 
 def espacio_usado(particion):
     if os.path.exists(particion):
@@ -41,10 +42,10 @@ def preseed_debconf_values(mnt, debconflist):
 
 def instalar_paquetes(mnt, dest, plist):
     for loc, name in plist:
-        ProcessGenerator('mkdir -p {0}'.format(mnt+dest))
-        ProcessGenerator('cp {0}/{1}*.deb {2}'.format(loc, name, mnt+dest+'/'))
+        ProcessGenerator('mkdir -p {0}'.format(mnt + dest))
+        ProcessGenerator('cp {0}/{1}*.deb {2}'.format(loc, name, mnt + dest + '/'))
         ProcessGenerator('chroot {0} dpkg -i {1}/{2}*.deb'.format(mnt, dest, name))
-        ProcessGenerator('rm -rf {0}'.format(mnt+dest))
+        ProcessGenerator('rm -rf {0}'.format(mnt + dest))
 
 def desinstalar_paquetes(mnt, plist):
     for name in plist:
@@ -131,14 +132,14 @@ def crear_etc_fstab(mnt, cfg, mountlist, cdroms):
             content += "\n{0}\tnone\tswap\tsw\t0\t0".format(uuid)
         else:
             content += '\n{0}\t{1}\t{2}\t{3}'.format(uuid, point, fs, defaults)
-            ProcessGenerator('mkdir -p {0}'.format(mnt+point))
+            ProcessGenerator('mkdir -p {0}'.format(mnt + point))
 
     for cd in cdroms:
         num = cd[-1:]
         content += '\n/dev/{0}\t/media/cdrom{1}\tudf,iso9660\tuser,noauto\t0\t0'.format(cd, num)
-        ProcessGenerator('mkdir -p {0}'.format(mnt+'/media/cdrom'+num))
+        ProcessGenerator('mkdir -p {0}'.format(mnt + '/media/cdrom' + num))
 
-    f = open(mnt+cfg, 'w')
+    f = open(mnt + cfg, 'w')
     f.write(content)
     f.close()
 
@@ -459,3 +460,15 @@ def is_usable(selected_row):
     except (ValueError, IndexError):
         return False
 
+def is_resizable(fs):
+    'Determina si un filesystem tiene herramienta de redimension'
+    try:
+        print  FSPROGS[fs][1]
+        if FSPROGS[fs][1] == '':
+            return False
+        else:
+            return True
+    except KeyError:
+        # Retorna False para el caso en que TblCol.FORMATO es igual a '' o a 
+        # 'Espacio libre' por ejemplo
+        return False

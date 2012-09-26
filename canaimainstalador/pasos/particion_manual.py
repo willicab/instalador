@@ -3,7 +3,7 @@
 import gtk
 
 from canaimainstalador.clases.common import floatify, humanize, TblCol, \
-    is_primary, is_usable, PStatus
+    is_primary, is_usable, PStatus, is_resizable
 from canaimainstalador.clases import particion_nueva, particion_redimensionar, \
     particion_eliminar, particion_usar
 from canaimainstalador.clases.tabla_particiones import TablaParticiones
@@ -144,9 +144,11 @@ class PasoPartManual(gtk.Fixed):
 
         #BTN_REDIMENSION
         # Si la particion NO es libre
+        # si el filesystem tiene redimensionador
         # y no se ha marcado la aprticion para usarla
         # y si hay espacio para redimensionar dentro de la particion
         if fila[TblCol.FORMATO] != msj.particion.libre \
+        and is_resizable(fila[TblCol.FORMATO]) \
         and fila[TblCol.ESTADO] != PStatus.USED \
         and floatify(fila[TblCol.TAMANO]) > floatify(fila[TblCol.USADO]):
             self.btn_redimension.set_sensitive(True)
