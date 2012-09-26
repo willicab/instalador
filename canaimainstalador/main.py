@@ -209,7 +209,7 @@ class PartTodo():
         CFG['w'].previous('Metodo', Metodo, (CFG))
 
     def siguiente(self, CFG):
-        CFG['acciones'] = CFG['w'].formulario('PartAuto').acciones
+        CFG['acciones'] = CFG['w'].formulario('PartTodo').acciones
         CFG['w'].next('Usuario', Usuario, (CFG), PasoUsuario(CFG))
 
 class PartAuto():

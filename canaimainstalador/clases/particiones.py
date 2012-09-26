@@ -4,8 +4,7 @@
 import parted, _ped
 
 from canaimainstalador.clases.common import ProcessGenerator, espacio_usado
-from canaimainstalador.config import FSPROGS
-
+from canaimainstalador.config import *
 
 class Particiones():
     def __init__(self):
@@ -45,8 +44,11 @@ class Particiones():
         sectorsize = dev.sectorSize
         total = float(dev.getSize(unit='KB'))
 
-        for j in disk.partitions: l.append(j)
-        for w in disk.getFreeSpacePartitions(): l.append(w)
+        for j in disk.partitions:
+            l.append(j)
+
+        for w in disk.getFreeSpacePartitions():
+            l.append(w)
 
         for i in l:
             code = i.type
@@ -100,6 +102,15 @@ class Particiones():
 
         return sorted(p, key=lambda particiones: particiones[1])
 
+    def nombre_particion(self, start, end):
+
+        dev = parted.Device(drive)
+        disk = parted.Disk(dev)
+        s_sec = start * 1024 / dev.sectorSize
+        e_sec = end * 1024 / dev.sectorSize
+        m_sec = ((e_sec - s_sec) / 2) + s_sec
+        return disk.getPartitionBySector(m_sec).path
+
     def crear_particion(self, drive, start, end, fs, partype):
         '''
         Argumentos:
@@ -111,9 +122,6 @@ class Particiones():
         '''
         dev = parted.Device(drive)
         disk = parted.Disk(dev)
-        s_sec = start * 1024 / dev.sectorSize
-        e_sec = end * 1024 / dev.sectorSize
-        m_sec = ((e_sec - s_sec) / 2) + s_sec
 
         if partype == 'primary' or partype == 0:
             partype = _ped.PARTITION_NORMAL
@@ -133,8 +141,23 @@ class Particiones():
             if partype != _ped.PARTITION_EXTENDED:
                 if fs in FSPROGS:
                     ProcessGenerator(
-                        FSPROGS[fs][0].format(disk.getPartitionBySector(m_sec).path)
+                        FSPROGS[fs][0].format(self.nombre_particion(start, end))
                         )
+            return True
+        else:
+            return False
+
+    def formatear_particion(self, part, fs):
+        '''
+        Argumentos:
+        - disco: el disco donde se realizará la partición. Ej: /dev/sda
+        - tipo: el tipo de partición a realizar {primary, extended, logical}
+        - formato: el formato que usará la partición {ext2, ext4, linux-swap,fat32, ntfs}
+        - inicio: donde comenzará la partición, en kB
+        - fin: donde terminará la partición, en kB
+        '''
+        if fs in FSPROGS:
+            ProcessGenerator(FSPROGS[fs][0].format(part))
             return True
         else:
             return False

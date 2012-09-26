@@ -227,6 +227,7 @@ class BarraTodo(gtk.DrawingArea):
                 self.p.acciones.append(
                     ['crear', None, a_mount, a_ini, a_fin, a_fs, a_tipo]
                     )
+        print self.p.acciones
 
     def press(self, widget, event):
         if event.x >= self.pos[0] and event.x <= self.pos[2] and event.y >= self.pos[1] and event.y <= self.pos[3]:

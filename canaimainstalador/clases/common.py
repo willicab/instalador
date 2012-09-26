@@ -1,10 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 
-import commands, re, subprocess, math, cairo, gtk, hashlib, random, urllib2
+import commands, re, subprocess, math, cairo, gtk, hashlib, random, urllib2, os
 
 from canaimainstalador.translator import msj
-import os
 
 def espacio_usado(particion):
     if os.path.exists(particion):
@@ -17,17 +16,43 @@ def espacio_usado(particion):
         used = 'unknown'
     return used
 
-def instalar_paquete(place, name):
-    pass
+def assisted_mount(bind, plist):
+    if bind:
+        bindcmd = '-o bind'
+    else:
+        bindcmd = ''
 
+    for p, m, fs in plist:
+        if fs:
+            fscmd = '-t {0}'.format(fs)
+        else:
+            fscmd = ''
 
-def desinstalar_paquete(place, name):
-    pass
+        ProcessGenerator('mount {0} {1} {2} {3}'.format(bindcmd, fscmd, p, m))
 
+def preseed_debconf_values(mnt, debconflist):
+    ProcessGenerator('rm -rf {0}/tmp/debconf'.format(mnt))
 
-def reconfigurar_paquete(place, name):
-    pass
+    for debconf in debconflist:
+        ProcessGenerator('chroot {0} echo "{1}" >> /tmp/debconf'.format(mnt, debconf))
 
+    ProcessGenerator('chroot {0} debconf-set-selections < /tmp/debconf'.format(mnt))
+    ProcessGenerator('rm -rf {0}/tmp/debconf'.format(mnt))
+
+def instalar_paquetes(mnt, dest, plist):
+    for loc, name in plist:
+        ProcessGenerator('mkdir -p {0}'.format(mnt+dest))
+        ProcessGenerator('cp {0}/{1}*.deb {2}'.format(loc, name, mnt+dest+'/'))
+        ProcessGenerator('chroot {0} dpkg -i {1}/{2}*.deb'.format(mnt, dest, name))
+        ProcessGenerator('rm -rf {0}'.format(mnt+dest))
+
+def desinstalar_paquetes(mnt, plist):
+    for name in plist:
+        ProcessGenerator('chroot {0} aptitude purge {1}'.format(mnt, name))
+
+def reconfigurar_paquetes(mnt, plist):
+    for name in plist:
+        ProcessGenerator('chroot {0} dpkg-reconfigure {1}'.format(mnt, name))
 
 def crear_etc_network_interfaces(mnt, cfg):
     content = ''
@@ -94,45 +119,28 @@ def crear_etc_default_keyboard(mnt, cfg, key):
     outfile.write(string)
     outfile.close()
 
-#===============================================================================
-# def crear_fstab(mnt, cfg, particiones, cdroms):
-#    content = ''
-#    content += '#<filesystem>\t<mountpoint>\t<type>\t<options>\t<dump>\t<pass>\n'
-#    content += '\nproc\t/proc\tproc\tdefaults\t0\t0'
-#    defaults = 'defaults\t0\t0'
-# 
-#    for part in particiones:
-#        uuid = get_uuid(part)
-# 
-#        if fs == 'swap':
-#            content += "\n{0}\tnone\tswap\tsw\t0\t0".format(uuid)
-#        else:
-#            for fstype in SUPPORTED_FS:
-#                if fstype == fs:
-#                    if self.particiones.has_key(part):
-#                        mnt = self.particiones[part].split('/target')[1]
-#                        point = '{0}/'.format(mnt)
-#                    elif dbus[0] != 'usb' and dtype[0] == 'disk':
-#                        fldr = '/target/media/{0}'.format(part.split('/dev/')[1])
-#                        os.system('mkdir -p {0}'.format(fldr))
-#                        mnt = fldr.split('/target')[1]
-#                        point = '{0}/'.format(mnt)
-#                    else:
-#                        point = ''
-#            if point:
-#                content += '\n{0}\t{1}\t{2}\t{3}'.format(uuid, point, fs, defaults)
-#        else:
-#            content += '\n# DISABLED: {0}, TYPE: ?, UUID: ?'.format(part)
-# 
-#    for cd in cdroms:
-#        num = cd[-1:]
-#        os.system('mkdir -p /target/media/cdrom{0}'.format(num))
-#        content += '\n/dev/{0}\t/media/cdrom{1}\tudf,iso9660\tuser,noauto\t0\t0'.format(cd, num)
-# 
-#    f = open(mnt+cfg, 'w')
-#    f.write(content)
-#    f.close()
-#===============================================================================
+def crear_etc_fstab(mnt, cfg, mountlist, cdroms):
+    defaults = 'defaults\t0\t0'
+    content = '#<filesystem>\t<mountpoint>\t<type>\t<options>\t<dump>\t<pass>\n'
+    content += '\nproc\t/proc\tproc\t{0}'.format(defaults)
+
+    for part, point, fs in mountlist:
+        uuid = get_uuid(part)
+
+        if fs == 'swap':
+            content += "\n{0}\tnone\tswap\tsw\t0\t0".format(uuid)
+        else:
+            content += '\n{0}\t{1}\t{2}\t{3}'.format(uuid, point, fs, defaults)
+            ProcessGenerator('mkdir -p {0}'.format(mnt+point))
+
+    for cd in cdroms:
+        num = cd[-1:]
+        content += '\n/dev/{0}\t/media/cdrom{1}\tudf,iso9660\tuser,noauto\t0\t0'.format(cd, num)
+        ProcessGenerator('mkdir -p {0}'.format(mnt+'/media/cdrom'+num))
+
+    f = open(mnt+cfg, 'w')
+    f.write(content)
+    f.close()
 
 def lista_cdroms():
     info = '/proc/sys/dev/cdrom/info'
@@ -193,7 +201,7 @@ def hex_to_rgb(value):
     lv = len(value)
     return tuple(int(value[i:i + lv / 3], 16) for i in range(0, lv, lv / 3))
 
-def process_color (item, start, end):
+def process_color(item, start, end):
     start = hex_to_rgb(start) + (0,)
     end = hex_to_rgb(end) + (1,)
 
@@ -302,13 +310,11 @@ def aconnect(button, signals, function, params):
 
     return signals
 
-def UserMessage(message, title, mtype, buttons,
-                    c_1=False, f_1=False, p_1='',
-                    c_2=False, f_2=False, p_2='',
-                    c_3=False, f_3=False, p_3='',
-                    c_4=False, f_4=False, p_4='',
-                    c_5=False, f_5=False, p_5=''
-                    ):
+def UserMessage(
+    message, title, mtype, buttons, c_1=False, f_1=False, p_1='',
+    c_2=False, f_2=False, p_2='', c_3=False, f_3=False, p_3='',
+    c_4=False, f_4=False, p_4='', c_5=False, f_5=False, p_5=''
+    ):
 
     dialog = gtk.MessageDialog(
         parent=None, flags=0, type=mtype,
@@ -330,6 +336,41 @@ def UserMessage(message, title, mtype, buttons,
         f_5(*p_5)
 
     return response
+
+def ProcessGenerator(command):
+
+    filename = '/tmp/cs-command-' + hashlib.sha1(
+        str(random.getrandbits(random.getrandbits(10)))
+        ).hexdigest()
+
+    if isinstance(command, list):
+        strcmd = ' '.join(command)
+    elif isinstance(command, str):
+        strcmd = command
+
+    cmd = '{0} 1>{1} 2>&1'.format(strcmd, filename)
+
+    try:
+        os.mkfifo(filename)
+        fifo = os.fdopen(os.open(filename, os.O_RDONLY | os.O_NONBLOCK))
+
+        process = subprocess.Popen(
+                cmd, shell=True, stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT
+                )
+
+        while process.returncode == None:
+            process.poll()
+            try:
+                line = fifo.readline().strip()
+                if line: print line
+            except:
+                continue
+
+    finally:
+        os.unlink(filename)
+
+    return process
 
 def debug_list(the_list):
     data = "List [\n"
@@ -404,51 +445,6 @@ def is_logic(fila):
         return True
     else:
         return False
-
-def ProcessGenerator(command, terminal=False, bar=False):
-
-    filename = '/tmp/cs-command-' + hashlib.sha1(
-        str(random.getrandbits(random.getrandbits(10)))
-        ).hexdigest()
-
-    if isinstance(command, list):
-        strcmd = ' '.join(command)
-    elif isinstance(command, str):
-        strcmd = command
-
-    cmd = '{0} 1>{1} 2>&1'.format(strcmd, filename)
-
-    try:
-        os.mkfifo(filename)
-        fifo = os.fdopen(os.open(filename, os.O_RDONLY | os.O_NONBLOCK))
-
-        process = subprocess.Popen(
-                cmd, shell=True, stdout=subprocess.PIPE,
-                stderr=subprocess.STDOUT
-                )
-
-        #=======================================================================
-        # if bar:
-        #    timer = gobject.timeout_add(100, ProgressPulse, bar)
-        #=======================================================================
-
-        while process.returncode == None:
-            process.poll()
-            try:
-                line = fifo.readline().strip()
-                if terminal:
-                    terminal.feed(line + '\r\n')
-            except:
-                continue
-
-    finally:
-        os.unlink(filename)
-        #=======================================================================
-        # if bar:
-        #    gobject.source_remove(timer)
-        #=======================================================================
-
-    return process
 
 def is_usable(selected_row):
     disp = selected_row[TblCol.DISPOSITIVO]
