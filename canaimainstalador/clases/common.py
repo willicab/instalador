@@ -176,6 +176,13 @@ class TblCol:
     FORMATEAR = 9
     ESTADO = 10
 
+class PStatus:
+    NORMAL = 'NORM'
+    NEW = 'NUEV'
+    REDIM = 'REDI'
+    USED = 'USAR'
+    FREED = 'LIBE'
+
 def givemeswap():
     r = ram()
     if r >= float(1024 * 1024):
@@ -404,9 +411,9 @@ def get_next_row(the_list, row, row_index=None):
     else:
         return None
 
-def is_extended(row):
-        'Determina si una fila pertenece a una particion extendida'
-        return row[TblCol.TIPO] == msj.particion.extendida
+def is_logic(row):
+        'Determina si una particion es lógica'
+        return row[TblCol.TIPO] == msj.particion.logica
 
 def has_extended(lista):
         'Determina si existe por lo menos una particion extendida en la lista'
@@ -429,19 +436,7 @@ def set_partition(the_list, selected_row, new_row, pop=True):
 def is_primary(fila):
     'Determina si una particion es primaria'
     p_type = fila[TblCol.TIPO]
-    p_format = fila[TblCol.FORMATO]
-    if p_type == msj.particion.primaria \
-    or (p_type == msj.particion.extendida and p_format == ''):
-        return True
-    else:
-        return False
-
-def is_logic(fila):
-    'Determina si una particion es lógica'
-    p_type = fila[TblCol.TIPO]
-    p_format = fila[TblCol.FORMATO]
-    if p_type == msj.particion.logica \
-    or (p_type == msj.particion.extendida and p_format != ''):
+    if p_type == msj.particion.primaria or p_type == msj.particion.extendida:
         return True
     else:
         return False
@@ -449,14 +444,15 @@ def is_logic(fila):
 def is_usable(selected_row):
     disp = selected_row[TblCol.DISPOSITIVO]
     tipo = selected_row[TblCol.TIPO]
-    fs = selected_row[TblCol.FORMATO]
+    estado = selected_row[TblCol.ESTADO]
     try:
         # Esta linea comprueba que el dispositivo termine en un entero, esto
         # para comprobar que tiene un formato similar a /dev/sdb3 por ejemplo.
         int(disp[-1])
 
         # No se usan las particiones extendidas, sino las logicas
-        if tipo == msj.particion.extendida and fs == '':
+        # Tampoco se usan particiones que no estan en estado Normal
+        if tipo == msj.particion.extendida or estado != PStatus.NORMAL:
             return False
         else:
             return True

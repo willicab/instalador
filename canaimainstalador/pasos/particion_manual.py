@@ -3,7 +3,7 @@
 import gtk
 
 from canaimainstalador.clases.common import floatify, humanize, TblCol, \
-    is_primary, is_usable
+    is_primary, is_usable, PStatus
 from canaimainstalador.clases import particion_nueva, particion_redimensionar, \
     particion_eliminar, particion_usar
 from canaimainstalador.clases.tabla_particiones import TablaParticiones
@@ -35,7 +35,7 @@ class PasoPartManual(gtk.Fixed):
         self.btn_nueva.connect("clicked", self.particion_nueva)
 
         # btn_usar
-        self.btn_usar = gtk.Button("Usar")
+        self.btn_usar = gtk.Button("Editar")
         self.btn_usar.show()
         self.btn_usar.connect("clicked", self.particion_usar)
 
@@ -107,7 +107,8 @@ class PasoPartManual(gtk.Fixed):
                        humanize(p_libre),
                        floatify(p_ini),
                        floatify(p_fin),
-                       False
+                       False, # Formatear
+                       PStatus.NORMAL,
                    ]
                 self.lista.append(fila)
 
@@ -127,8 +128,8 @@ class PasoPartManual(gtk.Fixed):
             # Activar solo si hay menos de 4 particiones primarias
             if self.contar_primarias() < 4:
                 self.btn_nueva.set_sensitive(True)
-            # o si la part. libre pertenece a una part. extendida
-            elif fila[TblCol.TIPO] == msj.particion.extendida:
+            # o si la part. libre es logica
+            elif fila[TblCol.TIPO] == msj.particion.logica:
                 self.btn_nueva.set_sensitive(True)
             else:
                 self.btn_nueva.set_sensitive(False)
@@ -142,8 +143,12 @@ class PasoPartManual(gtk.Fixed):
             self.btn_usar.set_sensitive(False)
 
         #BTN_REDIMENSION
-        if floatify(fila[TblCol.TAMANO]) > floatify(fila[TblCol.USADO]) \
-        and fila[TblCol.FORMATO] != msj.particion.libre:
+        # Si la particion NO es libre
+        # y no se ha marcado la aprticion para usarla
+        # y si hay espacio para redimensionar dentro de la particion
+        if fila[TblCol.FORMATO] != msj.particion.libre \
+        and fila[TblCol.ESTADO] != PStatus.USED \
+        and floatify(fila[TblCol.TAMANO]) > floatify(fila[TblCol.USADO]):
             self.btn_redimension.set_sensitive(True)
         else:
             self.btn_redimension.set_sensitive(False)
@@ -152,8 +157,7 @@ class PasoPartManual(gtk.Fixed):
         # Solo se pueden eliminar particiones, no los espacios libres
         #TODO: Eliminar part. extendidas (necesita verificar part. logicas)
         if fila[TblCol.FORMATO] != msj.particion.libre \
-        and (fila[TblCol.TIPO] != msj.particion.extendida \
-            and fila[TblCol.FORMATO] != ''):
+        and fila[TblCol.TIPO] != msj.particion.extendida:
             self.btn_eliminar.set_sensitive(True)
         else:
             self.btn_eliminar.set_sensitive(False)
@@ -232,6 +236,7 @@ class PasoPartManual(gtk.Fixed):
         self.llenar_tabla()
 
     def particion_usar(self, widget):
+        widget.set_sensitive(False)
         w_usar = particion_usar.Main(self.lista, self.fila_selec, self.acciones)
         self.lista = w_usar.lista
         self.acciones = w_usar.acciones

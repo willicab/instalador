@@ -5,7 +5,7 @@ Created on 21/09/2012
 @author: erick
 '''
 import gtk
-from canaimainstalador.clases.common import is_extended, has_extended, TblCol, \
+from canaimainstalador.clases.common import is_logic, has_extended, TblCol, \
     is_usable
 from canaimainstalador.translator import msj
 from canaimainstalador.config import FSPROGS
@@ -35,7 +35,7 @@ class frame_fs(gtk.Table):
         self.lbl1.show()
 
         self.cmb_tipo = gtk.combo_box_new_text()
-        if is_extended(self.part_act):
+        if is_logic(self.part_act):
             self.cmb_tipo.append_text(msj.particion.logica)
             self.cmb_tipo.set_sensitive(False)
         else:
