@@ -1,17 +1,19 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 
-import os, gtk, threading, commands, webkit, sys
+import os, gtk, webkit, sys
 
 from canaimainstalador.clases.particiones import Particiones
 from canaimainstalador.clases.common import UserMessage, ProcessGenerator, \
     reconfigurar_paquetes, desinstalar_paquetes, instalar_paquetes, lista_cdroms, \
     crear_etc_default_keyboard, crear_etc_hostname, crear_etc_hosts, \
     crear_etc_network_interfaces, assisted_mount, preseed_debconf_values
+from canaimainstalador.config import INSTALL_SLIDES
 
 class PasoInstalacion(gtk.Fixed):
     def __init__(self, CFG):
         gtk.Fixed.__init__(self)
+        self.p = Particiones()
         self.w = CFG['wizard']
         self.metodo = CFG['metodo']
         self.acciones = CFG['acciones']
@@ -65,15 +67,11 @@ class PasoInstalacion(gtk.Fixed):
             ['/proc', self.mountpoint+'/proc', '']
             ]
         self.mountlist = []
-        self.p = Particiones()
-        path = os.path.realpath(
-            os.path.join(os.path.dirname(__file__), '..', 'data', 'slider.html')
-            )
 
         self.visor = webkit.WebView()
-        self.visor.set_size_request(690, 280)
+        self.visor.set_size_request(700, 400)
+        self.visor.open(INSTALL_SLIDES)
         self.put(self.visor, 0, 0)
-        self.visor.open(path)
 
         msg = 'Ha culminado la instalación, puede reiniciar ahora el sistema o seguir probando canaima y reiniciar más tarde.'
         self.lblInfo = gtk.Label(msg)
@@ -81,7 +79,7 @@ class PasoInstalacion(gtk.Fixed):
         self.put(self.lblInfo, 0, 0)
 
         self.lblDesc = gtk.Label()
-        self.lblDesc.set_size_request(690, 30)
+        self.lblDesc.set_size_request(700, 30)
         self.put(self.lblDesc, 0, 290)
 
         self.w.siguiente.set_label('Reiniciar más tarde')

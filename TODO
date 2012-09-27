@@ -12,3 +12,4 @@
 - arreglar disco de instalación y puntos de montaje fuera del disco.
 [ LISTO ] - verificar conexión a internet antes de hacer actualización.
 [ LISTO ] - hacer la acción "usar"
+- devolver valor correcto en KB cuando el inicio o fin de partición es en bytes.

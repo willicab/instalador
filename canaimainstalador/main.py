@@ -1,5 +1,30 @@
 #!/usr/bin/env python
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
+#
+# ==============================================================================
+# PAQUETE: canaima-instalador
+# ARCHIVO: canaimainstalador/main.py
+# COPYRIGHT:
+#       (C) 2012 William Abrahan Cabrera Reyes <william@linux.es>
+#       (C) 2012 Erick Manuel Birbe Salazar <erickcion@gmail.com>
+#       (C) 2012 Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>
+# LICENCIA: GPL-3
+# ==============================================================================
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# COPYING file for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+#
+# CODE IS POETRY
 
 # Módulos globales
 import gtk, os, re, Image
@@ -15,27 +40,18 @@ from canaimainstalador.pasos.instalacion import PasoInstalacion
 from canaimainstalador.pasos.usuario import PasoUsuario
 from canaimainstalador.pasos.accesibilidad import PasoAccesibilidad
 from canaimainstalador.pasos.info import PasoInfo
-from canaimainstalador.clases.common import UserMessage, aconnect
-from canaimainstalador.config import CFG
+from canaimainstalador.clases.common import UserMessage, AboutWindow, aconnect
+from canaimainstalador.config import CFG, BAR_ICON
 
 class Wizard(gtk.Window):
-    '''
-        Clase del Asistente
-    '''
-    pasos = {}                  # Pasos
-    nombres = []                # Nombres
-    contenidos = []             # Contenidos
-    actual = ''                 # Paso actual
-    __count = 0                 # Número de pasos
-    __c_principal = gtk.Fixed() # Contenedor Principal
-    btn_aplicar = gtk.Button()  # Botón Aplicar
-    c_pasos = gtk.VBox()
-
     def __init__(self, ancho, alto, titulo, banner):
+        self.pasos = {}
+        self.actual = ''
+
         # Creo la ventana
         gtk.Window.__init__(self, gtk.WINDOW_TOPLEVEL)
         gtk.Window.set_position(self, gtk.WIN_POS_CENTER_ALWAYS)
-        self.set_icon_from_file('canaimainstalador/data/img/icon.png')
+        self.set_icon_from_file(BAR_ICON)
         self.titulo = titulo
         self.set_title(titulo)
         self.set_size_request(ancho, alto)
@@ -43,7 +59,8 @@ class Wizard(gtk.Window):
         self.set_border_width(0)
 
         # Creo el contenedor principal
-        self.add(self.__c_principal)
+        self.c_principal = gtk.Fixed()
+        self.add(self.c_principal)
 
         # Calculo tamaño del banner
         self.banner_img = Image.open(banner)
@@ -54,16 +71,17 @@ class Wizard(gtk.Window):
         self.banner = gtk.Image()
         self.banner.set_from_file(banner)
         self.banner.set_size_request(ancho, self.banner_h)
-        self.__c_principal.put(self.banner, 0, 0)
+        self.c_principal.put(self.banner, 0, 0)
 
         # Creo el contenedor de los pasos
+        self.c_pasos = gtk.VBox()
         self.c_pasos.set_size_request((ancho - 10), (alto - 50 - self.banner_h))
-        self.__c_principal.put(self.c_pasos, 5, (self.banner_h + 5))
+        self.c_principal.put(self.c_pasos, 5, (self.banner_h + 5))
 
         # Creo la botonera
         self.botonera = gtk.Fixed()
         self.botonera.set_size_request(ancho, 40)
-        self.__c_principal.put(self.botonera, 0, (alto - 40))
+        self.c_principal.put(self.botonera, 0, (alto - 40))
 
         # Creo la linea divisoria
         self.linea = gtk.HSeparator()
@@ -72,20 +90,26 @@ class Wizard(gtk.Window):
 
         # Anterior
         self.anterior = gtk.Button(stock=gtk.STOCK_GO_BACK)
-        self.botonera.put(self.anterior, (ancho - 210), 10)
         self.anterior.set_size_request(100, 30)
+        self.botonera.put(self.anterior, (ancho - 210), 10)
 
         # Siguiente
         self.siguiente = gtk.Button(stock=gtk.STOCK_GO_FORWARD)
-        self.botonera.put(self.siguiente, (ancho - 110), 10)
         self.siguiente.set_size_request(100, 30)
+        self.botonera.put(self.siguiente, (ancho - 110), 10)
 
         # Cancelar
         self.cancelar = gtk.Button(stock=gtk.STOCK_QUIT)
-        self.botonera.put(self.cancelar, 10, 10)
         self.cancelar.set_size_request(100, 30)
-
         self.cancelar.connect('clicked', self.close)
+        self.botonera.put(self.cancelar, 10, 10)
+
+        # Acerca
+        self.acerca = gtk.Button(stock=gtk.STOCK_ABOUT)
+        self.acerca.set_size_request(100, 30)
+        self.acerca.connect('clicked', AboutWindow)
+        self.botonera.put(self.acerca, 110, 10)
+
         self.connect("delete-event", self.close)
 
         self.show_all()
@@ -145,6 +169,7 @@ class Bienvenida():
     '''
     def __init__(self, CFG):
         CFG['s'] = aconnect(CFG['w'].siguiente, CFG['s'], self.siguiente, (CFG))
+        CFG['w'].c_principal.move(CFG['w'].c_pasos, 0, 0)
         CFG['w'].anterior.set_sensitive(False)
 
     def init(self, CFG):
@@ -160,6 +185,7 @@ class Teclado():
     def __init__(self, CFG):
         CFG['s'] = aconnect(CFG['w'].siguiente, CFG['s'], self.siguiente, CFG)
         CFG['s'] = aconnect(CFG['w'].anterior, CFG['s'], self.anterior, CFG)
+        CFG['w'].c_principal.move(CFG['w'].c_pasos, 5, CFG['w'].banner_h)
         CFG['w'].anterior.set_sensitive(True)
 
     def anterior(self, CFG):
@@ -343,6 +369,7 @@ class Instalacion():
     def __init__(self, CFG):
         CFG['s'] = aconnect(CFG['w'].siguiente, CFG['s'], self.siguiente, CFG)
         CFG['s'] = aconnect(CFG['w'].anterior, CFG['s'], self.anterior, CFG)
+        CFG['w'].c_principal.move(CFG['w'].c_pasos, 0, 0)
 
     def anterior(self, CFG):
         os.system('reboot')
