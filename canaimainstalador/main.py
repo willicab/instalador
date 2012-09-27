@@ -236,6 +236,7 @@ class PartTodo():
 
     def siguiente(self, CFG):
         CFG['acciones'] = CFG['w'].formulario('PartTodo').acciones
+        CFG['forma'] = CFG['w'].formulario('PartTodo').forma
         CFG['w'].next('Usuario', Usuario, (CFG), PasoUsuario(CFG))
         print 'CFG: {0}'.format(CFG)
 
@@ -252,6 +253,7 @@ class PartAuto():
 
     def siguiente(self, CFG):
         CFG['acciones'] = CFG['w'].formulario('PartAuto').acciones
+        CFG['forma'] = CFG['w'].formulario('PartAuto').forma
         CFG['w'].next('Usuario', Usuario, (CFG), PasoUsuario(CFG))
         print 'CFG: {0}'.format(CFG)
 
