@@ -272,7 +272,7 @@ class PartManual():
             UserMessage(message, 'ERROR', gtk.MESSAGE_ERROR, gtk.BUTTONS_OK)
             return False
 
-        CFG['acciones'] = CFG['w'].formulario('PartAuto').acciones
+        CFG['acciones'] = CFG['w'].formulario('PartManual').acciones
         CFG['w'].next('Usuario', Usuario, (CFG), PasoUsuario(CFG))
         print 'CFG: {0}'.format(CFG)
 
