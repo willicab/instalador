@@ -30,7 +30,8 @@ import commands, re, subprocess, math, cairo, gtk, hashlib, random, urllib2, os
 
 from canaimainstalador.translator import msj
 from canaimainstalador.config import APP_NAME, APP_COPYRIGHT, APP_DESCRIPTION, \
-    APP_URL, LICENSE_FILE, AUTHORS_FILE, TRANSLATORS_FILE, VERSION_FILE, ABOUT_IMAGE
+    APP_URL, LICENSE_FILE, AUTHORS_FILE, TRANSLATORS_FILE, VERSION_FILE, ABOUT_IMAGE, \
+    FSPROGS
 
 def AboutWindow(widget=None):
     about = gtk.AboutDialog()
@@ -46,7 +47,7 @@ def AboutWindow(widget=None):
         license = f.read()
         f.close()
     except Exception, msg:
-        license =  'NOT FOUND'
+        license = 'NOT FOUND'
 
     try:
         f = open(AUTHORS_FILE, 'r')
@@ -534,7 +535,6 @@ def is_usable(selected_row):
 def is_resizable(fs):
     'Determina si un filesystem tiene herramienta de redimension'
     try:
-        print  FSPROGS[fs][1]
         if FSPROGS[fs][1] == '':
             return False
         else:
