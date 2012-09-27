@@ -237,6 +237,7 @@ class PartTodo():
     def siguiente(self, CFG):
         CFG['acciones'] = CFG['w'].formulario('PartTodo').acciones
         CFG['w'].next('Usuario', Usuario, (CFG), PasoUsuario(CFG))
+        print 'CFG: {0}'.format(CFG)
 
 class PartAuto():
     '''
@@ -252,6 +253,7 @@ class PartAuto():
     def siguiente(self, CFG):
         CFG['acciones'] = CFG['w'].formulario('PartAuto').acciones
         CFG['w'].next('Usuario', Usuario, (CFG), PasoUsuario(CFG))
+        print 'CFG: {0}'.format(CFG)
 
 class PartManual():
     '''
@@ -270,9 +272,9 @@ class PartManual():
             UserMessage(message, 'ERROR', gtk.MESSAGE_ERROR, gtk.BUTTONS_OK)
             return False
 
-        CFG['lista_manual'] = CFG['w'].formulario('PartManual').lista
-        CFG['disco'] = CFG['w'].formulario('PartManual').disco
+        CFG['acciones'] = CFG['w'].formulario('PartAuto').acciones
         CFG['w'].next('Usuario', Usuario, (CFG), PasoUsuario(CFG))
+        print 'CFG: {0}'.format(CFG)
 
 class Usuario():
     '''

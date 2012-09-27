@@ -3,7 +3,6 @@
 SHELL := sh -e
 PYCS = $(shell find . -type f -iname "*.pyc")
 IMAGES = $(shell ls -1 canaimainstalador/data/img/ | grep "\.svg" | sed 's/\.svg//g')
-SLIDES = $(shell ls -1 canaimainstalador/data/slides/ | grep "\.svg" | sed 's/\.svg//g')
 CONVERT = $(shell which convert)
 
 SCRIPTS = "debian/preinst install" "debian/postinst configure" "debian/prerm remove" "debian/postrm remove"
@@ -16,14 +15,9 @@ build:
 
 gen-img: clean-img
 
-	@printf "Generando imágenes desde las fuentes [SVG > PNG,JPG] ["
+	@printf "Generando imágenes desde las fuentes [SVG > PNG] ["
 	@for IMAGE in $(IMAGES); do \
 		$(CONVERT) -background None canaimainstalador/data/img/$${IMAGE}.svg canaimainstalador/data/img/$${IMAGE}.png; \
-		printf "."; \
-	done;
-	@for SLIDE in $(SLIDES); do \
-		$(CONVERT) -background None canaimainstalador/data/slides/$${SLIDE}.svg canaimainstalador/data/slides/$${SLIDE}.png; \
-		$(CONVERT) -background None canaimainstalador/data/slides/$${SLIDE}.png canaimainstalador/data/slides/$${SLIDE}.jpg; \
 		printf "."; \
 	done;
 	@printf "]\n"
@@ -34,12 +28,7 @@ clean-img:
 	@for IMAGE in $(IMAGES); do \
 		rm -rf canaimainstalador/data/img/$${IMAGE}.png; \
 		printf "."; \
-	done
-	@for SLIDE in $(SLIDES); do \
-		rm -rf canaimainstalador/data/slides/$${SLIDE}.png; \
-		rm -rf canaimainstalador/data/slides/$${SLIDE}.jpg; \
-		printf "."; \
-	done
+	done;
 	@printf "]\n"
 
 clean-pyc:

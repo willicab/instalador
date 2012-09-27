@@ -6,8 +6,6 @@ import gtk
 class PasoInfo(gtk.Fixed):
     def __init__(self, CFG):
         gtk.Fixed.__init__(self)
-        self.cfg = CFG
-
         altura = 260
         inc = 20
 
