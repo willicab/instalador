@@ -5,7 +5,7 @@ Created on 13/09/2012
 @author: Erick Birbe <erickcion@gmail.com>
 '''
 import gtk
-from canaimainstalador.clases.common import humanize, TblCol, floatify
+from canaimainstalador.clases.common import humanize, TblCol, floatify, PStatus
 from canaimainstalador.translator import msj
 
 class Main(gtk.Dialog):
@@ -92,7 +92,7 @@ class Main(gtk.Dialog):
         self.procesar_respuesta(self.run())
 
     def get_tamano(self):
-        return int(self.escala.get_value() - self.inicio)
+        return self.escala.get_value() - self.inicio
     def get_minimo(self):
         'El tamaño minimo al que se puede redimensionar la partición'
         return self.inicio + self.usado
@@ -101,10 +101,10 @@ class Main(gtk.Dialog):
         return self.fin + self.get_espacio_sin_particionar()
     def get_libre(self):
         'Retorna el espacio libre de la partición'
-        return int(self.escala.get_value() - self.get_minimo())
+        return self.escala.get_value() - self.get_minimo()
     def get_sin_particion(self):
         'Retorna el espacio sin particionar que va quedando'
-        return int(self.get_maximo() - self.escala.get_value())
+        return self.get_maximo() - self.escala.get_value()
     def _get_num_fila_act(self, fila):
         '''Obtiene el numero de la fila seleccionada en la tabla.
         Este metodo deberia usarse solo una vez para darle el valor a la \
@@ -159,13 +159,15 @@ class Main(gtk.Dialog):
             return response
 
         part_actual = self.lista[self.num_fila_act]
+        original = part_actual
         part_sig = self.get_fila_siguiente()
 
         if response == gtk.RESPONSE_OK:
 
-            part_actual[TblCol.FIN] = int(self.escala.get_value())
+            part_actual[TblCol.FIN] = self.escala.get_value()
             part_actual[TblCol.TAMANO] = humanize(self.get_tamano())
             part_actual[TblCol.LIBRE] = humanize(self.get_libre())
+            part_actual[TblCol.ESTADO] = PStatus.REDIM
 
             # Si dejamos espacio libre
             if part_actual[TblCol.FIN] < self.get_maximo():
@@ -177,15 +179,13 @@ class Main(gtk.Dialog):
                                 part_sig[TblCol.FIN] - part_sig[TblCol.INICIO])
                     part_sig[TblCol.TAMANO] = tamano
                     part_sig[TblCol.LIBRE] = tamano
+                    part_sig[TblCol.ESTADO] = PStatus.FREED
                     self.lista[self.num_fila_act + 1] = part_sig
                 # Si no hay particion siguiente, tenemos que crear toda la fila
                 else:
                     part_sig = list(range(len(part_actual)))
                     part_sig[TblCol.DISPOSITIVO] = ''
-                    if part_actual[TblCol.TIPO] == msj.particion.logica:
-                        part_sig[TblCol.TIPO] = msj.particion.extendida
-                    else:
-                        part_sig[TblCol.TIPO] = part_actual[TblCol.TIPO]
+                    part_sig[TblCol.TIPO] = part_actual[TblCol.TIPO]
                     part_sig[TblCol.FORMATO] = msj.particion.libre
                     part_sig[TblCol.MONTAJE] = ''
                     part_sig[TblCol.TAMANO] = humanize(self.get_sin_particion())
@@ -194,6 +194,7 @@ class Main(gtk.Dialog):
                     part_sig[TblCol.INICIO] = part_actual[TblCol.FIN] + 1
                     part_sig[TblCol.FIN] = self.get_maximo()
                     part_sig[TblCol.FORMATEAR] = False
+                    part_sig[TblCol.ESTADO] = PStatus.FREED
                     tmp = []
                     for i in range(len(self.lista)):
                         if i == self.num_fila_act:
@@ -212,9 +213,10 @@ class Main(gtk.Dialog):
                                   part_actual[TblCol.DISPOSITIVO],
                                   part_actual[TblCol.MONTAJE],
                                   part_actual[TblCol.INICIO],
-                                  part_actual[TblCol.FIN],
+                                  original[TblCol.FIN], # Fin original
                                   part_actual[TblCol.FORMATO],
-                                  part_actual[TblCol.TIPO]
+                                  part_actual[TblCol.TIPO],
+                                  part_actual[TblCol.FIN], # Nuevo Fin
                                   ])
         self.destroy()
         return response

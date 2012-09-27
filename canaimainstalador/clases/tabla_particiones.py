@@ -28,8 +28,8 @@ class TablaParticiones (gtk.TreeView):
     def __init__(self):
 
         # Tipos de valores a mostrar en la tabla
-        self.liststore = gtk.ListStore(str, str, str, str, str, str, str, int, \
-                                       int, bool, str)
+        self.liststore = gtk.ListStore(str, str, str, str, str, str, str, float, \
+                                       float, bool, str)
 
         gtk.TreeView.__init__(self, model=self.liststore)
         self.set_headers_clickable(False)
@@ -109,11 +109,12 @@ class TablaParticiones (gtk.TreeView):
         self.nueva_columna_texto("Inicio", TblCol.INICIO)
         self.nueva_columna_texto("Fin", TblCol.FIN)
         self.nueva_columna_check("Formatear", TblCol.FORMATEAR)
-        self.nueva_columna_check("Estado", TblCol.ESTADO)
+        self.nueva_columna_texto("Estado", TblCol.ESTADO)
 
         # Ocultar las columnas que no se desean mostrar
         self.columnas[TblCol.INICIO].set_visible(False)
         self.columnas[TblCol.FIN].set_visible(False)
+        self.columnas[TblCol.ESTADO].set_visible(False)
 
     def nueva_columna_color(self, title, index):
         'Crea nueva columna de color en el TreeView'

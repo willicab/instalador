@@ -266,8 +266,8 @@ class PartManual():
 
     def siguiente(self, CFG):
         if CFG['w'].formulario('PartManual').raiz == False:
-            print "Debe existir una partición raiz (/)"
-            #msg_error("Debe existir una partición raiz (/)")
+            message = "Debe existir una partición raiz (/)"
+            UserMessage(message, 'ERROR', gtk.MESSAGE_ERROR, gtk.BUTTONS_OK)
             return False
 
         CFG['lista_manual'] = CFG['w'].formulario('PartManual').lista

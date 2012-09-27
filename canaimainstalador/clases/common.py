@@ -114,10 +114,10 @@ def preseed_debconf_values(mnt, debconflist):
 
 def instalar_paquetes(mnt, dest, plist):
     for loc, name in plist:
-        ProcessGenerator('mkdir -p {0}'.format(mnt+dest))
-        ProcessGenerator('cp {0}/{1}*.deb {2}'.format(loc, name, mnt+dest+'/'))
+        ProcessGenerator('mkdir -p {0}'.format(mnt + dest))
+        ProcessGenerator('cp {0}/{1}*.deb {2}'.format(loc, name, mnt + dest + '/'))
         ProcessGenerator('chroot {0} dpkg -i {1}/{2}*.deb'.format(mnt, dest, name))
-        ProcessGenerator('rm -rf {0}'.format(mnt+dest))
+        ProcessGenerator('rm -rf {0}'.format(mnt + dest))
 
 def desinstalar_paquetes(mnt, plist):
     for name in plist:
@@ -204,14 +204,14 @@ def crear_etc_fstab(mnt, cfg, mountlist, cdroms):
             content += "\n{0}\tnone\tswap\tsw\t0\t0".format(uuid)
         else:
             content += '\n{0}\t{1}\t{2}\t{3}'.format(uuid, point, fs, defaults)
-            ProcessGenerator('mkdir -p {0}'.format(mnt+point))
+            ProcessGenerator('mkdir -p {0}'.format(mnt + point))
 
     for cd in cdroms:
         num = cd[-1:]
         content += '\n/dev/{0}\t/media/cdrom{1}\tudf,iso9660\tuser,noauto\t0\t0'.format(cd, num)
-        ProcessGenerator('mkdir -p {0}'.format(mnt+'/media/cdrom'+num))
+        ProcessGenerator('mkdir -p {0}'.format(mnt + '/media/cdrom' + num))
 
-    f = open(mnt+cfg, 'w')
+    f = open(mnt + cfg, 'w')
     f.write(content)
     f.close()
 
@@ -248,6 +248,13 @@ class TblCol:
     FIN = 8
     FORMATEAR = 9
     ESTADO = 10
+
+class PStatus:
+    NORMAL = 'NORM'
+    NEW = 'NUEV'
+    REDIM = 'REDI'
+    USED = 'USAR'
+    FREED = 'LIBE'
 
 def givemeswap():
     r = ram()
@@ -476,9 +483,9 @@ def get_next_row(the_list, row, row_index=None):
     else:
         return None
 
-def is_extended(row):
-        'Determina si una fila pertenece a una particion extendida'
-        return row[TblCol.TIPO] == msj.particion.extendida
+def is_logic(row):
+        'Determina si una particion es lógica'
+        return row[TblCol.TIPO] == msj.particion.logica
 
 def has_extended(lista):
         'Determina si existe por lo menos una particion extendida en la lista'
@@ -501,19 +508,7 @@ def set_partition(the_list, selected_row, new_row, pop=True):
 def is_primary(fila):
     'Determina si una particion es primaria'
     p_type = fila[TblCol.TIPO]
-    p_format = fila[TblCol.FORMATO]
-    if p_type == msj.particion.primaria \
-    or (p_type == msj.particion.extendida and p_format == ''):
-        return True
-    else:
-        return False
-
-def is_logic(fila):
-    'Determina si una particion es lógica'
-    p_type = fila[TblCol.TIPO]
-    p_format = fila[TblCol.FORMATO]
-    if p_type == msj.particion.logica \
-    or (p_type == msj.particion.extendida and p_format != ''):
+    if p_type == msj.particion.primaria or p_type == msj.particion.extendida:
         return True
     else:
         return False
@@ -521,17 +516,30 @@ def is_logic(fila):
 def is_usable(selected_row):
     disp = selected_row[TblCol.DISPOSITIVO]
     tipo = selected_row[TblCol.TIPO]
-    fs = selected_row[TblCol.FORMATO]
+    estado = selected_row[TblCol.ESTADO]
     try:
         # Esta linea comprueba que el dispositivo termine en un entero, esto
         # para comprobar que tiene un formato similar a /dev/sdb3 por ejemplo.
         int(disp[-1])
 
         # No se usan las particiones extendidas, sino las logicas
-        if tipo == msj.particion.extendida and fs == '':
+        # Tampoco se usan particiones que no estan en estado Normal
+        if tipo == msj.particion.extendida or estado != PStatus.NORMAL:
             return False
         else:
             return True
     except (ValueError, IndexError):
         return False
 
+def is_resizable(fs):
+    'Determina si un filesystem tiene herramienta de redimension'
+    try:
+        print  FSPROGS[fs][1]
+        if FSPROGS[fs][1] == '':
+            return False
+        else:
+            return True
+    except KeyError:
+        # Retorna False para el caso en que TblCol.FORMATO es igual a '' o a 
+        # 'Espacio libre' por ejemplo
+        return False

@@ -19,7 +19,7 @@ Created on 24/09/2012
 @author: Erick Birbe <erickcion@gmail.com>
 '''
 import gtk
-from canaimainstalador.clases.common import TblCol, get_row_index
+from canaimainstalador.clases.common import TblCol, get_row_index, PStatus
 from canaimainstalador.clases.frame_fs import frame_fs
 
 txt_manual = 'Escoger manualmente...'
@@ -35,7 +35,7 @@ class Main(gtk.Dialog):
 
         gtk.Window.__init__(self, gtk.WINDOW_TOPLEVEL)
         self.set_position(gtk.WIN_POS_CENTER_ALWAYS)
-        self.set_title("Usar partición existente")
+        self.set_title("Editar partición existente")
         self.set_resizable(0)
 
         self.add_button(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL)
@@ -59,7 +59,7 @@ class Main(gtk.Dialog):
 
         # Filesystem
         self.select_item(self.fs_box.cmb_fs, self.fila_selec[TblCol.FORMATO])
-        self.fs_box.cmb_fs.set_sensitive(False)
+        self.fs_box.cmb_fs.connect('changed', self.cmb_fs_changed)
 
         # Montaje
         montaje = self.fila_selec[TblCol.MONTAJE]
@@ -101,17 +101,41 @@ class Main(gtk.Dialog):
             tmp[TblCol.MONTAJE] = montaje
             tmp[TblCol.FORMATEAR] = formatear
 
-            if tmp != self.fila_selec:
+            if tmp != list(self.fila_selec):
+
+                tmp[TblCol.ESTADO] = PStatus.USED
                 self.lista[i] = tmp
+
                 disco = tmp[TblCol.DISPOSITIVO]
                 montaje = tmp[TblCol.MONTAJE]
                 inicio = tmp[TblCol.INICIO]
                 fin = tmp[TblCol.FIN]
                 formato = tmp[TblCol.FORMATO]
                 tipo = tmp[TblCol.TIPO]
-                self.acciones.append(['usar', disco, montaje, inicio, fin, \
+
+                if formatear:
+                    accion = 'formatear'
+                else:
+                    accion = 'usar'
+
+                self.acciones.append([accion, disco, montaje, inicio, fin, \
                                       formato, tipo])
 
         self.destroy()
+
+    def cmb_fs_changed(self, widget):
+        actual = self.fila_selec[TblCol.FORMATO]
+        formatear = self.fila_selec[TblCol.FORMATEAR]
+        selec = widget.get_active_text()
+        # Si el filesystem seleccionado es el mismo que tiene la particion
+        # se coloca el estado original que trae de la variable formatear
+        # sino hay que formatear obligatoramente y no se debe editar ese campo
+        if selec == actual:
+            self.fs_box.formatear.set_active(formatear)
+            self.fs_box.formatear.set_sensitive(True)
+        else:
+            self.fs_box.formatear.set_active(True)
+            self.fs_box.formatear.set_sensitive(False)
+
 
 

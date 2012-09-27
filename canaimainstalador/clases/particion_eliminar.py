@@ -5,7 +5,7 @@ Created on 24/09/2012
 @author: Erick Birbe <erickcion@gmail.com>
 '''
 from canaimainstalador.clases.common import get_row_index, TblCol, has_next_row, \
-    is_primary, is_logic, humanize
+    is_primary, is_logic, humanize, PStatus
 from canaimainstalador.translator import msj
 
 class Main():
@@ -16,7 +16,15 @@ class Main():
         self.acciones = acciones
         self.disco = fila_selec[TblCol.DISPOSITIVO]
 
-        i = get_row_index(self.lista, self.fila_selec)
+        if self.fila_selec[TblCol.TIPO] == msj.particion.primaria \
+        or self.fila_selec[TblCol.TIPO] == msj.particion.logica:
+            self._borrar_particion(self.fila_selec)
+        else:
+            print "Aun no se puede borrar particiones extendidas"
+
+    def _borrar_particion(self, part):
+        'Ejecuta el proceso de eliminar la particion de la lista'
+        i = get_row_index(self.lista, part)
         particion = self.lista[i]
         inicio = particion[TblCol.INICIO]
         fin = particion[TblCol.FIN]
@@ -42,7 +50,7 @@ class Main():
         if is_primary(temp):
             temp[TblCol.TIPO] = msj.particion.primaria
         elif is_logic(temp):
-            temp[TblCol.TIPO] = msj.particion.extendida
+            temp[TblCol.TIPO] = msj.particion.logica
         temp[TblCol.FORMATO] = msj.particion.libre
         temp[TblCol.MONTAJE] = ''
         temp[TblCol.TAMANO] = humanize(tamano)
@@ -50,10 +58,11 @@ class Main():
         temp[TblCol.LIBRE] = humanize(tamano)
         temp[TblCol.INICIO] = inicio
         temp[TblCol.FIN] = fin
+        temp[TblCol.ESTADO] = PStatus.FREED
 
         # Sustituimos con los nuevos valores
         self.lista[i] = temp
-        # Borramos los esṕacios vacios cobntiguos si existieren
+        # Borramos los esṕacios vacios contiguos si existieren
         if del_sig:
             del self.lista[i + 1]
         if del_ant:
@@ -61,6 +70,7 @@ class Main():
 
         # Agregamos la accion correspondiente
         self.acciones.append(['borrar', self.disco, None, particion[TblCol.INICIO], particion[TblCol.FIN], None, None])
+
     def _sumar_tamano(self, otra, actual):
         '''Indica si se puede sumar el tamaño de las particiones si se trata \
         del mismo tipo (primaria o lógica)'''
