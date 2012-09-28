@@ -178,7 +178,7 @@ class BarraAuto(gtk.DrawingArea):
                 if self.extendidas < 1:
                     if self.primarias + self.extendidas + len(self.p.nuevas) - 1 > 4:
                         self.p.acciones.append(
-                            ['crear', None, None, self.ini + self.current, self.ini + self.total, 'extended', 'extended', 0]
+                            ['crear', None, None, self.ini + self.current + 0.5, self.ini + self.total - 0.5, 'extended', 'extended', 0]
                             )
                         a_tipo = 'logical'
                     else:
@@ -209,8 +209,8 @@ class BarraAuto(gtk.DrawingArea):
                 a_mount = '/var'
                 a_fs = 'ext4'
 
-            a_ini = self.ini + self.p.nuevas[k][1]
-            a_fin = self.ini + self.p.nuevas[k][2]
+            a_ini = self.ini + self.p.nuevas[k][1] + 0.5
+            a_fin = self.ini + self.p.nuevas[k][2] - 0.5
 
             if self.p.nuevas[k][0] != 'PART':
                 self.p.acciones.append(

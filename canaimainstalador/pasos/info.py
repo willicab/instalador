@@ -8,29 +8,39 @@ class PasoInfo(gtk.Fixed):
         gtk.Fixed.__init__(self)
 
         msg_teclado = '● Se utilizará "{0}" como distribución de teclado.'.format(CFG['teclado'])
-        msg_nombre = '● Su nombre completo ({0}) será utilizado para identificar su cuenta de usuario.'.format(CFG['nombre'])
-        msg_usuario = '● Se creará una cuenta de usuario con nombre "{0}"'.format(CFG['usuario'])
-        msg_maquina = '● Se utilizará "{0}" para identificar a su equipo en la red local.'.format(CFG['maquina'])
         msg_final = 'Presione el botón "Siguiente" para iniciar la instalación del sistema. Después de este paso no podrá detener la instalación, asegúrese de que sus datos son correctos.'
 
-        if CFG['forma'] == 'ROOT:SWAP:LIBRE' or \
-            CFG['forma'] == 'PART:ROOT:SWAP':
-            msg_tipo = '● La instalación se realizará en una partición para el sistema y otra para el área de intercambio.'
+        if CFG['oem'] == False:
+            msg_nombre = '● Su nombre completo ({0}) será utilizado para identificar su cuenta de usuario.'.format(CFG['nombre'])
+            msg_usuario = '● Se creará una cuenta de usuario con nombre "{0}"'.format(CFG['usuario'])
+            msg_maquina = '● Se utilizará "{0}" para identificar a su equipo en la red local.'.format(CFG['maquina'])
+        else:
+            msg_nombre = '● Se instalará en modo OEM, sus datos serán requeridos en el primer inicio de sesión.'
+            msg_usuario = ''
+            msg_maquina = ''
 
-        elif CFG['forma'] == 'ROOT:HOME:SWAP:LIBRE' or \
-            CFG['forma'] == 'PART:ROOT:HOME:SWAP':
-            msg_tipo = "Tipo de instalación: {0}".format("Separar la partición /home.")
+        if CFG['metodo']['tipo'] != 'MANUAL':
+            if CFG['forma'] == 'ROOT:SWAP:LIBRE' or \
+                CFG['forma'] == 'PART:ROOT:SWAP':
+                msg_tipo = '● La instalación se realizará en una partición para el sistema y otra para el área de intercambio.'
 
-        elif CFG['forma'] == 'BOOT:ROOT:HOME:SWAP:LIBRE' or \
-            CFG['forma'] == 'PART:BOOT:ROOT:HOME:SWAP':
-            msg_tipo = "Tipo de instalación: {0}".format("Separar las particiones /home y /boot.")
+            elif CFG['forma'] == 'ROOT:HOME:SWAP:LIBRE' or \
+                CFG['forma'] == 'PART:ROOT:HOME:SWAP':
+                msg_tipo = "Tipo de instalación: {0}".format("Separar la partición /home.")
 
-        elif CFG['forma'] == 'BOOT:ROOT:VAR:USR:HOME:SWAP:LIBRE' or \
-            CFG['forma'] == 'PART:BOOT:ROOT:VAR:USR:HOME:SWAP':
-            msg_tipo = "Tipo de instalación: {0}".format("Separar las particiones /home, /boot, /var y /usr.")
+            elif CFG['forma'] == 'BOOT:ROOT:HOME:SWAP:LIBRE' or \
+                CFG['forma'] == 'PART:BOOT:ROOT:HOME:SWAP':
+                msg_tipo = "Tipo de instalación: {0}".format("Separar las particiones /home y /boot.")
 
-        elif CFG['forma'] == 'MANUAL':
-            msg_tipo = "Distribución: {0}".format("Particionado manual.")
+            elif CFG['forma'] == 'BOOT:ROOT:VAR:USR:HOME:SWAP:LIBRE' or \
+                CFG['forma'] == 'PART:BOOT:ROOT:VAR:USR:HOME:SWAP':
+                msg_tipo = "Tipo de instalación: {0}".format("Separar las particiones /home, /boot, /var y /usr.")
+
+            elif CFG['forma'] == 'MANUAL':
+                msg_tipo = "Distribución: {0}".format("Particionado manual.")
+
+            else:
+                msg_tipo = ''
 
         else:
             msg_tipo = ''

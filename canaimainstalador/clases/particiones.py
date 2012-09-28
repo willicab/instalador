@@ -63,13 +63,14 @@ class Particiones():
             if num != -1:
                 if i.fileSystem != None:
                     if code != 2:
-                        fs = i.fileSystem.type
-                        usado = espacio_usado(part)
-                        libre = tam - usado
-                        if fs == 'linux-swap(v1)':
+                        if i.fileSystem.type == 'linux-swap(v1)':
                             fs = 'swap'
                             usado = tam
                             libre = float(0)
+                        else:
+                            fs = i.fileSystem.type
+                            usado = espacio_usado(fs, part)
+                            libre = tam - usado
                 else:
                     if code == 2:
                         fs = 'extended'
@@ -102,7 +103,7 @@ class Particiones():
 
         return sorted(p, key=lambda particiones: particiones[1])
 
-    def nombre_particion(self, start, end):
+    def nombre_particion(self, drive, start, end):
 
         dev = parted.Device(drive)
         disk = parted.Disk(dev)
@@ -120,8 +121,13 @@ class Particiones():
         - inicio: donde comenzará la partición, en kB
         - fin: donde terminará la partición, en kB
         '''
+        i = 0
         dev = parted.Device(drive)
         disk = parted.Disk(dev)
+        s_sec = start * 1024 / dev.sectorSize
+        e_sec = end * 1024 / dev.sectorSize
+
+        print float(dev.getSize(unit='KB'))/2
 
         if partype == 'primary' or partype == 0:
             partype = _ped.PARTITION_NORMAL
@@ -132,17 +138,41 @@ class Particiones():
         else:
             return False
 
-        geometry = parted.Geometry(device=dev, start=s_sec, end=e_sec)
-        constraint = parted.Constraint(exactGeom=geometry)
-        partition = parted.Partition(disk=disk, type=partype, geometry=geometry)
+        try:
+            geometry = parted.Geometry(device=dev, start=s_sec, end=e_sec)
+            i += 1
+        except Exception as a:
+            print a
 
-        if disk.addPartition(partition=partition, constraint=constraint) \
-            and disk.commit():
-            if partype != _ped.PARTITION_EXTENDED:
-                if fs in FSPROGS:
-                    ProcessGenerator(
-                        FSPROGS[fs][0].format(self.nombre_particion(start, end))
-                        )
+        try:
+            constraint = parted.Constraint(exactGeom=geometry)
+            i += 1
+        except Exception as b:
+            print b
+
+        try:
+            partition = parted.Partition(disk=disk, type=partype, geometry=geometry)
+            i += 1
+        except Exception as c:
+            print c
+
+        try:
+            disk.addPartition(partition=partition, constraint=constraint)
+            i += 1
+        except Exception as d:
+            print d
+
+        try:
+            disk.commit()
+            i += 1
+        except Exception as e:
+            print e
+
+        if i == 5 and partype != _ped.PARTITION_EXTENDED:
+            if fs in FSPROGS:
+                ProcessGenerator(
+                    FSPROGS[fs][0].format(self.nombre_particion(drive, start, end))
+                    )
             return True
         else:
             return False
@@ -171,13 +201,24 @@ class Particiones():
         - inicio: donde comenzará la partición, en kB
         - fin: donde terminará la partición, en kB
         '''
+        i = 0
         dev = parted.Device(part[:-1])
         disk = parted.Disk(dev)
         partition = disk.getPartitionByPath(part)
 
-        if partition and \
-            disk.deletePartition(partition=partition) and \
-            disk.commit():
+        try:
+            disk.deletePartition(partition=partition)
+            i += 1
+        except Exception as x:
+            print x
+
+        try:
+            disk.commit()
+            i += 1
+        except Exception as y:
+            print y
+
+        if i == 2:
             return True
         else:
             return False

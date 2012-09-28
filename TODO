@@ -13,3 +13,9 @@
 [ LISTO ] - verificar conexión a internet antes de hacer actualización.
 [ LISTO ] - hacer la acción "usar"
 - devolver valor correcto en KB cuando el inicio o fin de partición es en bytes.
+- Verificar existencia de puntos de montaje /target y /live.
+- Verificar existencia de archivo squashfs.
+- Verificar existencia de paquetes a instalar.
+- Desmontar las particiones a ser utilizadas.
+- Asignar el flag de boot apropiadamente.
+- Agregar botones para seleccionar máximo y mínimo espacio en particionadores.

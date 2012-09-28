@@ -26,7 +26,7 @@
 #
 # CODE IS POETRY
 
-import commands, re, subprocess, math, cairo, gtk, hashlib, random, urllib2, os
+import commands, re, subprocess, math, cairo, gtk, hashlib, random, string, urllib2, os
 
 from canaimainstalador.translator import msj
 from canaimainstalador.config import APP_NAME, APP_COPYRIGHT, APP_DESCRIPTION, \
@@ -79,13 +79,13 @@ def AboutWindow(widget=None):
     about.run()
     about.destroy()
 
-def espacio_usado(particion):
+def espacio_usado(fs, particion):
     if os.path.exists(particion):
-        ProcessGenerator('umount /mnt')
-        ProcessGenerator('mount {0} /mnt'.format(particion))
+        assisted_umount([['', '/mnt', '']])
+        assisted_mount(False, [[particion, '/mnt', fs]])
         s = os.statvfs('/mnt')
         used = float(((s.f_blocks - s.f_bfree) * s.f_frsize) / 1024)
-        ProcessGenerator('umount /mnt')
+        assisted_umount([['', '/mnt', '']])
     else:
         used = 'unknown'
     return used
@@ -104,6 +104,11 @@ def assisted_mount(bind, plist):
 
         ProcessGenerator('mount {0} {1} {2} {3}'.format(bindcmd, fscmd, p, m))
 
+def assisted_umount(plist):
+    for p, m, fs in plist:
+        if os.path.ismount(m):
+            ProcessGenerator('umount {0}'.format(m))
+
 def preseed_debconf_values(mnt, debconflist):
     ProcessGenerator('rm -rf {0}/tmp/debconf'.format(mnt))
 
@@ -115,10 +120,11 @@ def preseed_debconf_values(mnt, debconflist):
 
 def instalar_paquetes(mnt, dest, plist):
     for loc, name in plist:
-        ProcessGenerator('mkdir -p {0}'.format(mnt + dest))
-        ProcessGenerator('cp {0}/{1}*.deb {2}'.format(loc, name, mnt + dest + '/'))
-        ProcessGenerator('chroot {0} dpkg -i {1}/{2}*.deb'.format(mnt, dest, name))
-        ProcessGenerator('rm -rf {0}'.format(mnt + dest))
+        if os.path.isdir(loc):
+            ProcessGenerator('mkdir -p {0}'.format(mnt + dest))
+            ProcessGenerator('cp {0}/{1}*.deb {2}'.format(loc, name, mnt + dest + '/'))
+            ProcessGenerator('chroot {0} dpkg -i {1}/{2}*.deb'.format(mnt, dest, name))
+            ProcessGenerator('rm -rf {0}'.format(mnt + dest))
 
 def desinstalar_paquetes(mnt, plist):
     for name in plist:
@@ -200,6 +206,7 @@ def crear_etc_fstab(mnt, cfg, mountlist, cdroms):
 
     for part, point, fs in mountlist:
         uuid = get_uuid(part)
+        point = point.strip(mnt)
 
         if fs == 'swap':
             content += "\n{0}\tnone\tswap\tsw\t0\t0".format(uuid)
@@ -418,11 +425,11 @@ def UserMessage(
 
     return response
 
-def ProcessGenerator(command):
+def random_generator(size=10, chars=string.ascii_uppercase + string.digits):
+    return hashlib.sha1(''.join(random.choice(chars) for x in range(size))).hexdigest()
 
-    filename = '/tmp/cs-command-' + hashlib.sha1(
-        str(random.getrandbits(random.getrandbits(10)))
-        ).hexdigest()
+def ProcessGenerator(command):
+    filename = '/tmp/canaimainstalador-' + random_generator()
 
     if isinstance(command, list):
         strcmd = ' '.join(command)
