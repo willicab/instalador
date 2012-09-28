@@ -69,7 +69,14 @@ class Main():
             del self.lista[i - 1]
 
         # Agregamos la accion correspondiente
-        self.acciones.append(['borrar', self.disco, None, particion[TblCol.INICIO], particion[TblCol.FIN], None, None])
+        self.acciones.append(['borrar',
+                              self.disco,
+                              None,
+                              particion[TblCol.INICIO],
+                              particion[TblCol.FIN],
+                              None,
+                              None,
+                              0])
 
     def _sumar_tamano(self, otra, actual):
         '''Indica si se puede sumar el tamaño de las particiones si se trata \

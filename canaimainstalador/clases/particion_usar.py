@@ -119,7 +119,7 @@ class Main(gtk.Dialog):
                     accion = 'usar'
 
                 self.acciones.append([accion, disco, montaje, inicio, fin, \
-                                      formato, tipo])
+                                      formato, tipo, 0])
 
         self.destroy()
 
