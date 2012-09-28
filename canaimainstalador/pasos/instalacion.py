@@ -92,8 +92,9 @@ class PasoInstalacion(gtk.Fixed):
         self.w.siguiente.hide()
         self.w.cancelar.hide()
 
-        self.thread = threading.Thread(target=self.instalar, args=())
-        self.thread.start()
+#        self.thread = threading.Thread(target=self.instalar, args=())
+#        self.thread.start()
+        self.instalar()
 
     def instalar(self):
         try:
