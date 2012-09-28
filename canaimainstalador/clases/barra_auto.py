@@ -169,7 +169,7 @@ class BarraAuto(gtk.DrawingArea):
 
         if self.metodo['tipo'] == 'REDIM':
             self.p.acciones.append(
-                ['redimensionar', self.p.metodo['part'][0], None, self.ini, self.ini + self.current, None, None]
+                ['redimensionar', self.p.metodo['part'][0], None, self.ini,, None, None, self.ini + self.current]
                 )
 
             if self.metodo['part'][5] == 'logical':

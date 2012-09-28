@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 
-import os, gtk, webkit, sys
+import os, gtk, webkit, sys, threading
 
 from canaimainstalador.clases.particiones import Particiones
 from canaimainstalador.clases.common import UserMessage, ProcessGenerator, \
@@ -14,7 +14,7 @@ class PasoInstalacion(gtk.Fixed):
     def __init__(self, CFG):
         gtk.Fixed.__init__(self)
         self.p = Particiones()
-        self.w = CFG['wizard']
+        self.w = CFG['w']
         self.metodo = CFG['metodo']
         self.acciones = CFG['acciones']
         self.teclado = CFG['teclado']
@@ -36,15 +36,15 @@ class PasoInstalacion(gtk.Fixed):
             'canaima-base'
             ]
         self.instpkgs_burg = [
-            ['/live/image/pool/main/libx/libx86', 'libx86-1']
-            ['/live/image/pool/main/s/svgalib', 'libsvga1']
-            ['/live/image/pool/main/libs/libsdl1.2', 'libsdl1.2']
-            ['/live/image/pool/main/g/gettext', 'gettext-base']
-            ['/live/image/pool/main/b/burg-themes', 'burg-themes-common']
-            ['/live/image/pool/main/b/burg-themes', 'burg-themes']
-            ['/live/image/pool/main/b/burg', 'burg-common']
-            ['/live/image/pool/main/b/burg', 'burg-emu']
-            ['/live/image/pool/main/b/burg', 'burg-pc']
+            ['/live/image/pool/main/libx/libx86', 'libx86-1'],
+            ['/live/image/pool/main/s/svgalib', 'libsvga1'],
+            ['/live/image/pool/main/libs/libsdl1.2', 'libsdl1.2'],
+            ['/live/image/pool/main/g/gettext', 'gettext-base'],
+            ['/live/image/pool/main/b/burg-themes', 'burg-themes-common'],
+            ['/live/image/pool/main/b/burg-themes', 'burg-themes'],
+            ['/live/image/pool/main/b/burg', 'burg-common'],
+            ['/live/image/pool/main/b/burg', 'burg-emu'],
+            ['/live/image/pool/main/b/burg', 'burg-pc'],
             ['/live/image/pool/main/b/burg', 'burg']
             ]
         self.instpkgs_cpp = [[

@@ -6,133 +6,82 @@ import gtk
 class PasoInfo(gtk.Fixed):
     def __init__(self, CFG):
         gtk.Fixed.__init__(self)
-        self.cfg = CFG
 
-        altura = 260
-        inc = 20
+        msg_teclado = '● Se utilizará "{0}" como distribución de teclado.'.format(CFG['teclado'])
+        msg_nombre = '● Su nombre completo ({0}) será utilizado para identificar su cuenta de usuario.'.format(CFG['nombre'])
+        msg_usuario = '● Se creará una cuenta de usuario con nombre "{0}"'.format(CFG['usuario'])
+        msg_maquina = '● Se utilizará "{0}" para identificar a su equipo en la red local.'.format(CFG['maquina'])
+        msg_final = 'Presione el botón "Siguiente" para iniciar la instalación del sistema. Después de este paso no podrá detener la instalación, asegúrese de que sus datos son correctos.'
 
-        msg = "Distribución del Teclado: {0}".format(self.cfg['teclado'])
-        self.lbldist = gtk.Label(msg)
-        self.lbldist.set_size_request(690, 30)
-        self.lbldist.set_alignment(0, 0)
-        self.put(self.lbldist, 0, altura)
-        altura = altura - inc
+        if CFG['forma'] == 'ROOT:SWAP:LIBRE' or \
+            CFG['forma'] == 'PART:ROOT:SWAP':
+            msg_tipo = '● La instalación se realizará en una partición para el sistema y otra para el área de intercambio.'
 
-        msg = "Tipo de instalación: "
-        if self.cfg['forma'] == 'ROOT:SWAP':
-            msg = msg + "Realizar la instalación en una sola partición."
-        elif self.cfg['forma'] == 'ROOT:HOME:SWAP':
-            msg = msg + "Separar la partición /home."
-        elif self.cfg['forma'] == 'BOOT:ROOT:HOME:SWAP':
-            msg = msg + "Separar la partición /home y /boot."
-        elif self.cfg['forma'] == 'BOOT:ROOT:VAR:USR:HOME:SWAP':
-            msg = msg + "Separar las particiones /home, /usr, /var y /boot."
-        elif self.cfg['forma'] == 'MANUAL':
-            msg = msg + "Particionado manual"
+        elif CFG['forma'] == 'ROOT:HOME:SWAP:LIBRE' or \
+            CFG['forma'] == 'PART:ROOT:HOME:SWAP':
+            msg_tipo = "Tipo de instalación: {0}".format("Separar la partición /home.")
 
-        self.lbltipo = gtk.Label(msg)
-        self.lbltipo.set_size_request(690, 30)
-        self.lbltipo.set_alignment(0, 0)
-        self.put(self.lbltipo, 0, altura)
-        altura = altura - inc
+        elif CFG['forma'] == 'BOOT:ROOT:HOME:SWAP:LIBRE' or \
+            CFG['forma'] == 'PART:BOOT:ROOT:HOME:SWAP':
+            msg_tipo = "Tipo de instalación: {0}".format("Separar las particiones /home y /boot.")
 
-        if self.cfg['metodo'] == 'MANUAL':
-            msg = "Dispositivo a usar: {0}".format(self.cfg['disco'])
-            self.lblmetodo = gtk.Label(msg)
-            self.lblmetodo.set_size_request(690, 30)
-            self.lblmetodo.set_alignment(0, 0)
-            self.put(self.lblmetodo, 0, altura)
-            altura = altura - inc
+        elif CFG['forma'] == 'BOOT:ROOT:VAR:USR:HOME:SWAP:LIBRE' or \
+            CFG['forma'] == 'PART:BOOT:ROOT:VAR:USR:HOME:SWAP':
+            msg_tipo = "Tipo de instalación: {0}".format("Separar las particiones /home, /boot, /var y /usr.")
 
-        elif self.cfg['metodo'] == 'TODO':
-            msg = "Dispositivo a usar: {0}".format(self.cfg['disco'])
-            self.lblmetodo = gtk.Label(msg)
-            self.lblmetodo.set_size_request(690, 30)
-            self.lblmetodo.set_alignment(0, 0)
-            self.put(self.lblmetodo, 0, altura)
-            altura = altura - inc
-
-        elif self.cfg['metodo'] == 'LIBRE':
-            msg = "Dispositivo a usar: {0}".format(self.cfg['disco'])
-            self.lblmetodo = gtk.Label(msg)
-            self.lblmetodo.set_size_request(690, 30)
-            self.lblmetodo.set_alignment(0, 0)
-            self.put(self.lblmetodo, 0, altura)
-            altura = altura - inc
-
-        elif self.cfg['metodo'] == 'REDIM':
-            msg = "Dispositivo a usar: {0}".format(self.cfg['disco'])
-            self.lblmetodo = gtk.Label(msg)
-            self.lblmetodo.set_size_request(690, 30)
-            self.lblmetodo.set_alignment(0, 0)
-            self.put(self.lblmetodo, 0, altura)
-            altura = altura - inc
+        elif CFG['forma'] == 'MANUAL':
+            msg_tipo = "Distribución: {0}".format("Particionado manual.")
 
         else:
-            pass
+            msg_tipo = ''
 
-#        if self.cfg['metodo'] == 'todo':
-#            msg = "Dispositivo a usar: {0}".format(self.cfg['disco'])
-#            self.lblmetodo = gtk.Label(msg)
-#            self.lblmetodo.set_size_request(690, 30)
-#            self.lblmetodo.set_alignment(0, 0)
-#            self.put(self.lblmetodo, 0, altura)
-#            altura = altura - inc
-#        elif self.cfg['metodo'] == 'vacio':
-#            pass
-#        else:
-#            msg = "partición a usar: {0}".format(self.cfg['particion'])
-#            self.lblparticion = gtk.Label(msg)
-#            self.lblparticion.set_size_request(590, 30)
-#            self.put(self.lblparticion, 0, altura)
-#            self.lblparticion.set_alignment(0, 0)
-#            self.lblparticion.show()
-#            altura = altura - inc
+        if CFG['metodo']['tipo'] == 'MANUAL':
+            msg_metodo = "Método: {0}"
 
-#            msg = "Tamaño Anterior de la Partición: {0}".format(gen.hum(gen.h2kb(self.cfg['fin'])))
-#            self.lbltam = gtk.Label(msg)
-#            self.lbltam.set_size_request(590, 30)
-#            self.put(self.lbltam, 0, altura)
-#            self.lbltam.set_alignment(0, 0)
-#            self.lbltam.show()
-#            altura = altura - inc
+        elif CFG['metodo']['tipo'] == 'TODO':
+            msg_metodo = "Dispositivo a utilizar: {0}"
 
-#            msg = "Nuevo Tamaño de la Partición: {0}".format(gen.hum(gen.h2kb(self.cfg['nuevo_fin'])))
-#            self.lblnuevo = gtk.Label(msg)
-#            self.lblnuevo.set_size_request(590, 30)
-#            self.put(self.lblnuevo, 0, altura)
-#            self.lblnuevo.set_alignment(0, 0)
-#            self.lblnuevo.show()
-#            altura = altura - inc
+        elif CFG['metodo']['tipo'] == 'LIBRE':
+            msg_metodo = "Dispositivo a utilizar: {0}"
 
-        msg = "Nombre completo del usuario: {0}".format(self.cfg['nombre'])
-        self.lblnombre = gtk.Label(msg)
-        self.lblnombre.set_size_request(690, 30)
-        self.lblnombre.set_alignment(0, 0)
-        self.put(self.lblnombre, 0, altura)
-        altura = altura - inc
+        elif CFG['metodo']['tipo'] == 'REDIM':
+            msg_metodo = "Dispositivo a utilizar: {0}"
 
-        msg = "Nombre de usuario: {0}".format(self.cfg['usuario'])
-        self.lblusuario = gtk.Label(msg)
-        self.lblusuario.set_size_request(690, 30)
+        else:
+            msg_metodo = ''
+
+        self.lblusuario = gtk.Label(msg_usuario)
+        self.lblusuario.set_size_request(640, 30)
         self.lblusuario.set_alignment(0, 0)
-        self.put(self.lblusuario, 0, altura)
-        altura = altura - inc
+        self.put(self.lblusuario, 50, 150)
 
-        msg = "Nombre de la maquina: {0}".format(self.cfg['maquina'])
-        self.lblmaquina = gtk.Label(msg)
-        self.lblmaquina.set_size_request(690, 30)
+        self.lblnombre = gtk.Label(msg_nombre)
+        self.lblnombre.set_size_request(640, 30)
+        self.lblnombre.set_alignment(0, 0)
+        self.put(self.lblnombre, 50, 170)
+
+        self.lblteclado = gtk.Label(msg_teclado)
+        self.lblteclado.set_size_request(640, 30)
+        self.lblteclado.set_alignment(0, 0)
+        self.put(self.lblteclado, 50, 190)
+
+        self.lblmaquina = gtk.Label(msg_maquina)
+        self.lblmaquina.set_size_request(640, 30)
         self.lblmaquina.set_alignment(0, 0)
-        self.put(self.lblmaquina, 0, altura)
-        altura = altura - inc
+        self.put(self.lblmaquina, 50, 210)
 
-        self.linea = gtk.HSeparator()
-        self.linea.set_size_request(690, 10);
-        self.put(self.linea, 0, altura)
-        altura = altura - inc
+        self.lbltipo = gtk.Label(msg_tipo)
+        self.lbltipo.set_size_request(690, 30)
+        self.lbltipo.set_alignment(0, 0)
+        self.put(self.lbltipo, 50, 230)
 
-        msg = 'Confirme que todos los datos son correctos, al hacer click en siguiente comenzará la instalación y ya no podrá dar marcha atrás.'
-        self.lblmsg = gtk.Label(msg)
-        self.lblmsg.set_size_request(690, (260 - altura))
-        self.put(self.lblmsg, 0, 0)
+        self.lblmetodo = gtk.Label(msg_metodo)
+        self.lblmetodo.set_size_request(640, 30)
+        self.lblmetodo.set_alignment(0, 0)
+        self.put(self.lblmetodo, 50, 250)
+
+        self.lblmsg = gtk.Label(msg_final)
+        self.lblmsg.set_size_request(640, 30)
+        self.lblmsg.set_line_wrap(True)
+        self.put(self.lblmsg, 50, 300)
 
