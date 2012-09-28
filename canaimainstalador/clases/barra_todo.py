@@ -200,7 +200,7 @@ class BarraTodo(gtk.DrawingArea):
 
             if len(self.p.nuevas) - 1 > 4:
                 self.p.acciones.append(
-                    ['crear', None, None, self.ini, self.ini + self.current, 'extended', 'extended']
+                    ['crear', None, None, self.ini, self.ini + self.current, 'extended', 'extended', 0]
                     )
                 a_tipo = 'logical'
             else:
@@ -213,7 +213,7 @@ class BarraTodo(gtk.DrawingArea):
                 if self.extendidas < 1:
                     if self.primarias + self.extendidas + len(self.p.nuevas) - 1 > 4:
                         self.p.acciones.append(
-                            ['crear', None, None, self.ini, self.ini + self.current, 'extended', 'extended']
+                            ['crear', None, None, self.ini, self.ini + self.current, 'extended', 'extended', 0]
                             )
                         a_tipo = 'logical'
                     else:
@@ -249,7 +249,7 @@ class BarraTodo(gtk.DrawingArea):
 
             if self.p.nuevas[k][0] != 'LIBRE':
                 self.p.acciones.append(
-                    ['crear', None, a_mount, a_ini, a_fin, a_fs, a_tipo]
+                    ['crear', None, a_mount, a_ini, a_fin, a_fs, a_tipo, 0]
                     )
         print self.p.acciones
 

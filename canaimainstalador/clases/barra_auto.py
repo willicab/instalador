@@ -169,7 +169,7 @@ class BarraAuto(gtk.DrawingArea):
 
         if self.metodo['tipo'] == 'REDIM':
             self.p.acciones.append(
-                ['redimensionar', self.p.metodo['part'][0], None, self.ini,, None, None, self.ini + self.current]
+                ['redimensionar', self.p.metodo['part'][0], None, self.ini, self.fin, None, None, self.ini + self.current]
                 )
 
             if self.metodo['part'][5] == 'logical':
@@ -178,7 +178,7 @@ class BarraAuto(gtk.DrawingArea):
                 if self.extendidas < 1:
                     if self.primarias + self.extendidas + len(self.p.nuevas) - 1 > 4:
                         self.p.acciones.append(
-                            ['crear', None, None, self.ini + self.current, self.ini + self.total, 'extended', 'extended']
+                            ['crear', None, None, self.ini + self.current, self.ini + self.total, 'extended', 'extended', 0]
                             )
                         a_tipo = 'logical'
                     else:
@@ -214,7 +214,7 @@ class BarraAuto(gtk.DrawingArea):
 
             if self.p.nuevas[k][0] != 'PART':
                 self.p.acciones.append(
-                    ['crear', None, a_mount, a_ini, a_fin, a_fs, a_tipo]
+                    ['crear', None, a_mount, a_ini, a_fin, a_fs, a_tipo, 0]
                     )
 
     def press(self, widget, event):

@@ -116,7 +116,6 @@ class PasoMetodo(gtk.Fixed):
                     tam = p[3]
                     fs = p[4]
                     tipo = p[5]
-                    #usado = p[7] Unused Variable
                     libre = p[8]
 
                     if fs != 'free' and libre >= self.minimo:
