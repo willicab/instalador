@@ -33,6 +33,8 @@ from canaimainstalador.config import APP_NAME, APP_COPYRIGHT, APP_DESCRIPTION, \
     APP_URL, LICENSE_FILE, AUTHORS_FILE, TRANSLATORS_FILE, VERSION_FILE, ABOUT_IMAGE, \
     FSPROGS
 
+SECTOR = 0.5 # Un sector es igual a 0.5 Kb
+
 def AboutWindow(widget=None):
     about = gtk.AboutDialog()
     about.set_position(gtk.WIN_POS_CENTER_ON_PARENT)

@@ -3,7 +3,7 @@
 import gtk
 
 from canaimainstalador.clases.common import humanize, TblCol, get_next_row, \
-    get_row_index, set_partition, PStatus
+    get_row_index, set_partition, PStatus, SECTOR
 from canaimainstalador.translator import msj
 from canaimainstalador.clases.frame_fs import frame_fs
 
@@ -109,7 +109,8 @@ class Main(gtk.Dialog):
                     tamano = humanize(fin - inicio)
                     libre = tamano
                     self.crear_particion(tipo, msj.particion.libre, montaje, \
-                                         tamano, usado, libre, inicio + 1, fin)
+                                         tamano, usado, libre, inicio + SECTOR, \
+                                         fin)
             # Extendida
             elif tipo == msj.particion.extendida:
                 print "Partición Extendida"
@@ -120,7 +121,7 @@ class Main(gtk.Dialog):
                 print "Crea vacío interno"
                 self.crear_particion(msj.particion.logica, msj.particion.libre, \
                                      montaje, tamano, usado, libre, \
-                                     inicio + 1, fin)
+                                     inicio + SECTOR, fin)
                 if fin != self.fin_part:
                     print "Y deja espacio libre"
                     inicio = self.escala.get_value()
@@ -129,7 +130,7 @@ class Main(gtk.Dialog):
                     libre = tamano
                     self.crear_particion(msj.particion.primaria, \
                                          msj.particion.libre, montaje, tamano, \
-                                         usado, libre, inicio + 1, fin)
+                                         usado, libre, inicio + SECTOR, fin)
             # Lógica
             elif tipo == msj.particion.logica:
                 print "Partición Lógica"
@@ -142,7 +143,8 @@ class Main(gtk.Dialog):
                     tamano = humanize(fin - inicio)
                     libre = tamano
                     self.crear_particion(tipo, msj.particion.libre, montaje, \
-                                         tamano, usado, libre, inicio + 1, fin)
+                                         tamano, usado, libre, inicio + SECTOR, \
+                                         fin)
             print "------------"
 
         self.destroy()

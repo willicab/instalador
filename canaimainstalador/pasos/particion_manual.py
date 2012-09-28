@@ -105,8 +105,8 @@ class PasoPartManual(gtk.Fixed):
                        humanize(floatify(p_tam)),
                        humanize(p_usado),
                        humanize(p_libre),
-                       floatify(p_ini),
-                       floatify(p_fin),
+                       p_ini,
+                       p_fin,
                        False, # Formatear
                        PStatus.NORMAL,
                    ]

@@ -5,7 +5,8 @@ Created on 13/09/2012
 @author: Erick Birbe <erickcion@gmail.com>
 '''
 import gtk
-from canaimainstalador.clases.common import humanize, TblCol, floatify, PStatus
+from canaimainstalador.clases.common import humanize, TblCol, floatify, PStatus, \
+    SECTOR
 from canaimainstalador.translator import msj
 
 class Main(gtk.Dialog):
@@ -171,10 +172,10 @@ class Main(gtk.Dialog):
 
             # Si dejamos espacio libre
             if part_actual[TblCol.FIN] < self.get_maximo():
-                # Si hay particion libre siguiente, solo modificamos algunos 
+                # Si hay particion libre siguiente, solo modificamos algunos
                 # valores
                 if part_sig:
-                    part_sig[TblCol.INICIO] = part_actual[TblCol.FIN] + 1
+                    part_sig[TblCol.INICIO] = part_actual[TblCol.FIN] + SECTOR
                     tamano = humanize(
                                 part_sig[TblCol.FIN] - part_sig[TblCol.INICIO])
                     part_sig[TblCol.TAMANO] = tamano
@@ -191,7 +192,7 @@ class Main(gtk.Dialog):
                     part_sig[TblCol.TAMANO] = humanize(self.get_sin_particion())
                     part_sig[TblCol.USADO] = humanize(0)
                     part_sig[TblCol.LIBRE] = humanize(self.get_sin_particion())
-                    part_sig[TblCol.INICIO] = part_actual[TblCol.FIN] + 1
+                    part_sig[TblCol.INICIO] = part_actual[TblCol.FIN] + SECTOR
                     part_sig[TblCol.FIN] = self.get_maximo()
                     part_sig[TblCol.FORMATEAR] = False
                     part_sig[TblCol.ESTADO] = PStatus.FREED
