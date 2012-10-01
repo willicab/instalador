@@ -1,13 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 
-import os, gtk, webkit, sys, threading
+import os, gtk, webkit, sys, threading, shutil, urllib2
 
 from canaimainstalador.clases.particiones import Particiones
 from canaimainstalador.clases.common import UserMessage, ProcessGenerator, \
     reconfigurar_paquetes, desinstalar_paquetes, instalar_paquetes, lista_cdroms, \
     crear_etc_default_keyboard, crear_etc_hostname, crear_etc_hosts, \
-    crear_etc_network_interfaces, assisted_mount, assisted_umount, preseed_debconf_values
+    crear_etc_network_interfaces, crear_etc_fstab, HeadRequest, assisted_mount, \
+    assisted_umount, preseed_debconf_values
 from canaimainstalador.config import INSTALL_SLIDES
 
 class PasoInstalacion(gtk.Fixed):
@@ -111,12 +112,23 @@ class PasoInstalacion(gtk.Fixed):
                 message='No se encuentra la imagen squashfs.',
                 title='ERROR',
                 mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
-                c_1=gtk.RESPONSE_OK, f_1=sys.exit, p_1=(1,)
+                c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, self.bindlist),
+                c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, self.mountlist),
+                c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
             )
 
         for mpart in self.p.lista_particiones(self.metodo['disco'][0]):
             if os.path.exists(mpart[0]):
-                assisted_umount([['', mpart[0], '']])
+                if not assisted_umount(
+                    sync = True, plist = [['', mpart[0], '']]
+                    ):
+                    UserMessage(
+                        message='Ocurrió un error desmontando las particiones.',
+                        title='ERROR',
+                        mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
+                        c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, self.bindlist),
+                        c_2=gtk.RESPONSE_OK, f_2=sys.exit, p_2=(1,)
+                    )
 
         self.lblDesc.set_text('Creando particiones en disco ...')
         for a in self.acciones:
@@ -140,7 +152,8 @@ class PasoInstalacion(gtk.Fixed):
                         message='Ocurrió un error creando una partición.',
                         title='ERROR',
                         mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
-                        c_1=gtk.RESPONSE_OK, f_1=sys.exit, p_1=(1,)
+                        c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, self.bindlist),
+                        c_2=gtk.RESPONSE_OK, f_2=sys.exit, p_2=(1,)
                     )
                 else:
                     self.mountlist.append([
@@ -156,7 +169,8 @@ class PasoInstalacion(gtk.Fixed):
                         message='Ocurrió un error borrando una partición.',
                         title='ERROR',
                         mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
-                        c_1=gtk.RESPONSE_OK, f_1=sys.exit, p_1=(1,)
+                        c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, self.bindlist),
+                        c_2=gtk.RESPONSE_OK, f_2=sys.exit, p_2=(1,)
                     )
 
             elif accion == 'redimensionar':
@@ -167,7 +181,8 @@ class PasoInstalacion(gtk.Fixed):
                         message='Ocurrió un error redimensionando una partición.',
                         title='ERROR',
                         mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
-                        c_1=gtk.RESPONSE_OK, f_1=sys.exit, p_1=(1,)
+                        c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, self.bindlist),
+                        c_2=gtk.RESPONSE_OK, f_2=sys.exit, p_2=(1,)
                     )
 
             elif accion == 'formatear':
@@ -178,7 +193,8 @@ class PasoInstalacion(gtk.Fixed):
                         message='Ocurrió un error formateando una partición.',
                         title='ERROR',
                         mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
-                        c_1=gtk.RESPONSE_OK, f_1=sys.exit, p_1=(1,)
+                        c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, self.bindlist),
+                        c_2=gtk.RESPONSE_OK, f_2=sys.exit, p_2=(1,)
                     )
 
             elif accion == 'usar':
@@ -187,89 +203,177 @@ class PasoInstalacion(gtk.Fixed):
                     self.mountpoint+montaje, fs
                     ])
 
-        print self.mountlist
         self.lblDesc.set_text('Montando sistemas de archivos ...')
-        assisted_mount(bind=False, plist=self.mountlist)
-        ProcessGenerator('mount')
+        if not assisted_mount(sync = True, bind=False, plist=self.mountlist):
+            UserMessage(
+                message='Ocurrió un error montando los sistemas de archivos.',
+                title='ERROR',
+                mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
+                c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, self.bindlist),
+                c_2=gtk.RESPONSE_OK, f_2=sys.exit, p_2=(1,)
+            )
+
         self.lblDesc.set_text('Copiando archivos en disco ...')
-        if not ProcessGenerator(
+        if ProcessGenerator(
             'unsquashfs -f -n -d {0} {1}'.format(self.mountpoint, self.squashfs)
-            ):
+            ).returncode != 0:
             UserMessage(
                 message='Ocurrió un error copiando los archivos al disco.',
                 title='ERROR',
                 mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
-                c_1=gtk.RESPONSE_OK, f_1=sys.exit, p_1=(1,)
+                c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, self.bindlist),
+                c_2=gtk.RESPONSE_OK, f_2=sys.exit, p_2=(1,)
             )
 
         self.lblDesc.set_text('Montando sistema de archivos ...')
-        assisted_mount(bind=True, plist=self.bindlist)
+        if not assisted_mount(sync = True, bind=True, plist=self.bindlist):
+            UserMessage(
+                message='Ocurrió un error montando los sistemas de archivos.',
+                title='ERROR',
+                mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
+                c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, self.bindlist),
+                c_2=gtk.RESPONSE_OK, f_2=sys.exit, p_2=(1,)
+            )
 
         self.lblDesc.set_text('Instalando gestor de arranque ...')
         if not preseed_debconf_values(
             mnt=self.mountpoint, debconflist=self.debconflist
             ):
             UserMessage(
-                message='Ocurrió un error desinstalando un paquete.',
+                message='Ocurrió un error presembrando las respuestas debconf.',
                 title='ERROR',
                 mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
-                c_1=gtk.RESPONSE_OK, f_1=sys.exit, p_1=(1,)
+                c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, self.bindlist),
+                c_2=gtk.RESPONSE_OK, f_2=sys.exit, p_2=(1,)
             )
+
         if not instalar_paquetes(
-            mnt = self.mountpoint, dest = '/root/debs', plist = self.instpkgs_burg
+            mnt = self.mountpoint, dest = '/tmp', plist = self.instpkgs_burg
             ):
             UserMessage(
-                message='Ocurrió un error desinstalando un paquete.',
+                message='Ocurrió un error instalando un paquete.',
                 title='ERROR',
                 mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
-                c_1=gtk.RESPONSE_OK, f_1=sys.exit, p_1=(1,)
+                c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, self.bindlist),
+                c_2=gtk.RESPONSE_OK, f_2=sys.exit, p_2=(1,)
             )
-        ProcessGenerator(
+
+        if ProcessGenerator(
             'chroot {0} burg-install --force {1}'.format(
                 self.mountpoint, self.metodo['disco'][0]
                 )
+            ).returncode != 0:
+            UserMessage(
+                message='Ocurrió un error instalando burg.',
+                title='ERROR',
+                mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
+                c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, self.bindlist),
+                c_2=gtk.RESPONSE_OK, f_2=sys.exit, p_2=(1,)
             )
-        ProcessGenerator(
+
+        if ProcessGenerator(
             'chroot {0} update-burg'.format(self.mountpoint)
+            ).returncode != 0:
+            UserMessage(
+                message='Ocurrió un error actualizando burg.',
+                title='ERROR',
+                mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
+                c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, self.bindlist),
+                c_2=gtk.RESPONSE_OK, f_2=sys.exit, p_2=(1,)
             )
 
         self.lblDesc.set_text('Generando imagen de arranque ...')
-        ProcessGenerator(
+        if ProcessGenerator(
             'chroot {0} /usr/sbin/mkinitramfs -o /boot/{1} {2}'.format(
                 self.mountpoint, 'initrd.img-'+os.uname()[2], os.uname()[2]
                 )
+            ).returncode != 0:
+            UserMessage(
+                message='Ocurrió un error generando la imagen de arranque.',
+                title='ERROR',
+                mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
+                c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, self.bindlist),
+                c_2=gtk.RESPONSE_OK, f_2=sys.exit, p_2=(1,)
             )
-        ProcessGenerator(
+
+        if ProcessGenerator(
             'chroot {0} update-initramfs -u'.format(self.mountpoint)
+            ).returncode != 0:
+            UserMessage(
+                message='Ocurrió un error actualizando la imagen de arranque.',
+                title='ERROR',
+                mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
+                c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, self.bindlist),
+                c_2=gtk.RESPONSE_OK, f_2=sys.exit, p_2=(1,)
             )
 
         self.lblDesc.set_text('Configurando interfaces de red ...')
-        crear_etc_hostname(
+        if not crear_etc_hostname(
             mnt=self.mountpoint, cfg='/etc/hostname', maq=self.maquina
+            ):
+            UserMessage(
+                message='Ocurrió un error creando el archivo /etc/hostname.',
+                title='ERROR',
+                mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
+                c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, self.bindlist),
+                c_2=gtk.RESPONSE_OK, f_2=sys.exit, p_2=(1,)
             )
-        crear_etc_hosts(
+
+        if not crear_etc_hosts(
             mnt=self.mountpoint, cfg='/etc/hosts', maq=self.maquina
+            ):
+            UserMessage(
+                message='Ocurrió un error creando el archivo /etc/hosts.',
+                title='ERROR',
+                mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
+                c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, self.bindlist),
+                c_2=gtk.RESPONSE_OK, f_2=sys.exit, p_2=(1,)
             )
-        crear_etc_network_interfaces(
+
+        if not crear_etc_network_interfaces(
             mnt=self.mountpoint, cfg='/etc/network/interfaces'
+            ):
+            UserMessage(
+                message='Ocurrió un error creando el archivo /etc/network/interfaces.',
+                title='ERROR',
+                mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
+                c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, self.bindlist),
+                c_2=gtk.RESPONSE_OK, f_2=sys.exit, p_2=(1,)
             )
 
         self.lblDesc.set_text('Configurando teclado ...')
-        crear_etc_default_keyboard(
+        if not crear_etc_default_keyboard(
             mnt=self.mountpoint, cfg='/etc/canaima-base/alternatives/keyboard',
             key=self.teclado
+            ):
+            UserMessage(
+                message='Ocurrió un error configurando el teclado.',
+                title='ERROR',
+                mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
+                c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, self.bindlist),
+                c_2=gtk.RESPONSE_OK, f_2=sys.exit, p_2=(1,)
             )
 
         self.lblDesc.set_text('Configurando particiones, usuarios y grupos ...')
-        crear_etc_fstab(
+        if not crear_etc_fstab(
             mnt=self.mountpoint, cfg='/etc/fstab',
             mountlist=self.mountlist, cdroms=self.cdroms
+            ):
+            UserMessage(
+                message='Ocurrió un error creando el archivo /etc/fstab.',
+                title='ERROR',
+                mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
+                c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, self.bindlist),
+                c_2=gtk.RESPONSE_OK, f_2=sys.exit, p_2=(1,)
             )
-        ProcessGenerator('cp -f /etc/passwd {0}/etc/passwd'.format(self.mountpoint))
-        ProcessGenerator('cp -f /etc/group {0}/etc/group'.format(self.mountpoint))
-        ProcessGenerator('cp -f /etc/inittab {0}/etc/inittab'.format(self.mountpoint))
-        ProcessGenerator('rm -rf {0}/etc/mtab'.format(self.mountpoint))
-        ProcessGenerator('touch {0}/etc/mtab'.format(self.mountpoint))
+
+        shutil.copy2('/etc/passwd', '{0}/etc/passwd'.format(self.mountpoint))
+        shutil.copy2('/etc/group', '{0}/etc/group'.format(self.mountpoint))
+        shutil.copy2('/etc/inittab', '{0}/new/dir/newname.ext'.format(self.mountpoint))
+
+        f = open('{0}/etc/mtab'.format(self.mountpoint), 'w')
+        f.write('')
+        f.close()
 
         if self.oem:
             self.adm_user = 'root'
@@ -278,9 +382,16 @@ class PasoInstalacion(gtk.Fixed):
             self.nml_password = 'canaima'
             self.nml_name = 'Mantenimiento'
 
-            instalar_paquetes(
-                mnt = self.mountpoint, dest = '/root/debs',
+            if not instalar_paquetes(
+                mnt = self.mountpoint, dest = '/tmp',
                 plist = self.instpkgs_cpp
+                ):
+                UserMessage(
+                    message='Ocurrió un error instalando un paquete.',
+                    title='ERROR',
+                    mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
+                    c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, self.bindlist),
+                    c_2=gtk.RESPONSE_OK, f_2=sys.exit, p_2=(1,)
                 )
 
         else:
@@ -291,9 +402,16 @@ class PasoInstalacion(gtk.Fixed):
             self.nml_name = self.nombre
 
         if self.chkgdm:
-            instalar_paquetes(
-                mnt = self.mountpoint, dest = '/root/debs',
+            if not instalar_paquetes(
+                mnt = self.mountpoint, dest = '/tmp',
                 plist = self.instpkgs_cagg
+                ):
+                UserMessage(
+                    message='Ocurrió un error instalando un paquete.',
+                    title='ERROR',
+                    mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
+                    c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, self.bindlist),
+                    c_2=gtk.RESPONSE_OK, f_2=sys.exit, p_2=(1,)
                 )
 
         self.lblDesc.set_text('Creando usuario administrador ...')
@@ -316,7 +434,8 @@ class PasoInstalacion(gtk.Fixed):
                 message='Ocurrió un error reconfigurando un paquete.',
                 title='ERROR',
                 mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
-                c_1=gtk.RESPONSE_OK, f_1=sys.exit, p_1=(1,)
+                c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, self.bindlist),
+                c_2=gtk.RESPONSE_OK, f_2=sys.exit, p_2=(1,)
             )
 
         self.lblDesc.set_text('Removiendo instalador del sistema de archivos ...')
@@ -327,18 +446,30 @@ class PasoInstalacion(gtk.Fixed):
                 message='Ocurrió un error desinstalando un paquete.',
                 title='ERROR',
                 mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
-                c_1=gtk.RESPONSE_OK, f_1=sys.exit, p_1=(1,)
+                c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, self.bindlist),
+                c_2=gtk.RESPONSE_OK, f_2=sys.exit, p_2=(1,)
             )
 
         if self.connection:
             self.lblDesc.set_text('Actualizando sistema operativo desde repositorios ...')
-            ProcessGenerator('chroot {0} dhclient'.format(self.mountpoint))
-            ProcessGenerator('chroot {0} aptitude update'.format(self.mountpoint))
-            ProcessGenerator('chroot {0} aptitude full-upgrade'.format(self.mountpoint))
+            if not actualizar_sistema(mnt = self.mountpoint):
+                UserMessage(
+                    message='Ocurrió un error actualizando el sistema.',
+                    title='ERROR',
+                    mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
+                    c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, self.bindlist),
+                    c_2=gtk.RESPONSE_OK, f_2=sys.exit, p_2=(1,)
+                )
 
         self.lblDesc.set_text('Desmontando sistema de archivos ...')
-        assisted_umount(self.bindlist)
-        ProcessGenerator('sync > /dev/null')
+        if not assisted_umount(sync = True, plist = self.bindlist):
+            UserMessage(
+                message='Ocurrió un error desinstalando un paquete.',
+                title='ERROR',
+                mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
+                c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, self.bindlist),
+                c_2=gtk.RESPONSE_OK, f_2=sys.exit, p_2=(1,)
+            )
 
         self.lblDesc.set_text('Ninguna planta fue lastimada en la creación del estilo visual de este instalador.')
 

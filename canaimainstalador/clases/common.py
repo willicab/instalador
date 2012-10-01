@@ -81,16 +81,22 @@ def AboutWindow(widget=None):
 
 def espacio_usado(fs, particion):
     if os.path.exists(particion):
-        assisted_umount([['', '/mnt', '']])
-        assisted_mount(False, [[particion, '/mnt', fs]])
+        assisted_umount(sync = False, plist = [['', '/mnt', '']])
+        assisted_mount(
+            sync = False, bind = False, plist = [[particion, '/mnt', fs]]
+            )
         s = os.statvfs('/mnt')
         used = float(((s.f_blocks - s.f_bfree) * s.f_frsize) / 1024)
-        assisted_umount([['', '/mnt', '']])
+        assisted_umount(sync = False, plist = [['', '/mnt', '']])
     else:
         used = 'unknown'
+
     return used
 
-def assisted_mount(bind, plist):
+def assisted_mount(sync, bind, plist):
+    i = 0
+    n = len(plist)
+
     if bind:
         bindcmd = '-o bind'
     else:
@@ -102,37 +108,138 @@ def assisted_mount(bind, plist):
         else:
             fscmd = ''
 
-        ProcessGenerator('mount {0} {1} {2} {3}'.format(bindcmd, fscmd, p, m))
+        if not os.path.isdir(m):
+            if os.makedirs(m):
+                i += 1
+        else:
+            i += 1
 
-def assisted_umount(plist):
+        if fs != 'swap':
+            if ProcessGenerator(
+                'mount {0} {1} {2} {3}'.format(bindcmd, fscmd, p, m)
+                ).returncode == 0:
+                i += 1
+        else:
+            i += 1
+
+    if sync:
+        ProcessGenerator('sync')
+
+    if i == n*2:
+        return True
+    else:
+        return False
+
+def assisted_umount(sync, plist):
+    i = 0
+    n = len(plist)
+    plist.reverse()
+    print plist
     for p, m, fs in plist:
         if os.path.ismount(m):
-            ProcessGenerator('umount {0}'.format(m))
+            if ProcessGenerator('umount {0}'.format(m)).returncode == 0:
+                i += 1
+        else:
+            i += 1
+
+    if sync:
+        ProcessGenerator('sync')
+
+    if i == n:
+        return True
+    else:
+        return False
 
 def preseed_debconf_values(mnt, debconflist):
-    ProcessGenerator('rm -rf {0}/tmp/debconf'.format(mnt))
+    content = '\n'.join(debconflist)
+    destination = '{0}/tmp/debconf'.format(mnt)
 
-    for debconf in debconflist:
-        ProcessGenerator('chroot {0} echo "{1}" >> /tmp/debconf'.format(mnt, debconf))
+    f = open(destination, 'w')
+    f.write(content)
+    f.close()
 
-    ProcessGenerator('chroot {0} debconf-set-selections < /tmp/debconf'.format(mnt))
-    ProcessGenerator('rm -rf {0}/tmp/debconf'.format(mnt))
+    if ProcessGenerator(
+        'chroot {0} debconf-set-selections < /tmp/debconf'.format(mnt)
+        ).returncode == 0:
+        return True
+    else:
+        return False
 
 def instalar_paquetes(mnt, dest, plist):
+    i = 0
+    n = len(plist)
+
     for loc, name in plist:
         if os.path.isdir(loc):
-            ProcessGenerator('mkdir -p {0}'.format(mnt + dest))
-            ProcessGenerator('cp {0}/{1}*.deb {2}'.format(loc, name, mnt + dest + '/'))
-            ProcessGenerator('chroot {0} dpkg -i {1}/{2}*.deb'.format(mnt, dest, name))
-            ProcessGenerator('rm -rf {0}'.format(mnt + dest))
+            if not os.path.isdir(mnt + dest):
+                if os.makedirs(mnt + dest):
+                    i += 1
+            if ProcessGenerator(
+                'cp {0}/{1}*.deb {2}'.format(loc, name, mnt + dest + '/')
+                ).returncode == 0:
+                i += 1
+            if ProcessGenerator(
+                'chroot {0} DEBIAN_FRONTEND=noninteractive dpkg -i {1}/{2}*.deb'.format(mnt, dest, name)
+                ).returncode == 0:
+                i += 1
+
+    if i == n*3:
+        return True
+    else:
+        return False
 
 def desinstalar_paquetes(mnt, plist):
+    i = 0
+    n = len(plist)
+
     for name in plist:
-        ProcessGenerator('chroot {0} aptitude purge {1}'.format(mnt, name))
+        if ProcessGenerator(
+            'chroot {0} aptitude purge {1}'.format(mnt, name)
+            ).returncode == 0:
+            i += 1
+
+    if i == n:
+        return True
+    else:
+        return False
 
 def reconfigurar_paquetes(mnt, plist):
+    i = 0
+    n = len(plist)
+
     for name in plist:
-        ProcessGenerator('chroot {0} dpkg-reconfigure {1}'.format(mnt, name))
+        if ProcessGenerator(
+            'chroot {0} dpkg-reconfigure {1}'.format(mnt, name)
+            ).returncode == 0:
+            i += 1
+
+    if i == n:
+        return True
+    else:
+        return False
+
+def actualizar_sistema(mnt):
+    i = 0
+
+    if ProcessGenerator(
+        'chroot {0} dhclient'.format(mnt)
+        ).returncode == 0:
+        i += 1
+
+    if ProcessGenerator(
+        'chroot {0} aptitude update'.format(mnt)
+        ).returncode == 0:
+        i += 1
+
+    if ProcessGenerator(
+        'chroot {0} aptitude full-upgrade'.format(mnt)
+        ).returncode == 0:
+        i += 1
+
+    if i == 4:
+        return True
+    else:
+        return False
 
 def crear_etc_network_interfaces(mnt, cfg):
     content = ''
@@ -149,13 +256,18 @@ def crear_etc_network_interfaces(mnt, cfg):
             content += '\niface {0} inet dhcp\n'.format(i)
 
     f = open(destination, 'w')
-    f.write(content)
-    f.close()
+    if f.write(content) and f.close():
+        return True
+    else:
+        return False
 
 def crear_etc_hostname(mnt, cfg, maq):
+    content = maq + '\n'
     f = open(mnt + cfg, 'w')
-    f.write(maq + '\n')
-    f.close()
+    if f.write(content) and f.close():
+        return True
+    else:
+        return False
 
 def crear_etc_hosts(mnt, cfg, maq):
     content = '127.0.0.1\t\t{0}\t\tlocalhost\n'.format(maq)
@@ -167,8 +279,10 @@ def crear_etc_hosts(mnt, cfg, maq):
     content += 'ff02::3\t\tip6-allhosts'
 
     f = open(mnt + cfg, 'w')
-    f.write(content)
-    f.close()
+    if f.write(content) and f.close():
+        return True
+    else:
+        return False
 
 def crear_etc_default_keyboard(mnt, cfg, key):
     pattern = "^XKBLAYOUT=*"
@@ -196,8 +310,10 @@ def crear_etc_default_keyboard(mnt, cfg, key):
 
     # Escribe el archivo modificado
     outfile = open(file_path, "w")
-    outfile.write(string)
-    outfile.close()
+    if outfile.write(string) and outfile.close():
+        return True
+    else:
+        return False
 
 def crear_etc_fstab(mnt, cfg, mountlist, cdroms):
     defaults = 'defaults\t0\t0'
@@ -220,8 +336,10 @@ def crear_etc_fstab(mnt, cfg, mountlist, cdroms):
         ProcessGenerator('mkdir -p {0}'.format(mnt + '/media/cdrom' + num))
 
     f = open(mnt + cfg, 'w')
-    f.write(content)
-    f.close()
+    if f.write(content) and f.close():
+        return True
+    else:
+        return False
 
 def lista_cdroms():
     info = '/proc/sys/dev/cdrom/info'
