@@ -7,7 +7,7 @@ from canaimainstalador.clases.particiones import Particiones
 from canaimainstalador.clases.common import UserMessage, ProcessGenerator, \
     reconfigurar_paquetes, desinstalar_paquetes, instalar_paquetes, lista_cdroms, \
     crear_etc_default_keyboard, crear_etc_hostname, crear_etc_hosts, \
-    crear_etc_network_interfaces, assisted_mount, preseed_debconf_values
+    crear_etc_network_interfaces, assisted_mount, assisted_umount, preseed_debconf_values
 from canaimainstalador.config import INSTALL_SLIDES
 
 class PasoInstalacion(gtk.Fixed):
@@ -31,7 +31,7 @@ class PasoInstalacion(gtk.Fixed):
         self.requesturl = 'http://www.google.com/'
         self.uninstpkgs = ['canaima-instalador']
         self.reconfpkgs = [
-            'cunaguaro', 'guacharo', 'canaima-estilo-visual', 'canaima-plymouth',
+            'cunaguaro', 'guacharo', 'canaima-estilo-visual-gnome', 'canaima-plymouth',
             'canaima-chat-gnome', 'canaima-bienvenido-gnome', 'canaima-escritorio-gnome',
             'canaima-base'
             ]
@@ -91,6 +91,7 @@ class PasoInstalacion(gtk.Fixed):
         self.w.anterior.hide()
         self.w.siguiente.hide()
         self.w.cancelar.hide()
+        self.w.acerca.hide()
 
 #        self.thread = threading.Thread(target=self.instalar, args=())
 #        self.thread.start()
@@ -101,21 +102,34 @@ class PasoInstalacion(gtk.Fixed):
             response = urllib2.urlopen(HeadRequest(self.requesturl))
         except:
             self.connection = False
+        
+        if not os.path.isdir(self.mountpoint):
+            os.makedirs(self.mountpoint)
+
+        if not os.path.exists(self.squashfs):
+            UserMessage(
+                message='No se encuentra la imagen squashfs.',
+                title='ERROR',
+                mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
+                c_1=gtk.RESPONSE_OK, f_1=sys.exit, p_1=(1,)
+            )
+
+        for mpart in self.p.lista_particiones(self.metodo['disco'][0]):
+            if os.path.exists(mpart[0]):
+                assisted_umount([['', mpart[0], '']])
 
         self.lblDesc.set_text('Creando particiones en disco ...')
         for a in self.acciones:
             accion = a[0]
-            particion = a[1]
             montaje = a[2]
             inicio = a[3]
             fin = a[4]
             fs = a[5]
             tipo = a[6]
             nuevo_fin = a[7]
-
+            particion = self.p.nombre_particion(self.metodo['disco'][0], inicio, fin)
             self.particiones = self.p.lista_particiones(self.metodo['disco'][0])
             self.cdroms = lista_cdroms()
-            particion = self.p.nombre_particion(inicio, fin)
 
             if accion == 'crear':
                 if not self.p.crear_particion(
@@ -128,15 +142,15 @@ class PasoInstalacion(gtk.Fixed):
                         mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
                         c_1=gtk.RESPONSE_OK, f_1=sys.exit, p_1=(1,)
                     )
-
+                else:
                     self.mountlist.append([
-                        self.p.nombre_particion(inicio, fin),
-                        montaje, fs
+                        self.p.nombre_particion(self.metodo['disco'][0], inicio, fin),
+                        self.mountpoint+montaje, fs
                         ])
 
             elif accion == 'borrar':
                 if not self.p.borrar_particion(
-                    particion=particion
+                    part=particion
                     ):
                     UserMessage(
                         message='Ocurrió un error borrando una partición.',
@@ -169,16 +183,17 @@ class PasoInstalacion(gtk.Fixed):
 
             elif accion == 'usar':
                 self.mountlist.append([
-                    self.p.nombre_particion(inicio, fin),
-                    montaje, fs
+                    self.p.nombre_particion(self.metodo['disco'][0], inicio, fin),
+                    self.mountpoint+montaje, fs
                     ])
 
+        print self.mountlist
         self.lblDesc.set_text('Montando sistemas de archivos ...')
         assisted_mount(bind=False, plist=self.mountlist)
-
+        ProcessGenerator('mount')
         self.lblDesc.set_text('Copiando archivos en disco ...')
         if not ProcessGenerator(
-            'unsquashfs -f -i -d {0} {1}'.format(self.mountpoint, self.squashfs)
+            'unsquashfs -f -n -d {0} {1}'.format(self.mountpoint, self.squashfs)
             ):
             UserMessage(
                 message='Ocurrió un error copiando los archivos al disco.',
@@ -189,24 +204,6 @@ class PasoInstalacion(gtk.Fixed):
 
         self.lblDesc.set_text('Montando sistema de archivos ...')
         assisted_mount(bind=True, plist=self.bindlist)
-
-        self.lblDesc.set_text('Configurando detalles del sistema operativo ...')
-        if not reconfigurar_paquetes(self.reconfpkgs):
-            UserMessage(
-                message='Ocurrió un error reconfigurando un paquete.',
-                title='ERROR',
-                mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
-                c_1=gtk.RESPONSE_OK, f_1=sys.exit, p_1=(1,)
-            )
-
-        self.lblDesc.set_text('Removiendo instalador del sistema de archivos ...')
-        if not desinstalar_paquetes(self.uninstpkgs):
-            UserMessage(
-                message='Ocurrió un error desinstalando un paquete.',
-                title='ERROR',
-                mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
-                c_1=gtk.RESPONSE_OK, f_1=sys.exit, p_1=(1,)
-            )
 
         self.lblDesc.set_text('Instalando gestor de arranque ...')
         if not preseed_debconf_values(
@@ -311,6 +308,28 @@ class PasoInstalacion(gtk.Fixed):
         ProcessGenerator('chroot {0} /usr/sbin/chpasswd < /tmp/passwd'.format(self.mountpoint))
         ProcessGenerator('rm -rf {0}/tmp/passwd'.format(self.mountpoint))
 
+        self.lblDesc.set_text('Configurando detalles del sistema operativo ...')
+        if not reconfigurar_paquetes(
+            mnt = self.mountpoint, plist = self.reconfpkgs
+            ):
+            UserMessage(
+                message='Ocurrió un error reconfigurando un paquete.',
+                title='ERROR',
+                mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
+                c_1=gtk.RESPONSE_OK, f_1=sys.exit, p_1=(1,)
+            )
+
+        self.lblDesc.set_text('Removiendo instalador del sistema de archivos ...')
+        if not desinstalar_paquetes(
+            mnt = self.mountpoint, plist = self.uninstpkgs
+            ):
+            UserMessage(
+                message='Ocurrió un error desinstalando un paquete.',
+                title='ERROR',
+                mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
+                c_1=gtk.RESPONSE_OK, f_1=sys.exit, p_1=(1,)
+            )
+
         if self.connection:
             self.lblDesc.set_text('Actualizando sistema operativo desde repositorios ...')
             ProcessGenerator('chroot {0} dhclient'.format(self.mountpoint))
@@ -318,11 +337,7 @@ class PasoInstalacion(gtk.Fixed):
             ProcessGenerator('chroot {0} aptitude full-upgrade'.format(self.mountpoint))
 
         self.lblDesc.set_text('Desmontando sistema de archivos ...')
-        ProcessGenerator('umount -l {0}/dev/pts'.format(self.mountpoint))
-        ProcessGenerator('umount -l {0}/dev'.format(self.mountpoint))
-        ProcessGenerator('umount -l {0}/proc'.format(self.mountpoint))
-        ProcessGenerator('umount -l {0}/sys'.format(self.mountpoint))
-        ProcessGenerator('umount -l {0}'.format(self.mountpoint))
+        assisted_umount(self.bindlist)
         ProcessGenerator('sync > /dev/null')
 
         self.lblDesc.set_text('Ninguna planta fue lastimada en la creación del estilo visual de este instalador.')

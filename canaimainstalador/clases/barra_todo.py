@@ -195,12 +195,12 @@ class BarraTodo(gtk.DrawingArea):
             for w in self.particiones:
                 if w[4] != 'free':
                     self.p.acciones.append(
-                        ['borrar', w[0], None, 0, 0, None, None]
+                        ['borrar', w[0], None, w[1], w[2], None, None, 0]
                         )
 
             if len(self.p.nuevas) - 1 > 4:
                 self.p.acciones.append(
-                    ['crear', None, None, self.ini, self.ini + self.current, 'extended', 'extended', 0]
+                    ['crear', None, None, self.ini, self.ini + self.current - 0.5, 'extended', 'extended', 0]
                     )
                 a_tipo = 'logical'
             else:
@@ -213,7 +213,7 @@ class BarraTodo(gtk.DrawingArea):
                 if self.extendidas < 1:
                     if self.primarias + self.extendidas + len(self.p.nuevas) - 1 > 4:
                         self.p.acciones.append(
-                            ['crear', None, None, self.ini, self.ini + self.current, 'extended', 'extended', 0]
+                            ['crear', None, None, self.ini, self.ini + self.current - 0.5, 'extended', 'extended', 0]
                             )
                         a_tipo = 'logical'
                     else:
@@ -245,13 +245,12 @@ class BarraTodo(gtk.DrawingArea):
                 a_fs = 'ext4'
 
             a_ini = self.ini + self.p.nuevas[k][1]
-            a_fin = self.ini + self.p.nuevas[k][2]
+            a_fin = self.ini + self.p.nuevas[k][2] - 0.5
 
             if self.p.nuevas[k][0] != 'LIBRE':
                 self.p.acciones.append(
                     ['crear', None, a_mount, a_ini, a_fin, a_fs, a_tipo, 0]
                     )
-        print self.p.acciones
 
     def press(self, widget, event):
         if event.x >= self.pos[0] and event.x <= self.pos[2] and event.y >= self.pos[1] and event.y <= self.pos[3]:
