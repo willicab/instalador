@@ -21,6 +21,7 @@ Created on 24/09/2012
 import gtk
 from canaimainstalador.clases.common import TblCol, get_row_index, PStatus
 from canaimainstalador.clases.frame_fs import frame_fs
+from canaimainstalador.translator import msj
 
 txt_manual = 'Escoger manualmente...'
 txt_ninguno = 'Ninguno'
@@ -119,7 +120,7 @@ class Main(gtk.Dialog):
                     accion = 'usar'
 
                 self.acciones.append([accion, disco, montaje, inicio, fin, \
-                                      formato, tipo, 0])
+                                      formato, msj.particion.get_tipo_orig(tipo), 0])
 
         self.destroy()
 

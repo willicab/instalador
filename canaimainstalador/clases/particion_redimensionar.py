@@ -216,7 +216,7 @@ class Main(gtk.Dialog):
                                   part_actual[TblCol.INICIO],
                                   original[TblCol.FIN], # Fin original
                                   part_actual[TblCol.FORMATO],
-                                  part_actual[TblCol.TIPO],
+                                  msj.particion.get_tipo_orig(part_actual[TblCol.TIPO]),
                                   part_actual[TblCol.FIN], # Nuevo Fin
                                   ])
         self.destroy()

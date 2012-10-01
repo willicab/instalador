@@ -23,8 +23,6 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
-#
-# CODE IS POETRY
 
 from gettext import gettext as _
 
@@ -48,6 +46,15 @@ class msj:
             if tipo == 'primary':   return self.primaria
             if tipo == 'extended':  return self.extendida
             if tipo == 'logical':   return self.logica
+
+            return tipo
+
+        @classmethod
+        def get_tipo_orig(self, tipo):
+            if tipo == self.libre :     return 'free'
+            if tipo == self.primaria:   return 'primary'
+            if tipo == self.extendida:  return 'extended'
+            if tipo == self.logica:     return 'logical'
 
             return tipo
 
