@@ -176,7 +176,7 @@ class Main(gtk.Dialog):
         # Crea la acción correspondiente que va ejecutarse
         if crear_accion:
             self.acciones.append(['crear', disp, montaje, inicio, fin, \
-                                  formato, tipo])
+                                  formato, tipo, 0])
 
         self.lista = set_partition(self.lista, self.particion_act, particion, \
                                    pop)
