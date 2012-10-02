@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 
-import os, gtk, webkit, sys, threading, shutil, urllib2
+import os, gtk, webkit, sys, threading, shutil, urllib2, filecmp
 
 from canaimainstalador.clases.particiones import Particiones
 from canaimainstalador.clases.common import UserMessage, ProcessGenerator, \
     reconfigurar_paquetes, desinstalar_paquetes, instalar_paquetes, lista_cdroms, \
     crear_etc_default_keyboard, crear_etc_hostname, crear_etc_hosts, \
     crear_etc_network_interfaces, crear_etc_fstab, HeadRequest, assisted_mount, \
-    assisted_umount, preseed_debconf_values
+    assisted_umount, preseed_debconf_values, actualizar_sistema
 from canaimainstalador.config import INSTALL_SLIDES
 
 class PasoInstalacion(gtk.Fixed):
@@ -31,14 +31,15 @@ class PasoInstalacion(gtk.Fixed):
         self.requesturl = 'http://www.google.com/'
         self.uninstpkgs = ['canaima-instalador']
         self.reconfpkgs = [
-            'cunaguaro', 'guacharo', 'canaima-estilo-visual-gnome', 'canaima-plymouth',
-            'canaima-chat-gnome', 'canaima-bienvenido-gnome', 'canaima-escritorio-gnome',
-            'canaima-base'
+            'canaima-estilo-visual-gnome', 'canaima-plymouth',
+            'canaima-chat-gnome', 'canaima-bienvenido-gnome',
+            'canaima-escritorio-gnome', 'canaima-base'
             ]
         self.instpkgs_burg = [
             ['/live/image/pool/main/libx/libx86', 'libx86-1'],
             ['/live/image/pool/main/s/svgalib', 'libsvga1'],
-            ['/live/image/pool/main/libs/libsdl1.2', 'libsdl1.2'],
+            ['/live/image/pool/main/libs/libsdl1.2', 'libsdl1.2debian-alsa'],
+            ['/live/image/pool/main/libs/libsdl1.2', 'libsdl1.2debian'],
             ['/live/image/pool/main/g/gettext', 'gettext-base'],
             ['/live/image/pool/main/b/burg-themes', 'burg-themes-common'],
             ['/live/image/pool/main/b/burg-themes', 'burg-themes'],
@@ -127,7 +128,8 @@ class PasoInstalacion(gtk.Fixed):
                         title='ERROR',
                         mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
                         c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, self.bindlist),
-                        c_2=gtk.RESPONSE_OK, f_2=sys.exit, p_2=(1,)
+                        c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, self.mountlist),
+                        c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
                     )
 
         self.lblDesc.set_text('Creando particiones en disco ...')
@@ -153,7 +155,8 @@ class PasoInstalacion(gtk.Fixed):
                         title='ERROR',
                         mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
                         c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, self.bindlist),
-                        c_2=gtk.RESPONSE_OK, f_2=sys.exit, p_2=(1,)
+                        c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, self.mountlist),
+                        c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
                     )
                 else:
                     self.mountlist.append([
@@ -170,7 +173,8 @@ class PasoInstalacion(gtk.Fixed):
                         title='ERROR',
                         mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
                         c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, self.bindlist),
-                        c_2=gtk.RESPONSE_OK, f_2=sys.exit, p_2=(1,)
+                        c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, self.mountlist),
+                        c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
                     )
 
             elif accion == 'redimensionar':
@@ -182,7 +186,8 @@ class PasoInstalacion(gtk.Fixed):
                         title='ERROR',
                         mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
                         c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, self.bindlist),
-                        c_2=gtk.RESPONSE_OK, f_2=sys.exit, p_2=(1,)
+                        c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, self.mountlist),
+                        c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
                     )
 
             elif accion == 'formatear':
@@ -194,7 +199,8 @@ class PasoInstalacion(gtk.Fixed):
                         title='ERROR',
                         mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
                         c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, self.bindlist),
-                        c_2=gtk.RESPONSE_OK, f_2=sys.exit, p_2=(1,)
+                        c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, self.mountlist),
+                        c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
                     )
 
             elif accion == 'usar':
@@ -210,7 +216,8 @@ class PasoInstalacion(gtk.Fixed):
                 title='ERROR',
                 mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
                 c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, self.bindlist),
-                c_2=gtk.RESPONSE_OK, f_2=sys.exit, p_2=(1,)
+                c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, self.mountlist),
+                c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
             )
 
         self.lblDesc.set_text('Copiando archivos en disco ...')
@@ -222,7 +229,8 @@ class PasoInstalacion(gtk.Fixed):
                 title='ERROR',
                 mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
                 c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, self.bindlist),
-                c_2=gtk.RESPONSE_OK, f_2=sys.exit, p_2=(1,)
+                c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, self.mountlist),
+                c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
             )
 
         self.lblDesc.set_text('Montando sistema de archivos ...')
@@ -232,7 +240,8 @@ class PasoInstalacion(gtk.Fixed):
                 title='ERROR',
                 mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
                 c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, self.bindlist),
-                c_2=gtk.RESPONSE_OK, f_2=sys.exit, p_2=(1,)
+                c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, self.mountlist),
+                c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
             )
 
         self.lblDesc.set_text('Instalando gestor de arranque ...')
@@ -244,7 +253,8 @@ class PasoInstalacion(gtk.Fixed):
                 title='ERROR',
                 mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
                 c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, self.bindlist),
-                c_2=gtk.RESPONSE_OK, f_2=sys.exit, p_2=(1,)
+                c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, self.mountlist),
+                c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
             )
 
         if not instalar_paquetes(
@@ -255,7 +265,8 @@ class PasoInstalacion(gtk.Fixed):
                 title='ERROR',
                 mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
                 c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, self.bindlist),
-                c_2=gtk.RESPONSE_OK, f_2=sys.exit, p_2=(1,)
+                c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, self.mountlist),
+                c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
             )
 
         if ProcessGenerator(
@@ -268,7 +279,8 @@ class PasoInstalacion(gtk.Fixed):
                 title='ERROR',
                 mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
                 c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, self.bindlist),
-                c_2=gtk.RESPONSE_OK, f_2=sys.exit, p_2=(1,)
+                c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, self.mountlist),
+                c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
             )
 
         if ProcessGenerator(
@@ -279,7 +291,8 @@ class PasoInstalacion(gtk.Fixed):
                 title='ERROR',
                 mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
                 c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, self.bindlist),
-                c_2=gtk.RESPONSE_OK, f_2=sys.exit, p_2=(1,)
+                c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, self.mountlist),
+                c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
             )
 
         self.lblDesc.set_text('Generando imagen de arranque ...')
@@ -293,18 +306,20 @@ class PasoInstalacion(gtk.Fixed):
                 title='ERROR',
                 mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
                 c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, self.bindlist),
-                c_2=gtk.RESPONSE_OK, f_2=sys.exit, p_2=(1,)
+                c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, self.mountlist),
+                c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
             )
 
         if ProcessGenerator(
-            'chroot {0} update-initramfs -u'.format(self.mountpoint)
+            'chroot {0} update-initramfs -u -t'.format(self.mountpoint)
             ).returncode != 0:
             UserMessage(
                 message='Ocurrió un error actualizando la imagen de arranque.',
                 title='ERROR',
                 mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
                 c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, self.bindlist),
-                c_2=gtk.RESPONSE_OK, f_2=sys.exit, p_2=(1,)
+                c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, self.mountlist),
+                c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
             )
 
         self.lblDesc.set_text('Configurando interfaces de red ...')
@@ -316,7 +331,8 @@ class PasoInstalacion(gtk.Fixed):
                 title='ERROR',
                 mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
                 c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, self.bindlist),
-                c_2=gtk.RESPONSE_OK, f_2=sys.exit, p_2=(1,)
+                c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, self.mountlist),
+                c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
             )
 
         if not crear_etc_hosts(
@@ -338,7 +354,8 @@ class PasoInstalacion(gtk.Fixed):
                 title='ERROR',
                 mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
                 c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, self.bindlist),
-                c_2=gtk.RESPONSE_OK, f_2=sys.exit, p_2=(1,)
+                c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, self.mountlist),
+                c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
             )
 
         self.lblDesc.set_text('Configurando teclado ...')
@@ -351,7 +368,8 @@ class PasoInstalacion(gtk.Fixed):
                 title='ERROR',
                 mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
                 c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, self.bindlist),
-                c_2=gtk.RESPONSE_OK, f_2=sys.exit, p_2=(1,)
+                c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, self.mountlist),
+                c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
             )
 
         self.lblDesc.set_text('Configurando particiones, usuarios y grupos ...')
@@ -364,12 +382,18 @@ class PasoInstalacion(gtk.Fixed):
                 title='ERROR',
                 mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
                 c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, self.bindlist),
-                c_2=gtk.RESPONSE_OK, f_2=sys.exit, p_2=(1,)
+                c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, self.mountlist),
+                c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
             )
 
-        shutil.copy2('/etc/passwd', '{0}/etc/passwd'.format(self.mountpoint))
-        shutil.copy2('/etc/group', '{0}/etc/group'.format(self.mountpoint))
-        shutil.copy2('/etc/inittab', '{0}/new/dir/newname.ext'.format(self.mountpoint))
+        if not filecmp.cmp('/etc/passwd', '{0}/etc/passwd'.format(self.mountpoint)):
+            shutil.copy2('/etc/passwd', '{0}/etc/passwd'.format(self.mountpoint))
+
+        if not filecmp.cmp('/etc/group', '{0}/etc/group'.format(self.mountpoint)):
+            shutil.copy2('/etc/group', '{0}/etc/group'.format(self.mountpoint))
+
+        if not filecmp.cmp('/etc/inittab', '{0}/etc/inittab'.format(self.mountpoint)):
+            shutil.copy2('/etc/inittab', '{0}/etc/inittab'.format(self.mountpoint))
 
         f = open('{0}/etc/mtab'.format(self.mountpoint), 'w')
         f.write('')
@@ -391,7 +415,8 @@ class PasoInstalacion(gtk.Fixed):
                     title='ERROR',
                     mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
                     c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, self.bindlist),
-                    c_2=gtk.RESPONSE_OK, f_2=sys.exit, p_2=(1,)
+                    c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, self.mountlist),
+                    c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
                 )
 
         else:
@@ -411,7 +436,8 @@ class PasoInstalacion(gtk.Fixed):
                     title='ERROR',
                     mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
                     c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, self.bindlist),
-                    c_2=gtk.RESPONSE_OK, f_2=sys.exit, p_2=(1,)
+                    c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, self.mountlist),
+                    c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
                 )
 
         self.lblDesc.set_text('Creando usuario administrador ...')
@@ -435,7 +461,8 @@ class PasoInstalacion(gtk.Fixed):
                 title='ERROR',
                 mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
                 c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, self.bindlist),
-                c_2=gtk.RESPONSE_OK, f_2=sys.exit, p_2=(1,)
+                c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, self.mountlist),
+                c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
             )
 
         self.lblDesc.set_text('Removiendo instalador del sistema de archivos ...')
@@ -447,7 +474,8 @@ class PasoInstalacion(gtk.Fixed):
                 title='ERROR',
                 mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
                 c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, self.bindlist),
-                c_2=gtk.RESPONSE_OK, f_2=sys.exit, p_2=(1,)
+                c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, self.mountlist),
+                c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
             )
 
         if self.connection:
@@ -458,7 +486,8 @@ class PasoInstalacion(gtk.Fixed):
                     title='ERROR',
                     mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
                     c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, self.bindlist),
-                    c_2=gtk.RESPONSE_OK, f_2=sys.exit, p_2=(1,)
+                    c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, self.mountlist),
+                    c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
                 )
 
         self.lblDesc.set_text('Desmontando sistema de archivos ...')
@@ -468,7 +497,8 @@ class PasoInstalacion(gtk.Fixed):
                 title='ERROR',
                 mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
                 c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, self.bindlist),
-                c_2=gtk.RESPONSE_OK, f_2=sys.exit, p_2=(1,)
+                c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, self.mountlist),
+                c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
             )
 
         self.lblDesc.set_text('Ninguna planta fue lastimada en la creación del estilo visual de este instalador.')
