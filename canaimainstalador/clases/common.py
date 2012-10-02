@@ -26,7 +26,7 @@
 #
 # CODE IS POETRY
 
-import commands, re, subprocess, math, cairo, gtk, hashlib, random, string, urllib2, os
+import commands, re, subprocess, math, cairo, gtk, hashlib, random, string, urllib2, os, glob
 
 from canaimainstalador.translator import msj
 from canaimainstalador.config import APP_NAME, APP_COPYRIGHT, APP_DESCRIPTION, \
@@ -111,10 +111,7 @@ def assisted_mount(sync, bind, plist):
             fscmd = ''
 
         if not os.path.isdir(m):
-            if os.makedirs(m):
-                i += 1
-        else:
-            i += 1
+            os.makedirs(m)
 
         if fs != 'swap':
             if ProcessGenerator(
@@ -127,7 +124,7 @@ def assisted_mount(sync, bind, plist):
     if sync:
         ProcessGenerator('sync')
 
-    if i == n * 2:
+    if i == n:
         return True
     else:
         return False
@@ -136,7 +133,7 @@ def assisted_umount(sync, plist):
     i = 0
     n = len(plist)
     plist.reverse()
-    print plist
+
     for p, m, fs in plist:
         if os.path.ismount(m):
             if ProcessGenerator('umount {0}'.format(m)).returncode == 0:
@@ -161,7 +158,7 @@ def preseed_debconf_values(mnt, debconflist):
     f.close()
 
     if ProcessGenerator(
-        'chroot {0} debconf-set-selections < /tmp/debconf'.format(mnt)
+        'chroot {0} cat /tmp/debconf | debconf-set-selections'.format(mnt)
         ).returncode == 0:
         return True
     else:
@@ -173,19 +170,28 @@ def instalar_paquetes(mnt, dest, plist):
 
     for loc, name in plist:
         if os.path.isdir(loc):
+            pkglist = glob.glob(loc + '/'+name+'_*.deb')
+
+            if pkglist:
+                pkg = os.path.basename(pkglist[0])
+                pkgpath = pkglist[0]
+            else:
+                return False
+
             if not os.path.isdir(mnt + dest):
-                if os.makedirs(mnt + dest):
-                    i += 1
+                os.makedirs(mnt + dest)
+
             if ProcessGenerator(
-                'cp {0}/{1}*.deb {2}'.format(loc, name, mnt + dest + '/')
-                ).returncode == 0:
-                i += 1
-            if ProcessGenerator(
-                'chroot {0} DEBIAN_FRONTEND=noninteractive dpkg -i {1}/{2}*.deb'.format(mnt, dest, name)
+                'cp {0} {1}'.format(pkgpath, mnt + dest + '/')
                 ).returncode == 0:
                 i += 1
 
-    if i == n * 3:
+            if ProcessGenerator(
+                'chroot {0} env DEBIAN_FRONTEND="noninteractive" dpkg -i {1}/{2}'.format(mnt, dest, pkg)
+                ).returncode == 0:
+                i += 1
+
+    if i == n*2:
         return True
     else:
         return False
@@ -210,9 +216,12 @@ def reconfigurar_paquetes(mnt, plist):
     n = len(plist)
 
     for name in plist:
-        if ProcessGenerator(
+        p = ProcessGenerator(
             'chroot {0} dpkg-reconfigure {1}'.format(mnt, name)
-            ).returncode == 0:
+            )
+        print p.returncode
+        print p.stdout
+        if p.returncode == 0:
             i += 1
 
     if i == n:
@@ -258,18 +267,18 @@ def crear_etc_network_interfaces(mnt, cfg):
             content += '\niface {0} inet dhcp\n'.format(i)
 
     f = open(destination, 'w')
-    if f.write(content) and f.close():
-        return True
-    else:
-        return False
+    f.write(content)
+    f.close()
+
+    return True
 
 def crear_etc_hostname(mnt, cfg, maq):
     content = maq + '\n'
     f = open(mnt + cfg, 'w')
-    if f.write(content) and f.close():
-        return True
-    else:
-        return False
+    f.write(content)
+    f.close()
+
+    return True
 
 def crear_etc_hosts(mnt, cfg, maq):
     content = '127.0.0.1\t\t{0}\t\tlocalhost\n'.format(maq)
@@ -281,10 +290,10 @@ def crear_etc_hosts(mnt, cfg, maq):
     content += 'ff02::3\t\tip6-allhosts'
 
     f = open(mnt + cfg, 'w')
-    if f.write(content) and f.close():
-        return True
-    else:
-        return False
+    f.write(content)
+    f.close()
+
+    return True
 
 def crear_etc_default_keyboard(mnt, cfg, key):
     pattern = "^XKBLAYOUT=*"
@@ -312,10 +321,10 @@ def crear_etc_default_keyboard(mnt, cfg, key):
 
     # Escribe el archivo modificado
     outfile = open(file_path, "w")
-    if outfile.write(string) and outfile.close():
-        return True
-    else:
-        return False
+    outfile.write(string)
+    outfile.close()
+
+    return True
 
 def crear_etc_fstab(mnt, cfg, mountlist, cdroms):
     defaults = 'defaults\t0\t0'
@@ -324,7 +333,7 @@ def crear_etc_fstab(mnt, cfg, mountlist, cdroms):
 
     for part, point, fs in mountlist:
         uuid = get_uuid(part)
-        point = point.strip(mnt)
+        point = point.replace(mnt, '')
 
         if fs == 'swap':
             content += "\n{0}\tnone\tswap\tsw\t0\t0".format(uuid)
@@ -338,10 +347,10 @@ def crear_etc_fstab(mnt, cfg, mountlist, cdroms):
         ProcessGenerator('mkdir -p {0}'.format(mnt + '/media/cdrom' + num))
 
     f = open(mnt + cfg, 'w')
-    if f.write(content) and f.close():
-        return True
-    else:
-        return False
+    f.write(content)
+    f.close()
+
+    return True
 
 def lista_cdroms():
     info = '/proc/sys/dev/cdrom/info'
