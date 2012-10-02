@@ -28,7 +28,6 @@ class PasoInstalacion(gtk.Fixed):
         self.chkgdm = CFG['chkgdm']
         self.mountpoint = '/target'
         self.squashfs = '/live/image/live/filesystem.squashfs'
-        self.connection = True
         self.requesturl = 'http://www.google.com/'
         self.uninstpkgs = ['canaima-instalador']
         self.reconfpkgs = [
@@ -67,6 +66,7 @@ class PasoInstalacion(gtk.Fixed):
             ['/sys', self.mountpoint+'/sys', ''],
             ['/proc', self.mountpoint+'/proc', '']
             ]
+        self.connection = True
         self.mountlist = []
 
         self.visor = webkit.WebView()
