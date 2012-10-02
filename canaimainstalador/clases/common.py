@@ -200,7 +200,7 @@ def desinstalar_paquetes(mnt, plist):
 
     for name in plist:
         if ProcessGenerator(
-            'chroot {0} aptitude purge {1}'.format(mnt, name)
+            'chroot {0} aptitude purge --assume-yes --allow-untrusted -o DPkg::Options::="--force-confmiss" -o DPkg::Options::="--force-confnew" -o DPkg::Options::="--force-overwrite" {1}'.format(mnt, name)
             ).returncode == 0:
             i += 1
 
@@ -217,8 +217,6 @@ def reconfigurar_paquetes(mnt, plist):
         p = ProcessGenerator(
             'chroot {0} dpkg-reconfigure {1}'.format(mnt, name)
             )
-        print p.returncode
-        print p.stdout
         if p.returncode == 0:
             i += 1
 
@@ -241,7 +239,7 @@ def actualizar_sistema(mnt):
         i += 1
 
     if ProcessGenerator(
-        'chroot {0} aptitude full-upgrade'.format(mnt)
+        'chroot {0} env DEBIAN_FRONTEND="noninteractive" aptitude full-upgrade --assume-yes --allow-untrusted -o DPkg::Options::="--force-confmiss" -o DPkg::Options::="--force-confnew" -o DPkg::Options::="--force-overwrite"'.format(mnt)
         ).returncode == 0:
         i += 1
 

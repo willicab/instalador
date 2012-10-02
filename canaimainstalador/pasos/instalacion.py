@@ -8,7 +8,7 @@ from canaimainstalador.clases.common import UserMessage, ProcessGenerator, \
     reconfigurar_paquetes, desinstalar_paquetes, instalar_paquetes, lista_cdroms, \
     crear_etc_default_keyboard, crear_etc_hostname, crear_etc_hosts, \
     crear_etc_network_interfaces, crear_etc_fstab, HeadRequest, assisted_mount, \
-    assisted_umount, preseed_debconf_values
+    assisted_umount, preseed_debconf_values, actualizar_sistema
 from canaimainstalador.config import INSTALL_SLIDES
 
 class PasoInstalacion(gtk.Fixed):
@@ -32,9 +32,9 @@ class PasoInstalacion(gtk.Fixed):
         self.requesturl = 'http://www.google.com/'
         self.uninstpkgs = ['canaima-instalador']
         self.reconfpkgs = [
-            'cunaguaro', 'guacharo', 'canaima-estilo-visual-gnome', 'canaima-plymouth',
-            'canaima-chat-gnome', 'canaima-bienvenido-gnome', 'canaima-escritorio-gnome',
-            'canaima-base'
+            'canaima-estilo-visual-gnome', 'canaima-plymouth',
+            'canaima-chat-gnome', 'canaima-bienvenido-gnome',
+            'canaima-escritorio-gnome', 'canaima-base'
             ]
         self.instpkgs_burg = [
             ['/live/image/pool/main/libx/libx86', 'libx86-1'],
