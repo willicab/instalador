@@ -24,8 +24,9 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 from canaimainstalador.clases.common import get_row_index, TblCol, has_next_row, \
-    is_primary, is_logic, humanize, PStatus
+    is_primary, is_logic, humanize, PStatus, is_free, UserMessage
 from canaimainstalador.translator import msj
+import gtk
 
 class Main():
 
@@ -35,11 +36,22 @@ class Main():
         self.acciones = acciones
         self.disco = fila_selec[TblCol.DISPOSITIVO]
 
-        if self.fila_selec[TblCol.TIPO] == msj.particion.primaria \
-        or self.fila_selec[TblCol.TIPO] == msj.particion.logica:
+        if is_primary(self.fila_selec, False) or is_logic(self.fila_selec):
             self._borrar_particion(self.fila_selec)
         else:
-            print "Aun no se puede borrar particiones extendidas"
+            is_clean = True
+            for partition in self.lista:
+                if is_logic(partition) and not is_free(partition):
+                    message = "Debe borrar primero las particiones lógicas."
+                    UserMessage(message, 'ERROR', gtk.MESSAGE_ERROR, gtk.BUTTONS_OK)
+                    is_clean = False
+                    break;
+            if is_clean:
+                i = get_row_index(self.lista, self.fila_selec)
+                free = self.lista[i + 1]
+                self._borrar_particion(self.fila_selec)
+                free[TblCol.TIPO] = msj.particion.primaria
+                self._borrar_particion(free)
 
     def _borrar_particion(self, part):
         'Ejecuta el proceso de eliminar la particion de la lista'
@@ -87,15 +99,17 @@ class Main():
         if del_ant:
             del self.lista[i - 1]
 
-        # Agregamos la accion correspondiente
-        self.acciones.append(['borrar',
-                              self.disco,
-                              None,
-                              particion[TblCol.INICIO],
-                              particion[TblCol.FIN],
-                              None,
-                              None,
-                              0])
+        # Si lo que se estaeliminando no es un espacio libre
+        if not is_free(particion):
+            # Agregamos la accion correspondiente
+            self.acciones.append(['borrar',
+                                  self.disco,
+                                  None,
+                                  particion[TblCol.INICIO],
+                                  particion[TblCol.FIN],
+                                  None,
+                                  None,
+                                  0])
 
     def _sumar_tamano(self, otra, actual):
         '''Indica si se puede sumar el tamaño de las particiones si se trata \

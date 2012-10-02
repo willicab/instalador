@@ -26,7 +26,7 @@
 import gtk
 
 from canaimainstalador.clases.common import floatify, humanize, TblCol, \
-    is_primary, is_usable, PStatus, is_resizable
+    is_primary, is_usable, PStatus, is_resizable, is_free
 from canaimainstalador.clases import particion_nueva, particion_redimensionar, \
     particion_eliminar, particion_usar
 from canaimainstalador.clases.tabla_particiones import TablaParticiones
@@ -181,8 +181,7 @@ class PasoPartManual(gtk.Fixed):
         # BTN_ELIMINAR
         # Solo se pueden eliminar particiones, no los espacios libres
         #TODO: Eliminar part. extendidas (necesita verificar part. logicas)
-        if fila[TblCol.FORMATO] != msj.particion.libre \
-        and fila[TblCol.TIPO] != msj.particion.extendida:
+        if not is_free(fila):
             self.btn_eliminar.set_sensitive(True)
         else:
             self.btn_eliminar.set_sensitive(False)
