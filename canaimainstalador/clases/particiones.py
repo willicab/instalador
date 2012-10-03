@@ -4,7 +4,7 @@
 import parted, _ped
 
 from canaimainstalador.clases.common import ProcessGenerator, espacio_usado
-from canaimainstalador.config import *
+from canaimainstalador.config import FSPROGS
 
 class Particiones():
     def __init__(self):
