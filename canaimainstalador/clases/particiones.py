@@ -3,7 +3,7 @@
 
 import parted, _ped
 
-from canaimainstalador.clases.common import ProcessGenerator, espacio_usado
+from canaimainstalador.clases.common import ProcessGenerator, espacio_usado, assisted_mount, assisted_umount
 from canaimainstalador.config import FSPROGS
 
 class Particiones():
@@ -103,14 +103,19 @@ class Particiones():
 
         return sorted(p, key=lambda particiones: particiones[1])
 
-    def nombre_particion(self, drive, start, end):
-
+    def nombre_particion(self, drive, ptype, start, end):
         dev = parted.Device(drive)
         disk = parted.Disk(dev)
         s_sec = start * 1024 / dev.sectorSize
         e_sec = end * 1024 / dev.sectorSize
         m_sec = ((e_sec - s_sec) / 2) + s_sec
-        return disk.getPartitionBySector(m_sec).path
+
+        if ptype == 'logical' or ptype == 'primary':
+            part = disk.getPartitionBySector(m_sec)
+        else:
+            part = disk.getExtendedPartition()
+
+        return part.path
 
     def crear_particion(self, drive, start, end, fs, partype):
         '''
@@ -128,11 +133,11 @@ class Particiones():
         e_sec = end * 1024 / dev.sectorSize
 
         if partype == 'primary' or partype == 0:
-            partype = _ped.PARTITION_NORMAL
+            pedtype = _ped.PARTITION_NORMAL
         elif partype == 'logical' or partype == 1:
-            partype = _ped.PARTITION_LOGICAL
+            pedtype = _ped.PARTITION_LOGICAL
         elif partype == 'extended' or partype == 2:
-            partype = _ped.PARTITION_EXTENDED
+            pedtype = _ped.PARTITION_EXTENDED
         else:
             return False
 
@@ -149,7 +154,7 @@ class Particiones():
             print b
 
         try:
-            partition = parted.Partition(disk=disk, type=partype, geometry=geometry)
+            partition = parted.Partition(disk=disk, type=pedtype, geometry=geometry)
             i += 1
         except Exception as c:
             print c
@@ -167,12 +172,14 @@ class Particiones():
             print e
 
         if i == 5:
-            if partype == _ped.PARTITION_EXTENDED:
+            if pedtype == _ped.PARTITION_EXTENDED:
                 return True
             else:
                 if fs in FSPROGS:
                     ProcessGenerator(
-                        FSPROGS[fs][0].format(self.nombre_particion(drive, start, end))
+                        FSPROGS[fs][0].format(
+                            self.nombre_particion(drive, partype, start, end)
+                            )
                         )
                 return True
         else:
@@ -193,7 +200,7 @@ class Particiones():
         else:
             return False
 
-    def borrar_particion(self, part):
+    def borrar_particion(self, drive, part):
         '''
         Argumentos:
         - disco: el disco donde se realizará la partición. Ej: /dev/sda
@@ -203,7 +210,7 @@ class Particiones():
         - fin: donde terminará la partición, en kB
         '''
         i = 0
-        dev = parted.Device(part[:-1])
+        dev = parted.Device(drive)
         disk = parted.Disk(dev)
         partition = disk.getPartitionByPath(part)
 
@@ -224,7 +231,7 @@ class Particiones():
         else:
             return False
 
-    def redimensionar_particion(self, part, newend):
+    def redimensionar_particion(self, drive, part, newend):
         '''
         Argumentos:
         - disco: el disco donde se realizará la partición. Ej: /dev/sda
@@ -233,7 +240,6 @@ class Particiones():
         - inicio: donde comenzará la partición, en kB
         - fin: donde terminará la partición, en kB
         '''
-        drive = part[:-1]
         dev = parted.Device(drive)
         disk = parted.Disk(dev)
         partition = disk.getPartitionByPath(part)
@@ -245,7 +251,7 @@ class Particiones():
 
         if newend > currend:
             # Redimensionar primero la partición y luego el sistema de archivos
-            if self.borrar_particion(part=part):
+            if self.borrar_particion(drive=drive, part=part):
                 if fs == 'linux-swap(v1)':
                     if self.crear_particion(
                         drive=drive, start=currstart, end=newend,
@@ -259,20 +265,21 @@ class Particiones():
                         ):
                         if FSPROGS[fs][1] != '':
                             if fs == 'btrfs':
-                                ProcessGenerator('umount /mnt')
-                                ProcessGenerator('mount {0} /mnt'.format(part))
+                                assisted_umount(sync = True, plist=[['', '/mnt', '']])
+                                assisted_mount(sync = True, bind=False, plist=[[part, '/mnt', 'btrfs']])
+
                             if ProcessGenerator(
                                 FSPROGS[fs][1].format(newsize, part)
                                 ).returncode == 0:
                                 if fs == 'btrfs':
-                                    ProcessGenerator('umount /mnt')
+                                    assisted_umount(sync = True, plist=[['', '/mnt', '']])
                                 return True
                         else:
                             return False
         elif newend < currend:
             # Redimensionar primero el sistema de archivos y luego la partición
             if fs == 'linux-swap(v1)':
-                if self.borrar_particion(part=part):
+                if self.borrar_particion(drive=drive, part=part):
                     if self.crear_particion(
                         drive=drive, start=currstart, end=newend,
                         fs='swap', partype=partype
@@ -281,14 +288,15 @@ class Particiones():
             else:
                 if FSPROGS[fs][1] != '':
                     if fs == 'btrfs':
-                        ProcessGenerator('umount /mnt')
-                        ProcessGenerator('mount {0} /mnt'.format(part))
-                        ProcessGenerator(FSPROGS[fs][1].format(newsize, part))
-                        ProcessGenerator('umount /mnt')
-                    else:
-                        ProcessGenerator(FSPROGS[fs][1].format(newsize, part))
+                        assisted_umount(sync = True, plist=[['', '/mnt', '']])
+                        assisted_mount(sync = True, bind=False, plist=[[part, '/mnt', 'btrfs']])
 
-                    if self.borrar_particion(part=part):
+                    ProcessGenerator(FSPROGS[fs][1].format(newsize, part))
+
+                    if fs == 'btrfs':
+                        assisted_umount(sync = True, plist=[['', '/mnt', '']])
+
+                    if self.borrar_particion(drive=drive, part=part):
                         if self.crear_particion(
                             drive=drive, start=currstart, end=newend,
                             fs=None, partype=partype

@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 
-import os, gtk, webkit, sys, threading, shutil, urllib2, filecmp
+import os, gtk, webkit, sys, threading, shutil, filecmp
 
 from canaimainstalador.clases.particiones import Particiones
 from canaimainstalador.clases.common import UserMessage, ProcessGenerator, \
     reconfigurar_paquetes, desinstalar_paquetes, instalar_paquetes, lista_cdroms, \
     crear_etc_default_keyboard, crear_etc_hostname, crear_etc_hosts, \
-    crear_etc_network_interfaces, crear_etc_fstab, HeadRequest, assisted_mount, \
-    assisted_umount, preseed_debconf_values, actualizar_sistema
+    crear_etc_network_interfaces, crear_etc_fstab, assisted_mount, \
+    assisted_umount, preseed_debconf_values
 from canaimainstalador.config import INSTALL_SLIDES
 
 class PasoInstalacion(gtk.Fixed):
@@ -100,11 +100,7 @@ class PasoInstalacion(gtk.Fixed):
         self.instalar()
 
     def instalar(self):
-        try:
-            response = urllib2.urlopen(HeadRequest(self.requesturl))
-        except:
-            self.connection = False
-        
+
         if not os.path.isdir(self.mountpoint):
             os.makedirs(self.mountpoint)
 
@@ -141,14 +137,14 @@ class PasoInstalacion(gtk.Fixed):
             fs = a[5]
             tipo = a[6]
             nuevo_fin = a[7]
-            particion = self.p.nombre_particion(self.metodo['disco'][0], inicio, fin)
-            self.particiones = self.p.lista_particiones(self.metodo['disco'][0])
+            disco = self.metodo['disco'][0]
+            self.particiones = self.p.lista_particiones(disco)
             self.cdroms = lista_cdroms()
+            print a
 
             if accion == 'crear':
                 if not self.p.crear_particion(
-                    drive=self.metodo['disco'][0], start=inicio,
-                    end=fin, fs=fs, partype=tipo
+                    drive=disco, start=inicio, end=fin, fs=fs, partype=tipo
                     ):
                     UserMessage(
                         message='Ocurrió un error creando una partición.',
@@ -159,14 +155,16 @@ class PasoInstalacion(gtk.Fixed):
                         c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
                     )
                 else:
-                    self.mountlist.append([
-                        self.p.nombre_particion(self.metodo['disco'][0], inicio, fin),
-                        self.mountpoint+montaje, fs
-                        ])
+                    if montaje:
+                        self.mountlist.append([
+                            self.p.nombre_particion(disco, tipo, inicio, fin),
+                            self.mountpoint+montaje, fs
+                            ])
 
             elif accion == 'borrar':
+                particion = self.p.nombre_particion(disco, tipo, inicio, fin)
                 if not self.p.borrar_particion(
-                    part=particion
+                    drive = disco, part=particion
                     ):
                     UserMessage(
                         message='Ocurrió un error borrando una partición.',
@@ -178,8 +176,10 @@ class PasoInstalacion(gtk.Fixed):
                     )
 
             elif accion == 'redimensionar':
+                print disco, tipo, inicio, fin
+                particion = self.p.nombre_particion(disco, tipo, inicio, fin)
                 if not self.p.redimensionar_particion(
-                    part=particion, newend=nuevo_fin
+                    drive = disco, part=particion, newend=nuevo_fin
                     ):
                     UserMessage(
                         message='Ocurrió un error redimensionando una partición.',
@@ -191,6 +191,7 @@ class PasoInstalacion(gtk.Fixed):
                     )
 
             elif accion == 'formatear':
+                particion = self.p.nombre_particion(disco, tipo, inicio, fin)
                 if not self.p.formatear_particion(
                     part=particion, fs=fs
                     ):
@@ -204,10 +205,11 @@ class PasoInstalacion(gtk.Fixed):
                     )
 
             elif accion == 'usar':
-                self.mountlist.append([
-                    self.p.nombre_particion(self.metodo['disco'][0], inicio, fin),
-                    self.mountpoint+montaje, fs
-                    ])
+                if montaje:
+                    self.mountlist.append([
+                        self.p.nombre_particion(disco, tipo, inicio, fin),
+                        self.mountpoint+montaje, fs
+                        ])
 
         self.lblDesc.set_text('Montando sistemas de archivos ...')
         if not assisted_mount(sync = True, bind=False, plist=self.mountlist):
@@ -477,18 +479,6 @@ class PasoInstalacion(gtk.Fixed):
                 c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, self.mountlist),
                 c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
             )
-
-        if self.connection:
-            self.lblDesc.set_text('Actualizando sistema operativo desde repositorios ...')
-            if not actualizar_sistema(mnt = self.mountpoint):
-                UserMessage(
-                    message='Ocurrió un error actualizando el sistema.',
-                    title='ERROR',
-                    mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
-                    c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, self.bindlist),
-                    c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, self.mountlist),
-                    c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
-                )
 
         self.lblDesc.set_text('Desmontando sistema de archivos ...')
         if not assisted_umount(sync = True, plist = self.bindlist):

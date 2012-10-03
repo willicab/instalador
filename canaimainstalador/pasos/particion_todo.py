@@ -84,7 +84,7 @@ class PasoPartTodo(gtk.Fixed):
         self.option_2.set_active(True)
 
         if self.metodo['tipo'] != 'TODO':
-            if self.metodo['disco'][4] > 0:
+            if self.metodo['disco'][4] > 0 and self.metodo['part'][5] != 'logical':
                 if self.metodo['disco'][3] == 0:
                     # Disponibles: root+swap, root+home+swap
                     self.option_3.set_sensitive(False)

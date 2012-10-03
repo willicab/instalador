@@ -168,9 +168,11 @@ class BarraAuto(gtk.DrawingArea):
                 cr.stroke()
 
         if self.metodo['tipo'] == 'REDIM':
-            self.p.acciones.append(
-                ['redimensionar', self.p.metodo['part'][0], None, self.ini, self.fin, None, None, self.ini + self.current]
-                )
+            self.p.acciones.append([
+                'redimensionar', self.p.metodo['part'][0], None, self.ini,
+                self.fin, self.p.metodo['part'][4], self.p.metodo['part'][5],
+                self.ini + self.current
+                ])
 
             if self.metodo['part'][5] == 'logical':
                 a_tipo = 'logical'
@@ -209,8 +211,12 @@ class BarraAuto(gtk.DrawingArea):
                 a_mount = '/var'
                 a_fs = 'ext4'
 
-            a_ini = self.ini + self.p.nuevas[k][1] + 0.5
-            a_fin = self.ini + self.p.nuevas[k][2] - 0.5
+            if a_tipo == 'primary':
+                a_ini = self.ini + self.p.nuevas[k][1] + 0.5
+                a_fin = self.ini + self.p.nuevas[k][2] - 0.5
+            elif a_tipo == 'logical':
+                a_ini = self.ini + self.p.nuevas[k][1] + 1
+                a_fin = self.ini + self.p.nuevas[k][2] - 1
 
             if self.p.nuevas[k][0] != 'PART':
                 self.p.acciones.append(
