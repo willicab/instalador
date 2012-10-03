@@ -138,7 +138,6 @@ class PasoInstalacion(gtk.Fixed):
             tipo = a[6]
             nuevo_fin = a[7]
             disco = self.metodo['disco'][0]
-            particion = self.p.nombre_particion(disco, tipo, inicio, fin)
             self.particiones = self.p.lista_particiones(disco)
             self.cdroms = lista_cdroms()
             print a
@@ -163,6 +162,7 @@ class PasoInstalacion(gtk.Fixed):
                             ])
 
             elif accion == 'borrar':
+                particion = self.p.nombre_particion(disco, tipo, inicio, fin)
                 if not self.p.borrar_particion(
                     drive = disco, part=particion
                     ):
@@ -176,8 +176,9 @@ class PasoInstalacion(gtk.Fixed):
                     )
 
             elif accion == 'redimensionar':
+                particion = self.p.nombre_particion(disco, tipo, inicio, fin)
                 if not self.p.redimensionar_particion(
-                    drive = self.metodo['disco'][0], part=particion, newend=nuevo_fin
+                    drive = disco, part=particion, newend=nuevo_fin
                     ):
                     UserMessage(
                         message='Ocurrió un error redimensionando una partición.',
@@ -189,6 +190,7 @@ class PasoInstalacion(gtk.Fixed):
                     )
 
             elif accion == 'formatear':
+                particion = self.p.nombre_particion(disco, tipo, inicio, fin)
                 if not self.p.formatear_particion(
                     part=particion, fs=fs
                     ):
@@ -204,7 +206,7 @@ class PasoInstalacion(gtk.Fixed):
             elif accion == 'usar':
                 if montaje:
                     self.mountlist.append([
-                        self.p.nombre_particion(self.metodo['disco'][0], tipo, inicio, fin),
+                        self.p.nombre_particion(disco, tipo, inicio, fin),
                         self.mountpoint+montaje, fs
                         ])
 
