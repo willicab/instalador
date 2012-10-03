@@ -195,7 +195,7 @@ class BarraTodo(gtk.DrawingArea):
             for w in self.particiones:
                 if w[4] != 'free':
                     self.p.acciones.append(
-                        ['borrar', w[0], None, w[1], w[2], None, None, 0]
+                        ['borrar', w[0], None, w[1], w[2], w[4], w[5], 0]
                         )
 
             if len(self.p.nuevas) - 1 > 4:
