@@ -26,14 +26,12 @@
 #
 # CODE IS POETRY
 
-import commands, re, subprocess, math, cairo, gtk, hashlib, random, string, urllib2, os, glob
+import commands, re, subprocess, math, cairo, gtk, hashlib, random, string, urllib2, os, glob, parted
 
 from canaimainstalador.translator import msj
 from canaimainstalador.config import APP_NAME, APP_COPYRIGHT, APP_DESCRIPTION, \
     APP_URL, LICENSE_FILE, AUTHORS_FILE, TRANSLATORS_FILE, VERSION_FILE, ABOUT_IMAGE, \
     FSPROGS
-
-SECTOR = 0.5 # Un sector es igual a 0.5 Kb
 
 def AboutWindow(widget=None):
     about = gtk.AboutDialog()
@@ -170,7 +168,7 @@ def instalar_paquetes(mnt, dest, plist):
 
     for loc, name in plist:
         if os.path.isdir(loc):
-            pkglist = glob.glob(loc + '/'+name+'_*.deb')
+            pkglist = glob.glob(loc + '/' + name + '_*.deb')
 
             if pkglist:
                 pkg = os.path.basename(pkglist[0])
@@ -191,7 +189,7 @@ def instalar_paquetes(mnt, dest, plist):
                 ).returncode == 0:
                 i += 1
 
-    if i == n*2:
+    if i == n * 2:
         return True
     else:
         return False
@@ -586,6 +584,11 @@ def ProcessGenerator(command):
 
     return process
 
+def get_sector_size(device):
+    'Retorna el tamaño en Kb de cada sector'
+    dev = parted.Device(device)
+    return dev.sectorSize / 1024.0
+
 def debug_list(the_list):
     data = "List [\n"
     for fila in the_list:
@@ -656,7 +659,6 @@ def is_primary(fila, with_extended=True):
 def is_usable(selected_row):
     disp = selected_row[TblCol.DISPOSITIVO]
     tipo = selected_row[TblCol.TIPO]
-    estado = selected_row[TblCol.ESTADO]
     try:
         # Esta linea comprueba que el dispositivo termine en un entero, esto
         # para comprobar que tiene un formato similar a /dev/sdb3 por ejemplo.
@@ -664,7 +666,7 @@ def is_usable(selected_row):
 
         # No se usan las particiones extendidas, sino las logicas
         # Tampoco se usan particiones que no estan en estado Normal
-        if tipo == msj.particion.extendida or estado != PStatus.NORMAL:
+        if tipo == msj.particion.extendida:
             return False
         else:
             return True

@@ -26,7 +26,7 @@
 import gtk
 
 from canaimainstalador.clases.common import floatify, humanize, TblCol, \
-    is_primary, is_usable, PStatus, is_resizable, is_free
+    is_primary, is_usable, PStatus, is_resizable, is_free, debug_list
 from canaimainstalador.clases import particion_nueva, particion_redimensionar, \
     particion_eliminar, particion_usar
 from canaimainstalador.clases.tabla_particiones import TablaParticiones
@@ -99,11 +99,7 @@ class PasoPartManual(gtk.Fixed):
         self.fila_selec = None  # Ultima fila seleccionada de la tabla
         self.raiz = False
 
-        # Llevar los botones a su estado inicial
-        self.btn_nueva.set_sensitive(False)
-        self.btn_usar.set_sensitive(False)
-        self.btn_redimension.set_sensitive(False)
-        self.btn_eliminar.set_sensitive(False)
+        self.set_buttons_insensitives()
 
         # Llenar la tabla con el contenido actual del disco
         if self.tabla != None:
@@ -136,6 +132,15 @@ class PasoPartManual(gtk.Fixed):
                 self.lista.append(fila)
 
             self.llenar_tabla()
+
+    def set_buttons_insensitives(self):
+        'Bloquea todos los botones de acciones'
+        # Llevar los botones a su estado inicial
+        self.btn_nueva.set_sensitive(False)
+        self.btn_usar.set_sensitive(False)
+        self.btn_redimension.set_sensitive(False)
+        self.btn_eliminar.set_sensitive(False)
+
 
     def seleccionar_fila(self, fila):
         '''Acciones a tomar cuando una fila de la tabla es seleccionada'''
@@ -235,22 +240,30 @@ class PasoPartManual(gtk.Fixed):
                     self.lista[k + 1] = f_temp
 
     def particion_eliminar(self, widget):
+        self.set_buttons_insensitives()
         w_elim = particion_eliminar.Main(self.lista, self.fila_selec, \
                                          self.acciones)
         self.lista = w_elim.lista
         self.acciones = w_elim.acciones
         self.llenar_tabla()
+        print "---ACCIONES---"
+        print debug_list(self.acciones)
+        print "--------------"
 
     def particion_redimensionar(self, widget):
+        self.set_buttons_insensitives()
         widget.set_sensitive(False)
-        w_redim = particion_redimensionar.Main(self.lista, self.fila_selec, \
+        w_redim = particion_redimensionar.Main(self.disco, self.lista, self.fila_selec, \
                                                self.acciones)
         self.acciones = w_redim.acciones
         self.lista = w_redim.lista
         self.llenar_tabla()
-
+        print "---ACCIONES---"
+        print debug_list(self.acciones)
+        print "--------------"
 
     def particion_nueva(self, widget):
+        self.set_buttons_insensitives()
         widget.set_sensitive(False)
         w_nueva = particion_nueva.Main(self)
         # Se actualiza la tabla
@@ -258,14 +271,24 @@ class PasoPartManual(gtk.Fixed):
         self.acciones = w_nueva.acciones
         self.acciones
         self.llenar_tabla()
+        print "---ACCIONES---"
+        print debug_list(self.acciones)
+        print "--------------"
 
     def particion_editar(self, widget):
+        self.set_buttons_insensitives()
         widget.set_sensitive(False)
         w_usar = particion_usar.Main(self.lista, self.fila_selec, self.acciones)
         self.lista = w_usar.lista
         self.acciones = w_usar.acciones
         self.llenar_tabla()
+        print "---ACCIONES---"
+        print debug_list(self.acciones)
+        print "--------------"
 
     def deshacer_todo(self, widget=None):
         self.inicializar(self.data)
+        print "---ACCIONES---"
+        print debug_list(self.acciones)
+        print "--------------"
 

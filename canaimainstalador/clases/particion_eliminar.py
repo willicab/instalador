@@ -27,6 +27,7 @@ from canaimainstalador.clases.common import get_row_index, TblCol, has_next_row,
     is_primary, is_logic, humanize, PStatus, is_free, UserMessage
 from canaimainstalador.translator import msj
 import gtk
+from copy import copy
 
 class Main():
 
@@ -64,18 +65,19 @@ class Main():
         # Si tiene una fila anterior
         if i > 0:
             p_anterior = self.lista[i - 1]
-            if self._sumar_tamano(p_anterior, particion):
+            if self._es_sumable(p_anterior, particion):
                 del_ant = True
                 inicio = p_anterior[TblCol.INICIO]
         # si tiene una fila siguiente
         if has_next_row(self.lista, i):
             p_siguiente = self.lista[i + 1]
-            if self._sumar_tamano(p_siguiente, particion):
+            if self._es_sumable(p_siguiente, particion):
                 del_sig = True
                 fin = p_siguiente[TblCol.FIN]
+
         tamano = fin - inicio
 
-        temp = particion
+        temp = copy(particion)
         temp[TblCol.DISPOSITIVO] = ''
         # Validar de que tipo quedará la particion libre
         if is_primary(temp):
@@ -107,11 +109,11 @@ class Main():
                                   None,
                                   particion[TblCol.INICIO],
                                   particion[TblCol.FIN],
-                                  None,
-                                  None,
+                                  particion[TblCol.FORMATO],
+                                  msj.particion.get_tipo_orig(particion[TblCol.TIPO]),
                                   0])
 
-    def _sumar_tamano(self, otra, actual):
+    def _es_sumable(self, otra, actual):
         '''Indica si se puede sumar el tamaño de las particiones si se trata \
         del mismo tipo (primaria o lógica)'''
         # Si la particion es libre

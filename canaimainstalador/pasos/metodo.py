@@ -109,8 +109,8 @@ class PasoMetodo(gtk.Fixed):
                     extendidas += 1
 
             disco_array = [self.disco, mini, mfin, primarias, extendidas]
-
-            if self.total > self.minimo:
+            print self.total, self.minimo
+            if self.total >= self.minimo:
                 for p in self.particiones:
                     part = p[0]
                     tam = p[3]

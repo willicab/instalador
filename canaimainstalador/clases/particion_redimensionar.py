@@ -25,12 +25,13 @@
 
 import gtk
 from canaimainstalador.clases.common import humanize, TblCol, floatify, PStatus, \
-    SECTOR
+    get_sector_size
 from canaimainstalador.translator import msj
 
 class Main(gtk.Dialog):
 
-    def __init__(self, lista, fila, acciones):
+    def __init__(self, disco, lista, fila, acciones):
+        self.sector = get_sector_size(disco)
         self.lista = lista
         self.acciones = acciones
         self.num_fila_act = self._get_num_fila_act(fila)
@@ -194,7 +195,7 @@ class Main(gtk.Dialog):
                 # Si hay particion libre siguiente, solo modificamos algunos
                 # valores
                 if part_sig:
-                    part_sig[TblCol.INICIO] = part_actual[TblCol.FIN] + SECTOR
+                    part_sig[TblCol.INICIO] = part_actual[TblCol.FIN] + self.sector
                     tamano = humanize(
                                 part_sig[TblCol.FIN] - part_sig[TblCol.INICIO])
                     part_sig[TblCol.TAMANO] = tamano
@@ -211,7 +212,7 @@ class Main(gtk.Dialog):
                     part_sig[TblCol.TAMANO] = humanize(self.get_sin_particion())
                     part_sig[TblCol.USADO] = humanize(0)
                     part_sig[TblCol.LIBRE] = humanize(self.get_sin_particion())
-                    part_sig[TblCol.INICIO] = part_actual[TblCol.FIN] + SECTOR
+                    part_sig[TblCol.INICIO] = part_actual[TblCol.FIN] + self.sector
                     part_sig[TblCol.FIN] = self.get_maximo()
                     part_sig[TblCol.FORMATEAR] = False
                     part_sig[TblCol.ESTADO] = PStatus.FREED
