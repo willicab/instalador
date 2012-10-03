@@ -12,7 +12,7 @@ class PasoInfo(gtk.Fixed):
 
         if CFG['oem'] == False:
             msg_nombre = '● Su nombre completo ({0}) será utilizado para identificar su cuenta de usuario.'.format(CFG['nombre'])
-            msg_usuario = '● Se creará una cuenta de usuario con nombre "{0}"'.format(CFG['usuario'])
+            msg_usuario = '● Se creará una cuenta de usuario con nombre "{0}".'.format(CFG['usuario'])
             msg_maquina = '● Se utilizará "{0}" para identificar a su equipo en la red local.'.format(CFG['maquina'])
         else:
             msg_nombre = '● Se instalará en modo OEM, sus datos serán requeridos en el primer inicio de sesión.'

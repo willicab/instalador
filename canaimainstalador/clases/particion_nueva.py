@@ -26,7 +26,7 @@
 import gtk
 
 from canaimainstalador.clases.common import humanize, TblCol, get_next_row, \
-    get_row_index, set_partition, PStatus, SECTOR
+    get_row_index, set_partition, PStatus, get_sector_size
 from canaimainstalador.translator import msj
 from canaimainstalador.clases.frame_fs import frame_fs
 
@@ -39,6 +39,7 @@ class Main(gtk.Dialog):
         gtk.Window.__init__(self, gtk.WINDOW_TOPLEVEL)
         gtk.Window.set_position(self, gtk.WIN_POS_CENTER_ALWAYS)
         self.disco = padre.disco
+        self.sector = get_sector_size(self.disco)
         self.lista = padre.lista
         self.acciones = padre.acciones
         self.particion_act = padre.fila_selec
@@ -132,7 +133,7 @@ class Main(gtk.Dialog):
                     tamano = humanize(fin - inicio)
                     libre = tamano
                     self.crear_particion(tipo, msj.particion.libre, montaje, \
-                                         tamano, usado, libre, inicio + SECTOR, \
+                                         tamano, usado, libre, inicio + self.sector, \
                                          fin)
             # Extendida
             elif tipo == msj.particion.extendida:
@@ -140,11 +141,11 @@ class Main(gtk.Dialog):
                 usado = tamano
                 libre = humanize(0)
                 self.crear_particion(tipo, formato, montaje, tamano, usado, \
-                                     libre, inicio, fin, PStatus.NEW)
+                                     libre, inicio, fin)
                 print "Crea vacío interno"
                 self.crear_particion(msj.particion.logica, msj.particion.libre, \
                                      montaje, tamano, usado, libre, \
-                                     inicio + SECTOR, fin)
+                                     inicio + self.sector * 2, fin)
                 if fin != self.fin_part:
                     print "Y deja espacio libre"
                     inicio = self.escala.get_value()
@@ -153,7 +154,7 @@ class Main(gtk.Dialog):
                     libre = tamano
                     self.crear_particion(msj.particion.primaria, \
                                          msj.particion.libre, montaje, tamano, \
-                                         usado, libre, inicio + SECTOR, fin)
+                                         usado, libre, inicio + self.sector, fin)
             # Lógica
             elif tipo == msj.particion.logica:
                 print "Partición Lógica"
@@ -166,8 +167,8 @@ class Main(gtk.Dialog):
                     tamano = humanize(fin - inicio)
                     libre = tamano
                     self.crear_particion(tipo, msj.particion.libre, montaje, \
-                                         tamano, usado, libre, inicio + SECTOR, \
-                                         fin)
+                                         tamano, usado, libre, inicio + self.sector \
+                                         * 2, fin)
             print "------------"
 
         self.destroy()

@@ -8,7 +8,7 @@ from canaimainstalador.clases.common import UserMessage, ProcessGenerator, \
     reconfigurar_paquetes, desinstalar_paquetes, instalar_paquetes, lista_cdroms, \
     crear_etc_default_keyboard, crear_etc_hostname, crear_etc_hosts, \
     crear_etc_network_interfaces, crear_etc_fstab, assisted_mount, \
-    assisted_umount, preseed_debconf_values
+    assisted_umount, preseed_debconf_values, debug_list
 from canaimainstalador.config import INSTALL_SLIDES
 
 class PasoInstalacion(gtk.Fixed):
@@ -62,10 +62,10 @@ class PasoInstalacion(gtk.Fixed):
             'burg-pc burg-pc/install_devices multiselect {0}'.format(self.metodo['disco'][0])
             ]
         self.bindlist = [
-            ['/dev', self.mountpoint+'/dev', ''],
-            ['/dev/pts', self.mountpoint+'/dev/pts', ''],
-            ['/sys', self.mountpoint+'/sys', ''],
-            ['/proc', self.mountpoint+'/proc', '']
+            ['/dev', self.mountpoint + '/dev', ''],
+            ['/dev/pts', self.mountpoint + '/dev/pts', ''],
+            ['/sys', self.mountpoint + '/sys', ''],
+            ['/proc', self.mountpoint + '/proc', '']
             ]
         self.connection = True
         self.mountlist = []
@@ -117,7 +117,7 @@ class PasoInstalacion(gtk.Fixed):
         for mpart in self.p.lista_particiones(self.metodo['disco'][0]):
             if os.path.exists(mpart[0]):
                 if not assisted_umount(
-                    sync = True, plist = [['', mpart[0], '']]
+                    sync=True, plist=[['', mpart[0], '']]
                     ):
                     UserMessage(
                         message='Ocurrió un error desmontando las particiones.',
@@ -158,13 +158,13 @@ class PasoInstalacion(gtk.Fixed):
                     if montaje:
                         self.mountlist.append([
                             self.p.nombre_particion(disco, tipo, inicio, fin),
-                            self.mountpoint+montaje, fs
+                            self.mountpoint + montaje, fs
                             ])
 
             elif accion == 'borrar':
                 particion = self.p.nombre_particion(disco, tipo, inicio, fin)
                 if not self.p.borrar_particion(
-                    drive = disco, part=particion
+                    drive=disco, part=particion
                     ):
                     UserMessage(
                         message='Ocurrió un error borrando una partición.',
@@ -179,7 +179,7 @@ class PasoInstalacion(gtk.Fixed):
                 print disco, tipo, inicio, fin
                 particion = self.p.nombre_particion(disco, tipo, inicio, fin)
                 if not self.p.redimensionar_particion(
-                    drive = disco, part=particion, newend=nuevo_fin
+                    drive=disco, part=particion, newend=nuevo_fin
                     ):
                     UserMessage(
                         message='Ocurrió un error redimensionando una partición.',
@@ -208,11 +208,11 @@ class PasoInstalacion(gtk.Fixed):
                 if montaje:
                     self.mountlist.append([
                         self.p.nombre_particion(disco, tipo, inicio, fin),
-                        self.mountpoint+montaje, fs
+                        self.mountpoint + montaje, fs
                         ])
 
         self.lblDesc.set_text('Montando sistemas de archivos ...')
-        if not assisted_mount(sync = True, bind=False, plist=self.mountlist):
+        if not assisted_mount(sync=True, bind=False, plist=self.mountlist):
             UserMessage(
                 message='Ocurrió un error montando los sistemas de archivos.',
                 title='ERROR',
@@ -236,7 +236,7 @@ class PasoInstalacion(gtk.Fixed):
             )
 
         self.lblDesc.set_text('Montando sistema de archivos ...')
-        if not assisted_mount(sync = True, bind=True, plist=self.bindlist):
+        if not assisted_mount(sync=True, bind=True, plist=self.bindlist):
             UserMessage(
                 message='Ocurrió un error montando los sistemas de archivos.',
                 title='ERROR',
@@ -260,7 +260,7 @@ class PasoInstalacion(gtk.Fixed):
             )
 
         if not instalar_paquetes(
-            mnt = self.mountpoint, dest = '/tmp', plist = self.instpkgs_burg
+            mnt=self.mountpoint, dest='/tmp', plist=self.instpkgs_burg
             ):
             UserMessage(
                 message='Ocurrió un error instalando un paquete.',
@@ -300,7 +300,7 @@ class PasoInstalacion(gtk.Fixed):
         self.lblDesc.set_text('Generando imagen de arranque ...')
         if ProcessGenerator(
             'chroot {0} /usr/sbin/mkinitramfs -o /boot/{1} {2}'.format(
-                self.mountpoint, 'initrd.img-'+os.uname()[2], os.uname()[2]
+                self.mountpoint, 'initrd.img-' + os.uname()[2], os.uname()[2]
                 )
             ).returncode != 0:
             UserMessage(
@@ -409,8 +409,8 @@ class PasoInstalacion(gtk.Fixed):
             self.nml_name = 'Mantenimiento'
 
             if not instalar_paquetes(
-                mnt = self.mountpoint, dest = '/tmp',
-                plist = self.instpkgs_cpp
+                mnt=self.mountpoint, dest='/tmp',
+                plist=self.instpkgs_cpp
                 ):
                 UserMessage(
                     message='Ocurrió un error instalando un paquete.',
@@ -430,8 +430,8 @@ class PasoInstalacion(gtk.Fixed):
 
         if self.chkgdm:
             if not instalar_paquetes(
-                mnt = self.mountpoint, dest = '/tmp',
-                plist = self.instpkgs_cagg
+                mnt=self.mountpoint, dest='/tmp',
+                plist=self.instpkgs_cagg
                 ):
                 UserMessage(
                     message='Ocurrió un error instalando un paquete.',
@@ -456,7 +456,7 @@ class PasoInstalacion(gtk.Fixed):
 
         self.lblDesc.set_text('Configurando detalles del sistema operativo ...')
         if not reconfigurar_paquetes(
-            mnt = self.mountpoint, plist = self.reconfpkgs
+            mnt=self.mountpoint, plist=self.reconfpkgs
             ):
             UserMessage(
                 message='Ocurrió un error reconfigurando un paquete.',
@@ -469,7 +469,7 @@ class PasoInstalacion(gtk.Fixed):
 
         self.lblDesc.set_text('Removiendo instalador del sistema de archivos ...')
         if not desinstalar_paquetes(
-            mnt = self.mountpoint, plist = self.uninstpkgs
+            mnt=self.mountpoint, plist=self.uninstpkgs
             ):
             UserMessage(
                 message='Ocurrió un error desinstalando un paquete.',
@@ -481,7 +481,7 @@ class PasoInstalacion(gtk.Fixed):
             )
 
         self.lblDesc.set_text('Desmontando sistema de archivos ...')
-        if not assisted_umount(sync = True, plist = self.bindlist):
+        if not assisted_umount(sync=True, plist=self.bindlist):
             UserMessage(
                 message='Ocurrió un error desinstalando un paquete.',
                 title='ERROR',
