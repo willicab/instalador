@@ -1,12 +1,32 @@
-#-*- coding: UTF-8 -*-
-'''
-Created on 24/09/2012
+# -*- coding: utf-8 -*-
+#
+# ==============================================================================
+# PAQUETE: canaima-instalador
+# ARCHIVO: canaimainstalador/translator.py
+# COPYRIGHT:
+#       (C) 2012 William Abrahan Cabrera Reyes <william@linux.es>
+#       (C) 2012 Erick Manuel Birbe Salazar <erickcion@gmail.com>
+#       (C) 2012 Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>
+# LICENCIA: GPL-3
+# ==============================================================================
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# COPYING file for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-@author: Erick Birbe <erickcion@gmail.com>
-'''
 from canaimainstalador.clases.common import get_row_index, TblCol, has_next_row, \
-    is_primary, is_logic, humanize, PStatus
+    is_primary, is_logic, humanize, PStatus, is_free, UserMessage
 from canaimainstalador.translator import msj
+import gtk
 
 class Main():
 
@@ -16,11 +36,22 @@ class Main():
         self.acciones = acciones
         self.disco = fila_selec[TblCol.DISPOSITIVO]
 
-        if self.fila_selec[TblCol.TIPO] == msj.particion.primaria \
-        or self.fila_selec[TblCol.TIPO] == msj.particion.logica:
+        if is_primary(self.fila_selec, False) or is_logic(self.fila_selec):
             self._borrar_particion(self.fila_selec)
         else:
-            print "Aun no se puede borrar particiones extendidas"
+            is_clean = True
+            for partition in self.lista:
+                if is_logic(partition) and not is_free(partition):
+                    message = "Debe borrar primero las particiones lógicas."
+                    UserMessage(message, 'ERROR', gtk.MESSAGE_ERROR, gtk.BUTTONS_OK)
+                    is_clean = False
+                    break;
+            if is_clean:
+                i = get_row_index(self.lista, self.fila_selec)
+                free = self.lista[i + 1]
+                self._borrar_particion(self.fila_selec)
+                free[TblCol.TIPO] = msj.particion.primaria
+                self._borrar_particion(free)
 
     def _borrar_particion(self, part):
         'Ejecuta el proceso de eliminar la particion de la lista'
@@ -68,8 +99,17 @@ class Main():
         if del_ant:
             del self.lista[i - 1]
 
-        # Agregamos la accion correspondiente
-        self.acciones.append(['borrar', self.disco, None, particion[TblCol.INICIO], particion[TblCol.FIN], None, None])
+        # Si lo que se estaeliminando no es un espacio libre
+        if not is_free(particion):
+            # Agregamos la accion correspondiente
+            self.acciones.append(['borrar',
+                                  self.disco,
+                                  None,
+                                  particion[TblCol.INICIO],
+                                  particion[TblCol.FIN],
+                                  None,
+                                  None,
+                                  0])
 
     def _sumar_tamano(self, otra, actual):
         '''Indica si se puede sumar el tamaño de las particiones si se trata \

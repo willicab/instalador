@@ -1,9 +1,32 @@
-#-*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
+#
+# ==============================================================================
+# PAQUETE: canaima-instalador
+# ARCHIVO: canaimainstalador/translator.py
+# COPYRIGHT:
+#       (C) 2012 William Abrahan Cabrera Reyes <william@linux.es>
+#       (C) 2012 Erick Manuel Birbe Salazar <erickcion@gmail.com>
+#       (C) 2012 Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>
+# LICENCIA: GPL-3
+# ==============================================================================
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# COPYING file for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 import gtk
 
 from canaimainstalador.clases.common import humanize, TblCol, get_next_row, \
-    get_row_index, set_partition, PStatus
+    get_row_index, set_partition, PStatus, SECTOR
 from canaimainstalador.translator import msj
 from canaimainstalador.clases.frame_fs import frame_fs
 
@@ -109,7 +132,8 @@ class Main(gtk.Dialog):
                     tamano = humanize(fin - inicio)
                     libre = tamano
                     self.crear_particion(tipo, msj.particion.libre, montaje, \
-                                         tamano, usado, libre, inicio + 1, fin)
+                                         tamano, usado, libre, inicio + SECTOR, \
+                                         fin)
             # Extendida
             elif tipo == msj.particion.extendida:
                 print "Partición Extendida"
@@ -120,7 +144,7 @@ class Main(gtk.Dialog):
                 print "Crea vacío interno"
                 self.crear_particion(msj.particion.logica, msj.particion.libre, \
                                      montaje, tamano, usado, libre, \
-                                     inicio + 1, fin)
+                                     inicio + SECTOR, fin)
                 if fin != self.fin_part:
                     print "Y deja espacio libre"
                     inicio = self.escala.get_value()
@@ -129,7 +153,7 @@ class Main(gtk.Dialog):
                     libre = tamano
                     self.crear_particion(msj.particion.primaria, \
                                          msj.particion.libre, montaje, tamano, \
-                                         usado, libre, inicio + 1, fin)
+                                         usado, libre, inicio + SECTOR, fin)
             # Lógica
             elif tipo == msj.particion.logica:
                 print "Partición Lógica"
@@ -142,7 +166,8 @@ class Main(gtk.Dialog):
                     tamano = humanize(fin - inicio)
                     libre = tamano
                     self.crear_particion(tipo, msj.particion.libre, montaje, \
-                                         tamano, usado, libre, inicio + 1, fin)
+                                         tamano, usado, libre, inicio + SECTOR, \
+                                         fin)
             print "------------"
 
         self.destroy()
@@ -174,7 +199,8 @@ class Main(gtk.Dialog):
         # Crea la acción correspondiente que va ejecutarse
         if crear_accion:
             self.acciones.append(['crear', disp, montaje, inicio, fin, \
-                                  formato, tipo])
+                                  formato, msj.particion.get_tipo_orig(tipo),
+                                  0])
 
         self.lista = set_partition(self.lista, self.particion_act, particion, \
                                    pop)
