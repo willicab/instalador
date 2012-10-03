@@ -63,35 +63,35 @@ class PasoInfo(gtk.Fixed):
         self.lblusuario = gtk.Label(msg_usuario)
         self.lblusuario.set_size_request(640, 30)
         self.lblusuario.set_alignment(0, 0)
-        self.put(self.lblusuario, 50, 150)
+        self.put(self.lblusuario, 10, 150)
 
         self.lblnombre = gtk.Label(msg_nombre)
         self.lblnombre.set_size_request(640, 30)
         self.lblnombre.set_alignment(0, 0)
-        self.put(self.lblnombre, 50, 170)
+        self.put(self.lblnombre, 10, 170)
 
         self.lblteclado = gtk.Label(msg_teclado)
         self.lblteclado.set_size_request(640, 30)
         self.lblteclado.set_alignment(0, 0)
-        self.put(self.lblteclado, 50, 190)
+        self.put(self.lblteclado, 10, 190)
 
         self.lblmaquina = gtk.Label(msg_maquina)
         self.lblmaquina.set_size_request(640, 30)
         self.lblmaquina.set_alignment(0, 0)
-        self.put(self.lblmaquina, 50, 210)
+        self.put(self.lblmaquina, 10, 210)
 
         self.lbltipo = gtk.Label(msg_tipo)
         self.lbltipo.set_size_request(690, 30)
         self.lbltipo.set_alignment(0, 0)
-        self.put(self.lbltipo, 50, 230)
+        self.put(self.lbltipo, 10, 230)
 
         self.lblmetodo = gtk.Label(msg_metodo)
         self.lblmetodo.set_size_request(640, 30)
         self.lblmetodo.set_alignment(0, 0)
-        self.put(self.lblmetodo, 50, 250)
+        self.put(self.lblmetodo, 10, 250)
 
         self.lblmsg = gtk.Label(msg_final)
         self.lblmsg.set_size_request(640, 30)
         self.lblmsg.set_line_wrap(True)
-        self.put(self.lblmsg, 50, 300)
+        self.put(self.lblmsg, 10, 300)
 

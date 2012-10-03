@@ -53,9 +53,9 @@ class Particiones():
         for i in l:
             code = i.type
             part = i.path
-            ini = float(i.geometry.start * sectorsize / 1024)
-            fin = float(i.geometry.end * sectorsize / 1024)
-            tam = float(i.geometry.length * sectorsize / 1024)
+            ini = float(i.geometry.start * sectorsize / 1024.0)
+            fin = float(i.geometry.end * sectorsize / 1024.0)
+            tam = float(i.geometry.length * sectorsize / 1024.0)
             num = int(i.number)
             usado = tam
             libre = float(0)
