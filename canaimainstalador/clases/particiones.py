@@ -4,7 +4,7 @@
 import parted, _ped
 
 from canaimainstalador.clases.common import ProcessGenerator, espacio_usado
-from canaimainstalador.config import *
+from canaimainstalador.config import FSPROGS
 
 class Particiones():
     def __init__(self):
@@ -53,9 +53,9 @@ class Particiones():
         for i in l:
             code = i.type
             part = i.path
-            ini = float(i.geometry.start * sectorsize / 1024)
-            fin = float(i.geometry.end * sectorsize / 1024)
-            tam = float(i.geometry.length * sectorsize / 1024)
+            ini = float(i.geometry.start * sectorsize / 1024.0)
+            fin = float(i.geometry.end * sectorsize / 1024.0)
+            tam = float(i.geometry.length * sectorsize / 1024.0)
             num = int(i.number)
             usado = tam
             libre = float(0)
@@ -127,8 +127,6 @@ class Particiones():
         s_sec = start * 1024 / dev.sectorSize
         e_sec = end * 1024 / dev.sectorSize
 
-        print float(dev.getSize(unit='KB'))/2
-
         if partype == 'primary' or partype == 0:
             partype = _ped.PARTITION_NORMAL
         elif partype == 'logical' or partype == 1:
@@ -168,12 +166,15 @@ class Particiones():
         except Exception as e:
             print e
 
-        if i == 5 and partype != _ped.PARTITION_EXTENDED:
-            if fs in FSPROGS:
-                ProcessGenerator(
-                    FSPROGS[fs][0].format(self.nombre_particion(drive, start, end))
-                    )
-            return True
+        if i == 5:
+            if partype == _ped.PARTITION_EXTENDED:
+                return True
+            else:
+                if fs in FSPROGS:
+                    ProcessGenerator(
+                        FSPROGS[fs][0].format(self.nombre_particion(drive, start, end))
+                        )
+                return True
         else:
             return False
 
@@ -260,11 +261,12 @@ class Particiones():
                             if fs == 'btrfs':
                                 ProcessGenerator('umount /mnt')
                                 ProcessGenerator('mount {0} /mnt'.format(part))
-                                ProcessGenerator(FSPROGS[fs][1].format(newsize, part))
-                                ProcessGenerator('umount /mnt')
-                            else:
-                                ProcessGenerator(FSPROGS[fs][1].format(newsize, part))
-                            return True
+                            if ProcessGenerator(
+                                FSPROGS[fs][1].format(newsize, part)
+                                ).returncode == 0:
+                                if fs == 'btrfs':
+                                    ProcessGenerator('umount /mnt')
+                                return True
                         else:
                             return False
         elif newend < currend:
@@ -297,4 +299,3 @@ class Particiones():
 
         elif newend == currend:
             return True
-

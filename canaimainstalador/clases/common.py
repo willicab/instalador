@@ -33,6 +33,8 @@ from canaimainstalador.config import APP_NAME, APP_COPYRIGHT, APP_DESCRIPTION, \
     APP_URL, LICENSE_FILE, AUTHORS_FILE, TRANSLATORS_FILE, VERSION_FILE, ABOUT_IMAGE, \
     FSPROGS
 
+SECTOR = 0.5 # Un sector es igual a 0.5 Kb
+
 def AboutWindow(widget=None):
     about = gtk.AboutDialog()
     about.set_position(gtk.WIN_POS_CENTER_ON_PARENT)
@@ -81,13 +83,13 @@ def AboutWindow(widget=None):
 
 def espacio_usado(fs, particion):
     if os.path.exists(particion):
-        assisted_umount(sync = False, plist = [['', '/mnt', '']])
+        assisted_umount(sync=False, plist=[['', '/mnt', '']])
         assisted_mount(
-            sync = False, bind = False, plist = [[particion, '/mnt', fs]]
+            sync=False, bind=False, plist=[[particion, '/mnt', fs]]
             )
         s = os.statvfs('/mnt')
         used = float(((s.f_blocks - s.f_bfree) * s.f_frsize) / 1024)
-        assisted_umount(sync = False, plist = [['', '/mnt', '']])
+        assisted_umount(sync=False, plist=[['', '/mnt', '']])
     else:
         used = 'unknown'
 
@@ -619,6 +621,10 @@ def get_next_row(the_list, row, row_index=None):
 def is_logic(row):
         'Determina si una particion es lógica'
         return row[TblCol.TIPO] == msj.particion.logica
+def is_free(row):
+        '''Determina si una particion es un espacio libre, idependientemente 
+        de si es Primaria o Logica'''
+        return row[TblCol.FORMATO] == msj.particion.libre
 
 def has_extended(lista):
         'Determina si existe por lo menos una particion extendida en la lista'
@@ -638,10 +644,11 @@ def set_partition(the_list, selected_row, new_row, pop=True):
 
     return the_list
 
-def is_primary(fila):
+def is_primary(fila, with_extended=True):
     'Determina si una particion es primaria'
     p_type = fila[TblCol.TIPO]
-    if p_type == msj.particion.primaria or p_type == msj.particion.extendida:
+    if p_type == msj.particion.primaria \
+    or (with_extended and p_type == msj.particion.extendida):
         return True
     else:
         return False

@@ -1,9 +1,32 @@
-#-*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
+#
+# ==============================================================================
+# PAQUETE: canaima-instalador
+# ARCHIVO: canaimainstalador/translator.py
+# COPYRIGHT:
+#       (C) 2012 William Abrahan Cabrera Reyes <william@linux.es>
+#       (C) 2012 Erick Manuel Birbe Salazar <erickcion@gmail.com>
+#       (C) 2012 Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>
+# LICENCIA: GPL-3
+# ==============================================================================
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# COPYING file for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 import gtk
 
 from canaimainstalador.clases.common import floatify, humanize, TblCol, \
-    is_primary, is_usable, PStatus, is_resizable
+    is_primary, is_usable, PStatus, is_resizable, is_free
 from canaimainstalador.clases import particion_nueva, particion_redimensionar, \
     particion_eliminar, particion_usar
 from canaimainstalador.clases.tabla_particiones import TablaParticiones
@@ -105,8 +128,8 @@ class PasoPartManual(gtk.Fixed):
                        humanize(floatify(p_tam)),
                        humanize(p_usado),
                        humanize(p_libre),
-                       floatify(p_ini),
-                       floatify(p_fin),
+                       p_ini,
+                       p_fin,
                        False, # Formatear
                        PStatus.NORMAL,
                    ]
@@ -158,8 +181,7 @@ class PasoPartManual(gtk.Fixed):
         # BTN_ELIMINAR
         # Solo se pueden eliminar particiones, no los espacios libres
         #TODO: Eliminar part. extendidas (necesita verificar part. logicas)
-        if fila[TblCol.FORMATO] != msj.particion.libre \
-        and fila[TblCol.TIPO] != msj.particion.extendida:
+        if not is_free(fila):
             self.btn_eliminar.set_sensitive(True)
         else:
             self.btn_eliminar.set_sensitive(False)

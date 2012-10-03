@@ -1,11 +1,31 @@
-#-*- coding: UTF-8 -*-
-'''
-Created on 13/09/2012
+# -*- coding: utf-8 -*-
+#
+# ==============================================================================
+# PAQUETE: canaima-instalador
+# ARCHIVO: canaimainstalador/translator.py
+# COPYRIGHT:
+#       (C) 2012 William Abrahan Cabrera Reyes <william@linux.es>
+#       (C) 2012 Erick Manuel Birbe Salazar <erickcion@gmail.com>
+#       (C) 2012 Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>
+# LICENCIA: GPL-3
+# ==============================================================================
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# COPYING file for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-@author: Erick Birbe <erickcion@gmail.com>
-'''
 import gtk
-from canaimainstalador.clases.common import humanize, TblCol, floatify, PStatus
+from canaimainstalador.clases.common import humanize, TblCol, floatify, PStatus, \
+    SECTOR
 from canaimainstalador.translator import msj
 
 class Main(gtk.Dialog):
@@ -171,10 +191,10 @@ class Main(gtk.Dialog):
 
             # Si dejamos espacio libre
             if part_actual[TblCol.FIN] < self.get_maximo():
-                # Si hay particion libre siguiente, solo modificamos algunos 
+                # Si hay particion libre siguiente, solo modificamos algunos
                 # valores
                 if part_sig:
-                    part_sig[TblCol.INICIO] = part_actual[TblCol.FIN] + 1
+                    part_sig[TblCol.INICIO] = part_actual[TblCol.FIN] + SECTOR
                     tamano = humanize(
                                 part_sig[TblCol.FIN] - part_sig[TblCol.INICIO])
                     part_sig[TblCol.TAMANO] = tamano
@@ -191,7 +211,7 @@ class Main(gtk.Dialog):
                     part_sig[TblCol.TAMANO] = humanize(self.get_sin_particion())
                     part_sig[TblCol.USADO] = humanize(0)
                     part_sig[TblCol.LIBRE] = humanize(self.get_sin_particion())
-                    part_sig[TblCol.INICIO] = part_actual[TblCol.FIN] + 1
+                    part_sig[TblCol.INICIO] = part_actual[TblCol.FIN] + SECTOR
                     part_sig[TblCol.FIN] = self.get_maximo()
                     part_sig[TblCol.FORMATEAR] = False
                     part_sig[TblCol.ESTADO] = PStatus.FREED
@@ -215,7 +235,7 @@ class Main(gtk.Dialog):
                                   part_actual[TblCol.INICIO],
                                   original[TblCol.FIN], # Fin original
                                   part_actual[TblCol.FORMATO],
-                                  part_actual[TblCol.TIPO],
+                                  msj.particion.get_tipo_orig(part_actual[TblCol.TIPO]),
                                   part_actual[TblCol.FIN], # Nuevo Fin
                                   ])
         self.destroy()
