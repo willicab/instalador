@@ -193,7 +193,13 @@ class BarraTodo(gtk.DrawingArea):
 
         if self.metodo['tipo'] == 'TODO':
             for w in self.particiones:
-                if w[4] != 'free':
+                if w[4] != 'free' and w[5] != 'extended':
+                    self.p.acciones.append(
+                        ['borrar', w[0], None, w[1], w[2], w[4], w[5], 0]
+                        )
+
+            for w in self.particiones:
+                if w[5] == 'extended':
                     self.p.acciones.append(
                         ['borrar', w[0], None, w[1], w[2], w[4], w[5], 0]
                         )
@@ -244,8 +250,12 @@ class BarraTodo(gtk.DrawingArea):
                 a_mount = '/var'
                 a_fs = 'ext4'
 
-            a_ini = self.ini + self.p.nuevas[k][1]
-            a_fin = self.ini + self.p.nuevas[k][2] - 0.5
+            if a_tipo == 'primary':
+                a_ini = self.ini + self.p.nuevas[k][1] + 0.5
+                a_fin = self.ini + self.p.nuevas[k][2] - 0.5
+            elif a_tipo == 'logical':
+                a_ini = self.ini + self.p.nuevas[k][1] + 1
+                a_fin = self.ini + self.p.nuevas[k][2] - 1
 
             if self.p.nuevas[k][0] != 'LIBRE':
                 self.p.acciones.append(

@@ -11,7 +11,7 @@ import gtk
 from canaimainstalador.clases.particiones import Particiones
 from canaimainstalador.clases.common import humanize, UserMessage
 from canaimainstalador.clases.barra_particiones import BarraParticiones
-from canaimainstalador.config import ESPACIO_TOTAL, CFG
+from canaimainstalador.config import ESPACIO_TOTAL, CFG, FSPROGS
 
 class PasoMetodo(gtk.Fixed):
     def __init__(self, CFG):
@@ -61,6 +61,7 @@ class PasoMetodo(gtk.Fixed):
     def seleccionar_disco(self, widget=None):
         primarias = 0
         extendidas = 0
+        logicas = 0
         self.metodos = []
 
         try:
@@ -105,10 +106,12 @@ class PasoMetodo(gtk.Fixed):
 
                 if t[5] == 'primary' and t[4] != 'free':
                     primarias += 1
+                elif t[5] == 'logical' and t[4] != 'free':
+                    logicas += 1
                 elif t[5] == 'extended':
                     extendidas += 1
 
-            disco_array = [self.disco, mini, mfin, primarias, extendidas]
+            disco_array = [self.disco, mini, mfin, primarias, extendidas, logicas]
 
             if self.total > self.minimo:
                 for p in self.particiones:
@@ -119,7 +122,7 @@ class PasoMetodo(gtk.Fixed):
                     libre = p[8]
 
                     if fs != 'free' and libre >= self.minimo:
-                        if tipo == 'logical':
+                        if tipo == 'logical' and FSPROGS[fs][1] != '':
                             self.metodos.append({
                                 'tipo': 'REDIM',
                                 'msg': 'Instalar redimensionando {0} para liberar espacio ({1} libres)'.format(part, humanize(libre)),
@@ -127,7 +130,7 @@ class PasoMetodo(gtk.Fixed):
                                 'disco': disco_array
                             })
 
-                        elif tipo == 'primary':
+                        elif tipo == 'primary' and FSPROGS[fs][1] != '':
                             if (extendidas < 1 and primarias < 4) or (extendidas > 0 and primarias < 2):
                                 self.metodos.append({
                                     'tipo': 'REDIM',

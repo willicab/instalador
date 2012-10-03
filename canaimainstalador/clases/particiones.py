@@ -3,7 +3,7 @@
 
 import parted, _ped
 
-from canaimainstalador.clases.common import ProcessGenerator, espacio_usado
+from canaimainstalador.clases.common import ProcessGenerator, espacio_usado, assisted_mount, assisted_umount
 from canaimainstalador.config import FSPROGS
 
 class Particiones():
@@ -104,7 +104,6 @@ class Particiones():
         return sorted(p, key=lambda particiones: particiones[1])
 
     def nombre_particion(self, drive, ptype, start, end):
-        print drive, ptype, start, end
         dev = parted.Device(drive)
         disk = parted.Disk(dev)
         s_sec = start * 1024 / dev.sectorSize
@@ -210,7 +209,6 @@ class Particiones():
         - inicio: donde comenzará la partición, en kB
         - fin: donde terminará la partición, en kB
         '''
-        print drive, part
         i = 0
         dev = parted.Device(drive)
         disk = parted.Disk(dev)
@@ -267,13 +265,14 @@ class Particiones():
                         ):
                         if FSPROGS[fs][1] != '':
                             if fs == 'btrfs':
-                                ProcessGenerator('umount /mnt')
-                                ProcessGenerator('mount {0} /mnt'.format(part))
+                                assisted_umount(sync = True, plist=[['', '/mnt', '']])
+                                assisted_mount(sync = True, bind=False, plist=[[part, '/mnt', 'btrfs']])
+
                             if ProcessGenerator(
                                 FSPROGS[fs][1].format(newsize, part)
                                 ).returncode == 0:
                                 if fs == 'btrfs':
-                                    ProcessGenerator('umount /mnt')
+                                    assisted_umount(sync = True, plist=[['', '/mnt', '']])
                                 return True
                         else:
                             return False
@@ -289,12 +288,13 @@ class Particiones():
             else:
                 if FSPROGS[fs][1] != '':
                     if fs == 'btrfs':
-                        ProcessGenerator('umount /mnt')
-                        ProcessGenerator('mount {0} /mnt'.format(part))
-                        ProcessGenerator(FSPROGS[fs][1].format(newsize, part))
-                        ProcessGenerator('umount /mnt')
-                    else:
-                        ProcessGenerator(FSPROGS[fs][1].format(newsize, part))
+                        assisted_umount(sync = True, plist=[['', '/mnt', '']])
+                        assisted_mount(sync = True, bind=False, plist=[[part, '/mnt', 'btrfs']])
+
+                    ProcessGenerator(FSPROGS[fs][1].format(newsize, part))
+
+                    if fs == 'btrfs':
+                        assisted_umount(sync = True, plist=[['', '/mnt', '']])
 
                     if self.borrar_particion(drive=drive, part=part):
                         if self.crear_particion(
