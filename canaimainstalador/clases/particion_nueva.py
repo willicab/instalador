@@ -65,7 +65,7 @@ class Main(gtk.Dialog):
         lbl.show()
         hbox.add(lbl)
         adj = gtk.Adjustment(self.fin_part, self.inicio_part, self.fin_part, \
-                             1.0, 5.0, 0.0)
+                             1.0, 1024.0, 0.0)
         self.escala = gtk.HScale()
         self.escala.set_digits(0)
         self.escala.set_draw_value(False)
@@ -124,57 +124,57 @@ class Main(gtk.Dialog):
             # Primaria
             if tipo == msj.particion.primaria:
                 print "Partición primaria"
-                self.crear_particion(tipo, formato, montaje, tamano, usado, \
-                                     libre, inicio, fin)
+                self.add_partition_to_list(tipo, formato, montaje, tamano, \
+                    usado, libre, inicio, fin)
                 if fin != self.fin_part:
                     print "Que deja espacio libre"
                     inicio = self.escala.get_value()
                     fin = self.fin_part
                     tamano = humanize(fin - inicio)
                     libre = tamano
-                    self.crear_particion(tipo, msj.particion.libre, montaje, \
-                                         tamano, usado, libre, inicio + self.sector, \
-                                         fin)
+                    self.add_partition_to_list(tipo, msj.particion.libre, \
+                        montaje, tamano, usado, libre, inicio + self.sector, \
+                        fin)
             # Extendida
             elif tipo == msj.particion.extendida:
                 print "Partición Extendida"
                 usado = tamano
                 libre = humanize(0)
-                self.crear_particion(tipo, formato, montaje, tamano, usado, \
-                                     libre, inicio, fin)
+                self.add_partition_to_list(tipo, formato, montaje, tamano, \
+                    usado, libre, inicio, fin)
                 print "Crea vacío interno"
-                self.crear_particion(msj.particion.logica, msj.particion.libre, \
-                                     montaje, tamano, usado, libre, \
-                                     inicio + self.sector * 2, fin)
+                self.add_partition_to_list(msj.particion.logica, \
+                    msj.particion.libre, montaje, tamano, usado, libre, \
+                    inicio + self.sector * 2, fin)
                 if fin != self.fin_part:
                     print "Y deja espacio libre"
                     inicio = self.escala.get_value()
                     fin = self.fin_part
                     tamano = humanize(fin - inicio)
                     libre = tamano
-                    self.crear_particion(msj.particion.primaria, \
-                                         msj.particion.libre, montaje, tamano, \
-                                         usado, libre, inicio + self.sector, fin)
+                    self.add_partition_to_list(msj.particion.primaria, \
+                        msj.particion.libre, montaje, tamano, usado, libre, \
+                        inicio + self.sector, fin)
             # Lógica
             elif tipo == msj.particion.logica:
                 print "Partición Lógica"
-                self.crear_particion(tipo, formato, montaje, tamano, usado, \
-                                     libre, inicio, fin)
+                self.add_partition_to_list(tipo, formato, montaje, tamano, \
+                    usado, libre, inicio, fin)
                 if fin != self.fin_part:
                     print "Que deja espacio extendido libre"
                     inicio = self.escala.get_value()
                     fin = self.fin_part
                     tamano = humanize(fin - inicio)
                     libre = tamano
-                    self.crear_particion(tipo, msj.particion.libre, montaje, \
-                                         tamano, usado, libre, inicio + self.sector \
-                                         * 2, fin)
+                    self.add_partition_to_list(tipo, msj.particion.libre, \
+                        montaje, tamano, usado, libre, \
+                        inicio + self.sector * 2, fin)
             print "------------"
 
         self.destroy()
         return response
 
-    def crear_particion(self, tipo, formato, montaje, tamano, usado,
+    def add_partition_to_list(self, tipo, formato, montaje, tamano, usado,
                         libre, inicio, fin):
         disp = self.disco
         crear_accion = True
@@ -195,16 +195,15 @@ class Main(gtk.Dialog):
 
         # Entrada de la particion para la tabla
         particion = [disp, tipo, formato, montaje, tamano, usado, libre, \
-                     inicio, fin, formatear, PStatus.NEW]
+            inicio, fin, formatear, PStatus.NEW]
 
         # Crea la acción correspondiente que va ejecutarse
         if crear_accion:
-            self.acciones.append(['crear', disp, montaje, inicio, fin, \
-                                  formato, msj.particion.get_tipo_orig(tipo),
-                                  0])
+            self.acciones.append(['crear', disp, montaje, inicio, fin, formato,
+                msj.particion.get_tipo_orig(tipo), 0])
 
         self.lista = set_partition(self.lista, self.particion_act, particion, \
-                                   pop)
+            pop)
 
     def escala_on_changed(self, widget=None):
         self.lblsize.set_text(humanize(widget.get_value() - self.inicio_part))

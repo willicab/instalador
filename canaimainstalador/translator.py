@@ -39,6 +39,7 @@ class msj:
         primaria = 'Primaria'
         extendida = 'Extendida'
         logica = 'Lógica'
+        desconocida = 'Desconocido'
 
         @classmethod
         def get_tipo(self, tipo):
@@ -55,13 +56,15 @@ class msj:
             if tipo == self.primaria:   return 'primary'
             if tipo == self.extendida:  return 'extended'
             if tipo == self.logica:     return 'logical'
+            if tipo == self.desconocida:return 'unknown'
 
             return tipo
 
         @classmethod
         def get_formato(self, formato):
-            if formato == 'free':           return self.libre
-            if formato == 'extended':     return ''
+            if formato == 'free':       return self.libre
+            if formato == 'unknown':    return self.desconocida
+            if formato == 'extended':   return ''
 
             return formato
 
