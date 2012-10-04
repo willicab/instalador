@@ -103,11 +103,16 @@ def assisted_mount(sync, bind, plist):
         bindcmd = ''
 
     for p, m, fs in plist:
+        if fs == 'fat32' or fs == 'fat16':
+            fs = 'vfat'
+        elif fs == 'hfs+':
+            fs = 'hfsplus'
+
         if fs:
             fscmd = '-t {0}'.format(fs)
         else:
             fscmd = ''
-
+        
         if not os.path.isdir(m):
             os.makedirs(m)
 

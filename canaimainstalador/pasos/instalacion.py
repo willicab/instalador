@@ -176,6 +176,7 @@ class PasoInstalacion(gtk.Fixed):
                     )
 
             elif accion == 'redimensionar':
+                print disco, tipo, inicio, fin
                 particion = self.p.nombre_particion(disco, tipo, inicio, fin)
                 if not self.p.redimensionar_particion(
                     drive=disco, part=particion, newend=nuevo_fin

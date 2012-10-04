@@ -4,18 +4,23 @@
 [ DESCARTADO ] - hacer que la barra de progreso en el proceso de instalación sea incremental
 [ LISTO ] - calcular el tamaño minimo y el máximo de cada partición
 
-- Arreglar alineación de particiones lógicas dentro de las extendidas.
+[ LISTO ] - Arreglar alineación de particiones lógicas dentro de las extendidas.
 [ LISTO ] - arreglar instalación/desinstalacion/reconfiguración de paquetes.
 - hacer banner de bienvenida y renovar los otros banners.
 [ LISTO ] - arreglar instalación de burg.
 [ LISTO ] - arreglar montaje y desmontaje de particiones antes de la instalación.
-- arreglar disco de instalación y puntos de montaje fuera del disco.
+[ DESCARTADO ] - arreglar disco de instalación y puntos de montaje fuera del disco.
 [ LISTO ] - verificar conexión a internet antes de hacer actualización.
 [ LISTO ] - hacer la acción "usar"
-- devolver valor correcto en KB cuando el inicio o fin de partición es en bytes.
-- Verificar existencia de puntos de montaje /target y /live.
-- Verificar existencia de archivo squashfs.
-- Verificar existencia de paquetes a instalar.
-- Desmontar las particiones a ser utilizadas.
+[ LISTO ] - devolver valor correcto en KB cuando el inicio o fin de partición es en bytes.
+[ LISTO ] - Verificar existencia de puntos de montaje /target y /live.
+[ LISTO ] - Verificar existencia de archivo squashfs.
+[ LISTO ] - Verificar existencia de paquetes a instalar.
+[ LISTO ] - Desmontar las particiones a ser utilizadas.
 - Asignar el flag de boot apropiadamente.
 - Agregar botones para seleccionar máximo y mínimo espacio en particionadores.
+- Agregar estilo de la pantalla de información.
+- Agregar estilo de la pantalla de datos de usuario.
+- Agregar estilo de la pantalla de accesibilidad.
+- Depurar el Segfault de webkit.
+- Validar el máximo de 11 particiones lógicas.
