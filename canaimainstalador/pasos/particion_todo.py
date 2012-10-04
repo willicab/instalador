@@ -83,13 +83,30 @@ class PasoPartTodo(gtk.Fixed):
 
         self.option_2.set_active(True)
 
-        if self.metodo['tipo'] != 'TODO':
-            if self.metodo['disco'][4] > 0 and self.metodo['part'][5] != 'logical':
+        if self.metodo['tipo'] != 'TODO' and self.metodo['disco'][4] > 0:
+            if self.metodo['part'][5] == 'primary':
                 if self.metodo['disco'][3] == 0:
                     # Disponibles: root+swap, root+home+swap
                     self.option_3.set_sensitive(False)
                     self.option_4.set_sensitive(False)
                 elif self.metodo['disco'][3] == 1:
+                    # Disponibles: root+swap
+                    self.option_1.set_active(True)
+                    self.option_2.set_sensitive(False)
+                    self.option_3.set_sensitive(False)
+                    self.option_4.set_sensitive(False)
+            elif self.metodo['part'][5] == 'logical':
+                if self.metodo['disco'][5] == 7:
+                    # Disponibles: root+swap, root+home+swap, boot+root+home+swap
+                    self.option_4.set_sensitive(False)
+                elif self.metodo['disco'][5] == 6:
+                    # Disponibles: root+swap, root+home+swap, boot+root+home+swap
+                    self.option_4.set_sensitive(False)
+                elif self.metodo['disco'][5] == 8:
+                    # Disponibles: root+swap, root+home+swap
+                    self.option_3.set_sensitive(False)
+                    self.option_4.set_sensitive(False)
+                elif self.metodo['disco'][5] == 9:
                     # Disponibles: root+swap
                     self.option_1.set_active(True)
                     self.option_2.set_sensitive(False)

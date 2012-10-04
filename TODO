@@ -19,8 +19,9 @@
 [ LISTO ] - Desmontar las particiones a ser utilizadas.
 - Asignar el flag de boot apropiadamente.
 - Agregar botones para seleccionar máximo y mínimo espacio en particionadores.
-- Agregar estilo de la pantalla de información.
-- Agregar estilo de la pantalla de datos de usuario.
-- Agregar estilo de la pantalla de accesibilidad.
+- Arreglar estilo de la pantalla de información.
+- Arreglar estilo de la pantalla de datos de usuario.
+- Arreglar estilo de la pantalla de accesibilidad.
 - Depurar el Segfault de webkit.
 - Validar el máximo de 11 particiones lógicas.
+- Mejorar mensajes de error de la instalación.
