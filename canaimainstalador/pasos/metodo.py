@@ -1,8 +1,30 @@
 #!/usr/bin/env python
-# -*- coding: UTF-8 -*-
-'''Clase que configura las particiones'''
-# Autor: William Cabrera
-# Fecha: 13/10/2011
+# -*- coding: utf-8 -*-
+#
+# ==============================================================================
+# PAQUETE: canaima-instalador
+# ARCHIVO: canaimainstalador/pasos/metodo.py
+# COPYRIGHT:
+#       (C) 2012 William Abrahan Cabrera Reyes <william@linux.es>
+#       (C) 2012 Erick Manuel Birbe Salazar <erickcion@gmail.com>
+#       (C) 2012 Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>
+# LICENCIA: GPL-3
+# ==============================================================================
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# COPYING file for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+#
+# CODE IS POETRY
 
 # Módulos globales
 import gtk
@@ -123,12 +145,13 @@ class PasoMetodo(gtk.Fixed):
 
                     if fs != 'free' and libre >= self.minimo:
                         if tipo == 'logical' and FSPROGS[fs][1] != '':
-                            self.metodos.append({
-                                'tipo': 'REDIM',
-                                'msg': 'Instalar redimensionando {0} para liberar espacio ({1} libres)'.format(part, humanize(libre)),
-                                'part': p,
-                                'disco': disco_array
-                            })
+                            if logicas < 10:
+                                self.metodos.append({
+                                    'tipo': 'REDIM',
+                                    'msg': 'Instalar redimensionando {0} para liberar espacio ({1} libres)'.format(part, humanize(libre)),
+                                    'part': p,
+                                    'disco': disco_array
+                                })
 
                         elif tipo == 'primary' and FSPROGS[fs][1] != '':
                             if (extendidas < 1 and primarias < 4) or (extendidas > 0 and primarias < 2):
@@ -141,12 +164,13 @@ class PasoMetodo(gtk.Fixed):
 
                     if fs == 'free' and tam >= self.minimo:
                         if tipo == 'logical':
-                            self.metodos.append({
-                                'tipo': 'LIBRE',
-                                'msg': 'Instalar usando espacio libre disponible ({0})'.format(humanize(tam)),
-                                'part': p,
-                                'disco': disco_array
-                            })
+                            if logicas < 10:
+                                self.metodos.append({
+                                    'tipo': 'LIBRE',
+                                    'msg': 'Instalar usando espacio libre disponible ({0})'.format(humanize(tam)),
+                                    'part': p,
+                                    'disco': disco_array
+                                })
 
                         elif tipo == 'primary':
                             if (extendidas < 1 and primarias < 4) or (extendidas > 0 and primarias < 2):

@@ -1,5 +1,30 @@
 #!/usr/bin/env python
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
+#
+# ==============================================================================
+# PAQUETE: canaima-instalador
+# ARCHIVO: canaimainstalador/pasos/instalacion.py
+# COPYRIGHT:
+#       (C) 2012 William Abrahan Cabrera Reyes <william@linux.es>
+#       (C) 2012 Erick Manuel Birbe Salazar <erickcion@gmail.com>
+#       (C) 2012 Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>
+# LICENCIA: GPL-3
+# ==============================================================================
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# COPYING file for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+#
+# CODE IS POETRY
 
 import os, gtk, webkit, sys, threading, shutil, filecmp
 
@@ -95,9 +120,9 @@ class PasoInstalacion(gtk.Fixed):
         self.w.cancelar.hide()
         self.w.acerca.hide()
 
-#        self.thread = threading.Thread(target=self.instalar, args=())
-#        self.thread.start()
-        self.instalar()
+        self.thread = threading.Thread(target=self.instalar, args=())
+        self.thread.start()
+#        self.instalar()
 
     def instalar(self):
 
@@ -140,7 +165,6 @@ class PasoInstalacion(gtk.Fixed):
             disco = self.metodo['disco'][0]
             self.particiones = self.p.lista_particiones(disco)
             self.cdroms = lista_cdroms()
-            print a
 
             if accion == 'crear':
                 if not self.p.crear_particion(
@@ -176,7 +200,6 @@ class PasoInstalacion(gtk.Fixed):
                     )
 
             elif accion == 'redimensionar':
-                print disco, tipo, inicio, fin
                 particion = self.p.nombre_particion(disco, tipo, inicio, fin)
                 if not self.p.redimensionar_particion(
                     drive=disco, part=particion, newend=nuevo_fin
@@ -483,7 +506,16 @@ class PasoInstalacion(gtk.Fixed):
         self.lblDesc.set_text('Desmontando sistema de archivos ...')
         if not assisted_umount(sync=True, plist=self.bindlist):
             UserMessage(
-                message='Ocurrió un error desinstalando un paquete.',
+                message='Ocurrió un error desmontando las particiones.',
+                title='ERROR',
+                mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
+                c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, self.bindlist),
+                c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, self.mountlist),
+                c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
+            )
+        if not assisted_umount(sync = True, plist = self.mountlist):
+            UserMessage(
+                message='Ocurrió un error desmontando las particiones.',
                 title='ERROR',
                 mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
                 c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, self.bindlist),
