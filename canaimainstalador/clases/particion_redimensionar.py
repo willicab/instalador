@@ -27,6 +27,7 @@ import gtk
 from canaimainstalador.clases.common import humanize, TblCol, floatify, PStatus, \
     get_sector_size
 from canaimainstalador.translator import msj
+from copy import copy
 
 class Main(gtk.Dialog):
 
@@ -180,7 +181,7 @@ class Main(gtk.Dialog):
             return response
 
         part_actual = self.lista[self.num_fila_act]
-        original = part_actual
+        original = copy(part_actual)
         part_sig = self.get_fila_siguiente()
 
         if response == gtk.RESPONSE_OK:
