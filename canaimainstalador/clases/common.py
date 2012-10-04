@@ -95,6 +95,19 @@ def espacio_usado(fs, particion):
 
     return used
 
+def mounted_targets(mnt):
+    m = []
+    cmd = "awk '$2 ~ /^\/target/ {print $2}' /proc/mounts | sort -r"
+    salida = commands.getstatusoutput(cmd)[1].split()
+
+    for i in salida:
+        m.append(['', i, ''])
+
+    if m:
+        return m
+    else:
+        return False
+
 def assisted_mount(sync, bind, plist):
     i = 0
     n = len(plist)
@@ -349,6 +362,7 @@ def crear_etc_fstab(mnt, cfg, mountlist, cdroms):
         content += '\n/dev/{0}\t/media/cdrom{1}\tudf,iso9660\tuser,noauto\t0\t0'.format(cd, num)
         ProcessGenerator('mkdir -p {0}'.format(mnt + '/media/cdrom' + num))
 
+    content += '\n'
     f = open(mnt + cfg, 'w')
     f.write(content)
     f.close()
