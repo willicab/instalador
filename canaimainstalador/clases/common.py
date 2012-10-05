@@ -26,7 +26,7 @@
 #
 # CODE IS POETRY
 
-import commands, re, subprocess, math, cairo, gtk, hashlib, random, string, urllib2, os, glob, parted
+import re, subprocess, math, cairo, gtk, hashlib, random, string, urllib2, os, glob, parted
 
 from canaimainstalador.translator import msj
 from canaimainstalador.config import APP_NAME, APP_COPYRIGHT, APP_DESCRIPTION, \
@@ -93,18 +93,33 @@ def espacio_usado(fs, particion):
 
     return used
 
-def mounted_targets():
+def mounted_targets(mnt):
     m = []
-    cmd = "awk '$2 ~ /^\/target/ {print $2}' /proc/mounts | sort -r"
-    salida = commands.getstatusoutput(cmd)[1].split()
+    _mnt = mnt.replace('/', '\/')
+    cmd = "awk '$2 ~ /^"+_mnt+"/ {print $2}' /proc/mounts | sort"
+    salida = subprocess.Popen(
+        cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT
+        ).communicate()[0].split()
 
     for i in salida:
         m.append(['', i, ''])
 
-    if m:
-        return m
-    else:
-        return False
+    print m
+    return m
+
+def mounted_parts(disk):
+    m = []
+    _disk = disk.replace('/', '\/')
+    cmd = "awk '$1 ~ /^"+_disk+"/ {print $2}' /proc/mounts | sort"
+    salida = subprocess.Popen(
+        cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT
+        ).communicate()[0].split()
+
+    for i in salida:
+        m.append(['', i, ''])
+
+    print m
+    return m
 
 def assisted_mount(sync, bind, plist):
     i = 0
@@ -267,8 +282,8 @@ def actualizar_sistema(mnt):
         return False
 
 def crear_usuarios(mnt, a_user, a_pass, n_name, n_user, n_pass):
-    content_1 = '{1}:{2}'.format(a_user, a_pass)
-    content_2 = '{1}:{2}'.format(n_user, n_pass)
+    content_1 = a_user+':'+a_pass+'\n'
+    content_2 = n_user+':'+n_pass+'\n'
     destination_1 = '{0}/tmp/passwd_1'.format(mnt)
     destination_2 = '{0}/tmp/passwd_2'.format(mnt)
 
@@ -390,7 +405,7 @@ def lista_cdroms():
     cmd = 'cat {0}| grep "drive name:" | sed "s/drive name://g"'.format(info)
     salida = subprocess.Popen(
         cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT
-        ).communicate()[0].split('\n')[0]
+        ).communicate()[0].split()
 
     if salida:
         return salida
@@ -401,10 +416,10 @@ def get_uuid(particion):
     cmd = '/sbin/blkid -p {0}'.format(particion)
     salida = subprocess.Popen(
         cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT
-        ).communicate()[0].split('\n')[0].split()
+        ).communicate()[0].split()
 
     for i in salida:
-        if re.search('^UUID=*', item):
+        if re.search('^UUID=*', i):
             uid = i
 
     if uid:
@@ -554,7 +569,7 @@ def ram():
     return 1024.0 * float(subprocess.Popen(
         'echo "scale=1;$( cat "/proc/meminfo" | grep "MemFree:" | awk \'{print $2}\' )/(10^3)" | bc',
         shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-    ).communicate()[0].split('\n')[0])
+    ).communicate()[0].split())
 
 def aconnect(button, signals, function, params):
     '''

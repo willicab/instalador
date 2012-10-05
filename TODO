@@ -5,7 +5,6 @@
 [ LISTO ] - calcular el tamaño minimo y el máximo de cada partición
 [ LISTO ] - Arreglar alineación de particiones lógicas dentro de las extendidas.
 [ LISTO ] - arreglar instalación/desinstalacion/reconfiguración de paquetes.
-- hacer banner de bienvenida y renovar los otros banners.
 [ LISTO ] - arreglar instalación de burg.
 [ LISTO ] - arreglar montaje y desmontaje de particiones antes de la instalación.
 [ DESCARTADO ] - arreglar disco de instalación y puntos de montaje fuera del disco.
@@ -27,3 +26,5 @@
 - Arreglar flickering de las barras de las particiones.
 [ LISTO ] - Arreglar creación de usuarios.
 - Arreglar problema de actualización de barra en partauto.
+- hacer banner de bienvenida y renovar los otros banners.
+- 

@@ -33,7 +33,8 @@ from canaimainstalador.clases.common import UserMessage, ProcessGenerator, \
     reconfigurar_paquetes, desinstalar_paquetes, instalar_paquetes, lista_cdroms, \
     crear_etc_default_keyboard, crear_etc_hostname, crear_etc_hosts, \
     crear_etc_network_interfaces, crear_etc_fstab, assisted_mount, \
-    assisted_umount, preseed_debconf_values, debug_list, mounted_targets
+    assisted_umount, preseed_debconf_values, debug_list, mounted_targets, \
+    mounted_parts, crear_usuarios
 from canaimainstalador.config import INSTALL_SLIDES
 
 class PasoInstalacion(gtk.Fixed):
@@ -96,18 +97,18 @@ class PasoInstalacion(gtk.Fixed):
         self.mountlist = []
 
         self.visor = webkit.WebView()
-        self.visor.set_size_request(700, 400)
+        self.visor.set_size_request(700, 430)
         self.visor.open(INSTALL_SLIDES)
         self.put(self.visor, 0, 0)
 
-        msg = 'Ha culminado la instalación, puede reiniciar ahora el sistema o seguir probando canaima y reiniciar más tarde.'
-        self.lblInfo = gtk.Label(msg)
-        self.lblInfo.set_size_request(690, 280)
-        self.put(self.lblInfo, 0, 0)
+#        msg = 'Ha culminado la instalación, puede reiniciar ahora el sistema o seguir probando canaima y reiniciar más tarde.'
+#        self.lblInfo = gtk.Label(msg)
+#        self.lblInfo.set_size_request(690, 280)
+#        self.put(self.lblInfo, 0, 0)
 
         self.lblDesc = gtk.Label()
         self.lblDesc.set_size_request(700, 30)
-        self.put(self.lblDesc, 0, 290)
+        self.put(self.lblDesc, 0, 440)
 
         self.w.siguiente.set_label('Reiniciar más tarde')
         self.w.siguiente.set_size_request(150, 30)
@@ -120,8 +121,9 @@ class PasoInstalacion(gtk.Fixed):
         self.w.cancelar.hide()
         self.w.acerca.hide()
 
-        self.thread = threading.Thread(target=self.instalar, args=())
-        self.thread.start()
+#        self.thread = threading.Thread(target=self.instalar, args=())
+#        self.thread.start()
+        self.instalar()
 
     def instalar(self):
 
@@ -138,7 +140,9 @@ class PasoInstalacion(gtk.Fixed):
                 c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
                 )
 
-        if not assisted_umount(sync=True, plist=mounted_targets()):
+        if not assisted_umount(
+            sync=True, plist=mounted_targets(mnt=self.mountpoint)
+            ):
             UserMessage(
                 message='Ocurrió un error desmontando las particiones.',
                 title='ERROR',
@@ -148,17 +152,17 @@ class PasoInstalacion(gtk.Fixed):
                 c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
                 )
 
-#        for mpart in self.p.lista_particiones(self.metodo['disco'][0]):
-#            if os.path.exists(mpart[0]):
-#                if not assisted_umount(sync=True, plist=[['', mpart[0], '']]):
-#                    UserMessage(
-#                        message='Ocurrió un error desmontando las particiones.',
-#                        title='ERROR',
-#                        mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
-#                        c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, self.bindlist),
-#                        c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, self.mountlist),
-#                        c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
-#                        )
+        if not assisted_umount(
+            sync=True, plist=mounted_parts(disk=self.metodo['disco'][0])
+            ):
+            UserMessage(
+                message='Ocurrió un error desmontando las particiones.',
+                title='ERROR',
+                mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
+                c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, self.bindlist),
+                c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, self.mountlist),
+                c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
+                )
 
         self.lblDesc.set_text('Creando particiones en disco ...')
         for a in self.acciones:
@@ -237,40 +241,44 @@ class PasoInstalacion(gtk.Fixed):
                         self.mountpoint + montaje, fs
                         ])
 
+        unset_boot = ''
         for i in self.p.lista_particiones(self.metodo['disco'][0]):
             for flag in i[6]:
                 if flag == 'boot':
                     unset_boot = i[0]
 
+        set_boot = ''
         for part, mount, fs in self.mountlist:
             if mount == self.mountpoint + '/':
                 set_boot = part
             elif mount == self.mountpoint + '/boot':
                 set_boot = part
 
-        if not asignar_bandera(
-            drive=self.metodo['disco'][0], part=set_boot, flag='boot'
-            ):
-            UserMessage(
-                message='Ocurrió un error montando los sistemas de archivos.',
-                title='ERROR',
-                mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
-                c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, self.bindlist),
-                c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, self.mountlist),
-                c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
-                )
+        if unset_boot:
+            if not self.p.remover_bandera(
+                drive=self.metodo['disco'][0], part=unset_boot, flag='boot'
+                ):
+                UserMessage(
+                    message='Ocurrió un error montando los sistemas de archivos.',
+                    title='ERROR',
+                    mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
+                    c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, self.bindlist),
+                    c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, self.mountlist),
+                    c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
+                    )
 
-        if not remover_bandera(
-            drive=self.metodo['disco'][0], part=unset_boot, flag='boot'
-            ):
-            UserMessage(
-                message='Ocurrió un error montando los sistemas de archivos.',
-                title='ERROR',
-                mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
-                c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, self.bindlist),
-                c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, self.mountlist),
-                c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
-                )
+        if set_boot:
+            if not self.p.asignar_bandera(
+                drive=self.metodo['disco'][0], part=set_boot, flag='boot'
+                ):
+                UserMessage(
+                    message='Ocurrió un error montando los sistemas de archivos.',
+                    title='ERROR',
+                    mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
+                    c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, self.bindlist),
+                    c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, self.mountlist),
+                    c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
+                    )
 
         self.lblDesc.set_text('Montando sistemas de archivos ...')
         if not assisted_mount(sync=True, bind=False, plist=self.mountlist):
