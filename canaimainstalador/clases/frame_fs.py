@@ -96,7 +96,7 @@ class frame_fs(gtk.Table):
         self.entrada = gtk.Entry()
         self.entrada.set_text('/')
         self.attach(self.entrada, 1, 2, 2, 3)
-        self.entrada.connect("changed", self.validar_punto)
+        self.entrada.connect("changed", self.validate_m_point)
 
         self.formatear = gtk.CheckButton("Formatear esta partición")
         self.attach(self.formatear, 1, 2, 3, 4)
@@ -108,7 +108,7 @@ class frame_fs(gtk.Table):
 
     def cmb_tipo_on_changed(self, widget=None):
         tipo = widget.get_active_text()
-        if tipo == 'Extendida':
+        if tipo == msj.particion.extendida:
             self.cmb_fs.set_sensitive(False)
             self.cmb_montaje.set_sensitive(False)
         else:
@@ -158,12 +158,12 @@ class frame_fs(gtk.Table):
         montaje = widget.get_active_text()
         if montaje == 'Escoger manualmente...':
             self.entrada.show()
-            self.validar_punto(self.entrada)
+            self.validate_m_point(self.entrada)
         else:
             self.entrada.hide()
             self.parent_diag.set_response_sensitive(gtk.RESPONSE_OK, True)
 
-    def validar_punto(self, widget=None):
+    def validate_m_point(self, widget=None):
         '''Valida que el punto de montaje no esté ya asignado a otra
         partición'''
         aparece = False
@@ -174,19 +174,3 @@ class frame_fs(gtk.Table):
             self.parent_diag.set_response_sensitive(gtk.RESPONSE_OK, True)
         else:
             self.parent_diag.set_response_sensitive(gtk.RESPONSE_OK, False)
-
-if __name__ == "__main__":
-    lst = [
-          ['/dev/sda1', 'Primaria', 'ext3', '', '31.28GB', '22.85GB', '8.43GB', 31.0, 32804729.0, False],
-          ['', 'Primaria', 'Espacio Libre', '', '134.0KB', '0.0KB', '134.0KB', 32804730.0, 32804863.0, False],
-          ['/dev/sda2', 'Primaria', 'swap', '', '1024.0MB', '1024.0MB', '0.0KB', 32804864.0, 33853439.0, False],
-          ['/dev/sda3', 'Primaria', 'ext3', '', '42.24GB', '36.37GB', '5.86GB', 33853440.0, 78150655.0, False],
-          ]
-
-    pa = ['/dev/sda3', 'Primaria', 'Espacio Libre', '', '31.28GB', '0.0KB', '31.28GB', 31, 32804863, False]
-
-    w = gtk.Dialog()
-    frame = frame_fs(w, lst, pa)
-    w.vbox.pack_start(frame)
-    w.show()
-    gtk.main()

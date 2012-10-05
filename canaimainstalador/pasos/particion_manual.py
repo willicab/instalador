@@ -28,7 +28,7 @@ import gtk
 from canaimainstalador.clases.common import floatify, humanize, TblCol, \
     is_primary, is_usable, PStatus, is_resizable, is_free, debug_list, is_logic
 from canaimainstalador.clases import particion_nueva, particion_redimensionar, \
-    particion_eliminar, particion_usar
+    particion_eliminar, particion_editar
 from canaimainstalador.clases.tabla_particiones import TablaParticiones
 from canaimainstalador.translator import msj
 
@@ -282,7 +282,7 @@ class PasoPartManual(gtk.Fixed):
     def edit_partition(self, widget):
         self.set_buttons_insensitives()
         widget.set_sensitive(False)
-        w_usar = particion_usar.Main(self.lista, self.fila_selec, self.acciones)
+        w_usar = particion_editar.Main(self.lista, self.fila_selec, self.acciones)
         self.lista = w_usar.lista
         self.acciones = w_usar.acciones
         self.fill_table()

@@ -95,9 +95,9 @@ class Main(gtk.Dialog):
         self.vbox.pack_start(self.cont)
 
         response = self.run()
-        self.procesar_respuesta(response)
+        self.process_response(response)
 
-    def procesar_respuesta(self, response=None):
+    def process_response(self, response=None):
 
         if not response:
             return response
