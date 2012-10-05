@@ -193,6 +193,8 @@ class Main(gtk.Dialog):
                 formato = ''
                 montaje = ''
 
+        if montaje == 'Ninguno': montaje = ''
+
         # Entrada de la particion para la tabla
         particion = [disp, tipo, formato, montaje, tamano, usado, libre, \
             inicio, fin, formatear, PStatus.NEW]
