@@ -26,7 +26,7 @@
 import gtk
 
 from canaimainstalador.clases.common import floatify, humanize, TblCol, \
-    is_primary, is_usable, PStatus, is_resizable, is_free, debug_list
+    is_primary, is_usable, PStatus, is_resizable, is_free, debug_list, is_logic
 from canaimainstalador.clases import particion_nueva, particion_redimensionar, \
     particion_eliminar, particion_usar
 from canaimainstalador.clases.tabla_particiones import TablaParticiones
@@ -42,7 +42,7 @@ class PasoPartManual(gtk.Fixed):
 
         self.tabla = TablaParticiones()
         #self.tabla.set_doble_click(self.activar_tabla);
-        self.tabla.set_seleccionar(self.seleccionar_fila)
+        self.tabla.set_seleccionar(self.table_row_selected)
 
         self.scroll = gtk.ScrolledWindow()
         self.scroll.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
@@ -55,27 +55,27 @@ class PasoPartManual(gtk.Fixed):
         # btn_nueva
         self.btn_nueva = gtk.Button("Nueva")
         self.btn_nueva.show()
-        self.btn_nueva.connect("clicked", self.particion_nueva)
+        self.btn_nueva.connect("clicked", self.new_partition)
 
         # btn_usar
         self.btn_usar = gtk.Button("Editar")
         self.btn_usar.show()
-        self.btn_usar.connect("clicked", self.particion_editar)
+        self.btn_usar.connect("clicked", self.edit_partition)
 
         # btn_eliminar
         self.btn_eliminar = gtk.Button("Eliminar")
         self.btn_eliminar.show()
-        self.btn_eliminar.connect("clicked", self.particion_eliminar)
+        self.btn_eliminar.connect("clicked", self.delete_partition)
 
         # btn_redimension
         self.btn_redimension = gtk.Button("Redimensionar")
         self.btn_redimension.show()
-        self.btn_redimension.connect("clicked", self.particion_redimensionar)
+        self.btn_redimension.connect("clicked", self.resize_partition)
 
         # btn_deshacer
         self.btn_deshacer = gtk.Button("Deshacer todo")
         self.btn_deshacer.show()
-        self.btn_deshacer.connect("clicked", self.deshacer_todo)
+        self.btn_deshacer.connect("clicked", self.undo_all_actions)
 
         self.botonera1 = gtk.HButtonBox()
         self.botonera1.set_layout(gtk.BUTTONBOX_START)
@@ -88,9 +88,9 @@ class PasoPartManual(gtk.Fixed):
         self.put(self.botonera1, 0, 245)
 
         # llenar la tabla por primera vez
-        self.inicializar(data)
+        self.initialize(data)
 
-    def inicializar(self, data):
+    def initialize(self, data):
         '''
         Inicializa todas las variables
         '''
@@ -131,7 +131,7 @@ class PasoPartManual(gtk.Fixed):
                    ]
                 self.lista.append(fila)
 
-            self.llenar_tabla()
+            self.fill_table()
 
     def set_buttons_insensitives(self):
         'Bloquea todos los botones de acciones'
@@ -142,9 +142,10 @@ class PasoPartManual(gtk.Fixed):
         self.btn_eliminar.set_sensitive(False)
 
 
-    def seleccionar_fila(self, fila):
+    def table_row_selected(self, fila):
         '''Acciones a tomar cuando una fila de la tabla es seleccionada'''
 
+        # Si no se selecciona una fila valida
         if fila == None:
             print "Nada seleccionado."
             return
@@ -152,12 +153,12 @@ class PasoPartManual(gtk.Fixed):
             self.fila_selec = fila
 
         # BTN_NUEVA
-        if fila[TblCol.FORMATO] == msj.particion.libre:
+        if is_free(fila):
             # Activar solo si hay menos de 4 particiones primarias
-            if self.contar_primarias() < 4:
+            if is_primary(fila) and self.count_primary() < 4:
                 self.btn_nueva.set_sensitive(True)
             # o si la part. libre es logica
-            elif fila[TblCol.TIPO] == msj.particion.logica:
+            elif is_logic(fila) and self.count_logical() < 11:
                 self.btn_nueva.set_sensitive(True)
             else:
                 self.btn_nueva.set_sensitive(False)
@@ -191,24 +192,27 @@ class PasoPartManual(gtk.Fixed):
         else:
             self.btn_eliminar.set_sensitive(False)
 
-    def contar_primarias(self):
+    def count_primary(self):
         '''Cuenta la cantidad de particiones primarias. Las particiones
         extendidas cuentan como primarias'''
         total = 0
         for fila in self.lista:
-            # Los espacios libres no se cuentan
-            if fila[TblCol.FORMATO] == msj.particion.libre:
-                continue
-
-            if is_primary(fila):
+            if is_primary(fila) and not is_free(fila):
                 total = total + 1
-
         return total
 
-    def llenar_tabla(self):
+    def count_logical(self):
+        '''Cuenta la cantidad de particiones logicas que no sean vacias'''
+        total = 0
+        for fila in self.lista:
+            if is_logic(fila) and not is_free(fila):
+                total = total + 1
+        return total
+
+    def fill_table(self):
         '''Llena la tabla con las particiones existentes en el disco'''
 
-        self.ordenar_lista()
+        self.order_list()
 
         # Limpia previamente la tabla para inicializar su llenado
         self.tabla.liststore.clear()
@@ -226,7 +230,7 @@ class PasoPartManual(gtk.Fixed):
         else:
             self.btn_deshacer.set_sensitive(False)
 
-    def ordenar_lista(self):
+    def order_list(self):
         'Ordena la lista por el inicio de la particion (metodo burbuja)'
         tamano = len(self.lista)
         for i in range(tamano):
@@ -239,30 +243,30 @@ class PasoPartManual(gtk.Fixed):
                     self.lista[k] = self.lista[k + 1]
                     self.lista[k + 1] = f_temp
 
-    def particion_eliminar(self, widget):
+    def delete_partition(self, widget):
         self.set_buttons_insensitives()
         w_elim = particion_eliminar.Main(self.lista, self.fila_selec, \
                                          self.acciones)
         self.lista = w_elim.lista
         self.acciones = w_elim.acciones
-        self.llenar_tabla()
+        self.fill_table()
         print "---ACCIONES---"
         print debug_list(self.acciones)
         print "--------------"
 
-    def particion_redimensionar(self, widget):
+    def resize_partition(self, widget):
         self.set_buttons_insensitives()
         widget.set_sensitive(False)
         w_redim = particion_redimensionar.Main(self.disco, self.lista, self.fila_selec, \
                                                self.acciones)
         self.acciones = w_redim.acciones
         self.lista = w_redim.lista
-        self.llenar_tabla()
+        self.fill_table()
         print "---ACCIONES---"
         print debug_list(self.acciones)
         print "--------------"
 
-    def particion_nueva(self, widget):
+    def new_partition(self, widget):
         self.set_buttons_insensitives()
         widget.set_sensitive(False)
         w_nueva = particion_nueva.Main(self)
@@ -270,24 +274,24 @@ class PasoPartManual(gtk.Fixed):
         self.lista = w_nueva.lista
         self.acciones = w_nueva.acciones
         self.acciones
-        self.llenar_tabla()
+        self.fill_table()
         print "---ACCIONES---"
         print debug_list(self.acciones)
         print "--------------"
 
-    def particion_editar(self, widget):
+    def edit_partition(self, widget):
         self.set_buttons_insensitives()
         widget.set_sensitive(False)
         w_usar = particion_usar.Main(self.lista, self.fila_selec, self.acciones)
         self.lista = w_usar.lista
         self.acciones = w_usar.acciones
-        self.llenar_tabla()
+        self.fill_table()
         print "---ACCIONES---"
         print debug_list(self.acciones)
         print "--------------"
 
-    def deshacer_todo(self, widget=None):
-        self.inicializar(self.data)
+    def undo_all_actions(self, widget=None):
+        self.initialize(self.data)
         print "---ACCIONES---"
         print debug_list(self.acciones)
         print "--------------"
