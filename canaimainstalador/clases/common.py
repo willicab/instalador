@@ -632,7 +632,7 @@ def has_next_row(the_list, row_index):
 
 def get_next_row(the_list, row, row_index=None):
     '''Retorna la fila siguiente si existe'''
-    if not row_index:
+    if row_index == None:
         row_index = get_row_index(the_list, row)
 
     if row_index != None and has_next_row(the_list, row_index):

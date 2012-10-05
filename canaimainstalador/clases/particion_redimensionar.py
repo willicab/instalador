@@ -25,7 +25,7 @@
 
 import gtk
 from canaimainstalador.clases.common import humanize, TblCol, floatify, PStatus, \
-    get_sector_size
+    get_sector_size, has_next_row, is_free, get_row_index, get_next_row
 from canaimainstalador.translator import msj
 from copy import copy
 
@@ -35,7 +35,7 @@ class Main(gtk.Dialog):
         self.sector = get_sector_size(disco)
         self.lista = lista
         self.acciones = acciones
-        self.num_fila_act = self._get_num_fila_act(fila)
+        self.num_fila_act = get_row_index(lista, fila)
         self.dispositivo = fila[TblCol.DISPOSITIVO]
         self.inicio = fila[TblCol.INICIO]
         self.fin = fila[TblCol.FIN]
@@ -57,7 +57,7 @@ class Main(gtk.Dialog):
         self.escala.set_draw_value(False)
         adj = gtk.Adjustment(self.fin,
                             self.inicio,
-                            self.get_maximo(),
+                            self.get_maximum_size(),
                             1.0,
                             5.0,
                             0.0)
@@ -69,7 +69,7 @@ class Main(gtk.Dialog):
         self.lbl_dispositivo.show()
 
         self.lbl_tamano = gtk.Label('Tamaño')
-        self.lbl_tamano_num = gtk.Label(humanize(self.get_tamano()))
+        self.lbl_tamano_num = gtk.Label(humanize(self.get_new_partition_size()))
         self.vb_tamano = gtk.VBox()
         self.vb_tamano.add(self.lbl_tamano)
         self.vb_tamano.add(self.lbl_tamano_num)
@@ -83,14 +83,14 @@ class Main(gtk.Dialog):
         self.vb_usado.show_all()
 
         self.lbl_libre = gtk.Label('Libre')
-        self.lbl_libre_num = gtk.Label(humanize(self.get_libre()))
+        self.lbl_libre_num = gtk.Label(humanize(self.get_free_space()))
         self.vb_libre = gtk.VBox()
         self.vb_libre.add(self.lbl_libre)
         self.vb_libre.add(self.lbl_libre_num)
         self.vb_libre.show_all()
 
         self.lbl_sin_particion = gtk.Label('Sin Particionar')
-        self.lbl_sin_particion_num = gtk.Label(humanize(self.get_sin_particion()))
+        self.lbl_sin_particion_num = gtk.Label(humanize(self.get_unasigned_space()))
         self.vb_sin_particion = gtk.VBox()
         self.vb_sin_particion.add(self.lbl_sin_particion)
         self.vb_sin_particion.add(self.lbl_sin_particion_num)
@@ -111,55 +111,50 @@ class Main(gtk.Dialog):
 
         self.vbox.pack_start(self.cont)
 
-        self.procesar_respuesta(self.run())
+        self.process_response(self.run())
 
-    def get_tamano(self):
+    def get_new_partition_size(self):
+        'Retorna el tamaño de la nueva partición'
         return self.escala.get_value() - self.inicio
-    def get_minimo(self):
+
+    def get_minimum_size(self):
         'El tamaño minimo al que se puede redimensionar la partición'
         return self.inicio + self.usado
-    def get_maximo(self):
+
+    def get_maximum_size(self):
         'El tamaño maximo al que se puede redimensionar la partición'
-        return self.fin + self.get_espacio_sin_particionar()
-    def get_libre(self):
+        return self.fin + self.get_next_available_space()
+
+    def get_free_space(self):
         'Retorna el espacio libre de la partición'
-        return self.escala.get_value() - self.get_minimo()
-    def get_sin_particion(self):
-        'Retorna el espacio sin particionar que va quedando'
-        return self.get_maximo() - self.escala.get_value()
-    def _get_num_fila_act(self, fila):
-        '''Obtiene el numero de la fila seleccionada en la tabla.
-        Este metodo deberia usarse solo una vez para darle el valor a la \
-        propiedad self.num_fila_act'''
-        for i in range(len(self.lista)):
-            if fila == tuple(self.lista[i]):
-                return i
-        return None
-    def hay_fila_siguiente(self):
-        'Verifica si la lista contiene una fila siguiente'
-        if  self.num_fila_act < len(self.lista) - 1:
-            return True
-        else:
-            return False
-    def get_fila_siguiente(self):
+        return self.escala.get_value() - self.get_minimum_size()
+
+    def get_unasigned_space(self):
+        'Retorna el espacio sin particionar que va quedando al redimensionar'
+        return self.get_maximum_size() - self.escala.get_value()
+
+    def get_next_free_partition(self):
         '''Retorna la fila siguiente si existe y se trata de un espacio libre,
         sino retorna None'''
-        if self.hay_fila_siguiente():
-            fila_actual = self.lista[self.num_fila_act]
-            fila_siguiente = self.lista[self.num_fila_act + 1]
+        if has_next_row(self.lista, self.num_fila_act):
+            actual_row = self.lista[self.num_fila_act]
+            next_row = get_next_row(self.lista, None, self.num_fila_act)
             # Si la particion es del mismo tipo (Extendida o Primaria)
             # Y se trata de un espacio libre
-            if fila_actual[TblCol.TIPO] == fila_siguiente[TblCol.TIPO] \
-            and fila_siguiente[TblCol.FORMATO] == msj.particion.libre:
-                return fila_siguiente
+            if actual_row[TblCol.TIPO] == next_row[TblCol.TIPO] \
+            and is_free(next_row):
+                return next_row
         return None
-    def get_espacio_sin_particionar(self):
-        'Retona la cantidad de espacio libre que hay luego de la particion'
-        fila_siguiente = self.get_fila_siguiente()
-        if fila_siguiente != None:
-            return fila_siguiente[TblCol.FIN] - fila_siguiente[TblCol.INICIO]
+
+    def get_next_available_space(self):
+        '''Retona la cantidad de espacio sin particionar que hay luego de la
+        particion'''
+        next_row = self.get_next_free_partition()
+        if next_row != None:
+            return next_row[TblCol.FIN] - next_row[TblCol.INICIO]
         else:
             return 0
+
     def adj_value_changed(self, adjustment):
         'Acciones a tomar cuando se mueve el valor de la escala'
         # Activa el boton de aceptar sólo si se ha modificado el valor
@@ -168,31 +163,31 @@ class Main(gtk.Dialog):
         else:
             self.set_response_sensitive(gtk.RESPONSE_OK, True)
         # No reducir menos del espacio usado
-        if adjustment.value <= self.get_minimo():
-            adjustment.set_value(self.get_minimo())
+        if adjustment.value <= self.get_minimum_size():
+            adjustment.set_value(self.get_minimum_size())
         # Actualizar los textos con los valores
-        self.lbl_tamano_num.set_text(humanize(self.get_tamano()))
-        self.lbl_libre_num.set_text(humanize(self.get_libre()))
-        self.lbl_sin_particion_num.set_text(humanize(self.get_sin_particion()))
+        self.lbl_tamano_num.set_text(humanize(self.get_new_partition_size()))
+        self.lbl_libre_num.set_text(humanize(self.get_free_space()))
+        self.lbl_sin_particion_num.set_text(humanize(self.get_unasigned_space()))
 
-    def procesar_respuesta(self, response=None):
+    def process_response(self, response=None):
 
         if not response:
             return response
 
         part_actual = self.lista[self.num_fila_act]
         original = copy(part_actual)
-        part_sig = self.get_fila_siguiente()
+        part_sig = self.get_next_free_partition()
 
         if response == gtk.RESPONSE_OK:
 
             part_actual[TblCol.FIN] = self.escala.get_value()
-            part_actual[TblCol.TAMANO] = humanize(self.get_tamano())
-            part_actual[TblCol.LIBRE] = humanize(self.get_libre())
+            part_actual[TblCol.TAMANO] = humanize(self.get_new_partition_size())
+            part_actual[TblCol.LIBRE] = humanize(self.get_free_space())
             part_actual[TblCol.ESTADO] = PStatus.REDIM
 
             # Si dejamos espacio libre
-            if part_actual[TblCol.FIN] < self.get_maximo():
+            if part_actual[TblCol.FIN] < self.get_maximum_size():
                 # Si hay particion libre siguiente, solo modificamos algunos
                 # valores
                 if part_sig:
@@ -210,11 +205,11 @@ class Main(gtk.Dialog):
                     part_sig[TblCol.TIPO] = part_actual[TblCol.TIPO]
                     part_sig[TblCol.FORMATO] = msj.particion.libre
                     part_sig[TblCol.MONTAJE] = ''
-                    part_sig[TblCol.TAMANO] = humanize(self.get_sin_particion())
+                    part_sig[TblCol.TAMANO] = humanize(self.get_unasigned_space())
                     part_sig[TblCol.USADO] = humanize(0)
-                    part_sig[TblCol.LIBRE] = humanize(self.get_sin_particion())
+                    part_sig[TblCol.LIBRE] = humanize(self.get_unasigned_space())
                     part_sig[TblCol.INICIO] = part_actual[TblCol.FIN] + self.sector
-                    part_sig[TblCol.FIN] = self.get_maximo()
+                    part_sig[TblCol.FIN] = self.get_maximum_size()
                     part_sig[TblCol.FORMATEAR] = False
                     part_sig[TblCol.ESTADO] = PStatus.FREED
                     tmp = []
@@ -231,17 +226,14 @@ class Main(gtk.Dialog):
                 self.lista.remove(part_sig)
 
             self.acciones.append([
-                                  'redimensionar',
-                                  part_actual[TblCol.DISPOSITIVO],
-                                  part_actual[TblCol.MONTAJE],
-                                  part_actual[TblCol.INICIO],
-                                  original[TblCol.FIN], # Fin original
-                                  part_actual[TblCol.FORMATO],
-                                  msj.particion.get_tipo_orig(part_actual[TblCol.TIPO]),
-                                  part_actual[TblCol.FIN], # Nuevo Fin
-                                  ])
+              'redimensionar',
+              part_actual[TblCol.DISPOSITIVO],
+              part_actual[TblCol.MONTAJE],
+              part_actual[TblCol.INICIO],
+              original[TblCol.FIN], # Fin original
+              part_actual[TblCol.FORMATO],
+              msj.particion.get_tipo_orig(part_actual[TblCol.TIPO]),
+              part_actual[TblCol.FIN], # Nuevo Fin
+            ])
         self.destroy()
         return response
-
-if __name__ == "__main__":
-    d = Main('/dev/sdz1', 1024 * 1024, 1024 * 1024 * 2, 1024 * 512)
