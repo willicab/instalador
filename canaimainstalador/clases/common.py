@@ -93,7 +93,7 @@ def espacio_usado(fs, particion):
 
     return used
 
-def mounted_targets(mnt):
+def mounted_targets():
     m = []
     cmd = "awk '$2 ~ /^\/target/ {print $2}' /proc/mounts | sort -r"
     salida = commands.getstatusoutput(cmd)[1].split()
@@ -174,7 +174,7 @@ def preseed_debconf_values(mnt, debconflist):
     f.close()
 
     if ProcessGenerator(
-        'chroot {0} cat /tmp/debconf | debconf-set-selections'.format(mnt)
+        'chroot {0} cat /tmp/debconf | /usr/bin/debconf-set-selections'.format(mnt)
         ).returncode == 0:
         return True
     else:
@@ -265,6 +265,24 @@ def actualizar_sistema(mnt):
         return True
     else:
         return False
+
+def crear_usuarios(mnt, a_user, a_pass, n_name, n_user, n_pass):
+    content_1 = '{1}:{2}'.format(a_user, a_pass)
+    content_2 = '{1}:{2}'.format(n_user, n_pass)
+    destination_1 = '{0}/tmp/passwd_1'.format(mnt)
+    destination_2 = '{0}/tmp/passwd_2'.format(mnt)
+
+    f_1 = open(destination_1, 'w')
+    f_1.write(content_1)
+    f_1.close()
+
+    f_2 = open(destination_2, 'w')
+    f_2.write(content_2)
+    f_2.close()
+
+    ProcessGenerator('chroot {0} /usr/sbin/useradd -m -d /home/{1} {2} -s /bin/bash -c "{3}"'.format(mnt, n_user, n_user, n_name))
+    ProcessGenerator('chroot {0} cat /tmp/passwd_1 | /usr/sbin/chpasswd'.format(mnt))
+    ProcessGenerator('chroot {0} cat /tmp/passwd_2 | /usr/sbin/chpasswd'.format(mnt))
 
 def crear_etc_network_interfaces(mnt, cfg):
     content = ''
@@ -370,7 +388,9 @@ def crear_etc_fstab(mnt, cfg, mountlist, cdroms):
 def lista_cdroms():
     info = '/proc/sys/dev/cdrom/info'
     cmd = 'cat {0}| grep "drive name:" | sed "s/drive name://g"'.format(info)
-    salida = commands.getstatusoutput(cmd)[1].split()
+    salida = subprocess.Popen(
+        cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT
+        ).communicate()[0].split('\n')[0]
 
     if salida:
         return salida
@@ -379,11 +399,16 @@ def lista_cdroms():
 
 def get_uuid(particion):
     cmd = '/sbin/blkid -p {0}'.format(particion)
-    salida = commands.getstatusoutput(cmd)[1].split()
-    uid = [i for i, item in enumerate(salida) if re.search('^UUID=*', item)]
+    salida = subprocess.Popen(
+        cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT
+        ).communicate()[0].split('\n')[0].split()
+
+    for i in salida:
+        if re.search('^UUID=*', item):
+            uid = i
 
     if uid:
-        return salida[uid[0]].replace('"', '')
+        return uid.replace('"', '')
     else:
         return False
 
