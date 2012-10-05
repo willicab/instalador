@@ -24,9 +24,11 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 import gtk
-from canaimainstalador.clases.common import TblCol, get_row_index, PStatus
+from canaimainstalador.clases.common import TblCol, get_row_index, PStatus, \
+    UserMessage, humanize, validate_minimun_fs_size
 from canaimainstalador.clases.frame_fs import frame_fs
 from canaimainstalador.translator import msj
+from canaimainstalador.config import FSMIN
 
 txt_manual = 'Escoger manualmente...'
 txt_ninguno = 'Ninguno'
@@ -136,6 +138,9 @@ class Main(gtk.Dialog):
         self.destroy()
 
     def cmb_fs_changed(self, widget):
+
+        self.validate_minimun_fs_size()
+
         actual = self.fila_selec[TblCol.FORMATO]
         formatear = self.fila_selec[TblCol.FORMATEAR]
         selec = widget.get_active_text()
@@ -148,3 +153,9 @@ class Main(gtk.Dialog):
         else:
             self.fs_box.formatear.set_active(True)
             self.fs_box.formatear.set_sensitive(False)
+
+    def validate_minimun_fs_size(self):
+        formato = self.fs_box.cmb_fs.get_active_text()
+        tamano = self.fila_selec[TblCol.FIN]
+        validate_minimun_fs_size(self, formato, tamano)
+

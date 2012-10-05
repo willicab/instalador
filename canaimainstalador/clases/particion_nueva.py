@@ -26,9 +26,11 @@
 import gtk
 
 from canaimainstalador.clases.common import humanize, TblCol, get_next_row, \
-    get_row_index, set_partition, PStatus, get_sector_size
+    get_row_index, set_partition, PStatus, get_sector_size, UserMessage, \
+    validate_minimun_fs_size
 from canaimainstalador.translator import msj
 from canaimainstalador.clases.frame_fs import frame_fs
+from canaimainstalador.config import FSMIN
 
 class Main(gtk.Dialog):
 
@@ -83,7 +85,10 @@ class Main(gtk.Dialog):
 
         fs_container = frame_fs(self, self.lista, self.particion_act)
         self.cmb_tipo = fs_container.cmb_tipo
+
         self.cmb_fs = fs_container.cmb_fs
+        self.cmb_fs.connect('changed', self.cmb_fs_changed)
+
         self.cmb_montaje = fs_container.cmb_montaje
         self.entrada = fs_container.entrada
 
@@ -208,4 +213,20 @@ class Main(gtk.Dialog):
             pop)
 
     def escala_on_changed(self, widget=None):
-        self.lblsize.set_text(humanize(widget.get_value() - self.inicio_part))
+        formato = self.cmb_fs.get_active_text()
+        tamano = widget.get_value() - self.inicio_part
+
+        if tamano < FSMIN[formato]:
+            widget.set_value(self.inicio_part + FSMIN[formato])
+
+        if self.cmb_fs:
+            self.lblsize.set_text(humanize(widget.get_value() - self.inicio_part))
+            self.validate_minimun_fs_size()
+
+    def cmb_fs_changed(self, widget):
+        self.validate_minimun_fs_size()
+
+    def validate_minimun_fs_size(self):
+        formato = self.cmb_fs.get_active_text()
+        tamano = self.escala.get_value() - self.inicio_part
+        validate_minimun_fs_size(self, formato, tamano)

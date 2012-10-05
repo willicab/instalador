@@ -31,7 +31,7 @@ import commands, re, subprocess, math, cairo, gtk, hashlib, random, string, urll
 from canaimainstalador.translator import msj
 from canaimainstalador.config import APP_NAME, APP_COPYRIGHT, APP_DESCRIPTION, \
     APP_URL, LICENSE_FILE, AUTHORS_FILE, TRANSLATORS_FILE, VERSION_FILE, ABOUT_IMAGE, \
-    FSPROGS
+    FSPROGS, FSMIN
 
 def AboutWindow(widget=None):
     about = gtk.AboutDialog()
@@ -702,6 +702,14 @@ def is_resizable(fs):
         else:
             return True
     except KeyError:
-        # Retorna False para el caso en que TblCol.FORMATO es igual a '' o a 
+        # Retorna False para el caso en que TblCol.FORMATO es igual a '' o a
         # 'Espacio libre' por ejemplo
         return False
+
+def validate_minimun_fs_size(dialog, formato, tamano):
+    if tamano < FSMIN[formato]:
+        dialog.set_response_sensitive(gtk.RESPONSE_OK, False)
+        msg = "%s debe tener un tamaño minimo de %s." % (formato, humanize(FSMIN[formato]))
+        UserMessage(msg, 'Información', gtk.MESSAGE_INFO, gtk.BUTTONS_OK)
+    else:
+        dialog.set_response_sensitive(gtk.RESPONSE_OK, True)

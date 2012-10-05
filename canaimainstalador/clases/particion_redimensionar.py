@@ -28,6 +28,7 @@ from canaimainstalador.clases.common import humanize, TblCol, floatify, PStatus,
     get_sector_size, has_next_row, is_free, get_row_index, get_next_row
 from canaimainstalador.translator import msj
 from copy import copy
+from canaimainstalador.config import FSMIN
 
 class Main(gtk.Dialog):
 
@@ -37,6 +38,7 @@ class Main(gtk.Dialog):
         self.acciones = acciones
         self.num_fila_act = get_row_index(lista, fila)
         self.dispositivo = fila[TblCol.DISPOSITIVO]
+        self.formato = fila[TblCol.FORMATO]
         self.inicio = fila[TblCol.INICIO]
         self.fin = fila[TblCol.FIN]
         self.usado = floatify(fila[TblCol.USADO])
@@ -59,9 +61,9 @@ class Main(gtk.Dialog):
                             self.inicio,
                             self.get_maximum_size(),
                             1.0,
-                            5.0,
+                            1024.0,
                             0.0)
-        adj.connect("value-changed", self.adj_value_changed)
+        adj.connect("value-changed", self.escala_value_changed)
         self.escala.set_adjustment(adj)
         self.escala.show()
 
@@ -117,7 +119,7 @@ class Main(gtk.Dialog):
         'Retorna el tamaño de la nueva partición'
         return self.escala.get_value() - self.inicio
 
-    def get_minimum_size(self):
+    def get_used_space(self):
         'El tamaño minimo al que se puede redimensionar la partición'
         return self.inicio + self.usado
 
@@ -127,7 +129,7 @@ class Main(gtk.Dialog):
 
     def get_free_space(self):
         'Retorna el espacio libre de la partición'
-        return self.escala.get_value() - self.get_minimum_size()
+        return self.escala.get_value() - self.get_used_space()
 
     def get_unasigned_space(self):
         'Retorna el espacio sin particionar que va quedando al redimensionar'
@@ -155,16 +157,23 @@ class Main(gtk.Dialog):
         else:
             return 0
 
-    def adj_value_changed(self, adjustment):
+    def escala_value_changed(self, adjustment):
         'Acciones a tomar cuando se mueve el valor de la escala'
+
+        # No reducir menos del espacio minimo
+        tamano = adjustment.value - self.inicio
+        if tamano < FSMIN[self.formato]:
+            adjustment.set_value(self.inicio + FSMIN[self.formato])
+        # No reducir menos del espacio usado
+        elif adjustment.value <= self.get_used_space():
+            adjustment.set_value(self.get_used_space())
+
         # Activa el boton de aceptar sólo si se ha modificado el valor
         if adjustment.value == self.fin:
             self.set_response_sensitive(gtk.RESPONSE_OK, False)
         else:
             self.set_response_sensitive(gtk.RESPONSE_OK, True)
-        # No reducir menos del espacio usado
-        if adjustment.value <= self.get_minimum_size():
-            adjustment.set_value(self.get_minimum_size())
+
         # Actualizar los textos con los valores
         self.lbl_tamano_num.set_text(humanize(self.get_new_partition_size()))
         self.lbl_libre_num.set_text(humanize(self.get_free_space()))
