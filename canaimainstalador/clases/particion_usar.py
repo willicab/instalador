@@ -82,12 +82,17 @@ class Main(gtk.Dialog):
         self.fs_box.formatear.set_active(self.fila_selec[TblCol.FORMATEAR])
 
     def select_item(self, combo, item):
+
+        if item == msj.particion.desconocida:
+            item = 'ext4'
+
         for row in combo.get_model():
             index = row.path[0]
             text = row[0]
             if item == text:
                 combo.set_active(index)
                 return
+
         raise ValueError("No se ha encontado el item '%s'" % item)
 
     def procesar_respuesta(self, response):

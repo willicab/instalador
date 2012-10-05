@@ -125,7 +125,7 @@ def assisted_mount(sync, bind, plist):
             fscmd = '-t {0}'.format(fs)
         else:
             fscmd = ''
-        
+
         if not os.path.isdir(m):
             os.makedirs(m)
 
@@ -668,8 +668,9 @@ def get_next_row(the_list, row, row_index=None):
 def is_logic(row):
         'Determina si una particion es lógica'
         return row[TblCol.TIPO] == msj.particion.logica
+
 def is_free(row):
-        '''Determina si una particion es un espacio libre, idependientemente 
+        '''Determina si una particion es un espacio libre, idependientemente
         de si es Primaria o Logica'''
         return row[TblCol.FORMATO] == msj.particion.libre
 
@@ -691,9 +692,9 @@ def set_partition(the_list, selected_row, new_row, pop=True):
 
     return the_list
 
-def is_primary(fila, with_extended=True):
+def is_primary(row, with_extended=True):
     'Determina si una particion es primaria'
-    p_type = fila[TblCol.TIPO]
+    p_type = row[TblCol.TIPO]
     if p_type == msj.particion.primaria \
     or (with_extended and p_type == msj.particion.extendida):
         return True
@@ -701,6 +702,7 @@ def is_primary(fila, with_extended=True):
         return False
 
 def is_usable(selected_row):
+    'Determina si una particion puede ser usada (editada) en el part. manual'
     disp = selected_row[TblCol.DISPOSITIVO]
     tipo = selected_row[TblCol.TIPO]
     try:
