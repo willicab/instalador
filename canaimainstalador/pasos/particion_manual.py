@@ -54,26 +54,41 @@ class PasoPartManual(gtk.Fixed):
 
         # btn_nueva
         self.btn_nueva = gtk.Button("Nueva")
+        image = gtk.Image()
+        image.set_from_stock(gtk.STOCK_ADD, 12)
+        self.btn_nueva.set_image(image)
         self.btn_nueva.show()
         self.btn_nueva.connect("clicked", self.new_partition)
 
-        # btn_usar
-        self.btn_usar = gtk.Button("Editar")
-        self.btn_usar.show()
-        self.btn_usar.connect("clicked", self.edit_partition)
+        # btn_editar
+        self.btn_editar = gtk.Button("Editar")
+        image = gtk.Image()
+        image.set_from_stock(gtk.STOCK_EDIT, 12)
+        self.btn_editar.set_image(image)
+        self.btn_editar.show()
+        self.btn_editar.connect("clicked", self.edit_partition)
 
         # btn_eliminar
         self.btn_eliminar = gtk.Button("Eliminar")
+        image = gtk.Image()
+        image.set_from_stock(gtk.STOCK_REMOVE, 12)
+        self.btn_eliminar.set_image(image)
         self.btn_eliminar.show()
         self.btn_eliminar.connect("clicked", self.delete_partition)
 
         # btn_redimension
         self.btn_redimension = gtk.Button("Redimensionar")
+        image = gtk.Image()
+        image.set_from_stock(gtk.STOCK_INDENT, 12)
+        self.btn_redimension.set_image(image)
         self.btn_redimension.show()
         self.btn_redimension.connect("clicked", self.resize_partition)
 
         # btn_deshacer
         self.btn_deshacer = gtk.Button("Deshacer todo")
+        image = gtk.Image()
+        image.set_from_stock(gtk.STOCK_UNDO, 12)
+        self.btn_deshacer.set_image(image)
         self.btn_deshacer.show()
         self.btn_deshacer.connect("clicked", self.undo_all_actions)
 
@@ -81,7 +96,7 @@ class PasoPartManual(gtk.Fixed):
         self.botonera1.set_layout(gtk.BUTTONBOX_START)
         self.botonera1.set_homogeneous(False)
         self.botonera1.add(self.btn_nueva)
-        self.botonera1.add(self.btn_usar)
+        self.botonera1.add(self.btn_editar)
         self.botonera1.add(self.btn_redimension)
         self.botonera1.add(self.btn_eliminar)
         self.botonera1.add(self.btn_deshacer)
@@ -137,7 +152,7 @@ class PasoPartManual(gtk.Fixed):
         'Bloquea todos los botones de acciones'
         # Llevar los botones a su estado inicial
         self.btn_nueva.set_sensitive(False)
-        self.btn_usar.set_sensitive(False)
+        self.btn_editar.set_sensitive(False)
         self.btn_redimension.set_sensitive(False)
         self.btn_eliminar.set_sensitive(False)
 
@@ -167,9 +182,9 @@ class PasoPartManual(gtk.Fixed):
 
         # BTN_USAR
         if is_usable(self.fila_selec):
-            self.btn_usar.set_sensitive(True)
+            self.btn_editar.set_sensitive(True)
         else:
-            self.btn_usar.set_sensitive(False)
+            self.btn_editar.set_sensitive(False)
 
         #BTN_REDIMENSION
         # Si la particion NO es libre
