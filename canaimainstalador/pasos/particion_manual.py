@@ -28,14 +28,14 @@ import gtk
 from canaimainstalador.clases.common import floatify, humanize, TblCol, \
     is_primary, is_usable, PStatus, is_resizable, is_free, debug_list, is_logic
 from canaimainstalador.clases import particion_nueva, particion_redimensionar, \
-    particion_eliminar, particion_usar
+    particion_eliminar, particion_editar
 from canaimainstalador.clases.tabla_particiones import TablaParticiones
 from canaimainstalador.translator import msj
 
-class PasoPartManual(gtk.Fixed):
+class PasoPartManual(gtk.VBox):
 
     def __init__(self, data):
-        gtk.Fixed.__init__(self)
+        gtk.VBox.__init__(self)
 
         self.data = data
         self.disco = self.data['metodo']['disco'][0]
@@ -44,36 +44,59 @@ class PasoPartManual(gtk.Fixed):
         #self.tabla.set_doble_click(self.activar_tabla);
         self.tabla.set_seleccionar(self.table_row_selected)
 
+        label = gtk.Label("Utilice la tabla a continuación para configurar \
+su disco manualmente:")
+        label.set_line_wrap(False)
+        label.set_justify(gtk.JUSTIFY_LEFT)
+        label.set_alignment(0, 0)
+        label.show()
+        self.pack_start(label, False, False, 10)
+
         self.scroll = gtk.ScrolledWindow()
         self.scroll.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
-        self.scroll.set_size_request(690, 240)
+        self.scroll.set_size_request(0, 150)
         self.scroll.add(self.tabla)
-        self.put(self.scroll, 0, 0)
         self.tabla.show()
         self.scroll.show()
+        self.pack_start(self.scroll, True, True, 10)
 
         # btn_nueva
         self.btn_nueva = gtk.Button("Nueva")
+        image = gtk.Image()
+        image.set_from_stock(gtk.STOCK_ADD, gtk.ICON_SIZE_SMALL_TOOLBAR)
+        self.btn_nueva.set_image(image)
         self.btn_nueva.show()
         self.btn_nueva.connect("clicked", self.new_partition)
 
-        # btn_usar
-        self.btn_usar = gtk.Button("Editar")
-        self.btn_usar.show()
-        self.btn_usar.connect("clicked", self.edit_partition)
+        # btn_editar
+        self.btn_editar = gtk.Button("Editar")
+        image = gtk.Image()
+        image.set_from_stock(gtk.STOCK_EDIT, gtk.ICON_SIZE_SMALL_TOOLBAR)
+        self.btn_editar.set_image(image)
+        self.btn_editar.show()
+        self.btn_editar.connect("clicked", self.edit_partition)
 
         # btn_eliminar
         self.btn_eliminar = gtk.Button("Eliminar")
+        image = gtk.Image()
+        image.set_from_stock(gtk.STOCK_REMOVE, gtk.ICON_SIZE_SMALL_TOOLBAR)
+        self.btn_eliminar.set_image(image)
         self.btn_eliminar.show()
         self.btn_eliminar.connect("clicked", self.delete_partition)
 
         # btn_redimension
         self.btn_redimension = gtk.Button("Redimensionar")
+        image = gtk.Image()
+        image.set_from_stock(gtk.STOCK_INDENT, gtk.ICON_SIZE_SMALL_TOOLBAR)
+        self.btn_redimension.set_image(image)
         self.btn_redimension.show()
         self.btn_redimension.connect("clicked", self.resize_partition)
 
         # btn_deshacer
         self.btn_deshacer = gtk.Button("Deshacer todo")
+        image = gtk.Image()
+        image.set_from_stock(gtk.STOCK_UNDO, gtk.ICON_SIZE_SMALL_TOOLBAR)
+        self.btn_deshacer.set_image(image)
         self.btn_deshacer.show()
         self.btn_deshacer.connect("clicked", self.undo_all_actions)
 
@@ -81,12 +104,11 @@ class PasoPartManual(gtk.Fixed):
         self.botonera1.set_layout(gtk.BUTTONBOX_START)
         self.botonera1.set_homogeneous(False)
         self.botonera1.add(self.btn_nueva)
-        self.botonera1.add(self.btn_usar)
+        self.botonera1.add(self.btn_editar)
         self.botonera1.add(self.btn_redimension)
         self.botonera1.add(self.btn_eliminar)
         self.botonera1.add(self.btn_deshacer)
-        self.put(self.botonera1, 0, 245)
-
+        self.pack_start(self.botonera1, False, False, 10)
         # llenar la tabla por primera vez
         self.initialize(data)
 
@@ -137,7 +159,7 @@ class PasoPartManual(gtk.Fixed):
         'Bloquea todos los botones de acciones'
         # Llevar los botones a su estado inicial
         self.btn_nueva.set_sensitive(False)
-        self.btn_usar.set_sensitive(False)
+        self.btn_editar.set_sensitive(False)
         self.btn_redimension.set_sensitive(False)
         self.btn_eliminar.set_sensitive(False)
 
@@ -167,9 +189,9 @@ class PasoPartManual(gtk.Fixed):
 
         # BTN_USAR
         if is_usable(self.fila_selec):
-            self.btn_usar.set_sensitive(True)
+            self.btn_editar.set_sensitive(True)
         else:
-            self.btn_usar.set_sensitive(False)
+            self.btn_editar.set_sensitive(False)
 
         #BTN_REDIMENSION
         # Si la particion NO es libre
@@ -282,7 +304,7 @@ class PasoPartManual(gtk.Fixed):
     def edit_partition(self, widget):
         self.set_buttons_insensitives()
         widget.set_sensitive(False)
-        w_usar = particion_usar.Main(self.lista, self.fila_selec, self.acciones)
+        w_usar = particion_editar.Main(self.lista, self.fila_selec, self.acciones)
         self.lista = w_usar.lista
         self.acciones = w_usar.acciones
         self.fill_table()
