@@ -44,22 +44,21 @@ class PasoPartManual(gtk.VBox):
         #self.tabla.set_doble_click(self.activar_tabla);
         self.tabla.set_seleccionar(self.table_row_selected)
 
-        label = gtk.Label("""Utilice la tabla a continuación para configurar \
-su disco manualmente, Utilice los botnes de abajo para crear, eliminar, editar \
-o cambiar el tamaños de las particiones:""")
-        label.set_line_wrap(True)
+        label = gtk.Label("Utilice la tabla a continuación para configurar \
+su disco manualmente:")
+        label.set_line_wrap(False)
         label.set_justify(gtk.JUSTIFY_LEFT)
         label.set_alignment(0, 0)
         label.show()
-        self.add(label)
+        self.pack_start(label, False, False, 10)
 
         self.scroll = gtk.ScrolledWindow()
         self.scroll.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
-        self.scroll.set_size_request(690, 240)
+        self.scroll.set_size_request(0, 150)
         self.scroll.add(self.tabla)
-        self.add(self.scroll)
         self.tabla.show()
         self.scroll.show()
+        self.pack_start(self.scroll, True, True, 10)
 
         # btn_nueva
         self.btn_nueva = gtk.Button("Nueva")
@@ -109,8 +108,7 @@ o cambiar el tamaños de las particiones:""")
         self.botonera1.add(self.btn_redimension)
         self.botonera1.add(self.btn_eliminar)
         self.botonera1.add(self.btn_deshacer)
-        self.add(self.botonera1)
-
+        self.pack_start(self.botonera1, False, False, 10)
         # llenar la tabla por primera vez
         self.initialize(data)
 
