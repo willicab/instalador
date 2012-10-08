@@ -3,10 +3,8 @@
 [ LISTO ] - Separar la busqueda de discos de la clase de paso
 [ DESCARTADO ] - hacer que la barra de progreso en el proceso de instalación sea incremental
 [ LISTO ] - calcular el tamaño minimo y el máximo de cada partición
-
 [ LISTO ] - Arreglar alineación de particiones lógicas dentro de las extendidas.
 [ LISTO ] - arreglar instalación/desinstalacion/reconfiguración de paquetes.
-- hacer banner de bienvenida y renovar los otros banners.
 [ LISTO ] - arreglar instalación de burg.
 [ LISTO ] - arreglar montaje y desmontaje de particiones antes de la instalación.
 [ DESCARTADO ] - arreglar disco de instalación y puntos de montaje fuera del disco.
@@ -17,11 +15,16 @@
 [ LISTO ] - Verificar existencia de archivo squashfs.
 [ LISTO ] - Verificar existencia de paquetes a instalar.
 [ LISTO ] - Desmontar las particiones a ser utilizadas.
-- Asignar el flag de boot apropiadamente.
-- Agregar botones para seleccionar máximo y mínimo espacio en particionadores.
+[ LISTO ] - Asignar el flag de boot apropiadamente.
+[ LISTO ] - Agregar botones para seleccionar máximo y mínimo espacio en particionadores.
 - Arreglar estilo de la pantalla de información.
 - Arreglar estilo de la pantalla de datos de usuario.
 - Arreglar estilo de la pantalla de accesibilidad.
 - Depurar el Segfault de webkit.
-- Validar el máximo de 11 particiones lógicas.
+[ LISTO ] - Validar el máximo de 11 particiones lógicas.
 - Mejorar mensajes de error de la instalación.
+- Arreglar flickering de las barras de las particiones.
+[ LISTO ] - Arreglar creación de usuarios.
+- Arreglar problema de actualización de barra en partauto.
+- hacer banner de bienvenida y renovar los otros banners.
+- 

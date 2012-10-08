@@ -28,6 +28,7 @@ class BarraAuto(gtk.DrawingArea):
         self.expose()
 
     def expose(self, widget=None, event=None):
+        print 'expose'
         self.metodo = self.p.metodo
         self.ini = self.p.metodo['part'][1]
         self.fin = self.p.metodo['part'][2]

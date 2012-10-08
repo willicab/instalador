@@ -26,7 +26,7 @@
 #
 # CODE IS POETRY
 
-import commands, re, subprocess, math, cairo, gtk, hashlib, random, string, urllib2, os, glob, parted
+import re, subprocess, math, cairo, gtk, hashlib, random, string, urllib2, os, glob, parted
 
 from canaimainstalador.translator import msj
 from canaimainstalador.config import APP_NAME, APP_COPYRIGHT, APP_DESCRIPTION, \
@@ -95,16 +95,31 @@ def espacio_usado(fs, particion):
 
 def mounted_targets(mnt):
     m = []
-    cmd = "awk '$2 ~ /^\/target/ {print $2}' /proc/mounts | sort -r"
-    salida = commands.getstatusoutput(cmd)[1].split()
+    _mnt = mnt.replace('/', '\/')
+    cmd = "awk '$2 ~ /^"+_mnt+"/ {print $2}' /proc/mounts | sort"
+    salida = subprocess.Popen(
+        cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT
+        ).communicate()[0].split()
 
     for i in salida:
         m.append(['', i, ''])
 
-    if m:
-        return m
-    else:
-        return False
+    print m
+    return m
+
+def mounted_parts(disk):
+    m = []
+    _disk = disk.replace('/', '\/')
+    cmd = "awk '$1 ~ /^"+_disk+"/ {print $2}' /proc/mounts | sort"
+    salida = subprocess.Popen(
+        cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT
+        ).communicate()[0].split()
+
+    for i in salida:
+        m.append(['', i, ''])
+
+    print m
+    return m
 
 def assisted_mount(sync, bind, plist):
     i = 0
@@ -174,7 +189,7 @@ def preseed_debconf_values(mnt, debconflist):
     f.close()
 
     if ProcessGenerator(
-        'chroot {0} cat /tmp/debconf | debconf-set-selections'.format(mnt)
+        'chroot {0} cat /tmp/debconf | /usr/bin/debconf-set-selections'.format(mnt)
         ).returncode == 0:
         return True
     else:
@@ -265,6 +280,24 @@ def actualizar_sistema(mnt):
         return True
     else:
         return False
+
+def crear_usuarios(mnt, a_user, a_pass, n_name, n_user, n_pass):
+    content_1 = a_user+':'+a_pass+'\n'
+    content_2 = n_user+':'+n_pass+'\n'
+    destination_1 = '{0}/tmp/passwd_1'.format(mnt)
+    destination_2 = '{0}/tmp/passwd_2'.format(mnt)
+
+    f_1 = open(destination_1, 'w')
+    f_1.write(content_1)
+    f_1.close()
+
+    f_2 = open(destination_2, 'w')
+    f_2.write(content_2)
+    f_2.close()
+
+    ProcessGenerator('chroot {0} /usr/sbin/useradd -m -d /home/{1} {2} -s /bin/bash -c "{3}"'.format(mnt, n_user, n_user, n_name))
+    ProcessGenerator('chroot {0} cat /tmp/passwd_1 | /usr/sbin/chpasswd'.format(mnt))
+    ProcessGenerator('chroot {0} cat /tmp/passwd_2 | /usr/sbin/chpasswd'.format(mnt))
 
 def crear_etc_network_interfaces(mnt, cfg):
     content = ''
@@ -370,7 +403,9 @@ def crear_etc_fstab(mnt, cfg, mountlist, cdroms):
 def lista_cdroms():
     info = '/proc/sys/dev/cdrom/info'
     cmd = 'cat {0}| grep "drive name:" | sed "s/drive name://g"'.format(info)
-    salida = commands.getstatusoutput(cmd)[1].split()
+    salida = subprocess.Popen(
+        cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT
+        ).communicate()[0].split()
 
     if salida:
         return salida
@@ -379,11 +414,16 @@ def lista_cdroms():
 
 def get_uuid(particion):
     cmd = '/sbin/blkid -p {0}'.format(particion)
-    salida = commands.getstatusoutput(cmd)[1].split()
-    uid = [i for i, item in enumerate(salida) if re.search('^UUID=*', item)]
+    salida = subprocess.Popen(
+        cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT
+        ).communicate()[0].split()
+
+    for i in salida:
+        if re.search('^UUID=*', i):
+            uid = i
 
     if uid:
-        return salida[uid[0]].replace('"', '')
+        return uid.replace('"', '')
     else:
         return False
 
@@ -529,7 +569,7 @@ def ram():
     return 1024.0 * float(subprocess.Popen(
         'echo "scale=1;$( cat "/proc/meminfo" | grep "MemFree:" | awk \'{print $2}\' )/(10^3)" | bc',
         shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-    ).communicate()[0].split('\n')[0])
+    ).communicate()[0].split())
 
 def aconnect(button, signals, function, params):
     '''

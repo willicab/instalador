@@ -19,32 +19,32 @@ class Leyenda(gtk.Fixed):
         self.lbl_2 = gtk.Label(label)
         self.lbl_2.set_size_request(270, 20)
         self.lbl_2.set_alignment(0, 0)
-        self.put(self.lbl_2, 0, 25)
+        self.put(self.lbl_2, 0, 20)
 
         self.lbl_3 = gtk.Label(label)
         self.lbl_3.set_size_request(270, 20)
         self.lbl_3.set_alignment(0, 0)
-        self.put(self.lbl_3, 0, 50)
+        self.put(self.lbl_3, 0, 40)
 
         self.lbl_4 = gtk.Label(label)
         self.lbl_4.set_size_request(270, 20)
         self.lbl_4.set_alignment(0, 0)
-        self.put(self.lbl_4, 0, 75)
+        self.put(self.lbl_4, 0, 60)
 
         self.lbl_5 = gtk.Label(label)
         self.lbl_5.set_size_request(270, 20)
         self.lbl_5.set_alignment(0, 0)
-        self.put(self.lbl_5, 0, 100)
+        self.put(self.lbl_5, 0, 80)
 
         self.lbl_6 = gtk.Label(label)
         self.lbl_6.set_size_request(270, 20)
         self.lbl_6.set_alignment(0, 0)
-        self.put(self.lbl_6, 0, 125)
+        self.put(self.lbl_6, 0, 100)
 
         self.lbl_7 = gtk.Label(label)
         self.lbl_7.set_size_request(270, 20)
         self.lbl_7.set_alignment(0, 0)
-        self.put(self.lbl_7, 0, 150)
+        self.put(self.lbl_7, 0, 120)
 
         self.show_all()
 

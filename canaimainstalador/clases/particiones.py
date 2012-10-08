@@ -1,5 +1,30 @@
 #!/usr/bin/env python
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
+#
+# ==============================================================================
+# PAQUETE: canaima-instalador
+# ARCHIVO: canaimainstalador/clases/particiones.py
+# COPYRIGHT:
+#       (C) 2012 William Abrahan Cabrera Reyes <william@linux.es>
+#       (C) 2012 Erick Manuel Birbe Salazar <erickcion@gmail.com>
+#       (C) 2012 Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>
+# LICENCIA: GPL-3
+# ==============================================================================
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# COPYING file for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+#
+# CODE IS POETRY
 
 import parted, _ped
 
@@ -76,7 +101,7 @@ class Particiones():
                         fs = 'extended'
                     else:
                         fs = 'unknown'
-                flags = i.getFlagsAsString()
+                flags = i.getFlagsAsString().split(', ')
             else:
                 fs = 'free'
                 libre = tam
@@ -307,3 +332,36 @@ class Particiones():
 
         elif newend == currend:
             return True
+
+    def asignar_bandera(self, drive, part, flag):
+        dev = parted.Device(drive)
+        disk = parted.Disk(dev)
+        partition = disk.getPartitionByPath(part)
+        
+        if flag == 'boot':
+            pedflag = _ped.PARTITION_BOOT
+
+        if partition.isFlagAvailable(pedflag):
+            if partition.setFlag(pedflag):
+                return True
+            else:
+                return False
+        else:
+            return False
+
+    def remover_bandera(self, drive, part, flag):
+        dev = parted.Device(drive)
+        disk = parted.Disk(dev)
+        partition = disk.getPartitionByPath(part)
+        
+        if flag == 'boot':
+            pedflag = _ped.PARTITION_BOOT
+
+        if partition.isFlagAvailable(pedflag):
+            if partition.unsetFlag(pedflag):
+                return True
+            else:
+                return False
+        else:
+            return False
+
