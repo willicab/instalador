@@ -32,10 +32,10 @@ from canaimainstalador.clases import particion_nueva, particion_redimensionar, \
 from canaimainstalador.clases.tabla_particiones import TablaParticiones
 from canaimainstalador.translator import msj
 
-class PasoPartManual(gtk.Fixed):
+class PasoPartManual(gtk.VBox):
 
     def __init__(self, data):
-        gtk.Fixed.__init__(self)
+        gtk.VBox.__init__(self)
 
         self.data = data
         self.disco = self.data['metodo']['disco'][0]
@@ -44,11 +44,20 @@ class PasoPartManual(gtk.Fixed):
         #self.tabla.set_doble_click(self.activar_tabla);
         self.tabla.set_seleccionar(self.table_row_selected)
 
+        label = gtk.Label("""Utilice la tabla a continuación para configurar \
+su disco manualmente, Utilice los botnes de abajo para crear, eliminar, editar \
+o cambiar el tamaños de las particiones:""")
+        label.set_line_wrap(True)
+        label.set_justify(gtk.JUSTIFY_LEFT)
+        label.set_alignment(0, 0)
+        label.show()
+        self.add(label)
+
         self.scroll = gtk.ScrolledWindow()
         self.scroll.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
         self.scroll.set_size_request(690, 240)
         self.scroll.add(self.tabla)
-        self.put(self.scroll, 0, 0)
+        self.add(self.scroll)
         self.tabla.show()
         self.scroll.show()
 
@@ -100,7 +109,7 @@ class PasoPartManual(gtk.Fixed):
         self.botonera1.add(self.btn_redimension)
         self.botonera1.add(self.btn_eliminar)
         self.botonera1.add(self.btn_deshacer)
-        self.put(self.botonera1, 0, 245)
+        self.add(self.botonera1)
 
         # llenar la tabla por primera vez
         self.initialize(data)
