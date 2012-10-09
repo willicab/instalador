@@ -24,9 +24,11 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 import gtk
-from canaimainstalador.clases.common import TblCol, get_row_index, PStatus
+from canaimainstalador.clases.common import TblCol, get_row_index, PStatus, \
+    UserMessage, humanize, validate_minimun_fs_size
 from canaimainstalador.clases.frame_fs import frame_fs
 from canaimainstalador.translator import msj
+from canaimainstalador.config import FSMIN
 
 txt_manual = 'Escoger manualmente...'
 txt_ninguno = 'Ninguno'
@@ -49,14 +51,14 @@ class Main(gtk.Dialog):
         self.set_default_response(gtk.RESPONSE_CANCEL)
 
         self.fs_box = frame_fs(self, self.lista, self.fila_selec)
-        self.llenar_campos()
+        self.fill_fields()
 
         self.vbox.pack_start(self.fs_box)
 
         response = self.run()
-        self.procesar_respuesta(response)
+        self.process_response(response)
 
-    def llenar_campos(self):
+    def fill_fields(self):
 
         # Tipo
         self.fs_box.cmb_tipo.insert_text(0, self.fila_selec[TblCol.TIPO])
@@ -69,8 +71,7 @@ class Main(gtk.Dialog):
 
         # Montaje
         montaje = self.fila_selec[TblCol.MONTAJE]
-        if montaje == '':
-            montaje = txt_ninguno
+        if montaje == '': montaje = txt_ninguno
         try:
             self.select_item(self.fs_box.cmb_montaje, montaje)
         except ValueError, e:
@@ -83,6 +84,7 @@ class Main(gtk.Dialog):
 
     def select_item(self, combo, item):
 
+        # Si la ṕarticion es desconocida selecciona un valor por defecto
         if item == msj.particion.desconocida:
             item = 'ext4'
 
@@ -95,7 +97,7 @@ class Main(gtk.Dialog):
 
         raise ValueError("No se ha encontado el item '%s'" % item)
 
-    def procesar_respuesta(self, response):
+    def process_response(self, response):
 
         if response == gtk.RESPONSE_OK:
             i = get_row_index(self.lista, self.fila_selec)
@@ -103,6 +105,7 @@ class Main(gtk.Dialog):
             filesystem = self.fs_box.cmb_fs.get_active_text()
             formatear = self.fs_box.formatear.get_active()
             montaje = self.fs_box.cmb_montaje.get_active_text()
+
             if montaje == txt_manual:
                 montaje = self.fs_box.entrada.get_text().strip()
             elif montaje == txt_ninguno:
@@ -130,11 +133,14 @@ class Main(gtk.Dialog):
                     accion = 'usar'
 
                 self.acciones.append([accion, disco, montaje, inicio, fin, \
-                                      formato, msj.particion.get_tipo_orig(tipo), 0])
+                    formato, msj.particion.get_tipo_orig(tipo), 0])
 
         self.destroy()
 
     def cmb_fs_changed(self, widget):
+
+        self.validate_minimun_fs_size()
+
         actual = self.fila_selec[TblCol.FORMATO]
         formatear = self.fila_selec[TblCol.FORMATEAR]
         selec = widget.get_active_text()
@@ -148,5 +154,8 @@ class Main(gtk.Dialog):
             self.fs_box.formatear.set_active(True)
             self.fs_box.formatear.set_sensitive(False)
 
-
+    def validate_minimun_fs_size(self):
+        formato = self.fs_box.cmb_fs.get_active_text()
+        tamano = self.fila_selec[TblCol.FIN]
+        validate_minimun_fs_size(self, formato, tamano)
 

@@ -38,7 +38,7 @@ class Main():
         self.disco = fila_selec[TblCol.DISPOSITIVO]
 
         if is_primary(self.fila_selec, False) or is_logic(self.fila_selec):
-            self._borrar_particion(self.fila_selec)
+            self.delete_partition(self.fila_selec)
         else:
             is_clean = True
             for partition in self.lista:
@@ -50,11 +50,11 @@ class Main():
             if is_clean:
                 i = get_row_index(self.lista, self.fila_selec)
                 free = self.lista[i + 1]
-                self._borrar_particion(self.fila_selec)
+                self.delete_partition(self.fila_selec)
                 free[TblCol.TIPO] = msj.particion.primaria
-                self._borrar_particion(free)
+                self.delete_partition(free)
 
-    def _borrar_particion(self, part):
+    def delete_partition(self, part):
         'Ejecuta el proceso de eliminar la particion de la lista'
         i = get_row_index(self.lista, part)
         particion = self.lista[i]
@@ -65,13 +65,13 @@ class Main():
         # Si tiene una fila anterior
         if i > 0:
             p_anterior = self.lista[i - 1]
-            if self._es_sumable(p_anterior, particion):
+            if self.is_summable(p_anterior, particion):
                 del_ant = True
                 inicio = p_anterior[TblCol.INICIO]
         # si tiene una fila siguiente
         if has_next_row(self.lista, i):
             p_siguiente = self.lista[i + 1]
-            if self._es_sumable(p_siguiente, particion):
+            if self.is_summable(p_siguiente, particion):
                 del_sig = True
                 fin = p_siguiente[TblCol.FIN]
 
@@ -113,7 +113,7 @@ class Main():
                                   msj.particion.get_tipo_orig(particion[TblCol.TIPO]),
                                   0])
 
-    def _es_sumable(self, otra, actual):
+    def is_summable(self, otra, actual):
         '''Indica si se puede sumar el tamaño de las particiones si se trata \
         del mismo tipo (primaria o lógica)'''
         # Si la particion es libre

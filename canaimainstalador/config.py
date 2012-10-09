@@ -34,7 +34,7 @@ if curdir == '/usr/bin':
     GUIDIR = '/usr/share/pyshared/canaimainstalador'
     SHAREDIR = '/usr/share/canaima-instalador'
 else:
-    GUIDIR = curdir+'/canaimainstalador'
+    GUIDIR = curdir + '/canaimainstalador'
     SHAREDIR = curdir
 
 BAR_ICON = GUIDIR+'/data/img/icon.png'
@@ -44,24 +44,24 @@ WELCOME_IMAGE = GUIDIR+'/data/img/welcome.png'
 KEY_IMAGE_TMPL = GUIDIR+'/data/img/key_{0}.png'
 INSTALL_SLIDES = GUIDIR+'/data/install.html'
 
-VERSION_FILE = SHAREDIR+'/VERSION'
-AUTHORS_FILE = SHAREDIR+'/AUTHORS'
-LICENSE_FILE = SHAREDIR+'/LICENSE'
-TRANSLATORS_FILE = SHAREDIR+'/TRANSLATORS'
+VERSION_FILE = SHAREDIR + '/VERSION'
+AUTHORS_FILE = SHAREDIR + '/AUTHORS'
+LICENSE_FILE = SHAREDIR + '/LICENSE'
+TRANSLATORS_FILE = SHAREDIR + '/TRANSLATORS'
 
 APP_NAME = 'Canaima Instalador'
 APP_COPYRIGHT = 'Copyright (C) 2012 - Varios autores'
 APP_URL = 'http://code.google.com/p/canaima-instalador'
 APP_DESCRIPTION = 'Instalador para Canaima GNU/Linux'
 
-ESPACIO_ROOT = 1024*1024                # 1GB
-ESPACIO_VAR = 1024*896                  # 896MB
-ESPACIO_HOME = 1024*1024                # 1GB
-ESPACIO_USR = 1024*1024*2               # 2GB
-ESPACIO_BOOT = 1024*128                 # 128MB
-ESPACIO_SWAP = 1024*1024                # 1GB
+ESPACIO_ROOT = 1024 * 1024                # 1GB
+ESPACIO_VAR = 1024 * 896                  # 896MB
+ESPACIO_HOME = 1024 * 1024                # 1GB
+ESPACIO_USR = 1024 * 1024 * 2               # 2GB
+ESPACIO_BOOT = 1024 * 128                 # 128MB
+ESPACIO_SWAP = 1024 * 1024                # 1GB
 # --------------------------------------# -------
-ESPACIO_TOTAL = 1024*1024*6             # 6GB
+ESPACIO_TOTAL = 1024 * 1024 * 6             # 6GB
 
 CFG = {
     's': []
@@ -88,4 +88,21 @@ FSPROGS = {
     'reiser4': ['mkfs.reiser4 -y -f {0}', ''],
     'reiserfs': ['mkfs.reiserfs -q -f -f {0}', 'resize_reiserfs -q -f -s {0} {1}'],
     'xfs': ['mkfs.xfs -q -f {0}', '']
+    }
+
+FSMIN = {
+    'btrfs': 1024 * 256,
+    'ext2': 1024,
+    'ext3': 1024,
+    'ext4': 1024,
+    'fat16': 128,
+    'fat32': 32,
+    'ntfs': 1024,
+    'hfs+': 512,
+    'hfs': 800,
+    'jfs': 1024 * 16,
+    'swap': 40,
+    'reiser4': 156,
+    'reiserfs': 1024 * 16,
+    'xfs': 1024 * 16
     }
