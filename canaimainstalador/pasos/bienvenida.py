@@ -26,15 +26,14 @@
 #
 # CODE IS POETRY
 
-import gtk, webkit
+import gtk
 
-from canaimainstalador.config import WELCOME_SLIDES
+from canaimainstalador.config import WELCOME_IMAGE
 
 class PasoBienvenida(gtk.Fixed):
     def __init__(self, CFG):
         gtk.Fixed.__init__(self)
-        self.visor = webkit.WebView()
-        self.visor.set_size_request(700, 430)
-        self.visor.open(WELCOME_SLIDES)
-        self.put(self.visor, 0, 0)
+        self.img = gtk.Image()
+        self.img.set_from_file(WELCOME_IMAGE)
+        self.put(self.img, 0, 0)
 

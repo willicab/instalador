@@ -40,9 +40,9 @@ else:
 BAR_ICON = GUIDIR+'/data/img/icon.png'
 ABOUT_IMAGE = GUIDIR+'/data/img/logo.png'
 BANNER_IMAGE = GUIDIR+'/data/img/banner.png'
+WELCOME_IMAGE = GUIDIR+'/data/img/welcome.png'
 KEY_IMAGE_TMPL = GUIDIR+'/data/img/key_{0}.png'
-WELCOME_SLIDES = GUIDIR+'/data/slides/welcome.html'
-INSTALL_SLIDES= GUIDIR+'/data/slides/install.html'
+INSTALL_SLIDES = GUIDIR+'/data/install.html'
 
 VERSION_FILE = SHAREDIR+'/VERSION'
 AUTHORS_FILE = SHAREDIR+'/AUTHORS'
