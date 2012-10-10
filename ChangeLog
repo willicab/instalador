@@ -1,0 +1,290 @@
+DEVELOPMENT RELEASE v2.0+dev20121010121645 (10/10/12)
+Preparando empaquetamiento para la versión 2.0
+Conflicts:
+	TODO
+Arreglando estilo de la pantalla de información.
+Arreglando estilo de la pantalla de datos de usuario.
+Arreglando estilo de la pantalla de accesibilidad.
+Arreglando flickering de las barras de las particiones en particion_auto y particion_todo.
+Removiendo las animaciones sozi debido a poco rendimiento en equipos de bajos recursos.
+Mejorando SVG's de los teclados.
+Conflicts:
+	canaimainstalador/config.py
+Deshabilitando el sozi de inicio, consume muchos recursos en equipos de baja gama.
+Mejorando SVG del teclado.
+Dejando el comentario de la tabla sin line_wrap, tengo que aprender mas pygtk :(
+Agregando texto descriptivo antes de la tabla
+Mejorando las animaciones sozi.
+Utilizando un valor de tamaño de icono que no produzca un warning
+Mejorando el proceso de instalación.
+Agregando íconos a los botones
+Agregando minimos que faltaron en el 
+Validando los tamaños minimos de los sistemas de archivos
+Cambiando nombre de funciones
+Agregando botones para seleccionar mínimo y máximo de espacio para Canaima en el particionador completo.
+Arreglo de la creación de usuarios en el sistema instalado.
+Procedimiento para asignar la bandera de boot.
+Usando funciones de common.py en particiones_redimensionar
+Corrigiendo nombre de punto de montaje "Ninguno" en la tabla
+Validando que no se puedan generar más de 11 particiones lógicas
+- Comprobando si una filesystem es unknown antes de usarlo.
+- Ampliando movimiento para la escala del tamaño de particion.
+Asignando límite particiones lógicas dentro de una extendida.
+Usando copy() para copiar listas en particion_redimensionar.py
+Anteriormente se hacía una asignación simple lo cual causaba que el campo
+"Nuevo Fin" fuese el mísmo que Fin Original
+Conflicts:
+	canaimainstalador/pasos/metodo.py
+Conflicts:
+	canaimainstalador/pasos/metodo.py
+Mejorando proceso de creación y redimensionamiento de particiones lógicas.
+Mejorando validación en los particionadores para el número permitido de particiones lógicas.
+Actualizando TODO.
+Cambios Varios
+Corriendo falla en la determinación del nombre de la partición.
+Resolviendo inconsistencia con la creación, borrado, redimensión y montaje de particiones extendidas.
+Acercando un poco a la izquierda el resumen final de instalacion
+Enviando decimales en el inicio y fin de las particiones
+Corrigiendo import particiones.py
+Corrigiendo validación de redimension y creación de particiones en particiones.py
+Afinando detalles en el proceso de instalación.
+Mejorando animación durante la instalación.
+Mejorando procesos de instalación.
+Conflicts:
+	canaimainstalador/clases/common.py
+Permitiendo la eliminación de particiones extendidas.
+Sólo se eliminan las particiones extendidas cuando todas las particiones
+lógicas internas han sido previamente eliminadas.
+Mejorando validación de errores en la instalación.
+Agregando licencia a archivos
+Enviando el tipo de particion con el formato original de parted
+Agregando Nuevo Fin a lista de acciones en particion_nueva
+Progresando en las animaciones sozi para la bienvenida e instalación.
+Mejorando logo de la aplicación.
+Mejrando proceso de instalación, corrigiendo pequeños desajustes.
+Separando las particiones 1 sector para que no choquen
+Agregando campo de nuevo fin a todas las clases que utilizan las acciones
+Agregando el elemento "nuevo_fin" al resto de las acciones.
+Afinando detalles de la instalación.
+Mejorando información en la pantalla de resumen de datos.
+Conflicts:
+	canaimainstalador/main.py
+Deshabilidatando la conversión SVG > PNG en la carpeta de los slides.
+Pasando las acciones a la variable CFG
+Corrigiendo la importacion de FPROGS
+Ignorando archivos de imagines compilados para los slides
+Conflicts:
+	canaimainstalador/clases/common.py
+Eliminando las diapositivas del slider que se muestra durante la instalación.
+Agregando HTML+SVG para implementar animaciones con sozi.
+Mostrando mensaje de error si no hay raiz (/)
+Permitiendo el redimensionado solo de los filesystem que tengan herramienta
+Cambiando el nombre a funcion en particion_manual
+Cambios Varios
+- Agregando columna de estatus de las particiones
+- Activando cambio de FS en ventna usar
+Enviando Fin original y Fin Nuevo en la accion redimensionar
+Afinando y optimizando proceso de instalación.
+Corrigiendo referencia a función espacio_usado movida a canaimainstalador/clases/common.py
+Limpiando importaciones innecesarias y variables sin usar
+Comentando codigos incompletos en common.py
+Conflicts:
+	canaimainstalador/clases/common.py
+	canaimainstalador/clases/particionar.py
+Limpiando scripts de bash innecesarios.
+Limpiando clases de particionadores innecesarias.
+Mejorando rutina de instalación.
+Mejorando funciones de creación de archivos de configuración.
+Activando botón usar particion
+Separando acciones de eliminar del modulo particionador_manual.py
+Validando de no usar las particiones extendidas
+Agregando botón de de Usar
+Agragando check de formateo de la particion
+Integrando nuevo panel de sistema de archivos en particion_nueva.py
+Creando nueva clase para escoger el filesystem y punto de montaje
+Esta clase es de uso general para el dialogo de crear partición nueva y para
+el dialogo de usar partición que se creará mas adelante
+Activando columna "Formatear" en la tabla de particiones
+Iniciando desarrollo del módulo que realiza las particiones.
+Mejorando rutina que determina el tipo de partición {primary,extended,logical}.
+Comenzando reestructuración del proceso de particionado.
+Eliminando fragmentos de código innecesarios
+Ocultando columnas que no se desean mostrar
+Colocando el tipo correcto al redimensionar una particion lógica
+Corrigiendo BUG que impedia ejecutar acciones al refrescar la tabla
+Activando el boton de deshacer acciones solo cuando existan acciones
+Implementando la acción de eliminar particiones
+Moviendo metodo para agregar particiones a la lista a common.py
+- Validando excepción cuando se hace click y no hay fila seleccionada
+- Reordenando lugar de algunos metodos
+- Llenando datos de la lista de acciones para particion_nueva.py
+Poniendo de nuevo a funcionar correctamente el dialogo de particion nueva (POR FIIIIIN)
+Limpiando el puntero de seleccion de la tabla
+Poniendo a funcionar por completo del dialogo de redimension
+Agregando formulario para redimensionar
+Agregando formulario para redimensionar
+Mejorando las Barras de desplazamiento del Particionado automático y total.
+Convirtiendo el botón de Cancelar en boton Salir en Wizard
+Validando que no se redimensionen las particiones libres
+Agregando columna LIBRE
+Agregando soporte a xfs en la seleccion de sistema de archivos
+Agregando boton de redimension, mejorando llamado a indices de las filas
+Modificando .gitignore
+Corrigiendo llamados de importaciones para adaptarlo a los nuevos cambios
+Eliminando log de un merge antiguo
+Eliminando clases que ya no se usaran por convencion
+Eliminando imagenes compiladas
+Conflicts:
+	canaimainstalador/clases/particion_nueva.py
+	canaimainstalador/pasos/particion_manual.py
+Mejorando visualización de las barras de particiones en los métodos PartAuto y PartTodo.
+Cambiando el nombre del módulo general Python instalador -> canaimainstalador.
+Validando que no se creen mas de 4 particiones primarias y mas de 1 particion extendida
+Nuevas clases de acciones
+Moviendo clase accion a acciones.__init__
+Conflicts:
+	canaima-instalador.py
+Creando clase base para las acciones del instalador
+nuevos cambios
+Evitando quitar particiones de la lista y duplicados de espacios libres
+Evitando que se borre la particion extendida de la lista cuando se crea el primer espacio libre extendido
+Conflicts:
+	instalador/main.py
+Moviendo la clase msj a translator.py
+Corrigiendo el llamado del metodo manual en main.py
+Procesando respuesta en un metodo aparte de particion_nueva
+Eliminando propiedades no utilizadas en particion_manual
+Corrigiendo llamado a tabla_particiones
+Volviendo a corregir la pregunta de confirmación al salir
+Adaptando .gitignore
+Conflicts:
+	canaima-instalador.py
+	clases/wizard.py
+	instalador/clases/get_partitions.py
+	instalador/clases/install/particion_manual.py
+	instalador/clases/tabla_particiones.py
+	instalador/pasos/final.py
+	instalador/pasos/particion_manual.py
+Corrigiendo detalle en la obtención del valor del combobox.
+Mejorando el renderizado de la barra de particiones cuando se escoge la opción "usar todo el disco".
+Corrigiendo variable que asigna la partición en pasos/metodo.py
+Conflicts:
+	instalador/pasos/final.py
+Conflicts:
+	canaima-instalador.py
+	instalador/clases/install/particion_manual.py
+	instalador/pasos/final.py
+	instalador/pasos/metodo.py
+Eliminando bloques de comentarios
+Simplificando programación de establecer_metodo()
+Ordenando lista por el inicio de la particion
+Adaptando el llenado de la tabla al nuevo formato de particiones.lista_particiones()
+Cambiando de lugar el código fuente para que al ser movido a /usr/share/pyshared/instalador el instalador pueda ser importadoc omo un módulo desde cualquier lugar.
+Mejorando la paginación (anterior/siguiente) en la clase wizard.
+Reestructurando canaima-instalador.py para que este sea el ejecutable y evitar la necesidad del script bash canaima-instalador.
+nuevos cambios
+Conflicts:
+	canaima-instalador.py
+nuevos cambios al instaldor
+Seleccionando los dispositivos correctos en particiones.py
+Arreglando reconocedor de particiones con python-parted y python-gudev.
+Eliminando salidas innecesarias
+Corrigiendo comportamiento erroneo de la lista de particiones
+Agregando particiones nuevas a la lista
+Eliminando archivo inutilizado
+Corrigiendo el funcionamiento del mensaje de salida
+Ordenando el código
+Eliminando llamado redundante
+Recuperando .gitignore
+Evitando que la tabla pase a None al llamar el metodo inicializar()
+Detectando espacios libres para crear particiones nuevas y limpiando codigo
+Mejorando la forma en que se reconocen los discos con python-gudev.
+Mejorando forma de determinar los strings
+llenando lista de acciones de particionado
+Indicando inicio y fin de los discos
+Mejorando estética de las barras de particiones.
+Ejecutando acciones al seleccionar la tabla - limpieza de codigo
+Haciendo limpieza de código
+Llamando el metodo iniciar() al momento correcto en particion_manual
+Corrigiendo mensaje del particionado manual
+Haciendo limpieza del código
+Ignorando archivos .png creados con el make gen-img
+Mejorando detección de discos.
+Mejorando estética de las barras de particiones.
+Mejorando coloración de las barras de particiones.
+Removiendo imágenes innecesarias.
+Agregando rutina para generar las imágenes png a partir de sus fuentes svg.
+Mejorando estética de las barras de particiones.
+Conflicts:
+	canaima-instalador.py
+	pasos/metodo.py
+Ampliando tamaño del scroll
+Mostrando las particiones actuales del disco
+Eliminando implementación de código innecesaria por estar duplicada
+Forzando la aparición del particionador manual
+Corrigiendo tipo de valor recibido al llenar la tabla
+Corrigiendo el nombre de las propiedades de la clase
+Indicando el Inicio y fin de la partición
+Mejorando la forma en que se establecen los métodos de instalación.
+Corrigiendo mensaje de particionado
+Activando llamado a clase PartManual()
+Haciendo wrap de las lineas grandes
+Uniendo cambio de HuntingBears
+Estructurando código
+modificado mesaje de dialogo de salida de gtk.MESSAGE_INFO a gtk.MESSAGE_WARNIG
+se incluye nuevamente mesaje advertendia antes de cancelar la instalación
+Conflicts:
+	wizard.py
+comentando linea en el wizard inncesaria
+Mostrando interfaz y activando el botón cancelar
+corrigiendo email en colaboradores
+removiendo archivos basura del código
+Conflicts:
+	pasos/metodo.py
+Mejorando la forma en que se determinan los métodos de instalación.
+Mejorando la estética del paso sonde se muentran los métodos.
+Mejorando funciones de reconocimiento de discos y particiones.
+Mejorando interacción con los pasos del instalador.
+Cambiando tamaño de la ventana para redistribuir el espacio.
+Moviendo el Wizard de lugar (es una clase).
+Creando clases para las casenas de texto (translator) y los contructores gtk (constructor).
+Agregando target 'clean-pyc' al Makefile para borrar todos los .pyc antes de hacer commi
+t.
+Corrigiendo algunos detalles estéticos y limpiando comentarios.
+Condicionando que el nombre del disco no quede en blanco
+Eliminando las importaciones de pygtk
+Eliminando contador de particiones primarias repetido
+Eliminando impresiones innecesarias y variables no utilizadas
+Eliminando impresiones innecesarias
+Eliminando código innecesario en clases/particiones.py
+Eliminando declaración repetida de cmb_tipo_on_changed()
+Eliminando mensaje innecesario
+Eliminando elementos innecesarios del codigo
+Nueva versión
+Agregando colaboradores.
+Desmontando el /target al concluir el proceso de instalación
+Corrigiendo problemas de identación del codigo
+Mejorando detalles estéticos.
+Nueva versión
+Mejorando respuesta de h2kb si num es False.
+Nueva versión
+Moviendo base del código fuente al primer nivel de la carpeta.
+Nueva versión
+Arreglando detalle con asignación previa de variable.
+Nueva versión
+Removiendo carpeta de ejemplos.
+Nueva versión
+Pequeño detalle estético en el Makefile.
+Corrigiendo lugar de escritura del /etc/default/keyboard.
+Corrigiendo error resultante del procesamiento de las particiones cuando existe una partición de 0KB o cuando no existe tabla de particiones.
+Ampliando la escritura de /etc/network/interfaces según el número de interfaces.
+Sustituyendo "auto" por "allow-hotplug" en las entradas de /etc/network/interfaces para evitar que haga DHCP en el boot.
+Escribiendo /etc/fstab correctamente.
+Nueva versión
+Removiendo mensajes innecesarios.
+Nueva versión
+Agregandome como Uploader
+Activando el metodo de configuracion de teclado self.keyboard()
+Corrigiendo error de lintian executable-not-elf-or-script
+Especificando la distribución de teclado en /etc/default/keyborad (bug #426)
+
