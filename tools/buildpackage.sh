@@ -59,16 +59,16 @@ OLDREV="$( echo ${OLDDEBVERSION#${OLDRELVERSION}-} | sed 's/~.*//g' )"
 
 WARNING "Merging new upstream release ..."
 
-if [ "${TYPE}" == "final-release" ] || [ "${TYPE}" == "test-release" ]; then
+if [ "${TYPE}" = "final-release" ] || [ "${TYPE}" = "test-release" ]; then
 	git merge -q -s recursive -X theirs --squash release
-elif [ "${TYPE}" == "test-snapshot" ]; then
+elif [ "${TYPE}" = "test-snapshot" ]; then
 	git merge -q -s recursive -X theirs --squash development
 fi
 
 NEWRELVERSION="$( cat ${VERSION} | grep "VERSION" | sed 's/VERSION = //g' )"
 
-if [ "${OLDRELVERSION}" == "${NEWRELVERSION}" ]; then
-	if [ "${OLDDEBSTATUS}" == "UNRELEASED" ]; then
+if [ "${OLDRELVERSION}" = "${NEWRELVERSION}" ]; then
+	if [ "${OLDDEBSTATUS}" = "UNRELEASED" ]; then
 		NEWREV="${OLDREV}"
 	else
 		NEWREV="$[ ${OLDREV}+1 ]"
@@ -80,10 +80,10 @@ fi
 NEWDEBVERSION="${NEWRELVERSION}-${NEWREV}"
 
 WARNING "Generating Debian changelog ..."
-if [ "${TYPE}" == "final-release" ]; then
+if [ "${TYPE}" = "final-release" ]; then
 	OPTIONS="-kE78DAA2E -tc --git-tag --git-retag"
 	git dch --new-version="${NEWDEBVERSION}" --release --auto --id-length=7 --full
-elif [ "${TYPE}" == "test-snapshot" ] || [ "${TYPE}" == "test-release" ]; then
+elif [ "${TYPE}" = "test-snapshot" ] || [ "${TYPE}" = "test-release" ]; then
 	OPTIONS="-us -uc"
 	git dch --new-version="${NEWDEBVERSION}" --snapshot --auto --id-length=7 --full
 fi
@@ -93,14 +93,14 @@ git add .
 git commit -q -a -m "Importing New Upstream Release (${NEWRELVERSION})"
 
 WARNING "Generating tarball ..."
-tar --anchored --exclude="debian" -czf ../canaima-semilla_${NEWRELVERSION}.orig.tar.gz *
+tar --anchored --exclude="debian" -czf ../canaima-instalador_${NEWRELVERSION}.orig.tar.gz *
 
 WARNING "Generating Debian package ..."
 git buildpackage ${OPTIONS}
 git clean -fd
 git reset --hard
 
-if [ "${TYPE}" == "final-release" ]; then
+if [ "${TYPE}" = "final-release" ]; then
 	echo ""
 fi
 
