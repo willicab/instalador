@@ -1,4 +1,4 @@
-canaima-instalador (1.0-27) stable; urgency=low
+canaima-instalador (2.0+dev0) stable; urgency=low
 
   [ Luis Alejandro Martínez Faneyth ]
   * [720ff48] Moviendo base del código fuente al primer nivel de la
