@@ -38,7 +38,6 @@ from canaimainstalador.pasos.particion_todo import PasoPartTodo
 from canaimainstalador.pasos.particion_manual import PasoPartManual
 from canaimainstalador.pasos.instalacion import PasoInstalacion
 from canaimainstalador.pasos.usuario import PasoUsuario
-from canaimainstalador.pasos.accesibilidad import PasoAccesibilidad
 from canaimainstalador.pasos.info import PasoInfo
 from canaimainstalador.clases.common import UserMessage, AboutWindow, aconnect
 from canaimainstalador.config import CFG, BAR_ICON

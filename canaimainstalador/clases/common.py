@@ -26,7 +26,7 @@
 #
 # CODE IS POETRY
 
-import re, subprocess, math, cairo, gtk, hashlib, random, string, urllib2, os, glob, parted
+import re, subprocess, math, cairo, gtk, hashlib, random, string, urllib2, os, glob, parted, crypt, threading
 
 from canaimainstalador.translator import msj
 from canaimainstalador.config import APP_NAME, APP_COPYRIGHT, APP_DESCRIPTION, \
@@ -104,7 +104,6 @@ def mounted_targets(mnt):
     for i in salida:
         m.append(['', i, ''])
 
-    print m
     return m
 
 def mounted_parts(disk):
@@ -118,7 +117,6 @@ def mounted_parts(disk):
     for i in salida:
         m.append(['', i, ''])
 
-    print m
     return m
 
 def assisted_mount(sync, bind, plist):
@@ -282,22 +280,33 @@ def actualizar_sistema(mnt):
         return False
 
 def crear_usuarios(mnt, a_user, a_pass, n_name, n_user, n_pass):
-    content_1 = a_user+':'+a_pass+'\n'
-    content_2 = n_user+':'+n_pass+'\n'
-    destination_1 = '{0}/tmp/passwd_1'.format(mnt)
-    destination_2 = '{0}/tmp/passwd_2'.format(mnt)
+    i = 0
+    content = a_user+':'+a_pass+'\n'
+    destination = '{0}/tmp/passwd'.format(mnt)
+    home = '/home/{0}'.format(n_user)
+    shell = '/bin/bash'
+    password = crypt_generator(n_pass)
 
-    f_1 = open(destination_1, 'w')
-    f_1.write(content_1)
-    f_1.close()
+    f = open(destination, 'w')
+    f.write(content)
+    f.close()
 
-    f_2 = open(destination_2, 'w')
-    f_2.write(content_2)
-    f_2.close()
+    if ProcessGenerator(
+        'chroot {0} cat /tmp/passwd | /usr/sbin/chpasswd'.format(mnt)
+        ).returncode == 0:
+        i += 1
 
-    ProcessGenerator('chroot {0} /usr/sbin/useradd -m -d /home/{1} {2} -s /bin/bash -c "{3}"'.format(mnt, n_user, n_user, n_name))
-    ProcessGenerator('chroot {0} cat /tmp/passwd_1 | /usr/sbin/chpasswd'.format(mnt))
-    ProcessGenerator('chroot {0} cat /tmp/passwd_2 | /usr/sbin/chpasswd'.format(mnt))
+    if ProcessGenerator(
+        'chroot {0} /usr/sbin/useradd -m -d "{1}" -s "{2}" -c "{3}" -p "{4}" {5}'.format(
+            mnt, home, shell, n_name, password, n_user
+            )
+        ).returncode == 0:
+        i += 1
+
+    if i == 2:
+        return True
+    else:
+        return False
 
 def crear_etc_network_interfaces(mnt, cfg):
     content = ''
@@ -612,6 +621,9 @@ def UserMessage(
 def random_generator(size=10, chars=string.ascii_uppercase + string.digits):
     return hashlib.sha1(''.join(random.choice(chars) for x in range(size))).hexdigest()
 
+def crypt_generator(arg):
+    return crypt.crypt(arg, random_generator())
+
 def ProcessGenerator(command):
     filename = '/tmp/canaimainstalador-' + random_generator()
 
@@ -642,6 +654,20 @@ def ProcessGenerator(command):
         os.unlink(filename)
 
     return process
+
+class ThreadGenerator(threading.Thread):
+    def __init__(self, reference, function, params, event = False):
+        threading.Thread.__init__(self)
+        self._function = function
+        self._params = params
+        self._event = event
+        self.start()
+
+    def run(self):
+        if self._event:
+            self._event.wait()
+
+        self._function(**self._params)
 
 def get_sector_size(device):
     'Retorna el tamaño en Kb de cada sector'
