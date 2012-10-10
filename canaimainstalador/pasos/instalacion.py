@@ -45,13 +45,13 @@ class PasoInstalacion(gtk.Fixed):
         self.metodo = CFG['metodo']
         self.acciones = CFG['acciones']
         self.teclado = CFG['teclado']
-        self.passroot = CFG['passroot']
+        self.passroot = CFG['passroot1']
         self.nombre = CFG['nombre']
         self.usuario = CFG['usuario']
-        self.passuser = CFG['passuser']
+        self.passuser = CFG['passuser1']
         self.maquina = CFG['maquina']
         self.oem = CFG['oem']
-        self.chkgdm = CFG['chkgdm']
+        self.gdm = CFG['gdm']
         self.mountpoint = '/target'
         self.squashfs = '/live/image/live/filesystem.squashfs'
         self.requesturl = 'http://www.google.com/'
@@ -100,11 +100,6 @@ class PasoInstalacion(gtk.Fixed):
         self.visor.set_size_request(700, 430)
         self.visor.open(INSTALL_SLIDES)
         self.put(self.visor, 0, 0)
-
-#        msg = 'Ha culminado la instalación, puede reiniciar ahora el sistema o seguir probando canaima y reiniciar más tarde.'
-#        self.lblInfo = gtk.Label(msg)
-#        self.lblInfo.set_size_request(690, 280)
-#        self.put(self.lblInfo, 0, 0)
 
         self.lblDesc = gtk.Label()
         self.lblDesc.set_size_request(700, 30)
@@ -496,7 +491,7 @@ class PasoInstalacion(gtk.Fixed):
             self.nml_password = self.passuser
             self.nml_name = self.nombre
 
-        if self.chkgdm:
+        if self.gdm:
             if not instalar_paquetes(
                 mnt=self.mountpoint, dest='/tmp', plist=self.instpkgs_cagg
                 ):

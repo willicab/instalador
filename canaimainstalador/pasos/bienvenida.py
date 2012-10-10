@@ -26,14 +26,46 @@
 #
 # CODE IS POETRY
 
-import gtk
-
-from canaimainstalador.config import WELCOME_IMAGE
+import gtk, pango
 
 class PasoBienvenida(gtk.Fixed):
     def __init__(self, CFG):
         gtk.Fixed.__init__(self)
-        self.img = gtk.Image()
-        self.img.set_from_file(WELCOME_IMAGE)
-        self.put(self.img, 0, 0)
+
+        msg_titulo = 'Bienvenido al asistente de instalación de Canaima'
+        msg_intro = 'Mediante este asistente usted podrá instalar Canaima en su computador. Antes de continuar, asegúrese de que su equipo cumple con los siguientes requisitos:'
+        msg_disco = '● 6GB de espacio en disco (como mínimo).'
+        msg_memoria = '● 384MB de memoria RAM (como mínimo).'
+        msg_fin = 'Lo invitamos a seguir las instrucciones que se muestran en pantalla.'
+
+        attr = pango.AttrList()
+        size = pango.AttrSize(20000, 0, -1)
+        attr.insert(size)
+
+        self.lbltitulo = gtk.Label(msg_titulo)
+        self.lbltitulo.set_size_request(640, 40)
+        self.lbltitulo.set_alignment(0, 0)
+        self.lbltitulo.set_attributes(attr)
+        self.put(self.lbltitulo, 50, 110)
+
+        self.lblintro = gtk.Label(msg_intro)
+        self.lblintro.set_size_request(640, 40)
+        self.lblintro.set_alignment(0, 0)
+        self.lblintro.set_line_wrap(True)
+        self.put(self.lblintro, 50, 170)
+
+        self.lbldisco = gtk.Label(msg_disco)
+        self.lbldisco.set_size_request(640, 20)
+        self.lbldisco.set_alignment(0, 0)
+        self.put(self.lbldisco, 50, 220)
+
+        self.lblmemoria = gtk.Label(msg_memoria)
+        self.lblmemoria.set_size_request(640, 20)
+        self.lblmemoria.set_alignment(0, 0)
+        self.put(self.lblmemoria, 50, 240)
+
+        self.lblfin = gtk.Label(msg_fin)
+        self.lblfin.set_size_request(640, 20)
+        self.lblfin.set_alignment(0, 0)
+        self.put(self.lblfin, 50, 270)
 
