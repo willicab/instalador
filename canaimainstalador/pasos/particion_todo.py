@@ -3,7 +3,7 @@
 #
 # ==============================================================================
 # PAQUETE: canaima-instalador
-# ARCHIVO: canaimainstalador/config.py
+# ARCHIVO: canaimainstalador/pasos/particion_todo.py
 # COPYRIGHT:
 #       (C) 2012 William Abrahan Cabrera Reyes <william@linux.es>
 #       (C) 2012 Erick Manuel Birbe Salazar <erickcion@gmail.com>
@@ -137,6 +137,7 @@ class PasoPartTodo(gtk.Fixed):
         self.leyenda.expose()
 
     def change_option(self, widget, forma):
-        if widget.get_active() == True:
-            self.barra.cambiar(forma)
-            self.leyenda.cambiar(forma)
+        self.forma = forma
+        self.barra.expose()
+        self.leyenda.expose()
+

@@ -2,7 +2,7 @@ Source: canaima-instalador
 Section: admin
 Priority: extra
 Maintainer: Equipo de Desarrollo de Canaima GNU/Linux <desarrolladores@canaima.softwarelibre.gob.ve>
-Uploaders: William Cabrera <william@linux.es>, Erick Birbe <erickcion@gmail.com>
+Uploaders: William Abrahan Cabrera Reyes <william@linux.es>, Erick Manuel Birbe Salazar <erickcion@gmail.com>, Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>
 Build-Depends: debhelper (>= 7.0.50~)
 Standards-Version: 3.9.1
 Homepage: http://canaima.softwarelibre.gob.ve/
@@ -11,7 +11,7 @@ Vcs-Browser: http://gitorious.org/canaima-gnu-linux/canaima-instalador/trees/mas
 
 Package: canaima-instalador
 Architecture: all
-Depends: ${shlibs:Depends}, ${misc:Depends}, ${python:Depends}, python-imaging, lshw, parted, squashfs-tools, python-gtk2, python-cairo, reiserfsprogs
+Depends: ${shlibs:Depends}, ${misc:Depends}, ${python:Depends}, python, python-gtk2, python-cairo, python-parted, python-webkit, squashfs-tools, reiserfsprogs, btrfs-tools, e2fsprogs, dosfstools, mtools, hfsutils, hfsprogs, jfsutils, util-linux, ntfsprogs, reiser4progs, xfsprogs, fatresize
 Description: Instalador en vivo para medios instalables de Canaima GNU/Linux
  Este paquete prentende ser un instalador que pueda usarse en cualquier sabor
- de Canaima GNU/Linux
+ de Canaima GNU/Linux.
