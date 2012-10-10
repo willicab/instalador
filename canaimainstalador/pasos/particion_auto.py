@@ -1,5 +1,30 @@
 #!/usr/bin/env python
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
+#
+# ==============================================================================
+# PAQUETE: canaima-instalador
+# ARCHIVO: canaimainstalador/pasos/particion_auto.py
+# COPYRIGHT:
+#       (C) 2012 William Abrahan Cabrera Reyes <william@linux.es>
+#       (C) 2012 Erick Manuel Birbe Salazar <erickcion@gmail.com>
+#       (C) 2012 Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>
+# LICENCIA: GPL-3
+# ==============================================================================
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# COPYING file for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+#
+# CODE IS POETRY
 
 import gtk
 
@@ -27,17 +52,17 @@ class PasoPartAuto(gtk.Fixed):
         self.lbl1.set_line_wrap(True)
         self.put(self.lbl1, 0, 0)
 
-        self.tam_min = gtk.Button()
-        self.tam_min.set_label('Mínimo')
-        self.tam_min.set_size_request(60, 25)
-        self.tam_min.connect('clicked', self.set_min)
-        self.put(self.tam_min, 565, 35)
-
         self.tam_max = gtk.Button()
         self.tam_max.set_label('Máximo')
         self.tam_max.set_size_request(60, 25)
         self.tam_max.connect('clicked', self.set_max)
-        self.put(self.tam_max, 630, 35)
+        self.put(self.tam_max, 565, 35)
+
+        self.tam_min = gtk.Button()
+        self.tam_min.set_label('Mínimo')
+        self.tam_min.set_size_request(60, 25)
+        self.tam_min.connect('clicked', self.set_min)
+        self.put(self.tam_min, 630, 35)
 
         self.barra = BarraAuto(self)
         self.barra.set_size_request(690, 100)
@@ -104,16 +129,17 @@ class PasoPartAuto(gtk.Fixed):
                     self.option_4.set_sensitive(False)
 
     def set_min(self, widget):
-        self.libre = self.barra.total - self.minimo
+        self.current = self.barra.total - ESPACIO_TOTAL
         self.barra.expose()
         self.leyenda.expose()
 
     def set_max(self, widget):
-        self.libre = 0
+        self.current = self.usado
         self.barra.expose()
         self.leyenda.expose()
 
     def change_option(self, widget, forma):
-        if widget.get_active() == True:
-            self.barra.cambiar(forma)
-            self.leyenda.cambiar(forma)
+        self.forma = forma
+        self.barra.expose()
+        self.leyenda.expose()
+

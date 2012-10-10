@@ -23,9 +23,9 @@
 [ LISTO ] - Depurar el Segfault de webkit.
 [ LISTO ] - Validar el máximo de 11 particiones lógicas.
 - Mejorar mensajes de error de la instalación.
-- Arreglar flickering de las barras de las particiones.
+[ LISTO ] - Arreglar flickering de las barras de las particiones.
 [ LISTO ] - Arreglar creación de usuarios.
-- Arreglar problema de actualización de barra en partauto.
-- hacer banner de bienvenida y renovar los otros banners.
 - Agregar soporte para LVM y RAID.
 - Agregar funcionalidad para instalar desde red y hacia la red (FAI).
+[ LISTO ] - Arreglar problema de actualización de barra en partauto.
+- hacer banner de bienvenida y renovar los otros banners. 

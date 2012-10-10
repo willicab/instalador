@@ -1,5 +1,30 @@
 #!/usr/bin/env python
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
+#
+# ==============================================================================
+# PAQUETE: canaima-instalador
+# ARCHIVO: canaimainstalador/clases/barra_auto.py
+# COPYRIGHT:
+#       (C) 2012 William Abrahan Cabrera Reyes <william@linux.es>
+#       (C) 2012 Erick Manuel Birbe Salazar <erickcion@gmail.com>
+#       (C) 2012 Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>
+# LICENCIA: GPL-3
+# ==============================================================================
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# COPYING file for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+#
+# CODE IS POETRY
 
 import gtk
 
@@ -22,13 +47,7 @@ class BarraAuto(gtk.DrawingArea):
         self.p = parent
         self.presionado = False
 
-    def cambiar(self, forma):
-        self.p.forma = forma
-        self.forma = forma
-        self.expose()
-
     def expose(self, widget=None, event=None):
-        print 'expose'
         self.metodo = self.p.metodo
         self.ini = self.p.metodo['part'][1]
         self.fin = self.p.metodo['part'][2]
@@ -126,7 +145,7 @@ class BarraAuto(gtk.DrawingArea):
         else:
             pass
 
-        for p in self.nuevas:
+        for p in self.p.nuevas:
             ini = p[1]
             fin = p[2]
             tipo = p[5]
@@ -225,14 +244,20 @@ class BarraAuto(gtk.DrawingArea):
                     )
 
     def press(self, widget, event):
-        if event.x >= self.pos[0] and event.x <= self.pos[2] and event.y >= self.pos[1] and event.y <= self.pos[3]:
+        if event.x >= self.pos[0] and \
+        event.x <= self.pos[2] and \
+        event.y >= self.pos[1] and \
+        event.y <= self.pos[3]:
             self.presionado = True
 
     def release(self, widget, event):
         self.presionado = False
 
     def draw_cursor(self, widget, event):
-        if event.x >= self.pos[0] and event.x <= self.pos[2] and event.y >= self.pos[1] and event.y <= self.pos[3]:
+        if event.x >= self.pos[0] and \
+        event.x <= self.pos[2] and \
+        event.y >= self.pos[1] and \
+        event.y <= self.pos[3]:
             cursor = gtk.gdk.Cursor(gtk.gdk.HAND2)
             self.window.set_cursor(cursor)
         else:
@@ -244,7 +269,5 @@ class BarraAuto(gtk.DrawingArea):
             if x >= self.usado and x <= self.total - self.minimo:
                 self.current = x
                 self.p.current = x
-                self.p.barra.cambiar(self.forma)
-                self.p.leyenda.cambiar(self.forma)
                 self.queue_draw()
 
