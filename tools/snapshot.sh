@@ -74,7 +74,6 @@ read -p "Enter new version (last version was ${OLDVERSION}): " REPLY
 NEWVERSION="${REPLY}"
 
 echo "DEVELOPMENT RELEASE v${NEWVERSION}+${SNAPSHOT} (${DATE})" > ${NEWCHANGES}
-cat ${CHANGES} | sed -n 1,${OLDCOMMITLINE}p | sed 's/commit.*//g;s/Author:.*//g;s/Date:.*//g;s/Merge.*//g;/^$/d;'
 cat ${CHANGES} | sed -n 1,${OLDCOMMITLINE}p | sed 's/commit.*//g;s/Author:.*//g;s/Date:.*//g;s/Merge.*//g;/^$/d;' >> ${NEWCHANGES}
 sed -i 's/New development snapshot.*//g;s/    //g;/^$/d;' ${NEWCHANGES}
 sed -i 's/Signed-off-by:.*//g;s/    //g;/^$/d;' ${NEWCHANGES}
