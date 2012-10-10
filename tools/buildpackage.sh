@@ -65,7 +65,7 @@ elif [ "${TYPE}" = "test-snapshot" ]; then
 	git merge -q -s recursive -X theirs --squash development
 fi
 
-NEWRELVERSION="$( cat ${VERSION} | grep "VERSION" | sed 's/VERSION = //g' )"
+NEWRELVERSION="$( cat ${VERSION} | grep "VERSION" | sed 's/VERSION=//g' )"
 
 if [ "${OLDRELVERSION}" = "${NEWRELVERSION}" ]; then
 	if [ "${OLDDEBSTATUS}" = "UNRELEASED" ]; then
