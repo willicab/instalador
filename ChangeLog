@@ -1,3 +1,8 @@
+DEVELOPMENT RELEASE v2.0+dev20121011173002 (10/11/12)
+Solucionando problema con el renderizado de webkit.
+Implementado multi-hilos en el proceso de instalación.
+Agregando documentación de licencia.
+
 DEVELOPMENT RELEASE v2.0+dev20121010130703 (10/10/12)
 Corrigiendo error en la generación de los paquetes de prueba.
 
