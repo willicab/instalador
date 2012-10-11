@@ -681,7 +681,7 @@ class ThreadGenerator(threading.Thread):
             gtk.gdk.threads_leave()
 
         if self._window:
-            self._window.hide()
+            self._window.hide_all()
 
 def get_sector_size(device):
     'Retorna el tamaño en Kb de cada sector'

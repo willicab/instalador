@@ -351,7 +351,7 @@ class Info():
     def siguiente(self, CFG):
         ThreadGenerator(
             reference = self, function = PasoInstalacion, params = {'CFG': CFG},
-            gtk = True, window = CFG['w'], event = False
+            gtk = False, window = False, event = False
             )
 
 #class Instalacion():

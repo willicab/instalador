@@ -42,6 +42,7 @@ gtk.gdk.threads_init()
 def PasoInstalacion(CFG):
     q_button_a = Queue.Queue()
     q_button_b = Queue.Queue()
+    q_visor = Queue.Queue()
     q_label = Queue.Queue()
     event = threading.Event()
 
@@ -52,9 +53,11 @@ def PasoInstalacion(CFG):
             'title': 'x',
             'q_button_a': q_button_a,
             'q_button_b': q_button_b,
+            'q_visor': q_visor,
             'q_label': q_label,
             'event': event
-            }
+            },
+        window = CFG['w'], gtk = True, event = False
         )
 
     ThreadGenerator(
@@ -63,12 +66,13 @@ def PasoInstalacion(CFG):
             'CFG': CFG,
             'q_button_a': q_button_a,
             'q_button_b': q_button_b,
+            'q_visor': q_visor,
             'q_label': q_label
             },
-        event = event
+        window = False, gtk = False, event = event
         )
 
-def install_window(text, title, q_button_a, q_button_b, q_label, event):
+def install_window(text, title, q_button_a, q_button_b, q_visor, q_label, event):
     window = gtk.Window()
     window.set_border_width(0)
     window.set_title(title)
@@ -76,64 +80,48 @@ def install_window(text, title, q_button_a, q_button_b, q_label, event):
     window.set_size_request(700, 470)
     window.set_resizable(False)
     window.set_icon_from_file(BAR_ICON)
-    window.connect("destroy", close)
-    window.connect("delete-event", close)
 
-    outbox = gtk.VBox()
-    outbox.set_border_width(0)
-
-    inbox = gtk.VBox(spacing = 0)
-    inbox.set_border_width(0)
+    box = gtk.Fixed()
+    window.add(box)
 
     visor = webkit.WebView()
-#    visor.open(INSTALL_SLIDES)
-    inbox.pack_start(visor, False, False, 0)
+    visor.set_size_request(600, 400)
+    box.put(visor, 10, 10)
 
     linea = gtk.HSeparator()
-    inbox.pack_start(linea, False, False, 0)
+    linea.set_size_request(700, 5)
+    box.put(linea, 0, 435)
 
     label = gtk.Label()
     label.set_justify(gtk.JUSTIFY_CENTER)
-    inbox.pack_start(label, False, False, 0)
+    label.set_size_request(700, 20)
+    box.put(label, 0, 440)
 
-    bottom = gtk.HBox()
-    bottom.set_border_width(0)
-    inbox.pack_start(bottom, False, False, 0)
-    
     button_a = gtk.Button()
+    button_a.set_size_request(150, 30)
     button_a.set_label('Reiniciar más tarde')
-    bottom.pack_start(button_a, False, False, 0)
+    box.put(button_a, 390, 440)
 
     button_b = gtk.Button()
+    button_b.set_size_request(150, 30)
     button_b.set_label('Reiniciar ahora')
-    bottom.pack_start(button_b, False, False, 0)
+    box.put(button_b, 540, 440)
 
-    outbox.pack_start(inbox, False, False, 0)
-
-    window.add(outbox)
     window.show_all()
 
     button_a.hide()
     button_b.hide()
 
     q_label.put(label)
+    q_visor.put(visor)
     q_button_a.put(button_a)
     q_button_b.put(button_b)
     event.set()
 
-def close(widget=None, event=None):
-    '''
-        Cierra la ventana
-    '''
-    return UserMessage(
-        '¿Está seguro que desea cancelar la instalación?', 'Salir',
-        gtk.MESSAGE_WARNING, gtk.BUTTONS_YES_NO, c_1=gtk.RESPONSE_YES,
-        f_1=gtk.main_quit, p_1=()
-        )
-
-def install_process(CFG, q_button_a, q_button_b, q_label):
+def install_process(CFG, q_button_a, q_button_b, q_visor, q_label):
     button_a = q_button_a.get()
     button_b = q_button_b.get()
+    visor = q_visor.get()
     label = q_label.get()
     p = Particiones()
     w = CFG['w']
@@ -194,6 +182,10 @@ def install_process(CFG, q_button_a, q_button_b, q_label):
     time.sleep(10)
     print 'hola'
     print CFG
+    print 'file://'+os.path.realpath(INSTALL_SLIDES)
+    visor.load_uri('http://www.google.com')
+    #    visor.load_uri('file://'+os.path.realpath(INSTALL_SLIDES))
+    
 
 #    if not os.path.isdir(mountpoint):
 #        os.makedirs(mountpoint)
