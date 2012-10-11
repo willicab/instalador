@@ -39,7 +39,8 @@ from canaimainstalador.pasos.particion_manual import PasoPartManual
 from canaimainstalador.pasos.instalacion import PasoInstalacion
 from canaimainstalador.pasos.usuario import PasoUsuario
 from canaimainstalador.pasos.info import PasoInfo
-from canaimainstalador.clases.common import UserMessage, AboutWindow, aconnect
+from canaimainstalador.clases.common import UserMessage, AboutWindow, aconnect, \
+    ThreadGenerator
 from canaimainstalador.config import CFG, BAR_ICON
 
 class Wizard(gtk.Window):
@@ -348,19 +349,22 @@ class Info():
         CFG['w'].previous('Usuario', Usuario, (CFG))
 
     def siguiente(self, CFG):
-        CFG['w'].next('Instalacion', Instalacion, (CFG), PasoInstalacion(CFG))
+        ThreadGenerator(
+            reference = self, function = PasoInstalacion, params = {'CFG': CFG},
+            gtk = True, window = CFG['w'], event = False
+            )
 
-class Instalacion():
-    '''
-        Inicia el paso que realiza la instalación del sistema
-    '''
-    def __init__(self, CFG):
-        CFG['s'] = aconnect(CFG['w'].siguiente, CFG['s'], self.siguiente, CFG)
-        CFG['s'] = aconnect(CFG['w'].anterior, CFG['s'], self.anterior, CFG)
-        CFG['w'].c_principal.move(CFG['w'].c_pasos, 0, 0)
+#class Instalacion():
+#    '''
+#        Inicia el paso que realiza la instalación del sistema
+#    '''
+#    def __init__(self, CFG):
+#        CFG['s'] = aconnect(CFG['w'].siguiente, CFG['s'], self.siguiente, CFG)
+#        CFG['s'] = aconnect(CFG['w'].anterior, CFG['s'], self.anterior, CFG)
+#        CFG['w'].c_principal.move(CFG['w'].c_pasos, 0, 0)
 
-    def anterior(self, CFG):
-        os.system('reboot')
+#    def anterior(self, CFG):
+#        os.system('reboot')
 
-    def siguiente(self, CFG):
-        CFG['w'].close()
+#    def siguiente(self, CFG):
+#        CFG['w'].close()

@@ -656,18 +656,32 @@ def ProcessGenerator(command):
     return process
 
 class ThreadGenerator(threading.Thread):
-    def __init__(self, reference, function, params, event = False):
+    def __init__(
+        self, reference, function, params,
+        gtk = False, window = False, event = False
+        ):
         threading.Thread.__init__(self)
+        self._gtk = gtk
+        self._window = window
         self._function = function
         self._params = params
         self._event = event
         self.start()
 
     def run(self):
+        if self._gtk:
+            gtk.gdk.threads_enter()
+
         if self._event:
             self._event.wait()
 
         self._function(**self._params)
+
+        if self._gtk:
+            gtk.gdk.threads_leave()
+
+        if self._window:
+            self._window.hide()
 
 def get_sector_size(device):
     'Retorna el tamaño en Kb de cada sector'
