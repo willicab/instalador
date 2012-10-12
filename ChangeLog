@@ -1,3 +1,7 @@
+DEVELOPMENT RELEASE v2.0+dev20121012031326 (10/12/12)
+Agregando versiones a dependencias esenciales para evitar errores de lintian.
+Removiendo shabang del desktop entry para evitar errores de lintian.
+
 DEVELOPMENT RELEASE v2.0+dev20121012030115 (10/12/12)
 Actualizando TODO
 Creando nuevos slides para la animación de instalación.
