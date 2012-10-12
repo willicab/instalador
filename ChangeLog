@@ -1,3 +1,8 @@
+DEVELOPMENT RELEASE v2.0+dev20121012030115 (10/12/12)
+Actualizando TODO
+Creando nuevos slides para la animación de instalación.
+Corrigiendo detalles estéticos del paso de instalación.
+
 DEVELOPMENT RELEASE v2.0+dev20121011173002 (10/11/12)
 Solucionando problema con el renderizado de webkit.
 Implementado multi-hilos en el proceso de instalación.
