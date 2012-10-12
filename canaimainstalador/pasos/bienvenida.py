@@ -46,6 +46,7 @@ class PasoBienvenida(gtk.Fixed):
         self.lbltitulo.set_size_request(640, 40)
         self.lbltitulo.set_alignment(0, 0)
         self.lbltitulo.set_attributes(attr)
+        self.lbltitulo.set_line_wrap(True)
         self.put(self.lbltitulo, 50, 110)
 
         self.lblintro = gtk.Label(msg_intro)
@@ -57,15 +58,18 @@ class PasoBienvenida(gtk.Fixed):
         self.lbldisco = gtk.Label(msg_disco)
         self.lbldisco.set_size_request(640, 20)
         self.lbldisco.set_alignment(0, 0)
+        self.lblintro.set_line_wrap(True)
         self.put(self.lbldisco, 50, 220)
 
         self.lblmemoria = gtk.Label(msg_memoria)
         self.lblmemoria.set_size_request(640, 20)
         self.lblmemoria.set_alignment(0, 0)
+        self.lblmemoria.set_line_wrap(True)
         self.put(self.lblmemoria, 50, 240)
 
         self.lblfin = gtk.Label(msg_fin)
         self.lblfin.set_size_request(640, 20)
         self.lblfin.set_alignment(0, 0)
+        self.lblfin.set_line_wrap(True)
         self.put(self.lblfin, 50, 270)
 

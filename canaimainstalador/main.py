@@ -349,22 +349,12 @@ class Info():
         CFG['w'].previous('Usuario', Usuario, (CFG))
 
     def siguiente(self, CFG):
-        ThreadGenerator(
-            reference = self, function = PasoInstalacion, params = {'CFG': CFG},
-            gtk = False, window = False, event = False
-            )
+        CFG['w'].next('Instalacion', Instalacion, (CFG), PasoInstalacion(CFG))
 
-#class Instalacion():
-#    '''
-#        Inicia el paso que realiza la instalación del sistema
-#    '''
-#    def __init__(self, CFG):
-#        CFG['s'] = aconnect(CFG['w'].siguiente, CFG['s'], self.siguiente, CFG)
-#        CFG['s'] = aconnect(CFG['w'].anterior, CFG['s'], self.anterior, CFG)
-#        CFG['w'].c_principal.move(CFG['w'].c_pasos, 0, 0)
+class Instalacion():
+    '''
+        Inicia el paso que realiza la instalación del sistema
+    '''
+    def __init__(self, CFG):
+        pass
 
-#    def anterior(self, CFG):
-#        os.system('reboot')
-
-#    def siguiente(self, CFG):
-#        CFG['w'].close()
