@@ -28,4 +28,4 @@
 - Agregar soporte para LVM y RAID.
 - Agregar funcionalidad para instalar desde red y hacia la red (FAI).
 [ LISTO ] - Arreglar problema de actualización de barra en partauto.
-- hacer banner de bienvenida y renovar los otros banners. 
+[ LISTO ] - hacer banner de bienvenida y renovar los otros banners. 
