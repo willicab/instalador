@@ -1,3 +1,6 @@
+DEVELOPMENT RELEASE v2.0+dev20121012032810 (10/12/12)
+Corrigiendo error en la determinación de la versión para el paquete fuente.
+
 DEVELOPMENT RELEASE v2.0+dev20121012031326 (10/12/12)
 Agregando versiones a dependencias esenciales para evitar errores de lintian.
 Removiendo shabang del desktop entry para evitar errores de lintian.
