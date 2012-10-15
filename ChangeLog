@@ -1,3 +1,6 @@
+DEVELOPMENT RELEASE v2.0+dev20121015095248 (10/15/12)
+Cambiando dependencia de libmagickcore3-extra a libmagickcore-extra para que la compilación no rompa en Debian Sid.
+
 DEVELOPMENT RELEASE v2.0+dev20121015094014 (10/15/12)
 Corrigiendo la forma en que se determina el directorio donde residen los archivos en ejecución.
 Actualizando TODO
