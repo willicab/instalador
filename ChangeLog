@@ -1,3 +1,7 @@
+DEVELOPMENT RELEASE v2.0+dev20121015094014 (10/15/12)
+Corrigiendo la forma en que se determina el directorio donde residen los archivos en ejecución.
+Actualizando TODO
+
 DEVELOPMENT RELEASE v2.0+dev20121012032810 (10/12/12)
 Corrigiendo error en la determinación de la versión para el paquete fuente.
 
