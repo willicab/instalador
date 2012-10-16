@@ -43,11 +43,11 @@ class PasoBienvenida(gtk.Fixed):
         attr.insert(size)
 
         self.lbltitulo = gtk.Label(msg_titulo)
-        self.lbltitulo.set_size_request(640, 40)
+        self.lbltitulo.set_size_request(640, 80)
         self.lbltitulo.set_alignment(0, 0)
         self.lbltitulo.set_attributes(attr)
         self.lbltitulo.set_line_wrap(True)
-        self.put(self.lbltitulo, 50, 110)
+        self.put(self.lbltitulo, 50, 90)
 
         self.lblintro = gtk.Label(msg_intro)
         self.lblintro.set_size_request(640, 40)
