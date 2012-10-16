@@ -45,7 +45,9 @@ class BarraParticiones(gtk.DrawingArea):
         self.ancho = self.get_size_request()[0]
         self.alto = self.get_size_request()[1]
         self.particiones = self.p.particiones
-        self.total = self.p.particiones[0][9]
+
+        if len(self.p.particiones) > 0:
+            self.total = self.p.particiones[0][9]
 
         cr = self.window.cairo_create()
         cr.set_source_rgb(0.925490196, 0.91372549, 0.847058824)

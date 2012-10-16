@@ -28,7 +28,7 @@
 
 import os
 
-curdir = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
+curdir = os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '..'))
 
 if curdir == '/usr/share/pyshared':
     GUIDIR = '/usr/share/pyshared/canaimainstalador'
