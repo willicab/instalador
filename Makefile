@@ -70,11 +70,13 @@ install:
 
 	@mkdir -p $(DESTDIR)/usr/bin
 	@mkdir -p $(DESTDIR)/usr/share/pyshared
+	@mkdir -p $(DESTDIR)/usr/share/canaima-instalador
 	@mkdir -p $(DESTDIR)/etc/skel/Escritorio
 
 	@cp canaima-instalador.desktop $(DESTDIR)/etc/skel/Escritorio/
 	@cp canaima-instalador.py $(DESTDIR)/usr/bin/canaima-instalador
 	@cp -r canaimainstalador $(DESTDIR)/usr/share/pyshared/
+	@cp VERSIONS AUTHORS LICENSE TRANSLATORS $(DESTDIR)/usr/share/canaima-instalador/
 	@rm -rf $(DESTDIR)/usr/share/pyshared/canaimainstalador/data/slides/*.png
 	@rm -rf $(DESTDIR)/usr/share/pyshared/canaimainstalador/data/slides/*.svg
 	@rm -rf $(DESTDIR)/usr/share/pyshared/canaimainstalador/data/img/*.svg
