@@ -48,6 +48,7 @@ class PasoUsuario(gtk.Fixed):
         self.put(self.lblpassroot1, 50, 40)
 
         self.txtpassroot1 = gtk.Entry()
+        self.txtpassroot1.set_visibility(False)
         self.txtpassroot1.set_size_request(350, 25)
         self.put(self.txtpassroot1, 300, 40)
 
@@ -57,6 +58,7 @@ class PasoUsuario(gtk.Fixed):
         self.put(self.lblpassroot2, 50, 70)
 
         self.txtpassroot2 = gtk.Entry()
+        self.txtpassroot2.set_visibility(False)
         self.txtpassroot2.set_size_request(350, 25)
         self.put(self.txtpassroot2, 300, 70)
 
@@ -110,6 +112,7 @@ class PasoUsuario(gtk.Fixed):
         self.put(self.lblpassuser1, 50, 280)
 
         self.txtpassuser1 = gtk.Entry()
+        self.txtpassuser1.set_visibility(False)
         self.txtpassuser1.set_size_request(350, 25)
         self.put(self.txtpassuser1, 300, 280)
 
@@ -119,6 +122,7 @@ class PasoUsuario(gtk.Fixed):
         self.put(self.lblpassuser2, 50, 310)
 
         self.txtpassuser2 = gtk.Entry()
+        self.txtpassuser2.set_visibility(False)
         self.txtpassuser2.set_size_request(350, 25)
         self.put(self.txtpassuser2, 300, 310)
 
