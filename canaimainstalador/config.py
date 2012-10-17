@@ -28,7 +28,7 @@
 
 import os
 
-curdir = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
+curdir = os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '..'))
 
 if curdir == '/usr/share/pyshared':
     GUIDIR = '/usr/share/pyshared/canaimainstalador'
@@ -51,7 +51,7 @@ TRANSLATORS_FILE = SHAREDIR + '/TRANSLATORS'
 
 APP_NAME = 'Canaima Instalador'
 APP_COPYRIGHT = 'Copyright (C) 2012 - Varios autores'
-APP_URL = 'http://code.google.com/p/canaima-instalador'
+APP_URL = 'http://gitorious.org/canaima-gnu-linux/canaima-instalador'
 APP_DESCRIPTION = 'Instalador para Canaima GNU/Linux'
 
 ESPACIO_ROOT = 1024 * 1024              # 1GB
