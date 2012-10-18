@@ -45,26 +45,26 @@ class PasoPartTodo(gtk.Fixed):
 
         txt_info = "Seleccione la distribución de las particiones que desea utilizar. Utilice el selector para indicar el tamaño que desea utilizar para la instalación de Canaima."
         self.lbl1 = gtk.Label(txt_info)
-        self.lbl1.set_size_request(690, 30)
+        self.lbl1.set_size_request(690, 35)
         self.lbl1.set_alignment(0, 0)
         self.lbl1.set_line_wrap(True)
         self.put(self.lbl1, 0, 0)
 
         self.tam_min = gtk.Button()
         self.tam_min.set_label('Mínimo')
-        self.tam_min.set_size_request(60, 25)
+        self.tam_min.set_size_request(80, 25)
         self.tam_min.connect('clicked', self.set_min)
-        self.put(self.tam_min, 565, 35)
+        self.put(self.tam_min, 525, 40)
 
         self.tam_max = gtk.Button()
         self.tam_max.set_label('Máximo')
-        self.tam_max.set_size_request(60, 25)
+        self.tam_max.set_size_request(80, 25)
         self.tam_max.connect('clicked', self.set_max)
-        self.put(self.tam_max, 630, 35)
+        self.put(self.tam_max, 610, 40)
 
         self.barra = BarraTodo(self)
         self.barra.set_size_request(690, 100)
-        self.put(self.barra, 0, 65)
+        self.put(self.barra, 0, 70)
 
         msg_1 = "Instalar todo en una sola partición."
         self.option_1 = gtk.RadioButton(None, msg_1)
@@ -84,14 +84,14 @@ class PasoPartTodo(gtk.Fixed):
         self.option_3.set_size_request(350, 20)
         self.put(self.option_3, 0, 235)
 
-        msg_4 = "Separar las particiones /home, /boot, /var y /usr."
+        msg_4 = "Separar /home, /boot, /var y /usr."
         self.option_4 = gtk.RadioButton(self.option_1, msg_4)
         self.option_4.connect("toggled", self.change_option, "BOOT:ROOT:VAR:USR:HOME:SWAP:LIBRE")
         self.option_4.set_size_request(350, 20)
         self.put(self.option_4, 0, 260)
 
         self.leyenda = Leyenda(self)
-        self.leyenda.set_size_request(270, 150)
+        self.leyenda.set_size_request(300, 150)
         self.put(self.leyenda, 390, 185)
 
         self.option_2.set_active(True)
