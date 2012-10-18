@@ -1,3 +1,8 @@
+DEVELOPMENT RELEASE v2.0+dev20121018131923 (10/18/12)
+Actualizando TODO
+Asegurando la desinstalación de live-boot y live-config del sistema instalado.
+Corrigiendo error de importación de librería y parseo de cdroms en el /etc/fstab.
+
 DEVELOPMENT RELEASE v2.0+dev20121018012736 (10/18/12)
 Corrigiendo detalle de nombre en Makefile.
 
