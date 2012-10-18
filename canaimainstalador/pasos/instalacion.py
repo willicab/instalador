@@ -47,8 +47,7 @@ class PasoInstalacion(gtk.Fixed):
         q_view = Queue.Queue()
         q_label = Queue.Queue()
         q_win = Queue.Queue()
-        event_1 = threading.Event()
-        event_2 = threading.Event()
+        event = threading.Event()
         CFG['w'].destroy()
 
         params = {
@@ -58,7 +57,7 @@ class PasoInstalacion(gtk.Fixed):
                 'q_view': q_view,
                 'q_label': q_label,
                 'q_win': q_win,
-                'event': event_1
+                'event': event
                 }
 
         window = install_window(**params)
@@ -75,19 +74,10 @@ class PasoInstalacion(gtk.Fixed):
                 'q_button_b': q_button_b,
                 'q_view': q_view,
                 'q_label': q_label,
-                'q_win': q_win,
-                'event': event_2
+                'q_win': q_win
                 },
-            event = event_1
+            event = event
             )
-
-        ThreadGenerator(
-            reference = None, function = finish_error, params = {}, event = event_2
-            )
-
-def finish_error():
-    gtk.main_quit()
-    sys.exit(1)
 
 class install_window(object):
     def __init__(self, title, q_button_a, q_button_b, q_view, q_label, q_win, event):
@@ -263,7 +253,9 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
             mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
             c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
             c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
-            c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
+            c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
+            c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
+            c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
             )
 
     if not assisted_umount(
@@ -275,7 +267,9 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
             mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
             c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
             c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
-            c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
+            c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
+            c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
+            c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
             )
 
     label.set_text('Creando particiones en disco ...')
@@ -301,7 +295,9 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
                     mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
                     c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
                     c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
-                    c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
+                    c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
+                    c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
+                    c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
                     )
             else:
                 if montaje:
@@ -319,7 +315,9 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
                     mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
                     c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
                     c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
-                    c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
+                    c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
+                    c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
+                    c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
                     )
 
         elif accion == 'redimensionar':
@@ -333,7 +331,9 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
                     mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
                     c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
                     c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
-                    c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
+                    c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
+                    c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
+                    c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
                     )
 
         elif accion == 'formatear':
@@ -345,7 +345,9 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
                     mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
                     c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
                     c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
-                    c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
+                    c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
+                    c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
+                    c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
                     )
 
         elif accion == 'usar':
@@ -378,7 +380,9 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
                 mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
                 c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
                 c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
-                c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
+                c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
+                c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
+                c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
                 )
 
     if set_boot:
@@ -391,7 +395,9 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
                 mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
                 c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
                 c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
-                c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
+                c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
+                c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
+                c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
                 )
 
     label.set_text('Montando sistemas de archivos ...')
@@ -402,7 +408,9 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
             mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
             c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
             c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
-            c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
+            c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
+            c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
+            c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
             )
 
     label.set_text('Copiando archivos en disco ...')
@@ -415,7 +423,9 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
             mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
             c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
             c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
-            c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
+            c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
+            c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
+            c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
             )
 
     label.set_text('Montando sistema de archivos ...')
@@ -426,7 +436,9 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
             mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
             c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
             c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
-            c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
+            c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
+            c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
+            c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
             )
 
     label.set_text('Instalando gestor de arranque ...')
@@ -437,7 +449,9 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
             mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
             c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
             c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
-            c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
+            c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
+            c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
+            c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
             )
 
     if not instalar_paquetes(mnt=mountpoint, dest='/tmp', plist=instpkgs_burg):
@@ -447,7 +461,9 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
             mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
             c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
             c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
-            c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
+            c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
+            c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
+            c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
             )
 
     if ProcessGenerator(
@@ -461,7 +477,9 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
             mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
             c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
             c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
-            c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
+            c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
+            c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
+            c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
             )
 
     if ProcessGenerator(
@@ -473,7 +491,9 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
             mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
             c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
             c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
-            c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
+            c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
+            c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
+            c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
             )
 
     label.set_text('Generando imagen de arranque ...')
@@ -488,7 +508,9 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
             mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
             c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
             c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
-            c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
+            c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
+            c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
+            c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
             )
 
     if ProcessGenerator(
@@ -500,7 +522,9 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
             mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
             c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
             c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
-            c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
+            c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
+            c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
+            c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
             )
 
     label.set_text('Configurando detalles del sistema operativo ...')
@@ -511,7 +535,9 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
             mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
             c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
             c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
-            c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
+            c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
+            c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
+            c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
             )
 
     label.set_text('Configurando interfaces de red ...')
@@ -522,7 +548,9 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
             mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
             c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
             c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
-            c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
+            c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
+            c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
+            c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
             )
 
     if not crear_etc_hosts(mnt=mountpoint, cfg='/etc/hosts', maq=maquina):
@@ -543,7 +571,9 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
             mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
             c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
             c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
-            c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
+            c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
+            c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
+            c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
             )
 
     label.set_text('Configurando teclado ...')
@@ -557,7 +587,9 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
             mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
             c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
             c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
-            c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
+            c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
+            c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
+            c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
             )
 
     label.set_text('Configurando particiones en /etc/fstab ...')
@@ -571,7 +603,9 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
             mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
             c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
             c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
-            c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
+            c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
+            c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
+            c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
             )
 
     label.set_text('Configurando usuarios y grupos ...')
@@ -582,7 +616,9 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
             mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
             c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
             c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
-            c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
+            c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
+            c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
+            c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
             )
 
     if oem:
@@ -601,7 +637,9 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
                 mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
                 c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
                 c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
-                c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
+                c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
+                c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
+                c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
                 )
 
     else:
@@ -621,7 +659,9 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
                 mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
                 c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
                 c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
-                c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
+                c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
+                c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
+                c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
                 )
 
     label.set_text('Creando usuarios de sistema ...')
@@ -635,7 +675,9 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
             mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
             c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
             c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
-            c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
+            c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
+            c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
+            c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
             )
 
     label.set_text('Removiendo instalador del sistema de archivos ...')
@@ -646,7 +688,9 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
             mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
             c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
             c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
-            c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
+            c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
+            c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
+            c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
             )
 
     label.set_text('Desmontando sistema de archivos ...')
@@ -657,7 +701,9 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
             mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
             c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
             c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
-            c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
+            c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
+            c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
+            c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
             )
 
     if not assisted_umount(sync = True, plist = mountlist):
@@ -667,7 +713,9 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
             mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
             c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
             c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
-            c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
+            c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
+            c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
+            c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
             )
 
     button_a.show()
