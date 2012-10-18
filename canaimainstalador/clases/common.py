@@ -26,7 +26,7 @@
 #
 # CODE IS POETRY
 
-import re, subprocess, math, cairo, gtk, hashlib, random, string, urllib2, os, glob, parted, crypt, threading
+import re, subprocess, math, cairo, gtk, hashlib, random, string, urllib2, os, glob, parted, crypt, threading, shutil, filecmp
 
 from canaimainstalador.translator import msj
 from canaimainstalador.config import APP_NAME, APP_COPYRIGHT, APP_DESCRIPTION, \
@@ -187,7 +187,7 @@ def preseed_debconf_values(mnt, debconflist):
     f.close()
 
     if ProcessGenerator(
-        'chroot {0} cat /tmp/debconf | /usr/bin/debconf-set-selections'.format(mnt)
+        'chroot {0} /usr/bin/debconf-set-selections < {1}/tmp/debconf'.format(mnt, mnt)
         ).returncode == 0:
         return True
     else:
@@ -292,7 +292,7 @@ def crear_usuarios(mnt, a_user, a_pass, n_name, n_user, n_pass):
     f.close()
 
     if ProcessGenerator(
-        'chroot {0} cat /tmp/passwd | /usr/sbin/chpasswd'.format(mnt)
+        'chroot {0} /usr/sbin/chpasswd < {1}/tmp/passwd | '.format(mnt, mnt)
         ).returncode == 0:
         i += 1
 
@@ -408,6 +408,25 @@ def crear_etc_fstab(mnt, cfg, mountlist, cdroms):
     f.close()
 
     return True
+
+def crear_passwd_group_inittab_mtab(mnt):
+    if not filecmp.cmp('/usr/share/base-passwd/passwd.master', '{0}/etc/passwd'.format(mnt)):
+        shutil.copy2('/usr/share/base-passwd/passwd.master', '{0}/etc/passwd'.format(mnt))
+
+    if not filecmp.cmp('/usr/share/base-passwd/group.master', '{0}/etc/group'.format(mnt)):
+        shutil.copy2('/usr/share/base-passwd/group.master', '{0}/etc/group'.format(mnt))
+
+    if not filecmp.cmp('/usr/share/sysvinit/inittab', '{0}/etc/inittab'.format(mnt)):
+        shutil.copy2('/usr/share/sysvinit/inittab', '{0}/etc/inittab'.format(mnt))
+
+    f = open('{0}/etc/mtab'.format(mnt), 'w')
+    f.write('')
+    f.close()
+
+    if ProcessGenerator('chroot {0} update-passwd'.format(mnt)).returncode == 0:
+        return True
+    else:
+        return False
 
 def lista_cdroms():
     info = '/proc/sys/dev/cdrom/info'

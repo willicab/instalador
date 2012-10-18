@@ -26,7 +26,7 @@
 #
 # CODE IS POETRY
 
-import os, gtk, webkit, sys,  shutil, filecmp, Queue, glib, pango, threading
+import os, gtk, webkit, sys, Queue, glib, pango, threading
 
 from canaimainstalador.clases.particiones import Particiones
 from canaimainstalador.clases.common import UserMessage, ProcessGenerator, \
@@ -483,6 +483,17 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label):
             c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
             )
 
+    label.set_text('Configurando detalles del sistema operativo ...')
+    if not reconfigurar_paquetes(mnt=mountpoint, plist=reconfpkgs):
+        UserMessage(
+            message='Ocurrió un error reconfigurando un paquete.',
+            title='ERROR',
+            mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
+            c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
+            c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
+            c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
+            )
+
     label.set_text('Configurando interfaces de red ...')
     if not crear_etc_hostname(mnt=mountpoint, cfg='/etc/hostname', maq=maquina):
         UserMessage(
@@ -529,7 +540,7 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label):
             c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
             )
 
-    label.set_text('Configurando particiones, usuarios y grupos ...')
+    label.set_text('Configurando particiones en /etc/fstab ...')
     if not crear_etc_fstab(
         mnt=mountpoint, cfg='/etc/fstab',
         mountlist=mountlist, cdroms=cdroms
@@ -543,18 +554,16 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label):
             c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
             )
 
-    if not filecmp.cmp('/etc/passwd', '{0}/etc/passwd'.format(mountpoint)):
-        shutil.copy2('/etc/passwd', '{0}/etc/passwd'.format(mountpoint))
-
-    if not filecmp.cmp('/etc/group', '{0}/etc/group'.format(mountpoint)):
-        shutil.copy2('/etc/group', '{0}/etc/group'.format(mountpoint))
-
-    if not filecmp.cmp('/etc/inittab', '{0}/etc/inittab'.format(mountpoint)):
-        shutil.copy2('/etc/inittab', '{0}/etc/inittab'.format(mountpoint))
-
-    f = open('{0}/etc/mtab'.format(mountpoint), 'w')
-    f.write('')
-    f.close()
+    label.set_text('Configurando usuarios y grupos ...')
+    if not crear_passwd_group_inittab_mtab(mnt=mountpoint):
+        UserMessage(
+            message='Ocurrió un error configurando usuarios y grupos.',
+            title='ERROR',
+            mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
+            c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
+            c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
+            c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
+            )
 
     if oem:
         adm_user = 'root'
@@ -602,17 +611,6 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label):
         ):
         UserMessage(
             message='Ocurrió un error creando los usuarios de sistema.',
-            title='ERROR',
-            mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
-            c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
-            c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
-            c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
-            )
-
-    label.set_text('Configurando detalles del sistema operativo ...')
-    if not reconfigurar_paquetes(mnt=mountpoint, plist=reconfpkgs):
-        UserMessage(
-            message='Ocurrió un error reconfigurando un paquete.',
             title='ERROR',
             mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
             c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
