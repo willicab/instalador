@@ -430,15 +430,15 @@ def crear_passwd_group_inittab_mtab(mnt):
 
 def lista_cdroms():
     info = '/proc/sys/dev/cdrom/info'
-    cmd = 'cat {0}| grep "drive name:" | sed "s/drive name://g"'.format(info)
-    salida = subprocess.Popen(
-        cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT
-        ).communicate()[0].split()
-
-    if salida:
-        return salida
+    if os.path.exists(info):
+        cmd = 'cat {0}| grep "drive name:" | sed "s/drive name://g"'.format(info)
+        salida = subprocess.Popen(
+            cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT
+            ).communicate()[0].split()
     else:
-        return False
+        salida = []
+
+    return salida
 
 def get_uuid(particion):
     cmd = '/sbin/blkid -p {0}'.format(particion)

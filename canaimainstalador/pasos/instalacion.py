@@ -34,7 +34,7 @@ from canaimainstalador.clases.common import UserMessage, ProcessGenerator, \
     crear_etc_default_keyboard, crear_etc_hostname, crear_etc_hosts, \
     crear_etc_network_interfaces, crear_etc_fstab, assisted_mount, \
     assisted_umount, preseed_debconf_values, debug_list, mounted_targets, \
-    mounted_parts, crear_usuarios, ThreadGenerator
+    mounted_parts, crear_usuarios, ThreadGenerator, crear_passwd_group_inittab_mtab
 from canaimainstalador.config import INSTALL_SLIDES, BAR_ICON
 
 gtk.gdk.threads_init()
@@ -182,7 +182,10 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label):
     mountpoint = '/target'
     squashfs = '/live/image/live/filesystem.squashfs'
     requesturl = 'http://www.google.com/'
-    uninstpkgs = ['canaima-instalador']
+    uninstpkgs = [
+        'canaima-instalador', 'live-config', 'live-boot',
+        'live-boot-initramfs-tools', 'live-initramfs', 'live-config-sysvinit'
+        ]
     reconfpkgs = [
         'canaima-estilo-visual-gnome', 'canaima-plymouth',
         'canaima-chat-gnome', 'canaima-bienvenido-gnome',
