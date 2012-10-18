@@ -26,7 +26,7 @@
 #
 # CODE IS POETRY
 
-import os, gtk, webkit, sys, Queue, glib, pango, threading
+import os, gtk, webkit, sys, Queue, glib, pango, threading, time
 
 from canaimainstalador.clases.particiones import Particiones
 from canaimainstalador.clases.common import UserMessage, ProcessGenerator, \
@@ -46,8 +46,10 @@ class PasoInstalacion(gtk.Fixed):
         q_button_b = Queue.Queue()
         q_view = Queue.Queue()
         q_label = Queue.Queue()
-        event = threading.Event()
-        CFG['w'].hide_all()
+        q_win = Queue.Queue()
+        event_1 = threading.Event()
+        event_2 = threading.Event()
+        CFG['w'].destroy()
 
         params = {
                 'title': 'Instalación de Canaima',
@@ -55,7 +57,8 @@ class PasoInstalacion(gtk.Fixed):
                 'q_button_b': q_button_b,
                 'q_view': q_view,
                 'q_label': q_label,
-                'event': event
+                'q_win': q_win,
+                'event': event_1
                 }
 
         window = install_window(**params)
@@ -71,13 +74,23 @@ class PasoInstalacion(gtk.Fixed):
                 'q_button_a': q_button_a,
                 'q_button_b': q_button_b,
                 'q_view': q_view,
-                'q_label': q_label
+                'q_label': q_label,
+                'q_win': q_win,
+                'event': event_2
                 },
-            event = event
+            event = event_1
             )
 
+        ThreadGenerator(
+            reference = None, function = finish_error, params = {}, event = event_2
+            )
+
+def finish_error():
+    gtk.main_quit()
+    sys.exit(1)
+
 class install_window(object):
-    def __init__(self, title, q_button_a, q_button_b, q_view, q_label, event):
+    def __init__(self, title, q_button_a, q_button_b, q_view, q_label, q_win, event):
         window = gtk.Window()
         window.set_border_width(0)
         window.set_title(title)
@@ -142,6 +155,7 @@ class install_window(object):
 
         q_view.put(view)
         q_label.put(label)
+        q_win.put(window)
         q_button_a.put(button_a)
         q_button_b.put(button_b)
         event.set()
@@ -162,11 +176,12 @@ class install_window(object):
     def disable_close(self, widget=None, data=None):
         return True
 
-def install_process(CFG, q_button_a, q_button_b, q_view, q_label):
+def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
     button_a = q_button_a.get()
     button_b = q_button_b.get()
     view = q_view.get()
     label = q_label.get()
+    window = q_win.get()
     p = Particiones()
     w = CFG['w']
     metodo = CFG['metodo']
@@ -180,7 +195,7 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label):
     oem = CFG['oem']
     gdm = CFG['gdm']
     mountpoint = '/target'
-    squashfs = '/live/image/live/filesystem.squashfs'
+    squashfs = '/live/image/live/filesystem.squashfss'
     requesturl = 'http://www.google.com/'
     uninstpkgs = [
         'canaima-instalador', 'live-config', 'live-boot',
@@ -236,7 +251,9 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label):
             mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
             c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
             c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
-            c_3=gtk.RESPONSE_OK, f_3=sys.exit, p_3=(1,)
+            c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
+            c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
+            c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
             )
 
     if not assisted_umount(sync=True, plist=mounted_targets(mnt=mountpoint)):

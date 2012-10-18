@@ -615,12 +615,12 @@ def UserMessage(
     c_2=False, f_2=False, p_2='', c_3=False, f_3=False, p_3='',
     c_4=False, f_4=False, p_4='', c_5=False, f_5=False, p_5=''
     ):
-
     dialog = gtk.MessageDialog(
         parent=None, flags=0, type=mtype,
         buttons=buttons, message_format=message
         )
     dialog.set_title(title)
+    dialog.show_all()
     response = dialog.run()
     dialog.destroy()
 
