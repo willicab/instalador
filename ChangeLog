@@ -1,3 +1,21 @@
+DEVELOPMENT RELEASE v2.0+dev20121018012532 (10/18/12)
+Actualizando TODO list.
+Corrigiendo error de refrescamiento de la leyenda cuando se movía el selector.
+Corrigiendo diversos errores de desbordamiento de caracteres y alineación de labels (cierra ticket #524).
+Corrigiendo y reordenando la creación de los archivos /etc/passwd, /etc/group, /etc/inittab y /etc/mtab (cierra ticket #534).
+Corrigiendo el cambio de contraseña en el usuario root (cierra ticket #530 y #529).
+Cambiando de orden la reconfiguración de los paquetes base (cierra ticket #535).
+Corrigiendo errores ortográficos y de puntuación (cierra ticket #525).
+Alargando el tiempo de permanencia de una lámina en la animación de instalación (cierra ticket #527).
+Corrigiendo desborde de texto en el título de la bienvenida para resoluciones bajas (cierra ticket #519).
+Ordenando widgets en el paso de Configurar Usuario (Ticket #533)
+Corrigiendo deducción de la ruta base para los archivos.
+Corrigiendo el renderizado de la barra de particiones cuando no existe una tabla de particiones (cierra ticket #536).
+Colocando archivos de documentación de proyecto en /usr/share/canaima-instalador/ (cierra ticket #522).
+Ocultando contraseñas en los cuadros de texto (ticket #521)
+Corrigiendo deducción de ruta base para los archivos del instalador.
+Colocando archivos de documentación de proyecto en /usr/share/canaima-instalador/ (cierra ticket #522).
+
 DEVELOPMENT RELEASE v2.0+dev20121015095248 (10/15/12)
 Cambiando dependencia de libmagickcore3-extra a libmagickcore-extra para que la compilación no rompa en Debian Sid.
 
