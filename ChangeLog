@@ -1,3 +1,7 @@
+DEVELOPMENT RELEASE v2.0+dev20121018173336 (10/18/12)
+Corrigiendo salida correcta de los hilos.
+Corrigiendo segfault al salir error.
+
 DEVELOPMENT RELEASE v2.0+dev20121018131923 (10/18/12)
 Actualizando TODO
 Asegurando la desinstalación de live-boot y live-config del sistema instalado.
