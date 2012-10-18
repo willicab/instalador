@@ -185,7 +185,7 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
     oem = CFG['oem']
     gdm = CFG['gdm']
     mountpoint = '/target'
-    squashfs = '/live/image/live/filesystem.squashfss'
+    squashfs = '/live/image/live/filesystem.squashfs'
     requesturl = 'http://www.google.com/'
     uninstpkgs = [
         'canaima-instalador', 'live-config', 'live-boot',
