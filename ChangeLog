@@ -1,3 +1,6 @@
+DEVELOPMENT RELEASE v2.0+dev20121018012736 (10/18/12)
+Corrigiendo detalle de nombre en Makefile.
+
 DEVELOPMENT RELEASE v2.0+dev20121018012532 (10/18/12)
 Actualizando TODO list.
 Corrigiendo error de refrescamiento de la leyenda cuando se movía el selector.
