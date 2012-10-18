@@ -29,6 +29,6 @@
 - Agregar funcionalidad para instalar desde red y hacia la red (FAI).
 [ LISTO ] - Arreglar problema de actualización de barra en partauto.
 [ LISTO ] - hacer banner de bienvenida y renovar los otros banners.
-- Al final de la animación, queda una slide en blanco.
-. Arreglar la forma en como se determina el lugar de las cosas en config.py
+[ LISTO ] - Al final de la animación, queda una slide en blanco.
+[ LISTO ] - Arreglar la forma en como se determina el lugar de las cosas en config.py
 - La paertición boot lógica no es reconocida por burg.
