@@ -51,7 +51,7 @@ class frame_fs(gtk.Table):
         self.parent_diag = parent_diag
 
         #Tipo de partición
-        self.lbl1 = gtk.Label('Tipo de partición')
+        self.lbl1 = gtk.Label('Tipo de partición:')
         self.lbl1.set_alignment(0, 0.5)
         self.attach(self.lbl1, 0, 1, 0, 1)
         self.lbl1.show()
@@ -71,7 +71,7 @@ class frame_fs(gtk.Table):
         self.cmb_tipo.show()
 
         #Sistema de Archivos
-        self.lbl2 = gtk.Label('Sistema de Archivos')
+        self.lbl2 = gtk.Label('Sistema de Archivos:')
         self.lbl2.set_alignment(0, 0.5)
         self.attach(self.lbl2, 0, 1, 1, 2)
         self.lbl2.show()
@@ -84,7 +84,7 @@ class frame_fs(gtk.Table):
         self.cmb_fs.show()
 
         # Punto de Montaje
-        self.lbl3 = gtk.Label('Punto de Montaje')
+        self.lbl3 = gtk.Label('Punto de Montaje:')
         self.lbl3.set_alignment(0, 0.5)
         self.lbl3.set_size_request(200, 30)
         self.attach(self.lbl3, 0, 1, 2, 3)
@@ -101,7 +101,7 @@ class frame_fs(gtk.Table):
         self.attach(self.entrada, 1, 2, 2, 3)
         self.entrada.connect("changed", self.validate_m_point)
 
-        self.formatear = gtk.CheckButton("Formatear esta partición")
+        self.formatear = gtk.CheckButton("Formatear esta partición:")
         self.attach(self.formatear, 1, 2, 3, 4)
         self.formatear.show()
         self.formatear.set_visible(is_usable(self.part_act))
