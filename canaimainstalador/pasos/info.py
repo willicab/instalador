@@ -33,19 +33,19 @@ class PasoInfo(gtk.Fixed):
         gtk.Fixed.__init__(self)
 
         if CFG['oem'] == False:
-            msg_nombre = '● Su nombre completo ({0}) será utilizado para identificar su cuenta de usuario.'.format(CFG['nombre'])
+            msg_nombre = '● Su nombre completo será configurado como "{0}".'.format(CFG['nombre'])
             msg_usuario = '● Se creará una cuenta de usuario con nombre "{0}".'.format(CFG['usuario'])
             msg_maquina = '● Se utilizará "{0}" para identificar a su equipo en la red local.'.format(CFG['maquina'])
         else:
-            msg_nombre = '● Se instalará en modo OEM, sus datos serán requeridos en el primer inicio de sesión.'
-            msg_usuario = ''
-            msg_maquina = ''
+            msg_nombre = '● Su nombre completo será requerido en el primer inicio de sesión (modo OEM).'
+            msg_usuario = '● Su nombre de usuario será requerido en el primer inicio de sesión (modo OEM).'
+            msg_maquina = '● El nombre de máquina será requerido en el primer inicio de sesión (modo OEM).'
 
         if CFG['metodo']['tipo'] == 'MANUAL':
             msg_metodo = '● La instalación se realizará según las indicaciones provistas en el particionador manual.'
 
         elif CFG['metodo']['tipo'] == 'TODO':
-            msg_metodo = '● La instalación utilizará todo el disco "{0}"'.format(CFG['metodo']['disco'][0])
+            msg_metodo = '● La instalación utilizará todo el disco "{0}".'.format(CFG['metodo']['disco'][0])
 
         elif CFG['metodo']['tipo'] == 'LIBRE':
             msg_metodo = '● La instalación utilizará un espacio libre existente.'
@@ -53,31 +53,22 @@ class PasoInfo(gtk.Fixed):
         elif CFG['metodo']['tipo'] == 'REDIM':
             msg_metodo = '● La instalación liberará espacio redimesionando una partición existente.'
 
-        else:
-            msg_metodo = ''
-
         if CFG['metodo']['tipo'] != 'MANUAL':
             if CFG['forma'] == 'ROOT:SWAP:LIBRE' or \
                 CFG['forma'] == 'PART:ROOT:SWAP':
-                msg_tipo = '● La instalación se realizará en una partición para el sistema y otra para el área de intercambio.'
+                msg_tipo = '● La instalación se realizará en una partición para el sistema y otra para la swap.'
 
             elif CFG['forma'] == 'ROOT:HOME:SWAP:LIBRE' or \
                 CFG['forma'] == 'PART:ROOT:HOME:SWAP':
-                msg_tipo = '● La instalación se realizará en varias particiones: raíz, home y área de intercambio.'
+                msg_tipo = '● La instalación se realizará en varias particiones: raíz, home y swap.'
 
             elif CFG['forma'] == 'BOOT:ROOT:HOME:SWAP:LIBRE' or \
                 CFG['forma'] == 'PART:BOOT:ROOT:HOME:SWAP':
-                msg_tipo = '● La instalación se realizará en varias particiones: boot, raíz, home y área de intercambio.'
+                msg_tipo = '● La instalación se realizará en varias particiones: boot, raíz, home y swap.'
 
             elif CFG['forma'] == 'BOOT:ROOT:VAR:USR:HOME:SWAP:LIBRE' or \
                 CFG['forma'] == 'PART:BOOT:ROOT:VAR:USR:HOME:SWAP':
-                msg_tipo = '● La instalación se realizará en varias particiones: boot, raíz, var, usr, home y área de intercambio.'
-
-            elif CFG['forma'] == 'MANUAL':
-                msg_tipo = ''
-
-            else:
-                msg_tipo = ''
+                msg_tipo = '● La instalación se realizará en varias particiones: boot, raíz, var, usr, home y swap.'
 
         else:
             msg_tipo = ''
@@ -94,40 +85,48 @@ class PasoInfo(gtk.Fixed):
         self.lbltitulo.set_size_request(640, 40)
         self.lbltitulo.set_alignment(0, 0)
         self.lbltitulo.set_attributes(attr)
-        self.put(self.lbltitulo, 50, 110)
+        self.lbltitulo.set_line_wrap(True)
+        self.put(self.lbltitulo, 50, 90)
 
         self.lblusuario = gtk.Label(msg_usuario)
         self.lblusuario.set_size_request(640, 20)
         self.lblusuario.set_alignment(0, 0)
-        self.put(self.lblusuario, 50, 150)
+        self.lblusuario.set_line_wrap(True)
+        self.put(self.lblusuario, 50, 130)
 
         self.lblnombre = gtk.Label(msg_nombre)
         self.lblnombre.set_size_request(640, 20)
         self.lblnombre.set_alignment(0, 0)
-        self.put(self.lblnombre, 50, 170)
+        self.lblnombre.set_line_wrap(True)
+        self.put(self.lblnombre, 50, 150)
 
         self.lblteclado = gtk.Label(msg_teclado)
         self.lblteclado.set_size_request(640, 20)
         self.lblteclado.set_alignment(0, 0)
-        self.put(self.lblteclado, 50, 190)
+        self.lblteclado.set_line_wrap(True)
+        self.put(self.lblteclado, 50, 170)
 
         self.lblmaquina = gtk.Label(msg_maquina)
         self.lblmaquina.set_size_request(640, 20)
         self.lblmaquina.set_alignment(0, 0)
-        self.put(self.lblmaquina, 50, 210)
+        self.lblmaquina.set_line_wrap(True)
+        self.put(self.lblmaquina, 50, 190)
 
         self.lblmetodo = gtk.Label(msg_metodo)
         self.lblmetodo.set_size_request(640, 20)
         self.lblmetodo.set_alignment(0, 0)
-        self.put(self.lblmetodo, 50, 230)
+        self.lblmetodo.set_line_wrap(True)
+        self.put(self.lblmetodo, 50, 210)
 
         self.lbltipo = gtk.Label(msg_tipo)
         self.lbltipo.set_size_request(640, 20)
         self.lbltipo.set_alignment(0, 0)
-        self.put(self.lbltipo, 50, 250)
+        self.lbltipo.set_line_wrap(True)
+        self.put(self.lbltipo, 50, 230)
 
         self.lblmsg = gtk.Label(msg_final)
-        self.lblmsg.set_size_request(640, 30)
+        self.lblmsg.set_size_request(640, 50)
+        self.lblmsg.set_alignment(0, 0)
         self.lblmsg.set_line_wrap(True)
-        self.put(self.lblmsg, 50, 300)
+        self.put(self.lblmsg, 50, 280)
 
