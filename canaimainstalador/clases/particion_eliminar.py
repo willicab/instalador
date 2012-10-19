@@ -1,8 +1,9 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
 # ==============================================================================
 # PAQUETE: canaima-instalador
-# ARCHIVO: canaimainstalador/translator.py
+# ARCHIVO: canaimainstalador/clases/particion_eliminar.py
 # COPYRIGHT:
 #       (C) 2012 William Abrahan Cabrera Reyes <william@linux.es>
 #       (C) 2012 Erick Manuel Birbe Salazar <erickcion@gmail.com>
@@ -22,12 +23,15 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
+#
+# CODE IS POETRY
+
+import gtk
+from copy import copy
 
 from canaimainstalador.clases.common import get_row_index, TblCol, has_next_row, \
     is_primary, is_logic, humanize, PStatus, is_free, UserMessage
 from canaimainstalador.translator import msj
-import gtk
-from copy import copy
 
 class Main():
 

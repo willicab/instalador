@@ -1,8 +1,9 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
 # ==============================================================================
 # PAQUETE: canaima-instalador
-# ARCHIVO: canaimainstalador/translator.py
+# ARCHIVO: canaimainstalador/clases/particion_nueva.py
 # COPYRIGHT:
 #       (C) 2012 William Abrahan Cabrera Reyes <william@linux.es>
 #       (C) 2012 Erick Manuel Birbe Salazar <erickcion@gmail.com>
@@ -22,11 +23,13 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
+#
+# CODE IS POETRY
 
 import gtk
 
 from canaimainstalador.clases.common import humanize, TblCol, get_next_row, \
-    get_row_index, set_partition, PStatus, get_sector_size, UserMessage, \
+    get_row_index, set_partition, PStatus, get_sector_size, \
     validate_minimun_fs_size
 from canaimainstalador.translator import msj
 from canaimainstalador.clases.frame_fs import frame_fs
@@ -60,28 +63,27 @@ class Main(gtk.Dialog):
         self.set_default_response(gtk.RESPONSE_CANCEL)
 
         #Tamaño de la partición
-        hbox = gtk.HBox()
-        hbox.show()
-        lbl = gtk.Label('Tamaño')
-        lbl.set_alignment(0, 0.5)
-        lbl.show()
-        hbox.add(lbl)
+        lbl_tamano = gtk.Label('Tamaño:')
+        lbl_tamano.set_alignment(0, 0.5)
+        lbl_tamano.show()
         adj = gtk.Adjustment(self.fin_part, self.inicio_part, self.fin_part, \
                              1.0, 1024.0, 0.0)
         self.escala = gtk.HScale()
         self.escala.set_digits(0)
         self.escala.set_draw_value(False)
         self.escala.set_adjustment(adj)
-        self.escala.set_size_request(250, 30)
+        self.escala.set_size_request(450, -1)
         self.escala.connect("value-changed", self.escala_on_changed)
         self.escala.show()
-        hbox.add(self.escala)
 
         self.lblsize = gtk.Label(humanize(self.escala.get_value() - \
                                           self.inicio_part))
-        self.lblsize.set_alignment(0, 0.5)
         self.lblsize.show()
-        hbox.add(self.lblsize)
+
+        hbox = gtk.VBox()
+        hbox.show()
+        hbox.pack_start(self.escala)
+        hbox.pack_start(self.lblsize)
 
         fs_container = frame_fs(self, self.lista, self.particion_act)
         self.cmb_tipo = fs_container.cmb_tipo
@@ -94,8 +96,9 @@ class Main(gtk.Dialog):
 
         # Contenedor General
         self.cont = gtk.VBox()
-        self.cont.add(hbox)
-        self.cont.add(fs_container)
+        self.cont.pack_start(lbl_tamano)
+        self.cont.pack_start(hbox, padding=15)
+        self.cont.pack_start(fs_container)
         self.cont.show()
         self.vbox.pack_start(self.cont)
 

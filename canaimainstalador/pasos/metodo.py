@@ -26,10 +26,8 @@
 #
 # CODE IS POETRY
 
-# Módulos globales
 import gtk
 
-# Módulos locales
 from canaimainstalador.clases.particiones import Particiones
 from canaimainstalador.clases.common import humanize, UserMessage
 from canaimainstalador.clases.barra_particiones import BarraParticiones

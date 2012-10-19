@@ -28,21 +28,21 @@
 
 import os
 
-curdir = os.path.abspath(os.getcwd())
+curdir = os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '..'))
 
-if curdir == '/usr/bin':
+if curdir == '/usr/share/pyshared':
     GUIDIR = '/usr/share/pyshared/canaimainstalador'
     SHAREDIR = '/usr/share/canaima-instalador'
 else:
     GUIDIR = curdir + '/canaimainstalador'
     SHAREDIR = curdir
 
-BAR_ICON = GUIDIR + '/data/img/icon.png'
-ABOUT_IMAGE = GUIDIR + '/data/img/logo.png'
-BANNER_IMAGE = GUIDIR + '/data/img/banner.png'
-KEY_IMAGE_TMPL = GUIDIR + '/data/img/key_{0}.png'
-WELCOME_SLIDES = GUIDIR + '/data/slides/welcome.html'
-INSTALL_SLIDES = GUIDIR + '/data/slides/install.html'
+BAR_ICON = GUIDIR+'/data/img/icon.png'
+ABOUT_IMAGE = GUIDIR+'/data/img/logo.png'
+BANNER_IMAGE = GUIDIR+'/data/img/banner.png'
+WELCOME_IMAGE = GUIDIR+'/data/img/welcome.png'
+KEY_IMAGE_TMPL = GUIDIR+'/data/img/key_{0}.png'
+INSTALL_SLIDES = GUIDIR+'/data/install.html'
 
 VERSION_FILE = SHAREDIR + '/VERSION'
 AUTHORS_FILE = SHAREDIR + '/AUTHORS'
@@ -51,17 +51,17 @@ TRANSLATORS_FILE = SHAREDIR + '/TRANSLATORS'
 
 APP_NAME = 'Canaima Instalador'
 APP_COPYRIGHT = 'Copyright (C) 2012 - Varios autores'
-APP_URL = 'http://code.google.com/p/canaima-instalador'
+APP_URL = 'http://gitorious.org/canaima-gnu-linux/canaima-instalador'
 APP_DESCRIPTION = 'Instalador para Canaima GNU/Linux'
 
-ESPACIO_ROOT = 1024 * 1024                # 1GB
-ESPACIO_VAR = 1024 * 896                  # 896MB
-ESPACIO_HOME = 1024 * 1024                # 1GB
-ESPACIO_USR = 1024 * 1024 * 2               # 2GB
-ESPACIO_BOOT = 1024 * 128                 # 128MB
-ESPACIO_SWAP = 1024 * 1024                # 1GB
+ESPACIO_ROOT = 1024 * 1024              # 1GB
+ESPACIO_VAR = 1024 * 896                # 896MB
+ESPACIO_HOME = 1024 * 1024              # 1GB
+ESPACIO_USR = 1024 * 1024 * 2           # 2GB
+ESPACIO_BOOT = 1024 * 128               # 128MB
+ESPACIO_SWAP = 1024 * 1024              # 1GB
 # --------------------------------------# -------
-ESPACIO_TOTAL = 1024 * 1024 * 6             # 6GB
+ESPACIO_TOTAL = 1024 * 1024 * 6         # 6GB
 
 CFG = {
     's': []
@@ -106,3 +106,4 @@ FSMIN = {
     'reiserfs': 1024 * 16,
     'xfs': 1024 * 16
     }
+

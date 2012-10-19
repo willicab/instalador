@@ -46,11 +46,6 @@ class BarraTodo(gtk.DrawingArea):
         self.p = parent
         self.presionado = False
 
-    def cambiar(self, forma):
-        self.p.forma = forma
-        self.forma = forma
-        self.expose()
-
     def expose(self, widget=None, event=None):
         self.metodo = self.p.metodo
         self.ini = self.p.metodo['part'][1]
@@ -263,14 +258,20 @@ class BarraTodo(gtk.DrawingArea):
                     )
 
     def press(self, widget, event):
-        if event.x >= self.pos[0] and event.x <= self.pos[2] and event.y >= self.pos[1] and event.y <= self.pos[3]:
+        if event.x >= self.pos[0] and \
+        event.x <= self.pos[2] and \
+        event.y >= self.pos[1] and \
+        event.y <= self.pos[3]:
             self.presionado = True
 
     def release(self, widget, event):
         self.presionado = False
 
     def draw_cursor(self, widget, event):
-        if event.x >= self.pos[0] and event.x <= self.pos[2] and event.y >= self.pos[1] and event.y <= self.pos[3]:
+        if event.x >= self.pos[0] and \
+        event.x <= self.pos[2] and \
+        event.y >= self.pos[1] and \
+        event.y <= self.pos[3]:
             cursor = gtk.gdk.Cursor(gtk.gdk.HAND2)
             self.window.set_cursor(cursor)
         else:
@@ -282,7 +283,5 @@ class BarraTodo(gtk.DrawingArea):
             if x <= self.total and x >= self.minimo:
                 self.libre = self.total - x
                 self.p.libre = self.total - x
-                self.p.barra.cambiar(self.forma)
-                self.p.leyenda.cambiar(self.forma)
                 self.queue_draw()
 

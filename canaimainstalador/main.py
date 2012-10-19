@@ -38,9 +38,9 @@ from canaimainstalador.pasos.particion_todo import PasoPartTodo
 from canaimainstalador.pasos.particion_manual import PasoPartManual
 from canaimainstalador.pasos.instalacion import PasoInstalacion
 from canaimainstalador.pasos.usuario import PasoUsuario
-from canaimainstalador.pasos.accesibilidad import PasoAccesibilidad
 from canaimainstalador.pasos.info import PasoInfo
-from canaimainstalador.clases.common import UserMessage, AboutWindow, aconnect
+from canaimainstalador.clases.common import UserMessage, AboutWindow, aconnect, \
+    ThreadGenerator
 from canaimainstalador.config import CFG, BAR_ICON
 
 class Wizard(gtk.Window):
@@ -169,7 +169,6 @@ class Bienvenida():
     '''
     def __init__(self, CFG):
         CFG['s'] = aconnect(CFG['w'].siguiente, CFG['s'], self.siguiente, (CFG))
-        CFG['w'].c_principal.move(CFG['w'].c_pasos, 0, 0)
         CFG['w'].anterior.set_sensitive(False)
 
     def init(self, CFG):
@@ -185,7 +184,6 @@ class Teclado():
     def __init__(self, CFG):
         CFG['s'] = aconnect(CFG['w'].siguiente, CFG['s'], self.siguiente, CFG)
         CFG['s'] = aconnect(CFG['w'].anterior, CFG['s'], self.anterior, CFG)
-        CFG['w'].c_principal.move(CFG['w'].c_pasos, 5, CFG['w'].banner_h)
         CFG['w'].anterior.set_sensitive(True)
 
     def anterior(self, CFG):
@@ -293,21 +291,22 @@ class Usuario():
         CFG['w'].previous('Metodo', Metodo, (CFG))
 
     def siguiente(self, CFG):
-        CFG['passroot'] = CFG['w'].formulario('Usuario').txt_passroot.get_text()
-        CFG['passroot2'] = CFG['w'].formulario('Usuario').txt_passroot2.get_text()
-        CFG['nombre'] = CFG['w'].formulario('Usuario').txt_nombre.get_text()
-        CFG['usuario'] = CFG['w'].formulario('Usuario').txt_usuario.get_text()
-        CFG['passuser'] = CFG['w'].formulario('Usuario').txt_passuser.get_text()
-        CFG['passuser2'] = CFG['w'].formulario('Usuario').txt_passuser2.get_text()
-        CFG['maquina'] = CFG['w'].formulario('Usuario').txt_maquina.get_text()
+        CFG['passroot1'] = CFG['w'].formulario('Usuario').txtpassroot1.get_text()
+        CFG['passroot2'] = CFG['w'].formulario('Usuario').txtpassroot2.get_text()
+        CFG['nombre'] = CFG['w'].formulario('Usuario').txtnombre.get_text()
+        CFG['usuario'] = CFG['w'].formulario('Usuario').txtusuario.get_text()
+        CFG['passuser1'] = CFG['w'].formulario('Usuario').txtpassuser1.get_text()
+        CFG['passuser2'] = CFG['w'].formulario('Usuario').txtpassuser2.get_text()
+        CFG['maquina'] = CFG['w'].formulario('Usuario').txtmaquina.get_text()
         CFG['oem'] = CFG['w'].formulario('Usuario').chkoem.get_active()
+        CFG['gdm'] = CFG['w'].formulario('Usuario').chkgdm.get_active()
 
         if CFG['oem'] == False:
-            if CFG['passroot'].strip() == '':
+            if CFG['passroot1'].strip() == '':
                 message = "Debe escribir una contraseña para el administrador."
                 UserMessage(message, 'ERROR', gtk.MESSAGE_ERROR, gtk.BUTTONS_OK)
                 return
-            if CFG['passroot'] != CFG['passroot2']:
+            if CFG['passroot1'] != CFG['passroot2']:
                 message = "Las contraseñas de administrador no coinciden."
                 UserMessage(message, 'ERROR', gtk.MESSAGE_ERROR, gtk.BUTTONS_OK)
                 return
@@ -323,11 +322,11 @@ class Usuario():
                 message = "El nombre de usuario tiene caracteres inválidos."
                 UserMessage(message, 'ERROR', gtk.MESSAGE_ERROR, gtk.BUTTONS_OK)
                 return
-            if CFG['passuser'].strip() == '':
+            if CFG['passuser1'].strip() == '':
                 message = "Debe escribir una contraseña para el usuario."
                 UserMessage(message, 'ERROR', gtk.MESSAGE_ERROR, gtk.BUTTONS_OK)
                 return
-            if CFG['passuser'] != CFG['passuser2']:
+            if CFG['passuser1'] != CFG['passuser2']:
                 message = "Las contraseñas de usuario no coinciden."
                 UserMessage(message, 'ERROR', gtk.MESSAGE_ERROR, gtk.BUTTONS_OK)
                 return
@@ -335,21 +334,7 @@ class Usuario():
                 message = "El nombre de la máquina no está correctamente escrito."
                 UserMessage(message, 'ERROR', gtk.MESSAGE_ERROR, gtk.BUTTONS_OK)
                 return
-            CFG['w'].next('Accesibilidad', Accesibilidad, (CFG), PasoAccesibilidad(CFG))
 
-class Accesibilidad():
-    '''
-        Inicia el paso que muestr la información general de la instalación
-    '''
-    def __init__(self, CFG):
-        CFG['s'] = aconnect(CFG['w'].siguiente, CFG['s'], self.siguiente, CFG)
-        CFG['s'] = aconnect(CFG['w'].anterior, CFG['s'], self.anterior, CFG)
-
-    def anterior(self, CFG):
-        CFG['w'].previous('Usuario', Usuario, (CFG))
-
-    def siguiente(self, widget=None):
-        CFG['chkgdm'] = CFG['w'].formulario('Accesibilidad').chkgdm.get_active()
         CFG['w'].next('Info', Info, (CFG), PasoInfo(CFG))
 
 class Info():
@@ -361,7 +346,7 @@ class Info():
         CFG['s'] = aconnect(CFG['w'].anterior, CFG['s'], self.anterior, CFG)
 
     def anterior(self, CFG):
-        CFG['w'].previous('Accesibilidad', Accesibilidad, (CFG))
+        CFG['w'].previous('Usuario', Usuario, (CFG))
 
     def siguiente(self, CFG):
         CFG['w'].next('Instalacion', Instalacion, (CFG), PasoInstalacion(CFG))
@@ -371,12 +356,5 @@ class Instalacion():
         Inicia el paso que realiza la instalación del sistema
     '''
     def __init__(self, CFG):
-        CFG['s'] = aconnect(CFG['w'].siguiente, CFG['s'], self.siguiente, CFG)
-        CFG['s'] = aconnect(CFG['w'].anterior, CFG['s'], self.anterior, CFG)
-        CFG['w'].c_principal.move(CFG['w'].c_pasos, 0, 0)
+        pass
 
-    def anterior(self, CFG):
-        os.system('reboot')
-
-    def siguiente(self, CFG):
-        CFG['w'].close()

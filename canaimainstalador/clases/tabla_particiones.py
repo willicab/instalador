@@ -1,22 +1,33 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# Copyright 2012 Erick Birbe <erickcion@gmail.com>
+# ==============================================================================
+# PAQUETE: canaima-instalador
+# ARCHIVO: canaimainstalador/clases/tabla_particiones.py
+# COPYRIGHT:
+#       (C) 2012 William Abrahan Cabrera Reyes <william@linux.es>
+#       (C) 2012 Erick Manuel Birbe Salazar <erickcion@gmail.com>
+#       (C) 2012 Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>
+# LICENCIA: GPL-3
+# ==============================================================================
 #
-# TablaParticiones is free software; you can redistribute it and/or modify
+# This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
+# the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 #
-# TablaParticiones is distributed in the hope that it will be useful,
+# This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
+# COPYING file for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with TablaParticiones; if not, write to the Free Software Foundation, Inc.,
-# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+#
+# CODE IS POETRY
 
 import gtk
+
 from canaimainstalador.clases.common import TblCol
 
 class TablaParticiones (gtk.TreeView):

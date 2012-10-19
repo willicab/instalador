@@ -1,19 +1,82 @@
+<!DOCTYPE html>
 <html>
     <header>
-        <style type="text/css"> 
-            body, html, #container {
+        <script type="text/javascript" src="jquery.js"></script>
+        <script type="text/javascript">
+            var max = 13;
+            var i = 0;
+            var speed = 3000;
+            var delay = 20000;
+
+            $(document).ready(function(){
+                setInterval("mover()", delay);
+            });
+
+            function mover(){
+                $('#carousel ul').animate({marginLeft:'-=700px'}, speed);
+                i++;
+                if (i == max) {
+                    i = 0;
+                    $('#carousel ul').animate({marginLeft:'0px'}, 1);
+                    return
+                }
+            }
+        </script>
+        <style type="text/css">
+            body, html, #container{
                 padding: 0;
                 margin: 0;
                 border: 0;
             }
-
-            #container {
-                width: 700px;
-                height: 430px;
+            #container{
+                width:700px;
+                height:430px;
             }
+            #carousel{
+                width:700px;
+                height:430px;
+                overflow:hidden;
+            }
+            #carousel ul {
+                list-style-type:none;
+                margin:0;
+                padding:0;
+                width:20000px;
+            }
+            #carousel li {
+                margin:0;
+                padding:0;
+                display:inline;
+            }
+            #carousel ul li img{
+                width:700px;
+                height:430px;
+                float:left;
+            }
+            #navPrev {float:left;}
+            #navNext {float:right;}
         </style>
     </header>
     <body>
-        <iframe id='container' src='install.svg'></iframe>
+        <div id="container">
+            <div id="carousel">
+                <ul>
+                    <li><img src="slides/slide_1.jpg" /></li>
+                    <li><img src="slides/slide_2.jpg" /></li>
+                    <li><img src="slides/slide_3.jpg" /></li>
+                    <li><img src="slides/slide_4.jpg" /></li>
+                    <li><img src="slides/slide_5.jpg" /></li>
+                    <li><img src="slides/slide_6.jpg" /></li>
+                    <li><img src="slides/slide_7.jpg" /></li>
+                    <li><img src="slides/slide_8.jpg" /></li>
+                    <li><img src="slides/slide_9.jpg" /></li>
+                    <li><img src="slides/slide_10.jpg" /></li>
+                    <li><img src="slides/slide_11.jpg" /></li>
+                    <li><img src="slides/slide_12.jpg" /></li>
+                    <li><img src="slides/slide_13.jpg" /></li>
+                    <li><img src="slides/slide_14.jpg" /></li>
+                </ul>
+            </div>
+        </div>
     </body>
 </html>
