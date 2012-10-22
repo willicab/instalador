@@ -3,7 +3,7 @@ Section: admin
 Priority: extra
 Maintainer: Equipo de Desarrollo de Canaima GNU/Linux <desarrolladores@canaima.softwarelibre.gob.ve>
 Uploaders: William Abrahan Cabrera Reyes <william@linux.es>, Erick Manuel Birbe Salazar <erickcion@gmail.com>, Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>
-Build-Depends: debhelper (>= 7.0.50~), imagemagick, libmagickcore-extra
+Build-Depends: debhelper (>= 7.0.50~), imagemagick, libmagickcore-extra, python-imaging
 Standards-Version: 3.9.1
 Homepage: http://canaima.softwarelibre.gob.ve/
 Vcs-Git: git://gitorious.org/canaima-gnu-linux/canaima-instalador.git
