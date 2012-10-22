@@ -283,5 +283,6 @@ class BarraTodo(gtk.DrawingArea):
             if x <= self.total and x >= self.minimo:
                 self.libre = self.total - x
                 self.p.libre = self.total - x
+                self.p.leyenda.expose()
                 self.queue_draw()
 

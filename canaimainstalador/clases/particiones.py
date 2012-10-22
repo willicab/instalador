@@ -40,7 +40,7 @@ class Particiones():
         new = parted.freshDisk(dev, t)
         try:
             new.commit()
-        except _ped.IOException as x:
+        except _ped.IOException, x:
             print x
 
     def lista_discos(self):
@@ -169,31 +169,31 @@ class Particiones():
         try:
             geometry = parted.Geometry(device=dev, start=s_sec, end=e_sec)
             i += 1
-        except Exception as a:
+        except Exception, a:
             print a
 
         try:
             constraint = parted.Constraint(exactGeom=geometry)
             i += 1
-        except Exception as b:
+        except Exception, b:
             print b
 
         try:
             partition = parted.Partition(disk=disk, type=pedtype, geometry=geometry)
             i += 1
-        except Exception as c:
+        except Exception, c:
             print c
 
         try:
             disk.addPartition(partition=partition, constraint=constraint)
             i += 1
-        except Exception as d:
+        except Exception, d:
             print d
 
         try:
             disk.commit()
             i += 1
-        except Exception as e:
+        except Exception, e:
             print e
 
         if i == 5:
@@ -242,13 +242,13 @@ class Particiones():
         try:
             disk.deletePartition(partition=partition)
             i += 1
-        except Exception as x:
+        except Exception, x:
             print x
 
         try:
             disk.commit()
             i += 1
-        except Exception as y:
+        except Exception, y:
             print y
 
         if i == 2:

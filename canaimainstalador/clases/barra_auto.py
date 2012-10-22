@@ -269,5 +269,6 @@ class BarraAuto(gtk.DrawingArea):
             if x >= self.usado and x <= self.total - self.minimo:
                 self.current = x
                 self.p.current = x
+                self.p.leyenda.expose()
                 self.queue_draw()
 
