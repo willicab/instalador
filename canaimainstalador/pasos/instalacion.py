@@ -39,16 +39,14 @@ from canaimainstalador.config import INSTALL_SLIDES, BAR_ICON
 
 gtk.gdk.threads_init()
 
-class PasoInstalacion(gtk.Fixed):
+class PasoInstalacion():
     def __init__(self, CFG):
-        gtk.Fixed.__init__(self)
         q_button_a = Queue.Queue()
         q_button_b = Queue.Queue()
         q_view = Queue.Queue()
         q_label = Queue.Queue()
         q_win = Queue.Queue()
         event = threading.Event()
-        CFG['w'].destroy()
 
         params = {
                 'title': 'Instalación de Canaima',

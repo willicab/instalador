@@ -410,12 +410,6 @@ def crear_etc_fstab(mnt, cfg, mountlist, cdroms):
     return True
 
 def crear_passwd_group_inittab_mtab(mnt):
-    if not filecmp.cmp('/usr/share/base-passwd/passwd.master', '{0}/etc/passwd'.format(mnt)):
-        shutil.copy2('/usr/share/base-passwd/passwd.master', '{0}/etc/passwd'.format(mnt))
-
-    if not filecmp.cmp('/usr/share/base-passwd/group.master', '{0}/etc/group'.format(mnt)):
-        shutil.copy2('/usr/share/base-passwd/group.master', '{0}/etc/group'.format(mnt))
-
     if not filecmp.cmp('/usr/share/sysvinit/inittab', '{0}/etc/inittab'.format(mnt)):
         shutil.copy2('/usr/share/sysvinit/inittab', '{0}/etc/inittab'.format(mnt))
 
@@ -423,10 +417,7 @@ def crear_passwd_group_inittab_mtab(mnt):
     f.write('')
     f.close()
 
-    if ProcessGenerator('chroot {0} update-passwd'.format(mnt)).returncode == 0:
-        return True
-    else:
-        return False
+    return True
 
 def lista_cdroms():
     info = '/proc/sys/dev/cdrom/info'
