@@ -1,3 +1,6 @@
+DEVELOPMENT RELEASE v2.0+dev20121023160459 (10/23/12)
+Omitiendo la copia de nuevos /etc/group y /etc/passwd al sistema instalado.
+
 DEVELOPMENT RELEASE v2.0+dev20121022155238 (10/22/12)
 Corrigiendo posición de dependencia python-imaging
 
