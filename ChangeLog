@@ -1,3 +1,8 @@
+DEVELOPMENT RELEASE v2.0+dev20121024181253 (10/24/12)
+Corrigiendo UUID para sistemas de archivos que no tienen UUID en el fstab.
+Quitando soporte a sistema de archivos reiser4 por incompatibilidad con el kernel 2.6.32.
+Evitando que el check de accesibilidad en GDM se deshabilite cuando seleccionamos OEM.
+
 DEVELOPMENT RELEASE v2.0+dev20121024174936 (10/24/12)
 Corrigiendo longitud del título de la pantalla de bienvenida.
 
