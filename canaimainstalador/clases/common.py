@@ -440,6 +440,8 @@ def get_uuid(particion):
     for i in salida:
         if re.search('^UUID=*', i):
             uid = i
+        else:
+            uid = particion
 
     if uid:
         return uid.replace('"', '')

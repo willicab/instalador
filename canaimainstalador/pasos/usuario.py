@@ -121,4 +121,4 @@ class PasoUsuario(gtk.HBox):
         self.txtpassuser1.set_sensitive(active)
         self.txtpassuser2.set_sensitive(active)
         self.txtmaquina.set_sensitive(active)
-        self.chkgdm.set_sensitive(active)
+
