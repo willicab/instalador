@@ -1,3 +1,6 @@
+DEVELOPMENT RELEASE v2.0+dev20121024171545 (10/24/12)
+Corrigiendo función de asignación de banderas.
+
 DEVELOPMENT RELEASE v2.0+dev20121023160459 (10/23/12)
 Omitiendo la copia de nuevos /etc/group y /etc/passwd al sistema instalado.
 
