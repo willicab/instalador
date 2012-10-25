@@ -248,9 +248,16 @@ class BarraTodo(gtk.DrawingArea):
             if a_tipo == 'primary':
                 a_ini = self.ini + self.p.nuevas[k][1] + 0.5
                 a_fin = self.ini + self.p.nuevas[k][2] - 0.5
+
+                if a_fin >= self.fin:
+                    a_fin = self.fin - 0.5
+
             elif a_tipo == 'logical':
                 a_ini = self.ini + self.p.nuevas[k][1] + 1
                 a_fin = self.ini + self.p.nuevas[k][2] - 1
+
+                if a_fin >= self.fin:
+                    a_fin = self.fin - 1
 
             if self.p.nuevas[k][0] != 'LIBRE':
                 self.p.acciones.append(

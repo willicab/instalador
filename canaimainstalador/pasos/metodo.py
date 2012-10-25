@@ -117,6 +117,7 @@ class PasoMetodo(gtk.Fixed):
 
             mini = self.particiones[0][1]
             mfin = self.particiones[0][9]
+
             for t in self.particiones:
                 if mini > t[1]:
                     mini = t[1]
