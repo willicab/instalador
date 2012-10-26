@@ -1,3 +1,11 @@
+DEVELOPMENT RELEASE v2.0+dev20121026100449 (10/26/12)
+Actualizando TODO.
+Corrigiendo mensaje de error que aparece a causa de una variable no declarada en clases/barra_auto.py y clases/barra_todo.py.
+Agregando mecanismo de retención para la escritura de particiones cuando el dispositivo está ocupado.
+Corrigiendo separación de las particiones lógicas.
+Agregando un dpkg-reconfigure canaima-escritorio-gnome canaima-base luego de la creación de los usuarios para asegurar que las carpetas estén en su lugar.
+Copiando /etc/mtab antes de comenzar a instalar el burg
+
 DEVELOPMENT RELEASE v2.0+dev20121025103802 (10/25/12)
 Corrigiendo casos de particiones que exceden el tamaño del disco.
 
