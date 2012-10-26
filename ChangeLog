@@ -1,3 +1,7 @@
+DEVELOPMENT RELEASE v2.0+dev20121026110146 (10/26/12)
+Corrigiendo forma en que se determinan los directorios de trabajo.
+Corrigiendo habilitación del botón siguiente cuando un disco no tiene tabla de particiones.
+
 DEVELOPMENT RELEASE v2.0+dev20121026100449 (10/26/12)
 Actualizando TODO.
 Corrigiendo mensaje de error que aparece a causa de una variable no declarada en clases/barra_auto.py y clases/barra_todo.py.
