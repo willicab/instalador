@@ -95,6 +95,7 @@ class Main():
         temp[TblCol.LIBRE] = humanize(tamano)
         temp[TblCol.INICIO] = inicio
         temp[TblCol.FIN] = fin
+        temp[TblCol.FORMATEAR] = False
         temp[TblCol.ESTADO] = PStatus.FREED
 
         # Sustituimos con los nuevos valores
