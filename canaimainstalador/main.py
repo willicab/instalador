@@ -110,6 +110,7 @@ class Wizard(gtk.Window):
         self.acerca.connect('clicked', AboutWindow)
         self.botonera.put(self.acerca, 110, 10)
 
+        self.connect("destroy", self.close)
         self.connect("delete-event", self.close)
 
         self.show_all()
@@ -349,12 +350,5 @@ class Info():
         CFG['w'].previous('Usuario', Usuario, (CFG))
 
     def siguiente(self, CFG):
-        CFG['w'].next('Instalacion', Instalacion, (CFG), PasoInstalacion(CFG))
-
-class Instalacion():
-    '''
-        Inicia el paso que realiza la instalación del sistema
-    '''
-    def __init__(self, CFG):
-        pass
-
+        CFG['w'].hide_all()
+        PasoInstalacion(CFG)

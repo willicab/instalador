@@ -193,6 +193,8 @@ class Main(gtk.Dialog):
             pop = False
             disp = ''
             montaje = ''
+            usado = humanize(0)
+            libre = tamano
         # Si NO es espacio libre
         else:
             pop = True

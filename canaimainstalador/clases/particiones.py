@@ -341,8 +341,8 @@ class Particiones():
         if flag == 'boot':
             pedflag = _ped.PARTITION_BOOT
 
-        if partition.isFlagAvailable(pedflag):
-            if partition.setFlag(pedflag):
+        if partition.setFlag(pedflag):
+            if disk.commit():
                 return True
             else:
                 return False
@@ -357,8 +357,8 @@ class Particiones():
         if flag == 'boot':
             pedflag = _ped.PARTITION_BOOT
 
-        if partition.isFlagAvailable(pedflag):
-            if partition.unsetFlag(pedflag):
+        if partition.unsetFlag(pedflag):
+            if disk.commit():
                 return True
             else:
                 return False

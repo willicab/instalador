@@ -26,7 +26,7 @@
 #
 # CODE IS POETRY
 
-import os, gtk, webkit, sys, Queue, glib, pango, threading, time
+import os, gtk, webkit, sys, Queue, glib, pango, threading, shutil
 
 from canaimainstalador.clases.particiones import Particiones
 from canaimainstalador.clases.common import UserMessage, ProcessGenerator, \
@@ -39,16 +39,14 @@ from canaimainstalador.config import INSTALL_SLIDES, BAR_ICON
 
 gtk.gdk.threads_init()
 
-class PasoInstalacion(gtk.Fixed):
+class PasoInstalacion():
     def __init__(self, CFG):
-        gtk.Fixed.__init__(self)
         q_button_a = Queue.Queue()
         q_button_b = Queue.Queue()
         q_view = Queue.Queue()
         q_label = Queue.Queue()
         q_win = Queue.Queue()
         event = threading.Event()
-        CFG['w'].destroy()
 
         params = {
                 'title': 'Instalación de Canaima',
@@ -442,6 +440,10 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
             )
 
     label.set_text('Instalando gestor de arranque ...')
+
+    #Montamos /etc/mtab para que no de errores al intalar burg
+    shutil.copy2('/etc/mtab', '{0}/etc/mtab'.format(mountpoint))
+
     if not preseed_debconf_values(mnt=mountpoint, debconflist=debconflist):
         UserMessage(
             message='Ocurrió un error presembrando las respuestas debconf.',
