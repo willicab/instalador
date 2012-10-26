@@ -38,6 +38,11 @@ class Particiones():
     def nueva_tabla_particiones(self, drive, t):
         dev = parted.Device(drive)
         new = parted.freshDisk(dev, t)
+
+        while True:
+            if not dev.busy:
+                break
+
         try:
             new.commit()
         except _ped.IOException, x:
@@ -166,6 +171,10 @@ class Particiones():
         else:
             return False
 
+        while True:
+            if not dev.busy:
+                break
+
         try:
             geometry = parted.Geometry(device=dev, start=s_sec, end=e_sec)
             i += 1
@@ -238,6 +247,10 @@ class Particiones():
         dev = parted.Device(drive)
         disk = parted.Disk(dev)
         partition = disk.getPartitionByPath(part)
+
+        while True:
+            if not dev.busy:
+                break
 
         try:
             disk.deletePartition(partition=partition)
@@ -337,9 +350,13 @@ class Particiones():
         dev = parted.Device(drive)
         disk = parted.Disk(dev)
         partition = disk.getPartitionByPath(part)
-        
+
         if flag == 'boot':
             pedflag = _ped.PARTITION_BOOT
+
+        while True:
+            if not dev.busy:
+                break
 
         if partition.setFlag(pedflag):
             if disk.commit():
@@ -356,6 +373,10 @@ class Particiones():
         
         if flag == 'boot':
             pedflag = _ped.PARTITION_BOOT
+
+        while True:
+            if not dev.busy:
+                break
 
         if partition.unsetFlag(pedflag):
             if disk.commit():

@@ -143,9 +143,12 @@ def assisted_mount(sync, bind, plist):
             os.makedirs(m)
 
         if fs != 'swap':
-            if ProcessGenerator(
-                'mount {0} {1} {2} {3}'.format(bindcmd, fscmd, p, m)
-                ).returncode == 0:
+            if not os.path.ismount(m):
+                if ProcessGenerator(
+                    'mount {0} {1} {2} {3}'.format(bindcmd, fscmd, p, m)
+                    ).returncode == 0:
+                    i += 1
+            else:
                 i += 1
         else:
             i += 1

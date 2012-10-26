@@ -238,12 +238,18 @@ class BarraAuto(gtk.DrawingArea):
                 if a_fin >= self.fin:
                     a_fin = self.fin - 0.5
 
-            elif a_tipo == 'logical':
+            else:
                 a_ini = self.ini + self.p.nuevas[k][1] + 1
                 a_fin = self.ini + self.p.nuevas[k][2] - 1
 
                 if a_fin >= self.fin:
                     a_fin = self.fin - 1
+
+                if k == 1:
+                    a_ini += 0.5
+
+                if k == len(self.p.nuevas) - 1:
+                    a_fin -= 0.5
 
             if self.p.nuevas[k][0] != 'PART':
                 self.p.acciones.append(
