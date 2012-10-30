@@ -129,7 +129,7 @@ class PasoPartAuto(gtk.Fixed):
                     self.option_4.set_sensitive(False)
 
     def set_min(self, widget):
-        self.current = self.barra.total - ESPACIO_TOTAL
+        self.current = self.barra.fin - ESPACIO_TOTAL
         self.barra.expose()
         self.leyenda.expose()
 

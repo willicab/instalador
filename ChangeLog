@@ -1,3 +1,26 @@
+DEVELOPMENT RELEASE v2.0+dev20121026110146 (10/26/12)
+Corrigiendo forma en que se determinan los directorios de trabajo.
+Corrigiendo habilitación del botón siguiente cuando un disco no tiene tabla de particiones.
+
+DEVELOPMENT RELEASE v2.0+dev20121026100449 (10/26/12)
+Actualizando TODO.
+Corrigiendo mensaje de error que aparece a causa de una variable no declarada en clases/barra_auto.py y clases/barra_todo.py.
+Agregando mecanismo de retención para la escritura de particiones cuando el dispositivo está ocupado.
+Corrigiendo separación de las particiones lógicas.
+Agregando un dpkg-reconfigure canaima-escritorio-gnome canaima-base luego de la creación de los usuarios para asegurar que las carpetas estén en su lugar.
+Copiando /etc/mtab antes de comenzar a instalar el burg
+
+DEVELOPMENT RELEASE v2.0+dev20121025103802 (10/25/12)
+Corrigiendo casos de particiones que exceden el tamaño del disco.
+
+DEVELOPMENT RELEASE v2.0+dev20121024181253 (10/24/12)
+Corrigiendo UUID para sistemas de archivos que no tienen UUID en el fstab.
+Quitando soporte a sistema de archivos reiser4 por incompatibilidad con el kernel 2.6.32.
+Evitando que el check de accesibilidad en GDM se deshabilite cuando seleccionamos OEM.
+
+DEVELOPMENT RELEASE v2.0+dev20121024174936 (10/24/12)
+Corrigiendo longitud del título de la pantalla de bienvenida.
+
 DEVELOPMENT RELEASE v2.0+dev20121024171545 (10/24/12)
 Corrigiendo función de asignación de banderas.
 

@@ -28,7 +28,7 @@
 
 import os
 
-curdir = os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '..'))
+curdir = os.path.normpath(os.path.join(os.path.realpath(__file__), '..', '..')
 
 if curdir == '/usr/share/pyshared':
     GUIDIR = '/usr/share/pyshared/canaimainstalador'
@@ -85,7 +85,6 @@ FSPROGS = {
     'hfs': ['hformat -f {0}', ''],
     'jfs': ['mkfs.jfs -q {0}', ''],
     'swap': ['mkswap -f {0}', ''],
-    'reiser4': ['mkfs.reiser4 -y -f {0}', ''],
     'reiserfs': ['mkfs.reiserfs -q -f -f {0}', 'resize_reiserfs -q -f -s {0} {1}'],
     'xfs': ['mkfs.xfs -q -f {0}', '']
     }

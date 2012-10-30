@@ -206,6 +206,7 @@ class Metodo():
 
     def anterior(self, CFG):
         CFG['w'].previous('Teclado', Teclado, (CFG))
+        CFG['w'].siguiente.set_sensitive(True)
 
     def siguiente(self, CFG):
         CFG['metodo'] = CFG['w'].formulario('Metodo').metodo

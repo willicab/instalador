@@ -32,7 +32,7 @@ class PasoBienvenida(gtk.Fixed):
     def __init__(self, CFG):
         gtk.Fixed.__init__(self)
 
-        msg_titulo = 'Bienvenido al asistente de instalación de Canaima'
+        msg_titulo = 'Bienvenido al asistente de instalación'
         msg_intro = 'Mediante este asistente usted podrá instalar Canaima en su computador. Antes de continuar, asegúrese de que su equipo cumple con los siguientes requisitos:'
         msg_disco = '● 6GB de espacio en disco (como mínimo).'
         msg_memoria = '● 384MB de memoria RAM (como mínimo).'

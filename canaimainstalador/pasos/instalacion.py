@@ -682,6 +682,21 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
             c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
             )
 
+    label.set_text('Configurando detalles del sistema operativo ...')
+    if not reconfigurar_paquetes(
+        mnt=mountpoint, plist=['canaima-escritorio-gnome', 'canaima-base']
+        ):
+        UserMessage(
+            message='Ocurrió un error reconfigurando un paquete.',
+            title='ERROR',
+            mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
+            c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
+            c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
+            c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
+            c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
+            c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
+            )
+
     label.set_text('Removiendo instalador del sistema de archivos ...')
     if not desinstalar_paquetes(mnt=mountpoint, plist=uninstpkgs):
         UserMessage(
