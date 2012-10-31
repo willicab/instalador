@@ -27,7 +27,7 @@
 # CODE IS POETRY
 
 # Módulos globales
-import gtk, os, re, Image
+import gtk, re, Image
 
 # Módulos locales
 from canaimainstalador.pasos.bienvenida import PasoBienvenida
@@ -39,9 +39,8 @@ from canaimainstalador.pasos.particion_manual import PasoPartManual
 from canaimainstalador.pasos.instalacion import PasoInstalacion
 from canaimainstalador.pasos.usuario import PasoUsuario
 from canaimainstalador.pasos.info import PasoInfo
-from canaimainstalador.clases.common import UserMessage, AboutWindow, aconnect, \
-    ThreadGenerator
-from canaimainstalador.config import CFG, BAR_ICON
+from canaimainstalador.clases.common import UserMessage, AboutWindow, aconnect
+from canaimainstalador.config import BAR_ICON
 
 class Wizard(gtk.Window):
     def __init__(self, ancho, alto, titulo, banner):

@@ -33,7 +33,7 @@ from canaimainstalador.clases.common import UserMessage, ProcessGenerator, \
     reconfigurar_paquetes, desinstalar_paquetes, instalar_paquetes, lista_cdroms, \
     crear_etc_default_keyboard, crear_etc_hostname, crear_etc_hosts, \
     crear_etc_network_interfaces, crear_etc_fstab, assisted_mount, \
-    assisted_umount, preseed_debconf_values, debug_list, mounted_targets, \
+    assisted_umount, preseed_debconf_values, mounted_targets, \
     mounted_parts, crear_usuarios, ThreadGenerator, crear_passwd_group_inittab_mtab
 from canaimainstalador.config import INSTALL_SLIDES, BAR_ICON
 
@@ -61,12 +61,12 @@ class PasoInstalacion():
         window = install_window(**params)
 
         ThreadGenerator(
-            reference = None, function = window.show_html, params = {}
+            reference=None, function=window.show_html, params={}
             )
 
         ThreadGenerator(
-            reference = None, function = install_process,
-            params = {
+            reference=None, function=install_process,
+            params={
                 'CFG': CFG,
                 'q_button_a': q_button_a,
                 'q_button_b': q_button_b,
@@ -74,7 +74,7 @@ class PasoInstalacion():
                 'q_label': q_label,
                 'q_win': q_win
                 },
-            event = event
+            event=event
             )
 
 class install_window(object):
@@ -158,7 +158,7 @@ class install_window(object):
 
     def show_html(self):
         glib.idle_add(
-            self.view.load_uri, 'file://'+os.path.realpath(INSTALL_SLIDES)
+            self.view.load_uri, 'file://' + os.path.realpath(INSTALL_SLIDES)
             )
 
     def disable_close(self, widget=None, data=None):
@@ -171,7 +171,6 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
     label = q_label.get()
     window = q_win.get()
     p = Particiones()
-    w = CFG['w']
     metodo = CFG['metodo']
     acciones = CFG['acciones']
     teclado = CFG['teclado']
@@ -184,7 +183,6 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
     gdm = CFG['gdm']
     mountpoint = '/target'
     squashfs = '/live/image/live/filesystem.squashfs'
-    requesturl = 'http://www.google.com/'
     uninstpkgs = [
         'canaima-instalador', 'live-config', 'live-boot',
         'live-boot-initramfs-tools', 'live-initramfs', 'live-config-sysvinit'
@@ -226,7 +224,6 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
         ['/sys', mountpoint + '/sys', ''],
         ['/proc', mountpoint + '/proc', '']
         ]
-    connection = True
     mountlist = []
 
     if not os.path.isdir(mountpoint):
@@ -280,7 +277,6 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
         tipo = a[6]
         nuevo_fin = a[7]
         disco = metodo['disco'][0]
-        particiones = p.lista_particiones(disco)
         cdroms = lista_cdroms()
 
         if accion == 'crear':
@@ -723,7 +719,7 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
             c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
             )
 
-    if not assisted_umount(sync = True, plist = mountlist):
+    if not assisted_umount(sync=True, plist=mountlist):
         UserMessage(
             message='Ocurrió un error desmontando las particiones.',
             title='ERROR',
