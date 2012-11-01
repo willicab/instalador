@@ -329,12 +329,6 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
                     c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
                     c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
                     )
-            else:
-                if montaje:
-                    mountlist.append([
-                        p.nombre_particion(disco, tipo, inicio, fin),
-                        mountpoint + montaje, fs
-                        ])
 
         elif accion == 'formatear':
             particion = p.nombre_particion(disco, tipo, inicio, fin)
@@ -349,6 +343,12 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
                     c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
                     c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
                     )
+            else:
+                if montaje:
+                    mountlist.append([
+                        p.nombre_particion(disco, tipo, inicio, fin),
+                        mountpoint + montaje, fs
+                        ])
 
         elif accion == 'usar':
             if montaje:

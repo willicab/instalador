@@ -74,7 +74,7 @@ TECLADOS = {
     }
 
 FSPROGS = {
-    'btrfs': ['mkfs.btrfs {0}', 'btrfs filesystem resize {0} {1}'],
+#    'btrfs': ['mkfs.btrfs {0}', 'btrfs filesystem resize {0} {1}'],
     'ext2': ['mkfs.ext2 -q -F -F {0}', 'resize2fs -f {1} {0}'],
     'ext3': ['mkfs.ext3 -q -F -F {0}', 'resize2fs -f {1} {0}'],
     'ext4': ['mkfs.ext4 -q -F -F {0}', 'resize2fs -f {1} {0}'],
@@ -85,6 +85,7 @@ FSPROGS = {
     'hfs': ['hformat -f {0}', ''],
     'jfs': ['mkfs.jfs -q {0}', ''],
     'swap': ['mkswap -f {0}', ''],
+#    'reiser4': ['mkfs.reiser4 -y -f {0}', ''],
     'reiserfs': ['mkfs.reiserfs -q -f -f {0}', 'resize_reiserfs -q -f -s {0} {1}'],
     'xfs': ['mkfs.xfs -q -f {0}', '']
     }
