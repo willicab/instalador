@@ -29,10 +29,9 @@
 import gtk
 
 from canaimainstalador.clases.common import TblCol, get_row_index, PStatus, \
-    UserMessage, humanize, validate_minimun_fs_size
+    validate_minimun_fs_size
 from canaimainstalador.clases.frame_fs import frame_fs
 from canaimainstalador.translator import msj
-from canaimainstalador.config import FSMIN
 
 txt_manual = 'Escoger manualmente...'
 txt_ninguno = 'Ninguno'
@@ -84,6 +83,7 @@ class Main(gtk.Dialog):
             self.fs_box.entrada.set_text(montaje)
 
         # Formatear
+        self.set_format_label(self.fila_selec[TblCol.FORMATO])
         self.fs_box.formatear.set_active(self.fila_selec[TblCol.FORMATEAR])
 
     def select_item(self, combo, item):
@@ -141,13 +141,22 @@ class Main(gtk.Dialog):
 
         self.destroy()
 
+    def set_format_label(self, fs):
+        if fs == 'swap' and self.fila_selec[TblCol.FORMATO] == 'swap':
+            self.fs_box.formatear.set_label("Usar esta partición.")
+        else:
+            self.fs_box.formatear.set_label("Formatear esta partición.")
+
     def cmb_fs_changed(self, widget):
+
+        selec = widget.get_active_text()
+        self.set_format_label(selec)
 
         self.validate_minimun_fs_size()
 
         actual = self.fila_selec[TblCol.FORMATO]
         formatear = self.fila_selec[TblCol.FORMATEAR]
-        selec = widget.get_active_text()
+
         # Si el filesystem seleccionado es el mismo que tiene la particion
         # se coloca el estado original que trae de la variable formatear
         # sino hay que formatear obligatoramente y no se debe editar ese campo
