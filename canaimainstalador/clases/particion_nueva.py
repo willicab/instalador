@@ -133,7 +133,7 @@ class Main(gtk.Dialog):
             if tipo == msj.particion.primaria:
                 print "Partición primaria"
                 self.add_partition_to_list(tipo, formato, montaje, tamano, \
-                    usado, libre, inicio, fin)
+                    usado, libre, inicio + self.sector, fin)
                 if fin != self.fin_part:
                     print "Que deja espacio libre"
                     inicio = self.escala.get_value()
@@ -141,7 +141,7 @@ class Main(gtk.Dialog):
                     tamano = humanize(fin - inicio)
                     libre = tamano
                     self.add_partition_to_list(tipo, msj.particion.libre, \
-                        montaje, tamano, usado, libre, inicio + self.sector, \
+                        montaje, tamano, usado, libre, inicio , \
                         fin)
             # Extendida
             elif tipo == msj.particion.extendida:
@@ -149,11 +149,11 @@ class Main(gtk.Dialog):
                 usado = tamano
                 libre = humanize(0)
                 self.add_partition_to_list(tipo, formato, montaje, tamano, \
-                    usado, libre, inicio, fin)
+                    usado, libre, inicio + self.sector, fin)
                 print "Crea vacío interno"
                 self.add_partition_to_list(msj.particion.logica, \
                     msj.particion.libre, montaje, tamano, usado, libre, \
-                    inicio + self.sector * 2, fin)
+                    inicio + 1, fin) # agregamos +1 al inicio para que la lista no se desordene
                 if fin != self.fin_part:
                     print "Y deja espacio libre"
                     inicio = self.escala.get_value()
@@ -162,12 +162,12 @@ class Main(gtk.Dialog):
                     libre = tamano
                     self.add_partition_to_list(msj.particion.primaria, \
                         msj.particion.libre, montaje, tamano, usado, libre, \
-                        inicio + self.sector, fin)
+                        inicio , fin)
             # Lógica
             elif tipo == msj.particion.logica:
                 print "Partición Lógica"
                 self.add_partition_to_list(tipo, formato, montaje, tamano, \
-                    usado, libre, inicio, fin)
+                    usado, libre, inicio + self.sector * 4, fin)
                 if fin != self.fin_part:
                     print "Que deja espacio extendido libre"
                     inicio = self.escala.get_value()
@@ -176,7 +176,7 @@ class Main(gtk.Dialog):
                     libre = tamano
                     self.add_partition_to_list(tipo, msj.particion.libre, \
                         montaje, tamano, usado, libre, \
-                        inicio + self.sector * 2, fin)
+                        inicio , fin)
             print "------------"
 
         self.destroy()

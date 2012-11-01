@@ -28,7 +28,7 @@
 
 import os
 
-curdir = os.path.normpath(os.path.join(os.path.realpath(__file__), '..', '..')
+curdir = os.path.normpath(os.path.join(os.path.realpath(__file__), '..', '..'))
 
 if curdir == '/usr/share/pyshared':
     GUIDIR = '/usr/share/pyshared/canaimainstalador'
@@ -37,12 +37,12 @@ else:
     GUIDIR = curdir + '/canaimainstalador'
     SHAREDIR = curdir
 
-BAR_ICON = GUIDIR+'/data/img/icon.png'
-ABOUT_IMAGE = GUIDIR+'/data/img/logo.png'
-BANNER_IMAGE = GUIDIR+'/data/img/banner.png'
-WELCOME_IMAGE = GUIDIR+'/data/img/welcome.png'
-KEY_IMAGE_TMPL = GUIDIR+'/data/img/key_{0}.png'
-INSTALL_SLIDES = GUIDIR+'/data/install.html'
+BAR_ICON = GUIDIR + '/data/img/icon.png'
+ABOUT_IMAGE = GUIDIR + '/data/img/logo.png'
+BANNER_IMAGE = GUIDIR + '/data/img/banner.png'
+WELCOME_IMAGE = GUIDIR + '/data/img/welcome.png'
+KEY_IMAGE_TMPL = GUIDIR + '/data/img/key_{0}.png'
+INSTALL_SLIDES = GUIDIR + '/data/install.html'
 
 VERSION_FILE = SHAREDIR + '/VERSION'
 AUTHORS_FILE = SHAREDIR + '/AUTHORS'
