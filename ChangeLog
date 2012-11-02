@@ -1,3 +1,8 @@
+DEVELOPMENT RELEASE v2.0+dev20121102132525 (11/02/12)
+Mejorando la validación de sistemas de archivos soportados.
+Corrigiendo comando de creación de sistemas de archivos FAT16 y FAT32.
+Corrigiendo remoción de partición en la acción "borrar" del módulo instalación.
+
 DEVELOPMENT RELEASE v2.0+dev20121101034922 (11/01/12)
 Actualizando TODO.
 Inhabilitando BTRFS, burg no tiene soporte.
