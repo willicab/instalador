@@ -166,7 +166,7 @@ class Main(gtk.Dialog):
 
         # No reducir menos del espacio minimo
         tamano = adjustment.value - self.inicio
-        if validate_minimun_fs_size(self.formato, tamano):
+        if not validate_minimun_fs_size(self.formato, tamano):
             adjustment.set_value(self.inicio + FSMIN[self.formato])
         elif not validate_maximun_fs_size(self.formato, tamano):
             adjustment.set_value(self.inicio + FSMAX[self.formato])
