@@ -39,7 +39,8 @@ from canaimainstalador.pasos.particion_manual import PasoPartManual
 from canaimainstalador.pasos.instalacion import PasoInstalacion
 from canaimainstalador.pasos.usuario import PasoUsuario
 from canaimainstalador.pasos.info import PasoInfo
-from canaimainstalador.clases.common import UserMessage, AboutWindow, aconnect
+from canaimainstalador.clases.common import UserMessage, AboutWindow, aconnect, \
+    debug_list
 from canaimainstalador.config import BAR_ICON
 
 class Wizard(gtk.Window):
@@ -211,7 +212,7 @@ class Metodo():
         CFG['metodo'] = CFG['w'].formulario('Metodo').metodo
         CFG['particiones'] = CFG['w'].formulario('Metodo').particiones
         print 'El metodo de instalación escogido es: {0}'.format(CFG['metodo']['tipo'])
-        print 'CFG: {0}'.format(CFG)
+        print 'CFG: {0}'.format(debug_list(CFG))
 
         if CFG['metodo']['tipo'] == 'MANUAL':
             CFG['w'].next('PartManual', PartManual, (CFG), PasoPartManual(CFG))
