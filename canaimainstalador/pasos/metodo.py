@@ -143,23 +143,24 @@ class PasoMetodo(gtk.Fixed):
                     libre = p[8]
 
                     if fs != 'free' and libre >= self.minimo:
-                        if tipo == 'logical' and FSPROGS[fs][1] != '':
-                            if logicas < 10:
-                                self.metodos.append({
-                                    'tipo': 'REDIM',
-                                    'msg': 'Instalar redimensionando {0} para liberar espacio ({1} libres)'.format(part, humanize(libre)),
-                                    'part': p,
-                                    'disco': disco_array
-                                })
+                        if fs in FSPROGS:
+                            if tipo == 'logical' and FSPROGS[fs][1] != '':
+                                if logicas < 10:
+                                    self.metodos.append({
+                                        'tipo': 'REDIM',
+                                        'msg': 'Instalar redimensionando {0} para liberar espacio ({1} libres)'.format(part, humanize(libre)),
+                                        'part': p,
+                                        'disco': disco_array
+                                    })
 
-                        elif tipo == 'primary' and FSPROGS[fs][1] != '':
-                            if (extendidas < 1 and primarias < 4) or (extendidas > 0 and primarias < 2):
-                                self.metodos.append({
-                                    'tipo': 'REDIM',
-                                    'msg': 'Instalar redimensionando {0} para liberar espacio ({1} libres)'.format(part, humanize(libre)),
-                                    'part': p,
-                                    'disco': disco_array
-                                })
+                            elif tipo == 'primary' and FSPROGS[fs][1] != '':
+                                if (extendidas < 1 and primarias < 4) or (extendidas > 0 and primarias < 2):
+                                    self.metodos.append({
+                                        'tipo': 'REDIM',
+                                        'msg': 'Instalar redimensionando {0} para liberar espacio ({1} libres)'.format(part, humanize(libre)),
+                                        'part': p,
+                                        'disco': disco_array
+                                    })
 
                     if fs == 'free' and tam >= self.minimo:
                         if tipo == 'logical':
