@@ -101,7 +101,7 @@ class frame_fs(gtk.Table):
         self.attach(self.entrada, 1, 2, 2, 3)
         self.entrada.connect("changed", self.validate_m_point)
 
-        self.formatear = gtk.CheckButton("Formatear esta partición:")
+        self.formatear = gtk.CheckButton("Formatear esta partición.")
         self.attach(self.formatear, 1, 2, 3, 4)
         self.formatear.show()
         self.formatear.set_visible(is_usable(self.part_act))

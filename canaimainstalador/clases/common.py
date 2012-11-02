@@ -31,7 +31,7 @@ import re, subprocess, math, cairo, gtk, hashlib, random, string, urllib2, os, g
 from canaimainstalador.translator import msj
 from canaimainstalador.config import APP_NAME, APP_COPYRIGHT, APP_DESCRIPTION, \
     APP_URL, LICENSE_FILE, AUTHORS_FILE, TRANSLATORS_FILE, VERSION_FILE, ABOUT_IMAGE, \
-    FSPROGS, FSMIN
+    FSPROGS, FSMIN, FSMAX
 
 def AboutWindow(widget=None):
     about = gtk.AboutDialog()
@@ -96,7 +96,7 @@ def espacio_usado(fs, particion):
 def mounted_targets(mnt):
     m = []
     _mnt = mnt.replace('/', '\/')
-    cmd = "awk '$2 ~ /^"+_mnt+"/ {print $2}' /proc/mounts | sort"
+    cmd = "awk '$2 ~ /^" + _mnt + "/ {print $2}' /proc/mounts | sort"
     salida = subprocess.Popen(
         cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT
         ).communicate()[0].split()
@@ -109,7 +109,7 @@ def mounted_targets(mnt):
 def mounted_parts(disk):
     m = []
     _disk = disk.replace('/', '\/')
-    cmd = "awk '$1 ~ /^"+_disk+"/ {print $2}' /proc/mounts | sort"
+    cmd = "awk '$1 ~ /^" + _disk + "/ {print $2}' /proc/mounts | sort"
     salida = subprocess.Popen(
         cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT
         ).communicate()[0].split()
@@ -284,7 +284,7 @@ def actualizar_sistema(mnt):
 
 def crear_usuarios(mnt, a_user, a_pass, n_name, n_user, n_pass):
     i = 0
-    content = a_user+':'+a_pass+'\n'
+    content = a_user + ':' + a_pass + '\n'
     destination = '{0}/tmp/passwd'.format(mnt)
     home = '/home/{0}'.format(n_user)
     shell = '/bin/bash'
@@ -673,7 +673,7 @@ def ProcessGenerator(command):
 class ThreadGenerator(threading.Thread):
     def __init__(
         self, reference, function, params,
-        gtk = False, window = False, event = False
+        gtk=False, window=False, event=False
         ):
         threading.Thread.__init__(self)
         self._gtk = gtk
@@ -703,13 +703,32 @@ def get_sector_size(device):
     dev = parted.Device(device)
     return dev.sectorSize / 1024.0
 
-def debug_list(the_list):
-    data = "List [\n"
-    for fila in the_list:
-        data = data + '  ' + str(fila) + '\n'
-    data = data + ']'
+def debug_list(the_list, n_spc=0):
 
-    return data
+    space = ""
+    nw_line = ""
+    data = ""
+
+    if n_spc > 0:
+        space = "\t" * n_spc
+
+    the_type = type(the_list)
+
+    if isinstance(the_list, list) or isinstance(the_list, tuple) or isinstance(the_list, dict):
+        nw_line = "\n"
+        for fila in the_list:
+
+            if isinstance(the_list, dict):
+                data += "{0}{1}{2}:".format(nw_line, '\t' * (n_spc + 1), fila)
+                fila = the_list[fila]
+
+            data += nw_line + debug_list(fila, n_spc + 1)
+    else:
+        data = the_list
+
+    string = "{0}{1} [{2}]{3}".format(space, the_type, data, nw_line)
+
+    return string
 
 def get_row_index(the_list, row):
         '''Obtiene el numero de la fila seleccionada en la tabla'''
@@ -801,10 +820,23 @@ def is_resizable(fs):
         # 'Espacio libre' por ejemplo
         return False
 
-def validate_minimun_fs_size(dialog, formato, tamano):
+def validate_minimun_fs_size(formato, tamano):
     if tamano < FSMIN[formato]:
-        dialog.set_response_sensitive(gtk.RESPONSE_OK, False)
-        msg = "%s debe tener un tamaño minimo de %s." % (formato, humanize(FSMIN[formato]))
-        UserMessage(msg, 'Información', gtk.MESSAGE_INFO, gtk.BUTTONS_OK)
+        return False
     else:
-        dialog.set_response_sensitive(gtk.RESPONSE_OK, True)
+        return True
+
+def validate_maximun_fs_size(formato, tamano):
+    if formato in FSMAX and tamano > FSMAX[formato]:
+        return False
+    else:
+        return True
+
+if __name__ == "__main__":
+    print debug_list([1, 2])
+    print debug_list({"casa":[1]})
+    print debug_list("la casa")
+    print debug_list(12.0)
+    print debug_list(gtk)
+
+

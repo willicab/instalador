@@ -28,10 +28,11 @@
 
 import gtk
 from canaimainstalador.clases.common import humanize, TblCol, floatify, PStatus, \
-    get_sector_size, has_next_row, is_free, get_row_index, get_next_row
+    get_sector_size, has_next_row, is_free, get_row_index, get_next_row, \
+    validate_minimun_fs_size, validate_maximun_fs_size
 from canaimainstalador.translator import msj
 from copy import copy
-from canaimainstalador.config import FSMIN
+from canaimainstalador.config import FSMIN, FSMAX
 
 class Main(gtk.Dialog):
 
@@ -165,8 +166,10 @@ class Main(gtk.Dialog):
 
         # No reducir menos del espacio minimo
         tamano = adjustment.value - self.inicio
-        if tamano < FSMIN[self.formato]:
+        if validate_minimun_fs_size(self.formato, tamano):
             adjustment.set_value(self.inicio + FSMIN[self.formato])
+        elif not validate_maximun_fs_size(self.formato, tamano):
+            adjustment.set_value(self.inicio + FSMAX[self.formato])
         # No reducir menos del espacio usado
         elif adjustment.value <= self.get_used_space():
             adjustment.set_value(self.get_used_space())

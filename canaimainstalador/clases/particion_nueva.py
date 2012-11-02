@@ -30,10 +30,10 @@ import gtk
 
 from canaimainstalador.clases.common import humanize, TblCol, get_next_row, \
     get_row_index, set_partition, PStatus, get_sector_size, \
-    validate_minimun_fs_size
+    validate_minimun_fs_size, validate_maximun_fs_size, UserMessage
 from canaimainstalador.translator import msj
 from canaimainstalador.clases.frame_fs import frame_fs
-from canaimainstalador.config import FSMIN
+from canaimainstalador.config import FSMIN, FSMAX
 
 class Main(gtk.Dialog):
 
@@ -116,17 +116,17 @@ class Main(gtk.Dialog):
             montaje = self.cmb_montaje.get_active_text()
             usado = humanize(0)
 
-            if formato == 'swap':
-                montaje = ''
-
-            if montaje == 'Escoger manualmente...':
-                montaje = self.entrada.get_text().strip()
-
             # Calculo el tamaño
             inicio = self.inicio_part
             fin = self.escala.get_value()
             tamano = humanize(fin - inicio)
             libre = tamano
+
+            if formato == 'swap':
+                montaje = ''
+
+            if montaje == 'Escoger manualmente...':
+                montaje = self.entrada.get_text().strip()
 
             print "---NUEVA----"
             # Primaria
@@ -221,17 +221,33 @@ class Main(gtk.Dialog):
         formato = self.cmb_fs.get_active_text()
         tamano = widget.get_value() - self.inicio_part
 
-        if tamano < FSMIN[formato]:
+        # Impide que se sobrepasen los maximos y minimos
+        if not validate_minimun_fs_size(formato, tamano):
             widget.set_value(self.inicio_part + FSMIN[formato])
+        elif not validate_maximun_fs_size(formato, tamano):
+            widget.set_value(self.inicio_part + FSMAX[formato])
 
         if self.cmb_fs:
             self.lblsize.set_text(humanize(widget.get_value() - self.inicio_part))
-            self.validate_minimun_fs_size()
 
     def cmb_fs_changed(self, widget):
-        self.validate_minimun_fs_size()
+        self.validate_fs_size()
 
-    def validate_minimun_fs_size(self):
+    def validate_fs_size(self):
         formato = self.cmb_fs.get_active_text()
-        tamano = self.escala.get_value() - self.inicio_part
-        validate_minimun_fs_size(self, formato, tamano)
+        tamano = self.particion_act[TblCol.FIN] - self.particion_act[TblCol.INICIO]
+        estatus = True
+
+        if not validate_minimun_fs_size(formato, tamano):
+            estatus = False
+            msg = "%s debe tener un tamaño mínimo de %s." % (formato, humanize(FSMIN[formato]))
+            UserMessage(msg, 'Información', gtk.MESSAGE_INFO, gtk.BUTTONS_OK)
+            self.escala.set_value(self.inicio_part + FSMIN[formato])
+
+        if not validate_maximun_fs_size(formato, tamano):
+            estatus = False
+            msg = "%s debe tener un tamaño máximo de %s." % (formato, humanize(FSMAX[formato]))
+            UserMessage(msg, 'Información', gtk.MESSAGE_INFO, gtk.BUTTONS_OK)
+            self.escala.set_value(self.inicio_part + FSMAX[formato])
+
+        return estatus
