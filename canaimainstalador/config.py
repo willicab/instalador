@@ -86,7 +86,7 @@ FSPROGS = {
     'jfs': ['mkfs.jfs -q {0}', ''],
     'swap': ['mkswap -f {0}', ''],
     'reiser4': ['mkfs.reiser4 -y -f {0}', ''],
-    'reiserfs': ['mkfs.reiserfs -q -f -f {0}', 'resize_reiserfs -q -f -s {0} {1}'],
+    'reiserfs': ['mkfs.reiserfs -q -f -f {0}', 'echo y | resize_reiserfs -q -f -s {0} {1}'],
     'xfs': ['mkfs.xfs -q -f {0}', '']
     }
 

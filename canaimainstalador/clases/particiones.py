@@ -54,8 +54,11 @@ class Particiones():
         '''
         l = []
         dev = parted.getAllDevices()
+
         for d in dev:
-            l.append(d.path)
+            if not d.readOnly:
+                l.append(d.path)
+
         return sorted(l)
 
     def lista_particiones(self, disco):
@@ -288,7 +291,7 @@ class Particiones():
         currstart = partition.geometry.start * dev.sectorSize / 1024.0
         currend = partition.geometry.end * dev.sectorSize / 1024.0
 
-        if fs == 'ntfs':
+        if fs == 'ntfs' or fs == 'fat16' or fs == 'fat32':
             newsize = str(int((newend - currstart))) + 'k'
         else:
             newsize = str(int((newend - currstart))) + 'K'
