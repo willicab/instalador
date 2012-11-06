@@ -1,3 +1,6 @@
+DEVELOPMENT RELEASE v2.0+dev20121106150435 (11/06/12)
+Evitando la inclusión de basura en los paquetes fuente.
+
 DEVELOPMENT RELEASE v2.0+dev20121106140646 (11/06/12)
 Corrigiendo comando de redimensión para reiserfs, ntfs, fat16 y fat32.
 Corrigiendo detección de discos, inhabilitando discos montados como "sólo lectura".
