@@ -285,9 +285,13 @@ class Particiones():
         partition = disk.getPartitionByPath(part)
         fs = partition.fileSystem.type
         partype = partition.type
-        currstart = partition.geometry.start * dev.sectorSize / 1024
-        currend = partition.geometry.end * dev.sectorSize / 1024
-        newsize = str(int((newend - currstart))) + 'K'
+        currstart = partition.geometry.start * dev.sectorSize / 1024.0
+        currend = partition.geometry.end * dev.sectorSize / 1024.0
+
+        if fs == 'ntfs':
+            newsize = str(int((newend - currstart))) + 'k'
+        else:
+            newsize = str(int((newend - currstart))) + 'K'
 
         if newend > currend:
             # Redimensionar primero la partición y luego el sistema de archivos

@@ -54,14 +54,14 @@ APP_COPYRIGHT = 'Copyright (C) 2012 - Varios autores'
 APP_URL = 'http://gitorious.org/canaima-gnu-linux/canaima-instalador'
 APP_DESCRIPTION = 'Instalador para Canaima GNU/Linux'
 
-ESPACIO_ROOT = 1024 * 1024              # 1GB
-ESPACIO_VAR = 1024 * 896                # 896MB
-ESPACIO_HOME = 1024 * 1024              # 1GB
-ESPACIO_USR = 1024 * 1024 * 2           # 2GB
-ESPACIO_BOOT = 1024 * 128               # 128MB
-ESPACIO_SWAP = 1024 * 1024              # 1GB
-# --------------------------------------# -------
-ESPACIO_TOTAL = 1024 * 1024 * 6         # 6GB
+ESPACIO_ROOT = 1024.0 * 1024.0              # 1GB
+ESPACIO_VAR = 1024.0 * 896.0                # 896MB
+ESPACIO_HOME = 1024.0 * 1024.0              # 1GB
+ESPACIO_USR = 1024.0 * 1024.0 * 2.0         # 2GB
+ESPACIO_BOOT = 1024.0 * 128.0               # 128MB
+ESPACIO_SWAP = 1024.0 * 1024.0              # 1GB
+# ------------------------------------------# -------
+ESPACIO_TOTAL = 1024.0 * 1024.0 * 6.0       # 6GB
 
 CFG = {
     's': []
