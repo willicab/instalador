@@ -1,3 +1,8 @@
+DEVELOPMENT RELEASE v2.0+dev20121106103819 (11/06/12)
+Corrigiendo botón de "mínimo" en particionador automático.
+Corrigiendo validacion de tamaño minimo en redimensionar manual
+Validando tamaños maximos de las particiones fat16 y hfs
+
 DEVELOPMENT RELEASE v2.0+dev20121102132525 (11/02/12)
 Mejorando la validación de sistemas de archivos soportados.
 Corrigiendo comando de creación de sistemas de archivos FAT16 y FAT32.
