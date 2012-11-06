@@ -40,3 +40,4 @@
 - Agregar pantalla para selección de zona horaria y escribir el archivo /etc/localetime adecuadamente.
 - Ampliar opciones de selección de idioma y distribuciones de teclado, configurando el idioma de Canaima adecuadamente.
 - Implementar alineaciones óptimas de particiones.
+- Hacer instalador accesible (personas con discapacidad visual y motora).

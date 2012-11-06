@@ -31,6 +31,7 @@ import gtk
 from canaimainstalador.clases.barra_auto import BarraAuto
 from canaimainstalador.clases.leyenda import Leyenda
 from canaimainstalador.config import ESPACIO_TOTAL
+from canaimainstalador.clases.common import humanize
 
 class PasoPartAuto(gtk.Fixed):
     def __init__(self, CFG):
@@ -129,7 +130,7 @@ class PasoPartAuto(gtk.Fixed):
                     self.option_4.set_sensitive(False)
 
     def set_min(self, widget):
-        self.current = self.barra.fin - ESPACIO_TOTAL
+        self.current = self.barra.total - ESPACIO_TOTAL
         self.barra.expose()
         self.leyenda.expose()
 
