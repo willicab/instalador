@@ -98,18 +98,22 @@ snapshot: check-maintdep
 
 release: check-maintdep
 
+	@$(MAKE) clean
 	@$(SHELLBIN) tools/release.sh
 
 deb-test-snapshot: check-maintdep
 
+	@$(MAKE) clean
 	@$(SHELLBIN) tools/buildpackage.sh test-snapshot
 
 deb-test-release: check-maintdep
 
+	@$(MAKE) clean
 	@$(SHELLBIN) tools/buildpackage.sh test-release
 
 deb-final-release: check-maintdep
 
+	@$(MAKE) clean
 	@$(SHELLBIN) tools/buildpackage.sh final-release
 
 check-maintdep:
