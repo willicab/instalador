@@ -144,7 +144,7 @@ class PasoMetodo(gtk.Fixed):
 
                     if fs != 'free' and libre >= self.minimo:
                         if fs in FSPROGS:
-                            if tipo == 'logical' and FSPROGS[fs][1] != '':
+                            if tipo == 'logical' and FSPROGS[fs][1][0] != '':
                                 if logicas < 10:
                                     self.metodos.append({
                                         'tipo': 'REDIM',
@@ -153,7 +153,7 @@ class PasoMetodo(gtk.Fixed):
                                         'disco': disco_array
                                     })
 
-                            elif tipo == 'primary' and FSPROGS[fs][1] != '':
+                            elif tipo == 'primary' and FSPROGS[fs][1][0] != '':
                                 if (extendidas < 1 and primarias < 4) or (extendidas > 0 and primarias < 2):
                                     self.metodos.append({
                                         'tipo': 'REDIM',

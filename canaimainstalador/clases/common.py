@@ -811,7 +811,7 @@ def is_usable(selected_row):
 def is_resizable(fs):
     'Determina si un filesystem tiene herramienta de redimension'
     try:
-        if FSPROGS[fs][1] == '':
+        if FSPROGS[fs][1][0] == '':
             return False
         else:
             return True

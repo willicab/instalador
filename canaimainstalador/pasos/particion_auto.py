@@ -30,7 +30,7 @@ import gtk
 
 from canaimainstalador.clases.barra_auto import BarraAuto
 from canaimainstalador.clases.leyenda import Leyenda
-from canaimainstalador.config import ESPACIO_TOTAL
+from canaimainstalador.config import ESPACIO_TOTAL, ESPACIO_USADO_EXTRA
 from canaimainstalador.clases.common import humanize
 
 class PasoPartAuto(gtk.Fixed):
@@ -38,8 +38,8 @@ class PasoPartAuto(gtk.Fixed):
         gtk.Fixed.__init__(self)
         self.metodo = CFG['metodo']
         self.particiones = CFG['particiones']
-        self.current = self.metodo['part'][7]
-        self.usado = self.metodo['part'][7]
+        self.current = self.metodo['part'][7] + ESPACIO_USADO_EXTRA
+        self.usado = self.metodo['part'][7] + ESPACIO_USADO_EXTRA
         self.forma = 'PART:ROOT:HOME:SWAP'
         self.minimo = ESPACIO_TOTAL
         self.nuevas = []

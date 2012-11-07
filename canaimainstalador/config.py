@@ -63,6 +63,8 @@ ESPACIO_SWAP = 1024.0 * 1024.0              # 1GB
 # ------------------------------------------# -------
 ESPACIO_TOTAL = 1024.0 * 1024.0 * 6.0       # 6GB
 
+ESPACIO_USADO_EXTRA = 1024.0 * 512.0
+
 CFG = {
     's': []
     }
@@ -74,20 +76,81 @@ TECLADOS = {
     }
 
 FSPROGS = {
-    'btrfs': ['mkfs.btrfs {0}', 'btrfs filesystem resize {0} {1}'],
-    'ext2': ['mkfs.ext2 -q -F -F {0}', 'resize2fs -f {1} {0}'],
-    'ext3': ['mkfs.ext3 -q -F -F {0}', 'resize2fs -f {1} {0}'],
-    'ext4': ['mkfs.ext4 -q -F -F {0}', 'resize2fs -f {1} {0}'],
-    'fat16': ['mkfs.vfat -F 16 {0}', 'fatresize -q -s {0} {1}'],
-    'fat32': ['mkfs.vfat -F 32 {0}', 'fatresize -q -s {0} {1}'],
-    'ntfs': ['mkfs.ntfs -q -F {0}', 'ntfsresize -f -P -b -s {0} {1}'],
-    'hfs+': ['mkfs.hfsplus {0}', ''],
-    'hfs': ['hformat -f {0}', ''],
-    'jfs': ['mkfs.jfs -q {0}', ''],
-    'swap': ['mkswap -f {0}', ''],
-    'reiser4': ['mkfs.reiser4 -y -f {0}', ''],
-    'reiserfs': ['mkfs.reiserfs -q -f -f {0}', 'echo y | resize_reiserfs -q -f -s {0} {1}'],
-    'xfs': ['mkfs.xfs -q -f {0}', '']
+    'btrfs': [
+        ['mkfs.btrfs {0}'],
+        ['btrfsck {1}', 'umount /mnt || true', 'sync', 'mount -t btrfs {1} /mnt', 'sync', 'btrfs filesystem resize {0} /mnt', 'umount /mnt', 'sync'],
+        ['btrfsck {1}']
+        ],
+    'ext2': [
+        ['mkfs.ext2 -q -F -F {0}'],
+        ['e2fsck -f -y -v {1}', 'resize2fs {1} {0}'],
+        ['e2fsck -f -y -v {1}', 'resize2fs {1}']
+        ],
+    'ext3': [
+        ['mkfs.ext3 -q -F -F {0}'],
+        ['e2fsck -f -y -v {1}', 'resize2fs {1} {0}'],
+        ['e2fsck -f -y -v 1}', 'resize2fs {1}']
+        ],
+    'ext4': [
+        ['mkfs.ext4 -q -F -F {0}'],
+        ['e2fsck -f -y -v {1}', 'resize2fs {1} {0}'],
+        ['e2fsck -f -y -v {1}', 'resize2fs {1}']
+        ],
+    'fat16': [
+        ['mkfs.vfat -F 16 {0}'],
+        ['dosfsck -a -w -v {1}', 'fatresize -q -s {0} {1}'],
+        ['dosfsck -a -w -v {1}']
+        ],
+    'fat32': [
+        ['mkfs.vfat -F 32 {0}'],
+        ['dosfsck -a -w -v {1}', 'fatresize -q -s {0} {1}'],
+        ['dosfsck -a -w -v {1}']
+        ],
+    'ntfs': [
+        ['mkfs.ntfs -q -F {0}'],
+        ['ntfsresize -P -i -f -v {1}', 'ntfsresize -P -f -n -s {0} {1}', 'echo y | ntfsresize -P -f -s {0} {1}'],
+        ['ntfsresize -P -i -f -v {1}', 'ntfsresize -P -f -n {1}', 'echo y | ntfsresize -P -f {1}']
+        ],
+    'hfs+': [
+        ['mkfs.hfsplus {0}'],
+        [''],
+        ['']
+        ],
+    'hfs': [
+        ['hformat -f {0}'],
+        [''],
+        ['']
+        ],
+    'jfs': [
+        ['mkfs.jfs -q {0}'],
+        [''],
+        ['']
+        ],
+    'swap': [
+        ['mkswap -f {0}'],
+        [''],
+        ['']
+        ],
+    'reiser4': [
+        ['mkfs.reiser4 -y -f {0}'],
+        [''],
+        ['']
+        ],
+    'reiserfs': [
+        ['mkfs.reiserfs -q -f -f {0}'],
+        ['reiserfsck -q -y --fix-fixable {1} || true', 'echo y | resize_reiserfs -s {0} {1}'],
+        ['reiserfsck -q -y --fix-fixable {1} || true', 'echo y | resize_reiserfs {1}']
+        ],
+    'xfs': [
+        ['mkfs.xfs -q -f {0}'],
+        [''],
+        ['']
+        ],
+    'empty': [
+        [''],
+        [''],
+        ['']
+        ]
     }
 
 FSMIN = {

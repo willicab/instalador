@@ -41,3 +41,5 @@
 - Ampliar opciones de selección de idioma y distribuciones de teclado, configurando el idioma de Canaima adecuadamente.
 - Implementar alineaciones óptimas de particiones.
 - Hacer instalador accesible (personas con discapacidad visual y motora).
+- Identificar los sistemas operativos presentes en las particiones.
+- Identificar en el gráfico de cairo las particiones.

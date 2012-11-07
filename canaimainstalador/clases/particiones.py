@@ -143,7 +143,7 @@ class Particiones():
         e_sec = end * 1024 / dev.sectorSize
         m_sec = ((e_sec - s_sec) / 2) + s_sec
 
-        if ptype == 'logical' or ptype == 'primary':
+        if ptype == 'logical' or ptype == 'primary' or ptype == 1 or ptype == 0:
             part = disk.getPartitionBySector(m_sec)
         else:
             part = disk.getExtendedPartition()
@@ -160,6 +160,7 @@ class Particiones():
         - fin: donde terminará la partición, en kB
         '''
         i = 0
+        j = 0
         dev = parted.Device(drive)
         disk = parted.Disk(dev)
         s_sec = start * 1024 / dev.sectorSize
@@ -213,13 +214,17 @@ class Particiones():
                 return True
             else:
                 if fs in FSPROGS:
-                    if FSPROGS[fs][0] != '':
-                        ProcessGenerator(
-                            FSPROGS[fs][0].format(
-                                self.nombre_particion(drive, partype, start, end)
-                                )
-                            )
-                return True
+                    for mkfs in FSPROGS[fs][0]:
+                        pname = self.nombre_particion(drive, partype, start, end)
+                        if ProcessGenerator(mkfs.format(pname)).returncode == 0:
+                            j += 1
+
+                    if j == len(FSPROGS[fs][0]):
+                        return True
+                    else:
+                        return False
+                else:
+                    return False
         else:
             return False
 
@@ -232,10 +237,17 @@ class Particiones():
         - inicio: donde comenzará la partición, en kB
         - fin: donde terminará la partición, en kB
         '''
+        i= 0
+
         if fs in FSPROGS:
-            if FSPROGS[fs][0] != '':
-                ProcessGenerator(FSPROGS[fs][0].format(part))
+            for mkfs in FSPROGS[fs][0]:
+                if ProcessGenerator(mkfs.format(part)).returncode == 0:
+                    i += 1
+
+            if i == len(FSPROGS[fs][0]):
                 return True
+            else:
+                return False
         else:
             return False
 
@@ -283,6 +295,8 @@ class Particiones():
         - inicio: donde comenzará la partición, en kB
         - fin: donde terminará la partición, en kB
         '''
+        i = 0
+        j = 0
         dev = parted.Device(drive)
         disk = parted.Disk(dev)
         partition = disk.getPartitionByPath(part)
@@ -296,66 +310,83 @@ class Particiones():
         else:
             newsize = str(int((newend - currstart))) + 'K'
 
-        if newend > currend:
-            # Redimensionar primero la partición y luego el sistema de archivos
+        if fs == 'linux-swap(v1)':
             if self.borrar_particion(drive=drive, part=part):
-                if fs == 'linux-swap(v1)':
-                    if self.crear_particion(
-                        drive=drive, start=currstart, end=newend,
-                        fs='swap', partype=partype
-                        ):
-                        return True
+                if self.crear_particion(
+                    drive=drive, start=currstart, end=newend,
+                    fs='swap', partype=partype
+                    ):
+                    return True
                 else:
-                    if self.crear_particion(
-                        drive=drive, start=currstart, end=newend,
-                        fs=None, partype=partype
-                        ):
-                        if fs in FSPROGS:
-                            if FSPROGS[fs][1] != '':
-                                if fs == 'btrfs':
-                                    assisted_umount(sync = True, plist=[['', '/mnt', '']])
-                                    assisted_mount(sync = True, bind=False, plist=[[part, '/mnt', 'btrfs']])
-
-                                if ProcessGenerator(
-                                    FSPROGS[fs][1].format(newsize, part)
-                                    ).returncode == 0:
-                                    if fs == 'btrfs':
-                                        assisted_umount(sync = True, plist=[['', '/mnt', '']])
-                                    return True
-                            else:
-                                return False
-        elif newend < currend:
-            # Redimensionar primero el sistema de archivos y luego la partición
-            if fs == 'linux-swap(v1)':
+                    return False
+            else:
+                return False
+        else:
+            if newend > currend:
+                # Redimensionar primero la partición y luego el sistema de archivos
                 if self.borrar_particion(drive=drive, part=part):
                     if self.crear_particion(
                         drive=drive, start=currstart, end=newend,
-                        fs='swap', partype=partype
+                        fs='empty', partype=partype
                         ):
-                        return True
-            else:
+                        if fs in FSPROGS:
+                            for mkfs in FSPROGS[fs][1]:
+                                pname = self.nombre_particion(drive, partype, currstart, newend)
+                                if ProcessGenerator(mkfs.format(newsize, pname)).returncode == 0:
+                                    i += 1
+
+                            if i == len(FSPROGS[fs][1]):
+                                for chk in FSPROGS[fs][2]:
+                                    pname = self.nombre_particion(drive, partype, currstart, newend)
+                                    if ProcessGenerator(chk.format(newsize, pname)).returncode == 0:
+                                        j += 1
+
+                                if j == len(FSPROGS[fs][2]):
+                                    return True
+                                else:
+                                    return False
+                            else:
+                                return False
+                        else:
+                            return False
+                    else:
+                        return False
+                else:
+                    return False
+
+            elif newend < currend:
+                # Redimensionar primero el sistema de archivos y luego la partición
                 if fs in FSPROGS:
-                    if FSPROGS[fs][1] != '':
-                        if fs == 'btrfs':
-                            assisted_umount(sync = True, plist=[['', '/mnt', '']])
-                            assisted_mount(sync = True, bind=False, plist=[[part, '/mnt', 'btrfs']])
+                    for mkfs in FSPROGS[fs][1]:
+                        if ProcessGenerator(mkfs.format(newsize, part)).returncode == 0:
+                            i += 1
 
-                        ProcessGenerator(FSPROGS[fs][1].format(newsize, part))
-
-                        if fs == 'btrfs':
-                            assisted_umount(sync = True, plist=[['', '/mnt', '']])
-
+                    if i == len(FSPROGS[fs][1]):
                         if self.borrar_particion(drive=drive, part=part):
                             if self.crear_particion(
                                 drive=drive, start=currstart, end=newend,
-                                fs=None, partype=partype
+                                fs='empty', partype=partype
                                 ):
-                                return True
+                                for chk in FSPROGS[fs][2]:
+                                    pname = self.nombre_particion(drive, partype, currstart, newend)
+                                    if ProcessGenerator(chk.format(newsize, pname)).returncode == 0:
+                                        j += 1
+
+                                if j == len(FSPROGS[fs][2]):
+                                    return True
+                                else:
+                                    return False
+                            else:
+                                return False
+                        else:
+                            return False
                     else:
                         return False
+                else:
+                    return False
 
-        elif newend == currend:
-            return True
+            elif newend == currend:
+                return True
 
     def asignar_bandera(self, drive, part, flag):
         dev = parted.Device(drive)
