@@ -1,3 +1,7 @@
+DEVELOPMENT RELEASE v2.0+dev20121107112428 (11/07/12)
+Rehaciendo rutina de redimensión de FS para permitir listas de acciones en vez de una sola.
+Añadiendo 512MB extra al espacio usado para comptibilidad con algunos FS.
+
 DEVELOPMENT RELEASE v2.0+dev20121106150435 (11/06/12)
 Evitando la inclusión de basura en los paquetes fuente.
 
