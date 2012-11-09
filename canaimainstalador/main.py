@@ -27,7 +27,7 @@
 # CODE IS POETRY
 
 # Módulos globales
-import gtk, os, re, Image
+import gtk, re, Image
 
 # Módulos locales
 from canaimainstalador.pasos.bienvenida import PasoBienvenida
@@ -38,10 +38,10 @@ from canaimainstalador.pasos.particion_todo import PasoPartTodo
 from canaimainstalador.pasos.particion_manual import PasoPartManual
 from canaimainstalador.pasos.instalacion import PasoInstalacion
 from canaimainstalador.pasos.usuario import PasoUsuario
-from canaimainstalador.pasos.accesibilidad import PasoAccesibilidad
 from canaimainstalador.pasos.info import PasoInfo
-from canaimainstalador.clases.common import UserMessage, AboutWindow, aconnect
-from canaimainstalador.config import CFG, BAR_ICON
+from canaimainstalador.clases.common import UserMessage, AboutWindow, aconnect, \
+    debug_list
+from canaimainstalador.config import BAR_ICON
 
 class Wizard(gtk.Window):
     def __init__(self, ancho, alto, titulo, banner):
@@ -110,6 +110,7 @@ class Wizard(gtk.Window):
         self.acerca.connect('clicked', AboutWindow)
         self.botonera.put(self.acerca, 110, 10)
 
+        self.connect("destroy", self.close)
         self.connect("delete-event", self.close)
 
         self.show_all()
@@ -205,12 +206,13 @@ class Metodo():
 
     def anterior(self, CFG):
         CFG['w'].previous('Teclado', Teclado, (CFG))
+        CFG['w'].siguiente.set_sensitive(True)
 
     def siguiente(self, CFG):
         CFG['metodo'] = CFG['w'].formulario('Metodo').metodo
         CFG['particiones'] = CFG['w'].formulario('Metodo').particiones
         print 'El metodo de instalación escogido es: {0}'.format(CFG['metodo']['tipo'])
-        print 'CFG: {0}'.format(CFG)
+        print 'CFG: {0}'.format(debug_list(CFG))
 
         if CFG['metodo']['tipo'] == 'MANUAL':
             CFG['w'].next('PartManual', PartManual, (CFG), PasoPartManual(CFG))
@@ -349,19 +351,5 @@ class Info():
         CFG['w'].previous('Usuario', Usuario, (CFG))
 
     def siguiente(self, CFG):
-        CFG['w'].next('Instalacion', Instalacion, (CFG), PasoInstalacion(CFG))
-
-class Instalacion():
-    '''
-        Inicia el paso que realiza la instalación del sistema
-    '''
-    def __init__(self, CFG):
-        CFG['s'] = aconnect(CFG['w'].siguiente, CFG['s'], self.siguiente, CFG)
-        CFG['s'] = aconnect(CFG['w'].anterior, CFG['s'], self.anterior, CFG)
-        CFG['w'].c_principal.move(CFG['w'].c_pasos, 0, 0)
-
-    def anterior(self, CFG):
-        os.system('reboot')
-
-    def siguiente(self, CFG):
-        CFG['w'].close()
+        CFG['w'].hide_all()
+        PasoInstalacion(CFG)

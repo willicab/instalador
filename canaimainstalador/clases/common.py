@@ -26,12 +26,12 @@
 #
 # CODE IS POETRY
 
-import re, subprocess, math, cairo, gtk, hashlib, random, string, urllib2, os, glob, parted
+import re, subprocess, math, cairo, gtk, hashlib, random, string, urllib2, os, glob, parted, crypt, threading, shutil, filecmp
 
 from canaimainstalador.translator import msj
 from canaimainstalador.config import APP_NAME, APP_COPYRIGHT, APP_DESCRIPTION, \
     APP_URL, LICENSE_FILE, AUTHORS_FILE, TRANSLATORS_FILE, VERSION_FILE, ABOUT_IMAGE, \
-    FSPROGS, FSMIN
+    FSPROGS, FSMIN, FSMAX
 
 def AboutWindow(widget=None):
     about = gtk.AboutDialog()
@@ -96,7 +96,7 @@ def espacio_usado(fs, particion):
 def mounted_targets(mnt):
     m = []
     _mnt = mnt.replace('/', '\/')
-    cmd = "awk '$2 ~ /^"+_mnt+"/ {print $2}' /proc/mounts | sort"
+    cmd = "awk '$2 ~ /^" + _mnt + "/ {print $2}' /proc/mounts | sort"
     salida = subprocess.Popen(
         cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT
         ).communicate()[0].split()
@@ -104,13 +104,12 @@ def mounted_targets(mnt):
     for i in salida:
         m.append(['', i, ''])
 
-    print m
     return m
 
 def mounted_parts(disk):
     m = []
     _disk = disk.replace('/', '\/')
-    cmd = "awk '$1 ~ /^"+_disk+"/ {print $2}' /proc/mounts | sort"
+    cmd = "awk '$1 ~ /^" + _disk + "/ {print $2}' /proc/mounts | sort"
     salida = subprocess.Popen(
         cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT
         ).communicate()[0].split()
@@ -118,8 +117,18 @@ def mounted_parts(disk):
     for i in salida:
         m.append(['', i, ''])
 
-    print m
     return m
+
+def get_windows_part_in(drive):
+    cmd = "os-prober | grep -i 'Windows' | grep '"+drive+"' | awk -F: '{print $1}'"
+    salida = subprocess.Popen(
+        cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT
+        ).communicate()[0].split()
+
+    if len(salida) > 0:
+	return salida[0]
+    else:
+        return ''
 
 def assisted_mount(sync, bind, plist):
     i = 0
@@ -145,9 +154,12 @@ def assisted_mount(sync, bind, plist):
             os.makedirs(m)
 
         if fs != 'swap':
-            if ProcessGenerator(
-                'mount {0} {1} {2} {3}'.format(bindcmd, fscmd, p, m)
-                ).returncode == 0:
+            if not os.path.ismount(m):
+                if ProcessGenerator(
+                    'mount {0} {1} {2} {3}'.format(bindcmd, fscmd, p, m)
+                    ).returncode == 0:
+                    i += 1
+            else:
                 i += 1
         else:
             i += 1
@@ -189,7 +201,7 @@ def preseed_debconf_values(mnt, debconflist):
     f.close()
 
     if ProcessGenerator(
-        'chroot {0} cat /tmp/debconf | /usr/bin/debconf-set-selections'.format(mnt)
+        'chroot {0} /usr/bin/debconf-set-selections < {1}/tmp/debconf'.format(mnt, mnt)
         ).returncode == 0:
         return True
     else:
@@ -282,22 +294,33 @@ def actualizar_sistema(mnt):
         return False
 
 def crear_usuarios(mnt, a_user, a_pass, n_name, n_user, n_pass):
-    content_1 = a_user+':'+a_pass+'\n'
-    content_2 = n_user+':'+n_pass+'\n'
-    destination_1 = '{0}/tmp/passwd_1'.format(mnt)
-    destination_2 = '{0}/tmp/passwd_2'.format(mnt)
+    i = 0
+    content = a_user + ':' + a_pass + '\n'
+    destination = '{0}/tmp/passwd'.format(mnt)
+    home = '/home/{0}'.format(n_user)
+    shell = '/bin/bash'
+    password = crypt_generator(n_pass)
 
-    f_1 = open(destination_1, 'w')
-    f_1.write(content_1)
-    f_1.close()
+    f = open(destination, 'w')
+    f.write(content)
+    f.close()
 
-    f_2 = open(destination_2, 'w')
-    f_2.write(content_2)
-    f_2.close()
+    if ProcessGenerator(
+        'chroot {0} /usr/sbin/chpasswd < {1}/tmp/passwd | '.format(mnt, mnt)
+        ).returncode == 0:
+        i += 1
 
-    ProcessGenerator('chroot {0} /usr/sbin/useradd -m -d /home/{1} {2} -s /bin/bash -c "{3}"'.format(mnt, n_user, n_user, n_name))
-    ProcessGenerator('chroot {0} cat /tmp/passwd_1 | /usr/sbin/chpasswd'.format(mnt))
-    ProcessGenerator('chroot {0} cat /tmp/passwd_2 | /usr/sbin/chpasswd'.format(mnt))
+    if ProcessGenerator(
+        'chroot {0} /usr/sbin/useradd -m -d "{1}" -s "{2}" -c "{3}" -p "{4}" {5}'.format(
+            mnt, home, shell, n_name, password, n_user
+            )
+        ).returncode == 0:
+        i += 1
+
+    if i == 2:
+        return True
+    else:
+        return False
 
 def crear_etc_network_interfaces(mnt, cfg):
     content = ''
@@ -400,19 +423,30 @@ def crear_etc_fstab(mnt, cfg, mountlist, cdroms):
 
     return True
 
+def crear_passwd_group_inittab_mtab(mnt):
+    if not filecmp.cmp('/usr/share/sysvinit/inittab', '{0}/etc/inittab'.format(mnt)):
+        shutil.copy2('/usr/share/sysvinit/inittab', '{0}/etc/inittab'.format(mnt))
+
+    f = open('{0}/etc/mtab'.format(mnt), 'w')
+    f.write('')
+    f.close()
+
+    return True
+
 def lista_cdroms():
     info = '/proc/sys/dev/cdrom/info'
-    cmd = 'cat {0}| grep "drive name:" | sed "s/drive name://g"'.format(info)
-    salida = subprocess.Popen(
-        cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT
-        ).communicate()[0].split()
-
-    if salida:
-        return salida
+    if os.path.exists(info):
+        cmd = 'cat {0}| grep "drive name:" | sed "s/drive name://g"'.format(info)
+        salida = subprocess.Popen(
+            cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT
+            ).communicate()[0].split()
     else:
-        return False
+        salida = []
+
+    return salida
 
 def get_uuid(particion):
+    uid = particion
     cmd = '/sbin/blkid -p {0}'.format(particion)
     salida = subprocess.Popen(
         cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT
@@ -420,12 +454,9 @@ def get_uuid(particion):
 
     for i in salida:
         if re.search('^UUID=*', i):
-            uid = i
+            uid = i            
 
-    if uid:
-        return uid.replace('"', '')
-    else:
-        return False
+    return uid.replace('"', '')
 
 # Orden de las columnas en la tabla de particiones
 class TblCol:
@@ -587,12 +618,12 @@ def UserMessage(
     c_2=False, f_2=False, p_2='', c_3=False, f_3=False, p_3='',
     c_4=False, f_4=False, p_4='', c_5=False, f_5=False, p_5=''
     ):
-
     dialog = gtk.MessageDialog(
         parent=None, flags=0, type=mtype,
         buttons=buttons, message_format=message
         )
     dialog.set_title(title)
+    dialog.show_all()
     response = dialog.run()
     dialog.destroy()
 
@@ -611,6 +642,9 @@ def UserMessage(
 
 def random_generator(size=10, chars=string.ascii_uppercase + string.digits):
     return hashlib.sha1(''.join(random.choice(chars) for x in range(size))).hexdigest()
+
+def crypt_generator(arg):
+    return crypt.crypt(arg, random_generator())
 
 def ProcessGenerator(command):
     filename = '/tmp/canaimainstalador-' + random_generator()
@@ -643,18 +677,65 @@ def ProcessGenerator(command):
 
     return process
 
+class ThreadGenerator(threading.Thread):
+    def __init__(
+        self, reference, function, params,
+        gtk=False, window=False, event=False
+        ):
+        threading.Thread.__init__(self)
+        self._gtk = gtk
+        self._window = window
+        self._function = function
+        self._params = params
+        self._event = event
+        self.start()
+
+    def run(self):
+        if self._gtk:
+            gtk.gdk.threads_enter()
+
+        if self._event:
+            self._event.wait()
+
+        self._function(**self._params)
+
+        if self._gtk:
+            gtk.gdk.threads_leave()
+
+        if self._window:
+            self._window.hide_all()
+
 def get_sector_size(device):
     'Retorna el tamaño en Kb de cada sector'
     dev = parted.Device(device)
     return dev.sectorSize / 1024.0
 
-def debug_list(the_list):
-    data = "List [\n"
-    for fila in the_list:
-        data = data + '  ' + str(fila) + '\n'
-    data = data + ']'
+def debug_list(the_list, n_spc=0):
 
-    return data
+    space = ""
+    nw_line = ""
+    data = ""
+
+    if n_spc > 0:
+        space = "\t" * n_spc
+
+    the_type = type(the_list)
+
+    if isinstance(the_list, list) or isinstance(the_list, tuple) or isinstance(the_list, dict):
+        nw_line = "\n"
+        for fila in the_list:
+
+            if isinstance(the_list, dict):
+                data += "{0}{1}{2}:".format(nw_line, '\t' * (n_spc + 1), fila)
+                fila = the_list[fila]
+
+            data += nw_line + debug_list(fila, n_spc + 1)
+    else:
+        data = the_list
+
+    string = "{0}{1} [{2}]{3}".format(space, the_type, data, nw_line)
+
+    return string
 
 def get_row_index(the_list, row):
         '''Obtiene el numero de la fila seleccionada en la tabla'''
@@ -737,7 +818,7 @@ def is_usable(selected_row):
 def is_resizable(fs):
     'Determina si un filesystem tiene herramienta de redimension'
     try:
-        if FSPROGS[fs][1] == '':
+        if FSPROGS[fs][1][0] == '':
             return False
         else:
             return True
@@ -746,10 +827,23 @@ def is_resizable(fs):
         # 'Espacio libre' por ejemplo
         return False
 
-def validate_minimun_fs_size(dialog, formato, tamano):
+def validate_minimun_fs_size(formato, tamano):
     if tamano < FSMIN[formato]:
-        dialog.set_response_sensitive(gtk.RESPONSE_OK, False)
-        msg = "%s debe tener un tamaño minimo de %s." % (formato, humanize(FSMIN[formato]))
-        UserMessage(msg, 'Información', gtk.MESSAGE_INFO, gtk.BUTTONS_OK)
+        return False
     else:
-        dialog.set_response_sensitive(gtk.RESPONSE_OK, True)
+        return True
+
+def validate_maximun_fs_size(formato, tamano):
+    if formato in FSMAX and tamano > FSMAX[formato]:
+        return False
+    else:
+        return True
+
+if __name__ == "__main__":
+    print debug_list([1, 2])
+    print debug_list({"casa":[1]})
+    print debug_list("la casa")
+    print debug_list(12.0)
+    print debug_list(gtk)
+
+

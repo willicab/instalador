@@ -92,5 +92,8 @@ WARNING "Commiting changes ..."
 git add .
 git commit -q -a -m "New development snapshot ${NEWVERSION}+${SNAPSHOT}"
 git tag ${NEWVERSION}+${SNAPSHOT} -m "New development snapshot ${NEWVERSION}+${SNAPSHOT}"
- 
+
+WARNING "Creating tarball ..."
+tar -czf ../canaima-instalador_${NEWVERSION}+${SNAPSHOT}.orig.tar.gz *
+
 SUCCESS "Snapshot Created"

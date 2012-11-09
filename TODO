@@ -22,10 +22,24 @@
 [ LISTO ] - Arreglar estilo de la pantalla de accesibilidad.
 [ LISTO ] - Depurar el Segfault de webkit.
 [ LISTO ] - Validar el máximo de 11 particiones lógicas.
-- Mejorar mensajes de error de la instalación.
 [ LISTO ] - Arreglar flickering de las barras de las particiones.
 [ LISTO ] - Arreglar creación de usuarios.
+[ LISTO ] - Arreglar problema de actualización de barra en partauto.
+[ LISTO ] - hacer banner de bienvenida y renovar los otros banners.
+[ LISTO ] - Al final de la animación, queda una slide en blanco.
+[ LISTO ] - Arreglar la forma en como se determina el lugar de las cosas en config.py
+[ LISTO ] - La partición boot lógica no es reconocida por burg.
+- Mejorar mensajes de error de la instalación.
 - Agregar soporte para LVM y RAID.
 - Agregar funcionalidad para instalar desde red y hacia la red (FAI).
-[ LISTO ] - Arreglar problema de actualización de barra en partauto.
-- hacer banner de bienvenida y renovar los otros banners. 
+- Agregar selector python-cairo al particionador manual (pantalla ppal, nueva partición y redimensionar).
+- Agregar manual de usuario y manual para el desarrollador.
+- Hacer instalador con python-setuptools.
+- Agregar opción para mover partición o redimensionar desde el principio al particionador manual.
+- Configuración de parámetros a partir de archivos .conf
+- Agregar pantalla para selección de zona horaria y escribir el archivo /etc/localetime adecuadamente.
+- Ampliar opciones de selección de idioma y distribuciones de teclado, configurando el idioma de Canaima adecuadamente.
+- Implementar alineaciones óptimas de particiones.
+- Hacer instalador accesible (personas con discapacidad visual y motora).
+- Identificar los sistemas operativos presentes en las particiones.
+- Identificar en el gráfico de cairo las particiones.

@@ -30,15 +30,16 @@ import gtk
 
 from canaimainstalador.clases.barra_auto import BarraAuto
 from canaimainstalador.clases.leyenda import Leyenda
-from canaimainstalador.config import ESPACIO_TOTAL
+from canaimainstalador.config import ESPACIO_TOTAL, ESPACIO_USADO_EXTRA
+from canaimainstalador.clases.common import humanize
 
 class PasoPartAuto(gtk.Fixed):
     def __init__(self, CFG):
         gtk.Fixed.__init__(self)
         self.metodo = CFG['metodo']
         self.particiones = CFG['particiones']
-        self.current = self.metodo['part'][7]
-        self.usado = self.metodo['part'][7]
+        self.current = self.metodo['part'][7] + ESPACIO_USADO_EXTRA
+        self.usado = self.metodo['part'][7] + ESPACIO_USADO_EXTRA
         self.forma = 'PART:ROOT:HOME:SWAP'
         self.minimo = ESPACIO_TOTAL
         self.nuevas = []
@@ -47,26 +48,26 @@ class PasoPartAuto(gtk.Fixed):
 
         txt_info = "Seleccione la distribución de las particiones que desea utilizar. Utilice el selector para indicar el tamaño que desea utilizar para la instalación de Canaima."
         self.lbl1 = gtk.Label(txt_info)
-        self.lbl1.set_size_request(690, 30)
+        self.lbl1.set_size_request(690, 35)
         self.lbl1.set_alignment(0, 0)
         self.lbl1.set_line_wrap(True)
         self.put(self.lbl1, 0, 0)
 
         self.tam_max = gtk.Button()
         self.tam_max.set_label('Máximo')
-        self.tam_max.set_size_request(60, 25)
+        self.tam_max.set_size_request(80, 25)
         self.tam_max.connect('clicked', self.set_max)
-        self.put(self.tam_max, 565, 35)
+        self.put(self.tam_max, 525, 40)
 
         self.tam_min = gtk.Button()
         self.tam_min.set_label('Mínimo')
-        self.tam_min.set_size_request(60, 25)
+        self.tam_min.set_size_request(80, 25)
         self.tam_min.connect('clicked', self.set_min)
-        self.put(self.tam_min, 630, 35)
+        self.put(self.tam_min, 610, 40)
 
         self.barra = BarraAuto(self)
         self.barra.set_size_request(690, 100)
-        self.put(self.barra, 0, 65)
+        self.put(self.barra, 0, 70)
 
         msg_1 = "Instalar todo en una sola partición."
         self.option_1 = gtk.RadioButton(None, msg_1)
@@ -86,7 +87,7 @@ class PasoPartAuto(gtk.Fixed):
         self.option_3.set_size_request(350, 20)
         self.put(self.option_3, 0, 235)
 
-        msg_4 = "Separar las particiones /home, /boot, /var y /usr."
+        msg_4 = "Separar /home, /boot, /var y /usr."
         self.option_4 = gtk.RadioButton(self.option_1, msg_4)
         self.option_4.connect("toggled", self.change_option, "PART:BOOT:ROOT:VAR:USR:HOME:SWAP")
         self.option_4.set_size_request(350, 20)

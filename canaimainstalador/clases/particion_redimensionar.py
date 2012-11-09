@@ -1,8 +1,9 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
 # ==============================================================================
 # PAQUETE: canaima-instalador
-# ARCHIVO: canaimainstalador/translator.py
+# ARCHIVO: canaimainstalador/pasos/particion_redimensionar.py
 # COPYRIGHT:
 #       (C) 2012 William Abrahan Cabrera Reyes <william@linux.es>
 #       (C) 2012 Erick Manuel Birbe Salazar <erickcion@gmail.com>
@@ -22,13 +23,16 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
+#
+# CODE IS POETRY
 
 import gtk
 from canaimainstalador.clases.common import humanize, TblCol, floatify, PStatus, \
-    get_sector_size, has_next_row, is_free, get_row_index, get_next_row
+    get_sector_size, has_next_row, is_free, get_row_index, get_next_row, \
+    validate_minimun_fs_size, validate_maximun_fs_size
 from canaimainstalador.translator import msj
 from copy import copy
-from canaimainstalador.config import FSMIN
+from canaimainstalador.config import FSMIN, FSMAX, ESPACIO_USADO_EXTRA
 
 class Main(gtk.Dialog):
 
@@ -121,7 +125,7 @@ class Main(gtk.Dialog):
 
     def get_used_space(self):
         'El tamaño minimo al que se puede redimensionar la partición'
-        return self.inicio + self.usado
+        return self.inicio + self.usado + ESPACIO_USADO_EXTRA
 
     def get_maximum_size(self):
         'El tamaño maximo al que se puede redimensionar la partición'
@@ -162,8 +166,10 @@ class Main(gtk.Dialog):
 
         # No reducir menos del espacio minimo
         tamano = adjustment.value - self.inicio
-        if tamano < FSMIN[self.formato]:
+        if not validate_minimun_fs_size(self.formato, tamano):
             adjustment.set_value(self.inicio + FSMIN[self.formato])
+        elif not validate_maximun_fs_size(self.formato, tamano):
+            adjustment.set_value(self.inicio + FSMAX[self.formato])
         # No reducir menos del espacio usado
         elif adjustment.value <= self.get_used_space():
             adjustment.set_value(self.get_used_space())

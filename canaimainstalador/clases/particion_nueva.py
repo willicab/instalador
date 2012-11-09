@@ -1,8 +1,9 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
 # ==============================================================================
 # PAQUETE: canaima-instalador
-# ARCHIVO: canaimainstalador/translator.py
+# ARCHIVO: canaimainstalador/clases/particion_nueva.py
 # COPYRIGHT:
 #       (C) 2012 William Abrahan Cabrera Reyes <william@linux.es>
 #       (C) 2012 Erick Manuel Birbe Salazar <erickcion@gmail.com>
@@ -22,15 +23,17 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
+#
+# CODE IS POETRY
 
 import gtk
 
 from canaimainstalador.clases.common import humanize, TblCol, get_next_row, \
-    get_row_index, set_partition, PStatus, get_sector_size, UserMessage, \
-    validate_minimun_fs_size
+    get_row_index, set_partition, PStatus, get_sector_size, \
+    validate_minimun_fs_size, validate_maximun_fs_size, UserMessage
 from canaimainstalador.translator import msj
 from canaimainstalador.clases.frame_fs import frame_fs
-from canaimainstalador.config import FSMIN
+from canaimainstalador.config import FSMIN, FSMAX
 
 class Main(gtk.Dialog):
 
@@ -60,28 +63,27 @@ class Main(gtk.Dialog):
         self.set_default_response(gtk.RESPONSE_CANCEL)
 
         #Tamaño de la partición
-        hbox = gtk.HBox()
-        hbox.show()
-        lbl = gtk.Label('Tamaño')
-        lbl.set_alignment(0, 0.5)
-        lbl.show()
-        hbox.add(lbl)
+        lbl_tamano = gtk.Label('Tamaño:')
+        lbl_tamano.set_alignment(0, 0.5)
+        lbl_tamano.show()
         adj = gtk.Adjustment(self.fin_part, self.inicio_part, self.fin_part, \
                              1.0, 1024.0, 0.0)
         self.escala = gtk.HScale()
         self.escala.set_digits(0)
         self.escala.set_draw_value(False)
         self.escala.set_adjustment(adj)
-        self.escala.set_size_request(250, 30)
+        self.escala.set_size_request(450, -1)
         self.escala.connect("value-changed", self.escala_on_changed)
         self.escala.show()
-        hbox.add(self.escala)
 
         self.lblsize = gtk.Label(humanize(self.escala.get_value() - \
                                           self.inicio_part))
-        self.lblsize.set_alignment(0, 0.5)
         self.lblsize.show()
-        hbox.add(self.lblsize)
+
+        hbox = gtk.VBox()
+        hbox.show()
+        hbox.pack_start(self.escala)
+        hbox.pack_start(self.lblsize)
 
         fs_container = frame_fs(self, self.lista, self.particion_act)
         self.cmb_tipo = fs_container.cmb_tipo
@@ -94,8 +96,9 @@ class Main(gtk.Dialog):
 
         # Contenedor General
         self.cont = gtk.VBox()
-        self.cont.add(hbox)
-        self.cont.add(fs_container)
+        self.cont.pack_start(lbl_tamano)
+        self.cont.pack_start(hbox, padding=15)
+        self.cont.pack_start(fs_container)
         self.cont.show()
         self.vbox.pack_start(self.cont)
 
@@ -113,24 +116,24 @@ class Main(gtk.Dialog):
             montaje = self.cmb_montaje.get_active_text()
             usado = humanize(0)
 
-            if formato == 'swap':
-                montaje = ''
-
-            if montaje == 'Escoger manualmente...':
-                montaje = self.entrada.get_text().strip()
-
             # Calculo el tamaño
             inicio = self.inicio_part
             fin = self.escala.get_value()
             tamano = humanize(fin - inicio)
             libre = tamano
 
+            if formato == 'swap':
+                montaje = ''
+
+            if montaje == 'Escoger manualmente...':
+                montaje = self.entrada.get_text().strip()
+
             print "---NUEVA----"
             # Primaria
             if tipo == msj.particion.primaria:
                 print "Partición primaria"
                 self.add_partition_to_list(tipo, formato, montaje, tamano, \
-                    usado, libre, inicio, fin)
+                    usado, libre, inicio + self.sector, fin)
                 if fin != self.fin_part:
                     print "Que deja espacio libre"
                     inicio = self.escala.get_value()
@@ -138,7 +141,7 @@ class Main(gtk.Dialog):
                     tamano = humanize(fin - inicio)
                     libre = tamano
                     self.add_partition_to_list(tipo, msj.particion.libre, \
-                        montaje, tamano, usado, libre, inicio + self.sector, \
+                        montaje, tamano, usado, libre, inicio , \
                         fin)
             # Extendida
             elif tipo == msj.particion.extendida:
@@ -146,11 +149,11 @@ class Main(gtk.Dialog):
                 usado = tamano
                 libre = humanize(0)
                 self.add_partition_to_list(tipo, formato, montaje, tamano, \
-                    usado, libre, inicio, fin)
+                    usado, libre, inicio + self.sector, fin)
                 print "Crea vacío interno"
                 self.add_partition_to_list(msj.particion.logica, \
                     msj.particion.libre, montaje, tamano, usado, libre, \
-                    inicio + self.sector * 2, fin)
+                    inicio + 1, fin) # agregamos +1 al inicio para que la lista no se desordene
                 if fin != self.fin_part:
                     print "Y deja espacio libre"
                     inicio = self.escala.get_value()
@@ -159,12 +162,12 @@ class Main(gtk.Dialog):
                     libre = tamano
                     self.add_partition_to_list(msj.particion.primaria, \
                         msj.particion.libre, montaje, tamano, usado, libre, \
-                        inicio + self.sector, fin)
+                        inicio , fin)
             # Lógica
             elif tipo == msj.particion.logica:
                 print "Partición Lógica"
                 self.add_partition_to_list(tipo, formato, montaje, tamano, \
-                    usado, libre, inicio, fin)
+                    usado, libre, inicio + self.sector * 4, fin)
                 if fin != self.fin_part:
                     print "Que deja espacio extendido libre"
                     inicio = self.escala.get_value()
@@ -173,7 +176,7 @@ class Main(gtk.Dialog):
                     libre = tamano
                     self.add_partition_to_list(tipo, msj.particion.libre, \
                         montaje, tamano, usado, libre, \
-                        inicio + self.sector * 2, fin)
+                        inicio , fin)
             print "------------"
 
         self.destroy()
@@ -190,6 +193,8 @@ class Main(gtk.Dialog):
             pop = False
             disp = ''
             montaje = ''
+            usado = humanize(0)
+            libre = tamano
         # Si NO es espacio libre
         else:
             pop = True
@@ -216,17 +221,33 @@ class Main(gtk.Dialog):
         formato = self.cmb_fs.get_active_text()
         tamano = widget.get_value() - self.inicio_part
 
-        if tamano < FSMIN[formato]:
+        # Impide que se sobrepasen los maximos y minimos
+        if not validate_minimun_fs_size(formato, tamano):
             widget.set_value(self.inicio_part + FSMIN[formato])
+        elif not validate_maximun_fs_size(formato, tamano):
+            widget.set_value(self.inicio_part + FSMAX[formato])
 
         if self.cmb_fs:
             self.lblsize.set_text(humanize(widget.get_value() - self.inicio_part))
-            self.validate_minimun_fs_size()
 
     def cmb_fs_changed(self, widget):
-        self.validate_minimun_fs_size()
+        self.validate_fs_size()
 
-    def validate_minimun_fs_size(self):
+    def validate_fs_size(self):
         formato = self.cmb_fs.get_active_text()
-        tamano = self.escala.get_value() - self.inicio_part
-        validate_minimun_fs_size(self, formato, tamano)
+        tamano = self.particion_act[TblCol.FIN] - self.particion_act[TblCol.INICIO]
+        estatus = True
+
+        if not validate_minimun_fs_size(formato, tamano):
+            estatus = False
+            msg = "%s debe tener un tamaño mínimo de %s." % (formato, humanize(FSMIN[formato]))
+            UserMessage(msg, 'Información', gtk.MESSAGE_INFO, gtk.BUTTONS_OK)
+            self.escala.set_value(self.inicio_part + FSMIN[formato])
+
+        if not validate_maximun_fs_size(formato, tamano):
+            estatus = False
+            msg = "%s debe tener un tamaño máximo de %s." % (formato, humanize(FSMAX[formato]))
+            UserMessage(msg, 'Información', gtk.MESSAGE_INFO, gtk.BUTTONS_OK)
+            self.escala.set_value(self.inicio_part + FSMAX[formato])
+
+        return estatus

@@ -28,99 +28,89 @@
 
 import gtk, pango
 
-class PasoUsuario(gtk.Fixed):
+class PasoUsuario(gtk.HBox):
     def __init__(self, CFG):
-        gtk.Fixed.__init__(self)
+        gtk.HBox.__init__(self)
+
+        table = gtk.Table(20, 2)
 
         attr = pango.AttrList()
         size = pango.AttrSize(18000, 0, -1)
         attr.insert(size)
 
         self.lbltitle1 = gtk.Label("Configuración de la cuenta de administrador")
-        self.lbltitle1.set_size_request(690, 40)
-        self.lbltitle1.set_alignment(0, 0)
+        self.lbltitle1.set_alignment(0, 0.5)
         self.lbltitle1.set_attributes(attr)
-        self.put(self.lbltitle1, 50, 0)
-
-        self.lblpassroot1 = gtk.Label("Escriba una contraseña")
-        self.lblpassroot1.set_size_request(690, 30)
-        self.lblpassroot1.set_alignment(0, 0)
-        self.put(self.lblpassroot1, 50, 40)
-
-        self.txtpassroot1 = gtk.Entry()
-        self.txtpassroot1.set_size_request(350, 25)
-        self.put(self.txtpassroot1, 300, 40)
-
-        self.lblpassroot2 = gtk.Label("Repita la contraseña")
-        self.lblpassroot2.set_size_request(690, 30)
-        self.lblpassroot2.set_alignment(0, 0)
-        self.put(self.lblpassroot2, 50, 70)
-
-        self.txtpassroot2 = gtk.Entry()
-        self.txtpassroot2.set_size_request(350, 25)
-        self.put(self.txtpassroot2, 300, 70)
-
-        self.lblmaquina = gtk.Label('Nombre de la máquina')
-        self.lblmaquina.set_size_request(690, 25)
-        self.lblmaquina.set_alignment(0, 0)
-        self.put(self.lblmaquina, 50, 100)
-
-        self.txtmaquina = gtk.Entry()
-        self.txtmaquina.set_text('canaima-popular')
-        self.txtmaquina.set_size_request(350, 25)
-        self.txtmaquina.set_max_length(255)
-        self.put(self.txtmaquina, 300, 100)
-
-        self.chkgdm = gtk.CheckButton("Activar accesibilidad en la pantalla de acceso de usuario (GDM).")
-        self.chkgdm.set_size_request(690, 20)
-        self.put(self.chkgdm, 50, 130)
+        table.attach(self.lbltitle1, 0, 2, 0, 1)
 
         self.chkoem = gtk.CheckButton("Instalación OEM (ignora esta configuración y la realiza al primer inicio).")
         self.chkoem.connect("toggled", self.oemchecked)
-        self.chkoem.set_size_request(690, 20)
-        self.put(self.chkoem, 50, 150)
+        table.attach(self.chkoem, 0, 2, 1, 2)
+
+        self.chkgdm = gtk.CheckButton("Activar accesibilidad en la pantalla de acceso de usuario (GDM).")
+        table.attach(self.chkgdm, 0, 2, 2, 3)
+
+        self.lblpassroot1 = gtk.Label("Escriba una contraseña:")
+        self.lblpassroot1.set_alignment(0, 0.5)
+        table.attach(self.lblpassroot1, 0, 1, 3, 4)
+
+        self.txtpassroot1 = gtk.Entry()
+        self.txtpassroot1.set_visibility(False)
+        table.attach(self.txtpassroot1, 1, 2, 3, 4)
+
+        self.lblpassroot2 = gtk.Label("Repita la contraseña:")
+        self.lblpassroot2.set_alignment(0, 0.5)
+        table.attach(self.lblpassroot2, 0, 1, 4, 5)
+
+        self.txtpassroot2 = gtk.Entry()
+        self.txtpassroot2.set_visibility(False)
+        table.attach(self.txtpassroot2, 1, 2, 4, 5)
+
+        self.lblmaquina = gtk.Label('Nombre de la máquina:')
+        self.lblmaquina.set_alignment(0, 0.5)
+        table.attach(self.lblmaquina, 0, 1, 5, 6)
+
+        self.txtmaquina = gtk.Entry()
+        self.txtmaquina.set_text('canaima-popular')
+        self.txtmaquina.set_max_length(255)
+        table.attach(self.txtmaquina, 1, 2, 5, 6)
 
         self.lbltitle2 = gtk.Label("Configuración de la cuenta de usuario")
-        self.lbltitle2.set_size_request(690, 40)
-        self.lbltitle2.set_alignment(0, 0)
+        self.lbltitle2.set_alignment(0, 0.5)
         self.lbltitle2.set_attributes(attr)
-        self.put(self.lbltitle2, 50, 180)
+        table.attach(self.lbltitle2, 0, 2, 6, 7)
 
-        self.lblnombre = gtk.Label("Nombre Completo")
-        self.lblnombre.set_size_request(690, 30)
-        self.lblnombre.set_alignment(0, 0)
-        self.put(self.lblnombre, 50, 220)
+        self.lblnombre = gtk.Label("Nombre completo:")
+        self.lblnombre.set_alignment(0, 0.5)
+        table.attach(self.lblnombre, 0, 1, 7, 8)
 
         self.txtnombre = gtk.Entry()
-        self.txtnombre.set_size_request(350, 25)
-        self.put(self.txtnombre, 300, 220)
+        table.attach(self.txtnombre, 1, 2, 7, 8)
 
-        self.lblusuario = gtk.Label('Nombre de usuario')
-        self.lblusuario.set_size_request(690, 25)
-        self.lblusuario.set_alignment(0, 0)
-        self.put(self.lblusuario, 50, 250)
+        self.lblusuario = gtk.Label('Nombre de usuario:')
+        self.lblusuario.set_alignment(0, 0.5)
+        table.attach(self.lblusuario, 0, 1, 8, 9)
 
         self.txtusuario = gtk.Entry()
-        self.txtusuario.set_size_request(350, 25)
-        self.put(self.txtusuario, 300, 250)
+        table.attach(self.txtusuario, 1, 2, 8, 9)
 
-        self.lblpassuser1 = gtk.Label("Escriba una contraseña")
-        self.lblpassuser1.set_size_request(690, 25)
-        self.lblpassuser1.set_alignment(0, 0)
-        self.put(self.lblpassuser1, 50, 280)
+        self.lblpassuser1 = gtk.Label("Escriba una contraseña:")
+        self.lblpassuser1.set_alignment(0, 0.5)
+        table.attach(self.lblpassuser1, 0, 1, 9, 10)
 
         self.txtpassuser1 = gtk.Entry()
-        self.txtpassuser1.set_size_request(350, 25)
-        self.put(self.txtpassuser1, 300, 280)
+        self.txtpassuser1.set_visibility(False)
+        table.attach(self.txtpassuser1, 1, 2, 9, 10)
 
-        self.lblpassuser2 = gtk.Label("Repita la contraseña")
-        self.lblpassuser2.set_size_request(690, 25)
-        self.lblpassuser2.set_alignment(0, 0)
-        self.put(self.lblpassuser2, 50, 310)
+        self.lblpassuser2 = gtk.Label("Repita la contraseña:")
+        self.lblpassuser2.set_alignment(0, 0.5)
+        table.attach(self.lblpassuser2, 0, 1, 10, 11)
 
         self.txtpassuser2 = gtk.Entry()
-        self.txtpassuser2.set_size_request(350, 25)
-        self.put(self.txtpassuser2, 300, 310)
+        self.txtpassuser2.set_visibility(False)
+        table.attach(self.txtpassuser2, 1, 2, 10, 11)
+
+        self.pack_start(table, padding=40)
 
     def oemchecked(self, widget=None):
         active = not self.txtnombre.get_sensitive()
@@ -131,5 +121,4 @@ class PasoUsuario(gtk.Fixed):
         self.txtpassuser1.set_sensitive(active)
         self.txtpassuser2.set_sensitive(active)
         self.txtmaquina.set_sensitive(active)
-        self.chkgdm.set_sensitive(active)
 

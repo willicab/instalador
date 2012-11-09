@@ -26,10 +26,8 @@
 #
 # CODE IS POETRY
 
-# Módulos globales
 import gtk
 
-# Módulos locales
 from canaimainstalador.clases.particiones import Particiones
 from canaimainstalador.clases.common import humanize, UserMessage
 from canaimainstalador.clases.barra_particiones import BarraParticiones
@@ -119,6 +117,7 @@ class PasoMetodo(gtk.Fixed):
 
             mini = self.particiones[0][1]
             mfin = self.particiones[0][9]
+
             for t in self.particiones:
                 if mini > t[1]:
                     mini = t[1]
@@ -144,23 +143,24 @@ class PasoMetodo(gtk.Fixed):
                     libre = p[8]
 
                     if fs != 'free' and libre >= self.minimo:
-                        if tipo == 'logical' and FSPROGS[fs][1] != '':
-                            if logicas < 10:
-                                self.metodos.append({
-                                    'tipo': 'REDIM',
-                                    'msg': 'Instalar redimensionando {0} para liberar espacio ({1} libres)'.format(part, humanize(libre)),
-                                    'part': p,
-                                    'disco': disco_array
-                                })
+                        if fs in FSPROGS:
+                            if tipo == 'logical' and FSPROGS[fs][1][0] != '':
+                                if logicas < 10:
+                                    self.metodos.append({
+                                        'tipo': 'REDIM',
+                                        'msg': 'Instalar redimensionando {0} para liberar espacio ({1} libres)'.format(part, humanize(libre)),
+                                        'part': p,
+                                        'disco': disco_array
+                                    })
 
-                        elif tipo == 'primary' and FSPROGS[fs][1] != '':
-                            if (extendidas < 1 and primarias < 4) or (extendidas > 0 and primarias < 2):
-                                self.metodos.append({
-                                    'tipo': 'REDIM',
-                                    'msg': 'Instalar redimensionando {0} para liberar espacio ({1} libres)'.format(part, humanize(libre)),
-                                    'part': p,
-                                    'disco': disco_array
-                                })
+                            elif tipo == 'primary' and FSPROGS[fs][1][0] != '':
+                                if (extendidas < 1 and primarias < 4) or (extendidas > 0 and primarias < 2):
+                                    self.metodos.append({
+                                        'tipo': 'REDIM',
+                                        'msg': 'Instalar redimensionando {0} para liberar espacio ({1} libres)'.format(part, humanize(libre)),
+                                        'part': p,
+                                        'disco': disco_array
+                                    })
 
                     if fs == 'free' and tam >= self.minimo:
                         if tipo == 'logical':

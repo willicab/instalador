@@ -1,8 +1,9 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
 # ==============================================================================
 # PAQUETE: canaima-instalador
-# ARCHIVO: canaimainstalador/translator.py
+# ARCHIVO: canaimainstalador/clases/particion_editar.py
 # COPYRIGHT:
 #       (C) 2012 William Abrahan Cabrera Reyes <william@linux.es>
 #       (C) 2012 Erick Manuel Birbe Salazar <erickcion@gmail.com>
@@ -22,13 +23,16 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
+#
+# CODE IS POETRY
 
 import gtk
+
 from canaimainstalador.clases.common import TblCol, get_row_index, PStatus, \
-    UserMessage, humanize, validate_minimun_fs_size
+    validate_maximun_fs_size, validate_minimun_fs_size, UserMessage, humanize
 from canaimainstalador.clases.frame_fs import frame_fs
 from canaimainstalador.translator import msj
-from canaimainstalador.config import FSMIN
+from canaimainstalador.config import FSMIN, FSMAX
 
 txt_manual = 'Escoger manualmente...'
 txt_ninguno = 'Ninguno'
@@ -37,7 +41,7 @@ class Main(gtk.Dialog):
 
     def __init__(self, lista, fila_selec, acciones):
         self.lista = lista
-        self.fila_selec = fila_selec
+        self.particion_act = fila_selec
         self.acciones = acciones
         self.disco = fila_selec[TblCol.DISPOSITIVO]
 
@@ -50,7 +54,7 @@ class Main(gtk.Dialog):
         self.add_button(gtk.STOCK_OK, gtk.RESPONSE_OK)
         self.set_default_response(gtk.RESPONSE_CANCEL)
 
-        self.fs_box = frame_fs(self, self.lista, self.fila_selec)
+        self.fs_box = frame_fs(self, self.lista, self.particion_act)
         self.fill_fields()
 
         self.vbox.pack_start(self.fs_box)
@@ -61,16 +65,16 @@ class Main(gtk.Dialog):
     def fill_fields(self):
 
         # Tipo
-        self.fs_box.cmb_tipo.insert_text(0, self.fila_selec[TblCol.TIPO])
+        self.fs_box.cmb_tipo.insert_text(0, self.particion_act[TblCol.TIPO])
         self.fs_box.cmb_tipo.set_active(0)
         self.fs_box.cmb_tipo.set_sensitive(False)
 
         # Filesystem
-        self.select_item(self.fs_box.cmb_fs, self.fila_selec[TblCol.FORMATO])
+        self.select_item(self.fs_box.cmb_fs, self.particion_act[TblCol.FORMATO])
         self.fs_box.cmb_fs.connect('changed', self.cmb_fs_changed)
 
         # Montaje
-        montaje = self.fila_selec[TblCol.MONTAJE]
+        montaje = self.particion_act[TblCol.MONTAJE]
         if montaje == '': montaje = txt_ninguno
         try:
             self.select_item(self.fs_box.cmb_montaje, montaje)
@@ -80,7 +84,8 @@ class Main(gtk.Dialog):
             self.fs_box.entrada.set_text(montaje)
 
         # Formatear
-        self.fs_box.formatear.set_active(self.fila_selec[TblCol.FORMATEAR])
+        self.set_format_label(self.particion_act[TblCol.FORMATO])
+        self.fs_box.formatear.set_active(self.particion_act[TblCol.FORMATEAR])
 
     def select_item(self, combo, item):
 
@@ -100,7 +105,7 @@ class Main(gtk.Dialog):
     def process_response(self, response):
 
         if response == gtk.RESPONSE_OK:
-            i = get_row_index(self.lista, self.fila_selec)
+            i = get_row_index(self.lista, self.particion_act)
             tmp = self.lista[i]
             filesystem = self.fs_box.cmb_fs.get_active_text()
             formatear = self.fs_box.formatear.get_active()
@@ -115,7 +120,7 @@ class Main(gtk.Dialog):
             tmp[TblCol.MONTAJE] = montaje
             tmp[TblCol.FORMATEAR] = formatear
 
-            if tmp != list(self.fila_selec):
+            if tmp != list(self.particion_act):
 
                 tmp[TblCol.ESTADO] = PStatus.USED
                 self.lista[i] = tmp
@@ -137,13 +142,23 @@ class Main(gtk.Dialog):
 
         self.destroy()
 
+    def set_format_label(self, fs):
+        if fs == 'swap' and self.particion_act[TblCol.FORMATO] == 'swap':
+            self.fs_box.formatear.set_label("Usar esta partición.")
+        else:
+            self.fs_box.formatear.set_label("Formatear esta partición.")
+
     def cmb_fs_changed(self, widget):
 
-        self.validate_minimun_fs_size()
-
-        actual = self.fila_selec[TblCol.FORMATO]
-        formatear = self.fila_selec[TblCol.FORMATEAR]
         selec = widget.get_active_text()
+        self.set_format_label(selec)
+
+        if not self.validate_fs_size():
+            self.fs_box.cmb_fs.set_active(3)
+
+        actual = self.particion_act[TblCol.FORMATO]
+        formatear = self.particion_act[TblCol.FORMATEAR]
+
         # Si el filesystem seleccionado es el mismo que tiene la particion
         # se coloca el estado original que trae de la variable formatear
         # sino hay que formatear obligatoramente y no se debe editar ese campo
@@ -154,8 +169,20 @@ class Main(gtk.Dialog):
             self.fs_box.formatear.set_active(True)
             self.fs_box.formatear.set_sensitive(False)
 
-    def validate_minimun_fs_size(self):
+    def validate_fs_size(self):
         formato = self.fs_box.cmb_fs.get_active_text()
-        tamano = self.fila_selec[TblCol.FIN]
-        validate_minimun_fs_size(self, formato, tamano)
+        tamano = self.particion_act[TblCol.FIN] - self.particion_act[TblCol.INICIO]
+        estatus = True
+
+        if not validate_minimun_fs_size(formato, tamano):
+            estatus = False
+            msg = "%s debe tener un tamaño mínimo de %s." % (formato, humanize(FSMIN[formato]))
+            UserMessage(msg, 'Información', gtk.MESSAGE_INFO, gtk.BUTTONS_OK)
+
+        if not validate_maximun_fs_size(formato, tamano):
+            estatus = False
+            msg = "%s debe tener un tamaño máximo de %s." % (formato, humanize(FSMAX[formato]))
+            UserMessage(msg, 'Información', gtk.MESSAGE_INFO, gtk.BUTTONS_OK)
+
+        return estatus
 
