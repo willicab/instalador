@@ -1,3 +1,8 @@
+DEVELOPMENT RELEASE v2.0+dev20121109020733 (11/09/12)
+Corrigiendo la obtención del UUID para el /etc/fstab.
+Corrigiendo la función de crear partición para que permita evitar crear el sistema de archivos.
+Agregando funcionalidad para especificar el tipo de partición con sfdisk.
+
 DEVELOPMENT RELEASE v2.0+dev20121107112428 (11/07/12)
 Rehaciendo rutina de redimensión de FS para permitir listas de acciones en vez de una sola.
 Añadiendo 512MB extra al espacio usado para comptibilidad con algunos FS.
