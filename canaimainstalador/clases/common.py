@@ -119,6 +119,17 @@ def mounted_parts(disk):
 
     return m
 
+def get_windows_part_in(drive):
+    cmd = "os-prober | grep -i 'Windows' | grep '"+drive+"' | awk -F: '{print $1}'"
+    salida = subprocess.Popen(
+        cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT
+        ).communicate()[0].split()
+
+    if len(salida) > 0:
+	return salida[0]
+    else:
+        return ''
+
 def assisted_mount(sync, bind, plist):
     i = 0
     n = len(plist)
@@ -435,6 +446,7 @@ def lista_cdroms():
     return salida
 
 def get_uuid(particion):
+    uid = particion
     cmd = '/sbin/blkid -p {0}'.format(particion)
     salida = subprocess.Popen(
         cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT
@@ -442,14 +454,9 @@ def get_uuid(particion):
 
     for i in salida:
         if re.search('^UUID=*', i):
-            uid = i
-        else:
-            uid = particion
+            uid = i            
 
-    if uid:
-        return uid.replace('"', '')
-    else:
-        return False
+    return uid.replace('"', '')
 
 # Orden de las columnas en la tabla de particiones
 class TblCol:

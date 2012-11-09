@@ -150,7 +150,21 @@ class Particiones():
 
         return part.path
 
-    def crear_particion(self, drive, start, end, fs, partype):
+    def num_particion(self, drive, ptype, start, end):
+        dev = parted.Device(drive)
+        disk = parted.Disk(dev)
+        s_sec = start * 1024 / dev.sectorSize
+        e_sec = end * 1024 / dev.sectorSize
+        m_sec = ((e_sec - s_sec) / 2) + s_sec
+
+        if ptype == 'logical' or ptype == 'primary' or ptype == 1 or ptype == 0:
+            part = disk.getPartitionBySector(m_sec)
+        else:
+            part = disk.getExtendedPartition()
+
+        return part.number
+
+    def crear_particion(self, drive, start, end, fs, partype, format):
         '''
         Argumentos:
         - disco: el disco donde se realizará la partición. Ej: /dev/sda
@@ -161,6 +175,7 @@ class Particiones():
         '''
         i = 0
         j = 0
+        k = 0
         dev = parted.Device(drive)
         disk = parted.Disk(dev)
         s_sec = start * 1024 / dev.sectorSize
@@ -214,13 +229,24 @@ class Particiones():
                 return True
             else:
                 if fs in FSPROGS:
-                    for mkfs in FSPROGS[fs][0]:
-                        pname = self.nombre_particion(drive, partype, start, end)
-                        if ProcessGenerator(mkfs.format(pname)).returncode == 0:
-                            j += 1
+                    for pid in FSPROGS[fs][3]:
+                        pnum = self.num_particion(drive, partype, start, end)
+                        if ProcessGenerator(pid.format(drive, pnum)).returncode == 0:
+                            k += 1
 
-                    if j == len(FSPROGS[fs][0]):
-                        return True
+                    if k == len(FSPROGS[fs][3]):
+                        if format:
+                            for mkfs in FSPROGS[fs][0]:
+                                pname = self.nombre_particion(drive, partype, start, end)
+                                if ProcessGenerator(mkfs.format(pname)).returncode == 0:
+                                    j += 1
+
+                            if j == len(FSPROGS[fs][0]):
+                                return True
+                            else:
+                                return False
+                        else:
+                            return True
                     else:
                         return False
                 else:
@@ -305,7 +331,7 @@ class Particiones():
         currstart = partition.geometry.start * dev.sectorSize / 1024.0
         currend = partition.geometry.end * dev.sectorSize / 1024.0
 
-        if fs == 'ntfs' or fs == 'fat16' or fs == 'fat32':
+        if fs == 'fat16' or fs == 'fat32' or fs == 'ntfs':
             newsize = str(int((newend - currstart))) + 'k'
         else:
             newsize = str(int((newend - currstart))) + 'K'
@@ -314,7 +340,7 @@ class Particiones():
             if self.borrar_particion(drive=drive, part=part):
                 if self.crear_particion(
                     drive=drive, start=currstart, end=newend,
-                    fs='swap', partype=partype
+                    fs='swap', partype=partype, format=True
                     ):
                     return True
                 else:
@@ -327,7 +353,7 @@ class Particiones():
                 if self.borrar_particion(drive=drive, part=part):
                     if self.crear_particion(
                         drive=drive, start=currstart, end=newend,
-                        fs='empty', partype=partype
+                        fs=fs, partype=partype, format=False
                         ):
                         if fs in FSPROGS:
                             for mkfs in FSPROGS[fs][1]:
@@ -365,7 +391,7 @@ class Particiones():
                         if self.borrar_particion(drive=drive, part=part):
                             if self.crear_particion(
                                 drive=drive, start=currstart, end=newend,
-                                fs='empty', partype=partype
+                                fs=fs, partype=partype, format=False
                                 ):
                                 for chk in FSPROGS[fs][2]:
                                     pname = self.nombre_particion(drive, partype, currstart, newend)

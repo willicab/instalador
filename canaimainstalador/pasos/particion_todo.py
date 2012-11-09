@@ -127,7 +127,7 @@ class PasoPartTodo(gtk.Fixed):
                     self.option_4.set_sensitive(False)
 
     def set_min(self, widget):
-        self.libre = self.barra.fin - self.minimo
+        self.libre = self.barra.total - self.minimo
         self.barra.expose()
         self.leyenda.expose()
 

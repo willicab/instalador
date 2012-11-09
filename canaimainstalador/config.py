@@ -79,77 +79,86 @@ FSPROGS = {
     'btrfs': [
         ['mkfs.btrfs {0}'],
         ['btrfsck {1}', 'umount /mnt || true', 'sync', 'mount -t btrfs {1} /mnt', 'sync', 'btrfs filesystem resize {0} /mnt', 'umount /mnt', 'sync'],
-        ['btrfsck {1}']
+        ['btrfsck {1}'],
+        ['sfdisk --id {0} {1} 83']
         ],
     'ext2': [
         ['mkfs.ext2 -q -F -F {0}'],
         ['e2fsck -f -y -v {1}', 'resize2fs {1} {0}'],
-        ['e2fsck -f -y -v {1}', 'resize2fs {1}']
+        ['e2fsck -f -y -v {1}', 'resize2fs {1}'],
+        ['sfdisk --id {0} {1} 83']
         ],
     'ext3': [
         ['mkfs.ext3 -q -F -F {0}'],
         ['e2fsck -f -y -v {1}', 'resize2fs {1} {0}'],
-        ['e2fsck -f -y -v 1}', 'resize2fs {1}']
+        ['e2fsck -f -y -v 1}', 'resize2fs {1}'],
+        ['sfdisk --id {0} {1} 83']
         ],
     'ext4': [
         ['mkfs.ext4 -q -F -F {0}'],
         ['e2fsck -f -y -v {1}', 'resize2fs {1} {0}'],
-        ['e2fsck -f -y -v {1}', 'resize2fs {1}']
+        ['e2fsck -f -y -v {1}', 'resize2fs {1}'],
+        ['sfdisk --id {0} {1} 83']
         ],
     'fat16': [
         ['mkfs.vfat -F 16 {0}'],
         ['dosfsck -a -w -v {1}', 'fatresize -q -s {0} {1}'],
-        ['dosfsck -a -w -v {1}']
+        ['dosfsck -a -w -v {1}'],
+        ['sfdisk --id {0} {1} 6']
         ],
     'fat32': [
         ['mkfs.vfat -F 32 {0}'],
         ['dosfsck -a -w -v {1}', 'fatresize -q -s {0} {1}'],
-        ['dosfsck -a -w -v {1}']
+        ['dosfsck -a -w -v {1}'],
+        ['sfdisk --id {0} {1} b']
         ],
     'ntfs': [
         ['mkfs.ntfs -q -F {0}'],
         ['ntfsresize -P -i -f -v {1}', 'ntfsresize -P -f -n -s {0} {1}', 'echo y | ntfsresize -P -f -s {0} {1}'],
-        ['ntfsresize -P -i -f -v {1}', 'ntfsresize -P -f -n {1}', 'echo y | ntfsresize -P -f {1}']
+        ['ntfsresize -P -i -f -v {1}', 'ntfsresize -P -f -n {1}', 'echo y | ntfsresize -P -f {1}'],
+        ['sfdisk --id {0} {1} 7']
         ],
     'hfs+': [
         ['mkfs.hfsplus {0}'],
         [''],
-        ['']
+        [''],
+        ['sfdisk --id {0} {1} af']
         ],
     'hfs': [
         ['hformat -f {0}'],
         [''],
-        ['']
+        [''],
+        ['sfdisk --id {0} {1} af']
         ],
     'jfs': [
         ['mkfs.jfs -q {0}'],
         [''],
-        ['']
+        [''],
+        ['sfdisk --id {0} {1} 83']
         ],
     'swap': [
         ['mkswap -f {0}'],
         [''],
-        ['']
+        [''],
+        ['sfdisk --id {0} {1} 82']
         ],
     'reiser4': [
         ['mkfs.reiser4 -y -f {0}'],
         [''],
-        ['']
+        [''],
+        ['sfdisk --id {0} {1} 83']
         ],
     'reiserfs': [
         ['mkfs.reiserfs -q -f -f {0}'],
         ['reiserfsck -q -y --fix-fixable {1} || true', 'echo y | resize_reiserfs -s {0} {1}'],
-        ['reiserfsck -q -y --fix-fixable {1} || true', 'echo y | resize_reiserfs {1}']
+        ['reiserfsck -q -y --fix-fixable {1} || true', 'echo y | resize_reiserfs {1}'],
+        ['sfdisk --id {0} {1} 83']
         ],
     'xfs': [
         ['mkfs.xfs -q -f {0}'],
         [''],
-        ['']
-        ],
-    'empty': [
         [''],
-        [''],
-        ['']
+        ['sfdisk --id {0} {1} 83']
         ]
     }
 

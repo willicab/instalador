@@ -34,7 +34,8 @@ from canaimainstalador.clases.common import UserMessage, ProcessGenerator, \
     crear_etc_default_keyboard, crear_etc_hostname, crear_etc_hosts, \
     crear_etc_network_interfaces, crear_etc_fstab, assisted_mount, \
     assisted_umount, preseed_debconf_values, mounted_targets, \
-    mounted_parts, crear_usuarios, ThreadGenerator, crear_passwd_group_inittab_mtab
+    mounted_parts, crear_usuarios, ThreadGenerator, crear_passwd_group_inittab_mtab, \
+    get_windows_part_in
 from canaimainstalador.config import INSTALL_SLIDES, BAR_ICON
 
 gtk.gdk.threads_init()
@@ -281,7 +282,7 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
 
         if accion == 'crear':
             if not p.crear_particion(
-                drive=disco, start=inicio, end=fin, fs=fs, partype=tipo
+                drive=disco, start=inicio, end=fin, fs=fs, partype=tipo, format=True
                 ):
                 UserMessage(
                     message='Ocurrió un error creando una partición.',
@@ -368,11 +369,15 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
                 unset_boot = i[0]
 
     set_boot = ''
-    for part, mount, fs in mountlist:
-        if mount == mountpoint + '/':
-            set_boot = part
-        elif mount == mountpoint + '/boot':
-            set_boot = part
+    winpart = get_windows_part_in(metodo['disco'][0])
+    if winpart:
+        set_boot = winpart
+    else:
+        for part, mount, fs in mountlist:
+            if mount == mountpoint + '/':
+                set_boot = part
+            elif mount == mountpoint + '/boot':
+                set_boot = part
 
     if unset_boot:
         if not p.remover_bandera(
@@ -465,22 +470,6 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
     if not instalar_paquetes(mnt=mountpoint, dest='/tmp', plist=instpkgs_burg):
         UserMessage(
             message='Ocurrió un error instalando un paquete.',
-            title='ERROR',
-            mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
-            c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
-            c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
-            c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
-            c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
-            c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
-            )
-
-    if ProcessGenerator(
-        'chroot {0} burg-install --force {1}'.format(
-            mountpoint, metodo['disco'][0]
-            )
-        ).returncode != 0:
-        UserMessage(
-            message='Ocurrió un error instalando burg.',
             title='ERROR',
             mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
             c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
