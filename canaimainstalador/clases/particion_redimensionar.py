@@ -32,7 +32,7 @@ from canaimainstalador.clases.common import humanize, TblCol, floatify, PStatus,
     validate_minimun_fs_size, validate_maximun_fs_size
 from canaimainstalador.translator import msj
 from copy import copy
-from canaimainstalador.config import FSMIN, FSMAX
+from canaimainstalador.config import FSMIN, FSMAX, ESPACIO_USADO_EXTRA
 
 class Main(gtk.Dialog):
 
@@ -125,7 +125,7 @@ class Main(gtk.Dialog):
 
     def get_used_space(self):
         'El tamaño minimo al que se puede redimensionar la partición'
-        return self.inicio + self.usado
+        return self.inicio + self.usado + ESPACIO_USADO_EXTRA
 
     def get_maximum_size(self):
         'El tamaño maximo al que se puede redimensionar la partición'
