@@ -34,6 +34,7 @@ from canaimainstalador.clases import particion_nueva, particion_redimensionar, \
     particion_eliminar, particion_editar
 from canaimainstalador.clases.tabla_particiones import TablaParticiones
 from canaimainstalador.translator import msj
+from canaimainstalador.config import ESPACIO_TOTAL
 
 class PasoPartManual(gtk.VBox):
 
@@ -47,13 +48,16 @@ class PasoPartManual(gtk.VBox):
         #self.tabla.set_doble_click(self.activar_tabla);
         self.tabla.set_seleccionar(self.table_row_selected)
 
-        label = gtk.Label("Utilice la tabla a continuación para configurar \
-su disco manualmente:")
+        label = gtk.Label("""Utilice la tabla a continuación para configurar \
+su disco manualmente. Recomendamos:
+- Un minimo de {0} para el sistema,
+- Instalar partición swap."""
+.format(humanize(ESPACIO_TOTAL)))
         label.set_line_wrap(False)
         label.set_justify(gtk.JUSTIFY_LEFT)
         label.set_alignment(0, 0)
         label.show()
-        self.pack_start(label, False, False, 10)
+        self.pack_start(label, False, False, 0)
 
         self.scroll = gtk.ScrolledWindow()
         self.scroll.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
@@ -111,7 +115,7 @@ su disco manualmente:")
         self.botonera1.add(self.btn_redimension)
         self.botonera1.add(self.btn_eliminar)
         self.botonera1.add(self.btn_deshacer)
-        self.pack_start(self.botonera1, False, False, 10)
+        self.pack_start(self.botonera1, False, False, 0)
         # llenar la tabla por primera vez
         self.initialize(data)
 
