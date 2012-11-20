@@ -106,6 +106,16 @@ def mounted_targets(mnt):
 
     return m
 
+def activar_swap(plist):
+    for p, m, fs in plist:
+        if fs == 'swap':
+            cmd = 'swapon -e {0}'.format(p)
+            salida = subprocess.Popen(
+                cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT
+                ).communicate()[0].split()
+    return True
+
+
 def mounted_parts(disk):
     m = []
     _disk = disk.replace('/', '\/')
@@ -126,7 +136,7 @@ def get_windows_part_in(drive):
         ).communicate()[0].split()
 
     if len(salida) > 0:
-	return salida[0]
+        return salida[0]
     else:
         return ''
 

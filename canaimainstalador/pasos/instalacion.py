@@ -35,7 +35,7 @@ from canaimainstalador.clases.common import UserMessage, ProcessGenerator, \
     crear_etc_network_interfaces, crear_etc_fstab, assisted_mount, \
     assisted_umount, preseed_debconf_values, mounted_targets, \
     mounted_parts, crear_usuarios, ThreadGenerator, crear_passwd_group_inittab_mtab, \
-    get_windows_part_in
+    get_windows_part_in, activar_swap
 from canaimainstalador.config import INSTALL_SLIDES, BAR_ICON
 
 gtk.gdk.threads_init()
@@ -408,6 +408,18 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
                 c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
                 c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
                 )
+
+    if not activar_swap(plist=mountlist):
+        UserMessage(
+            message='Ocurrió un error activando la partición swap.',
+            title='ERROR',
+            mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
+            c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
+            c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
+            c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
+            c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
+            c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
+            )
 
     label.set_text('Montando sistemas de archivos ...')
     if not assisted_mount(sync=True, bind=False, plist=mountlist):
