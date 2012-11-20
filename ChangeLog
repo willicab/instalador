@@ -1,3 +1,7 @@
+DEVELOPMENT RELEASE v2.0.1+dev20121120173230 (11/20/12)
+Corrigiendo error ortográfico en una diapositiva.
+Agregando rutina para la activación de la swap antes de la copia de archivos con unsquashfs.
+
 DEVELOPMENT RELEASE v2.0.1+dev20121120165227 (11/20/12)
 Removiendo carpeta debian del código fuente.
 Colocando label informativo sobre swap y tam. minimo en particionador manual
