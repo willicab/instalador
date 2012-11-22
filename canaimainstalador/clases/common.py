@@ -109,12 +109,11 @@ def mounted_targets(mnt):
 def activar_swap(plist):
     for p, m, fs in plist:
         if fs == 'swap':
-            cmd = 'swapon -e {0}'.format(p)
+            cmd = 'swapon {0}'.format(p)
             salida = subprocess.Popen(
                 cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT
                 ).communicate()[0].split()
     return True
-
 
 def mounted_parts(disk):
     m = []
