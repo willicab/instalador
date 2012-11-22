@@ -216,7 +216,7 @@ class BarraAuto(gtk.DrawingArea):
                 a_mount = '/'
                 a_fs = 'ext4'
             elif self.p.nuevas[k][0] == 'SWAP':
-                a_mount = '/mnt'
+                a_mount = 'swap'
                 a_fs = 'swap'
             elif self.p.nuevas[k][0] == 'HOME':
                 a_mount = '/home'

@@ -101,13 +101,13 @@ class frame_fs(gtk.Table):
         self.attach(self.entrada, 1, 2, 2, 3)
         self.entrada.connect("changed", self.validate_m_point)
 
-        self.formatear = gtk.CheckButton("Formatear esta partición.")
+        self.formatear = gtk.CheckButton("Formatear esta partición")
         self.attach(self.formatear, 1, 2, 3, 4)
-        self.formatear.show()
         self.formatear.set_visible(is_usable(self.part_act))
+        self.formatear.connect("toggled", self.cmb_fs_on_changed)
+        self.formatear.show()
 
         self.show()
-
 
     def cmb_tipo_on_changed(self, widget=None):
         tipo = widget.get_active_text()
@@ -126,11 +126,15 @@ class frame_fs(gtk.Table):
         self.cmb_fs.set_active(3)
 
     def cmb_fs_on_changed(self, widget=None):
-        fs = widget.get_active_text()
+        fs = self.cmb_fs.get_active_text()
         if fs == 'swap':
+            self.cmb_montaje.insert_text(0, 'swap')
+            self.cmb_montaje.set_active(0)
             self.cmb_montaje.set_sensitive(False)
         else:
             self.cmb_montaje.set_sensitive(True)
+            self.cmb_montaje.get_model().clear()
+            self.cmb_montaje_fill()
 
     def cmb_montaje_fill(self):
         self.cmb_montaje_add('/')

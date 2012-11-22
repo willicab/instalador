@@ -48,10 +48,10 @@ class PasoPartManual(gtk.VBox):
         #self.tabla.set_doble_click(self.activar_tabla);
         self.tabla.set_seleccionar(self.table_row_selected)
 
-        label = gtk.Label("""Utilice la tabla a continuación para configurar \
-su disco manualmente. Recomendamos:
-- Un minimo de {0} para el sistema,
-- Instalar partición swap."""
+        label = gtk.Label("""Utilice la siguiente tabla para modificar \
+las particiones en disco a su gusto. Le recomendamos:
+- Establecer un minimo de {0} para la partición raíz (/).
+- Crear un área de intercambio (swap)."""
 .format(humanize(ESPACIO_TOTAL)))
         label.set_line_wrap(False)
         label.set_justify(gtk.JUSTIFY_LEFT)

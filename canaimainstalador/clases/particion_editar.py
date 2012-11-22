@@ -144,9 +144,9 @@ class Main(gtk.Dialog):
 
     def set_format_label(self, fs):
         if fs == 'swap' and self.particion_act[TblCol.FORMATO] == 'swap':
-            self.fs_box.formatear.set_label("Usar esta partición.")
+            self.fs_box.formatear.set_label("Usar esta partición")
         else:
-            self.fs_box.formatear.set_label("Formatear esta partición.")
+            self.fs_box.formatear.set_label("Formatear esta partición")
 
     def cmb_fs_changed(self, widget):
 

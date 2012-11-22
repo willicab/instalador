@@ -93,6 +93,8 @@ class Main(gtk.Dialog):
 
         self.cmb_montaje = fs_container.cmb_montaje
         self.entrada = fs_container.entrada
+        fs_container.formatear.set_active(True)
+        fs_container.formatear.set_sensitive(False)
 
         # Contenedor General
         self.cont = gtk.VBox()
@@ -123,7 +125,7 @@ class Main(gtk.Dialog):
             libre = tamano
 
             if formato == 'swap':
-                montaje = ''
+                montaje = 'swap'
 
             if montaje == 'Escoger manualmente...':
                 montaje = self.entrada.get_text().strip()
