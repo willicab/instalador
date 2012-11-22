@@ -34,21 +34,17 @@ CHANGES="$( tempfile )"
 DEVERSION="$( tempfile )"
 NEWCHANGES="$( tempfile )"
 DATE=$( date +%D )
-VERDE="\033[1;32m"
-ROJO="\033[1;31m"
-AMARILLO="\033[1;33m"
-FIN="\033[0m"
 
 ERROR() {
-	printf "${ROJO}${1}${FIN}\n"
+	printf "\033[1;31m${1}\033[0m\n"
 }
 
 WARNING() {
-	printf "${AMARILLO}${1}${FIN}\n"
+	printf "\033[1;33m${1}\033[0m\n"
 }
 
 SUCCESS() {
-	printf "${VERDE}${1}${FIN}\n"
+	printf "\033[1;32m${1}\033[0m\n"
 }
 
 cd ${ROOTDIR}

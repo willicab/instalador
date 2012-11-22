@@ -32,27 +32,28 @@ CHANGES="$( tempfile )"
 NEWCHANGES="$( tempfile )"
 DATE="$( date +%D )"
 SNAPSHOT="dev$( date +%Y%m%d%H%M%S )"
-VERDE="\033[1;32m"
-ROJO="\033[1;31m"
-AMARILLO="\033[1;33m"
-FIN="\033[0m"
 
 ERROR() {
-	printf "${ROJO}${1}${FIN}\n"
+	printf "\033[1;31m${1}\033[0m\n"
 }
 
 WARNING() {
-	printf "${AMARILLO}${1}${FIN}\n"
+	printf "\033[1;33m${1}\033[0m\n"
 }
 
 SUCCESS() {
-	printf "${VERDE}${1}${FIN}\n"
+	printf "\033[1;32m${1}\033[0m\n"
 }
 
 cd ${ROOTDIR}
 if [ "$( git branch 2> /dev/null | sed -e '/^[^*]/d;s/\* //' )" != "development" ]; then
 	ERROR "[MAIN] You are not on \"development\" branch."
 	git checkout development
+fi
+
+if [ "$( git status -s )" = "" ]; then
+	ERROR "Nothing to commit, aborting."
+	exit 1
 fi
 
 WARNING "Committing changes ..."
