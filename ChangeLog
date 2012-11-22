@@ -1,3 +1,6 @@
+DEVELOPMENT RELEASE v2.0.1+dev20121121193124 (11/21/12)
+Corrigiendo rutina que no colocaba punto de montajes de la partición swap en el particionador manual.
+
 DEVELOPMENT RELEASE v2.0.1+dev20121120173230 (11/20/12)
 Corrigiendo error ortográfico en una diapositiva.
 Agregando rutina para la activación de la swap antes de la copia de archivos con unsquashfs.
