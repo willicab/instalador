@@ -1,3 +1,6 @@
+DEVELOPMENT RELEASE v2.0.1+dev20121122003516 (11/22/12)
+Corrigiendo comando para la activación de swap.
+
 DEVELOPMENT RELEASE v2.0.1+dev20121121193124 (11/21/12)
 Corrigiendo rutina que no colocaba punto de montajes de la partición swap en el particionador manual.
 
