@@ -57,18 +57,18 @@ if [ -n "$( git diff --exit-code 2> /dev/null )" ]; then
 	exit 1
 fi
 
-git log > ${CHANGES}
+git log --pretty="tformat:%H@@@@##@@@@%s" > ${CHANGES}
 cp ${VERSION} ${DEVERSION}
 git checkout release
 git clean -fd
 git reset --hard
 
 OLDCOMMIT="$( cat ${VERSION} | grep "COMMIT" | sed 's/COMMIT=//g;s/"//g' )"
-OLDCOMMITLINE="$( cat ${CHANGES}  | grep -n "${OLDCOMMIT}" | awk -F: '{print $1}' )"
+OLDCOMMITLINE="$( cat ${CHANGES} | grep -n "${OLDCOMMIT}" | awk -F: '{print $1}' )"
 NEWVERSION="$( cat ${DEVERSION} | grep "VERSION" | sed 's/VERSION=//g;s/"//g;s/+.*//g' )"
 
 echo "STABLE RELEASE v${NEWVERSION} (${DATE})" > ${NEWCHANGES}
-cat ${CHANGES} | sed -n 1,${OLDCOMMITLINE}p | sed 's/commit.*//g;s/Author:.*//g;s/Date:.*//g;s/Merge.*//g;/^$/d;' >> ${NEWCHANGES}
+cat ${CHANGES} | sed -n 1,${OLDCOMMITLINE}p | awk -F@@@@##@@@@ '{print $2}' >> ${NEWCHANGES}
 sed -i 's/New stable release.*//g;s/    //g;/^$/d;' ${NEWCHANGES}
 sed -i 's/New development snapshot.*//g;s/    //g;/^$/d;' ${NEWCHANGES}
 sed -i 's/Signed-off-by:.*//g;s/    //g;/^$/d;' ${NEWCHANGES}
@@ -76,7 +76,7 @@ echo "" >> ${NEWCHANGES}
 cat ${CHANGELOG} >> ${NEWCHANGES}
 
 WARNING "Merging development into release ..."
-git merge -q -s recursive -X theirs --squash development
+git merge -q -s recursive -X theirs development
 
 mv ${NEWCHANGES} ${CHANGELOG}
 rm ${CHANGES} ${DEVERSION}

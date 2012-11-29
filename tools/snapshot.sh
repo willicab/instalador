@@ -65,17 +65,17 @@ if [ ${?} -eq 1 ]; then
 	exit 1
 fi
 
-git log > ${CHANGES}
+git log --pretty="tformat:%H@@@@##@@@@%s" > ${CHANGES}
 
 OLDVERSION="$( cat ${VERSION} | grep "VERSION" | sed 's/VERSION=//g;s/"//g' )"
 OLDCOMMIT="$( cat ${VERSION} | grep "COMMIT" | sed 's/COMMIT=//g;s/"//g' )"
-OLDCOMMITLINE="$( cat ${CHANGES}  | grep -n "${OLDCOMMIT}" | awk -F: '{print $1}' )"
+OLDCOMMITLINE="$( cat ${CHANGES} | grep -n "${OLDCOMMIT}" | awk -F: '{print $1}' )"
 
 read -p "Enter new version (last version was ${OLDVERSION}): " REPLY
 NEWVERSION="${REPLY}"
 
-echo "DEVELOPMENT RELEASE v${NEWVERSION}+${SNAPSHOT} (${DATE})" > ${NEWCHANGES}
-cat ${CHANGES} | sed -n 1,${OLDCOMMITLINE}p | sed 's/commit.*//g;s/Author:.*//g;s/Date:.*//g;s/Merge.*//g;/^$/d;' >> ${NEWCHANGES}
+echo "DEVELOPMENT SNAPSHOT v${NEWVERSION}+${SNAPSHOT} (${DATE})" > ${NEWCHANGES}
+cat ${CHANGES} | sed -n 1,${OLDCOMMITLINE}p | awk -F@@@@##@@@@ '{print $2}' >> ${NEWCHANGES}
 sed -i 's/New development snapshot.*//g;s/    //g;/^$/d;' ${NEWCHANGES}
 sed -i 's/Signed-off-by:.*//g;s/    //g;/^$/d;' ${NEWCHANGES}
 echo "" >> ${NEWCHANGES}
