@@ -1,4 +1,401 @@
-canaima-instalador (1.0+dev0-1) stable; urgency=low
+canaima-instalador (2.0-1) stable; urgency=low
+
+  [ Erick Birbe ]
+  * [de00a77] Desmontando el /target al concluir el proceso de
+    instalación
+  * [8223cbb] Eliminando elementos innecesarios del codigo
+  * [6df43cc] Eliminando mensaje innecesario
+  * [e9063e8] Eliminando declaración repetida de cmb_tipo_on_changed()
+  * [807f910] Eliminando código innecesario en clases/particiones.py
+  * [e039481] Eliminando impresiones innecesarias
+  * [5e579fa] Eliminando impresiones innecesarias y variables no
+    utilizadas
+  * [c0836dc] Eliminando contador de particiones primarias repetido
+  * [5e3bdb4] Eliminando las importaciones de pygtk
+  * [919a3e1] Condicionando que el nombre del disco no quede en blanco
+
+  [ Luis Alejandro Martínez Faneyth ]
+  * [82dba93] Agregando target 'clean-pyc' al Makefile para borrar todos
+    los .pyc antes de hacer commi t. Corrigiendo algunos detalles
+    estéticos y limpiando comentarios.
+  * [b59474b] Moviendo el Wizard de lugar (es una clase). Creando clases
+    para las casenas de texto (translator) y los contructores gtk
+    (constructor).
+  * [9d795c0] Mejorando funciones de reconocimiento de discos y
+    particiones. Mejorando interacción con los pasos del instalador.
+    Cambiando tamaño de la ventana para redistribuir el espacio.
+  * [1dddc0e] Mejorando la forma en que se determinan los métodos de
+    instalación. Mejorando la estética del paso sonde se muentran los
+    métodos.
+
+  [ Francisco Javier Vásquez Guerrero ]
+  * [22ee59d] removiendo archivos basura del código
+  * [1244e3c] corrigiendo email en colaboradores
+
+  [ Erick Birbe ]
+  * [25f01d5] Mostrando interfaz y activando el botón cancelar
+
+  [ Francisco Javier Vásquez Guerrero ]
+  * [68f4b78] comentando linea en el wizard inncesaria
+  * [b76e906] se incluye nuevamente mesaje advertendia antes de cancelar
+    la instalación
+  * [2794d3c] modificado mesaje de dialogo de salida de gtk.MESSAGE_INFO
+    a gtk.MESSAGE_WARNIG
+
+  [ Erick Birbe ]
+  * [bc29c01] Estructurando código
+  * [09efe61] Haciendo wrap de las lineas grandes
+  * [b210128] Activando llamado a clase PartManual()
+  * [6af4814] Corrigiendo mensaje de particionado
+
+  [ Luis Alejandro Martínez Faneyth ]
+  * [78fbd60] Mejorando la forma en que se establecen los métodos de
+    instalación.
+
+  [ Erick Birbe ]
+  * [9a07bfa] Indicando el Inicio y fin de la partición
+  * [f1f4d21] Corrigiendo el nombre de las propiedades de la clase
+  * [3636836] Corrigiendo tipo de valor recibido al llenar la tabla
+  * [bd128a6] Forzando la aparición del particionador manual
+  * [a488bf7] Eliminando implementación de código innecesaria por estar
+    duplicada
+  * [9b0768f] Mostrando las particiones actuales del disco
+  * [8174fdf] Ampliando tamaño del scroll
+
+  [ Luis Alejandro Martínez Faneyth ]
+  * [edb1cdc] Removiendo imágenes innecesarias. Agregando rutina para
+    generar las imágenes png a partir de sus fuentes svg. Mejorando
+    estética de las barras de particiones.
+  * [869f171] Mejorando coloración de las barras de particiones.
+  * [e8cd8f2] Mejorando detección de discos. Mejorando estética de las
+    barras de particiones.
+
+  [ Erick Birbe ]
+  * [405acfd] Ignorando archivos .png creados con el make gen-img
+  * [eb1f5e4] Haciendo limpieza del código
+  * [0ff8288] Corrigiendo mensaje del particionado manual
+  * [e4a2c03] Llamando el metodo iniciar() al momento correcto en
+    particion_manual
+  * [1eb5a4d] Haciendo limpieza de código
+  * [6af6305] Ejecutando acciones al seleccionar la tabla - limpieza de
+    codigo
+
+  [ Luis Alejandro Martínez Faneyth ]
+  * [eaface0] Mejorando estética de las barras de particiones.
+
+  [ Erick Birbe ]
+  * [5d53c83] Indicando inicio y fin de los discos
+  * [ef643f3] llenando lista de acciones de particionado
+  * [26e05c1] Mejorando forma de determinar los strings
+
+  [ Luis Alejandro Martínez Faneyth ]
+  * [8070b57] Mejorando la forma en que se reconocen los discos con
+    python-gudev.
+
+  [ Erick Birbe ]
+  * [73a6f87] Detectando espacios libres para crear particiones nuevas y
+    limpiando codigo
+  * [cc006e8] Evitando que la tabla pase a None al llamar el metodo
+    inicializar()
+  * [1644cde] Eliminando llamado redundante
+  * [daba43d] Ordenando el código
+  * [e337ff9] Corrigiendo el funcionamiento del mensaje de salida
+  * [91950d8] Eliminando archivo inutilizado
+  * [91af3d1] Agregando particiones nuevas a la lista
+  * [c5840d5] Corrigiendo comportamiento erroneo de la lista de
+    particiones
+  * [c4c3bc7] Eliminando salidas innecesarias
+
+  [ Luis Alejandro Martínez Faneyth ]
+  * [48fb0b1] Arreglando reconocedor de particiones con python-parted y
+    python-gudev.
+
+  [ Erick Birbe ]
+  * [5b59c5e] Seleccionando los dispositivos correctos en particiones.py
+
+  [ Francisco Javier Vásquez Guerrero ]
+  * [345638d] nuevos cambios al instaldor
+  * [3fc40b0] nuevos cambios
+
+  [ Luis Alejandro Martínez Faneyth ]
+  * [aac3e8b] Cambiando de lugar el código fuente para que al ser movido
+    a /usr/share/pyshared/instalador el instalador pueda ser importadoc
+    omo un módulo desde cualquier lugar. Mejorando la paginación
+    (anterior/siguiente) en la clase wizard. Reestructurando canaima-
+    instalador.py para que este sea el ejecutable y evitar la necesidad
+    del script bash canaima-instalador.
+
+  [ Erick Birbe ]
+  * [af908b1] Adaptando el llenado de la tabla al nuevo formato de
+    particiones.lista_particiones()
+  * [44bcb47] Ordenando lista por el inicio de la particion
+
+  [ Luis Alejandro Martínez Faneyth ]
+  * [d9ef81a] Simplificando programación de establecer_metodo()
+
+  [ Erick Birbe ]
+  * [0435c91] Eliminando bloques de comentarios
+
+  [ Luis Alejandro Martínez Faneyth ]
+  * [b17c9b2] Mejorando el renderizado de la barra de particiones cuando
+    se escoge la opción "usar todo el disco". Corrigiendo variable que
+    asigna la partición en pasos/metodo.py
+  * [fe10156] Corrigiendo detalle en la obtención del valor del
+    combobox.
+
+  [ Erick Birbe ]
+  * [5887c6d] Adaptando .gitignore
+  * [8c5566e] Volviendo a corregir la pregunta de confirmación al salir
+  * [e57797e] Corrigiendo llamado a tabla_particiones
+  * [3d62e50] Eliminando propiedades no utilizadas en particion_manual
+  * [f5a9f2a] Procesando respuesta en un metodo aparte de
+    particion_nueva
+  * [d4ec6eb] Corrigiendo el llamado del metodo manual en main.py
+  * [7d1ebe5] Moviendo la clase msj a translator.py
+  * [ddf010d] Evitando que se borre la particion extendida de la lista
+    cuando se crea el primer espacio libre extendido
+  * [6c1111f] Evitando quitar particiones de la lista y duplicados de
+    espacios libres
+
+  [ Francisco Javier Vásquez Guerrero ]
+  * [685394f] nuevos cambios
+
+  [ Erick Birbe ]
+  * [5982f19] Creando clase base para las acciones del instalador
+  * [fe3d793] Moviendo clase accion a acciones.__init__
+  * [7be37fd] Nuevas clases de acciones
+  * [3cc46aa] Validando que no se creen mas de 4 particiones primarias y
+    mas de 1 particion extendida
+
+  [ Luis Alejandro Martínez Faneyth ]
+  * [b092e31] Mejorando visualización de las barras de particiones en
+    los métodos PartAuto y PartTodo. Cambiando el nombre del módulo
+    general Python instalador -> canaimainstalador.
+
+  [ Erick Birbe ]
+  * [f49157e] Eliminando imagenes compiladas
+  * [c7af9dd] Eliminando clases que ya no se usaran por convencion
+  * [b5c9141] Eliminando log de un merge antiguo
+  * [0a034c0] Corrigiendo llamados de importaciones para adaptarlo a los
+    nuevos cambios
+  * [35443db] Modificando .gitignore
+  * [b4877b0] Agregando boton de redimension, mejorando llamado a
+    indices de las filas
+  * [33536a7] Agregando soporte a xfs en la seleccion de sistema de
+    archivos
+  * [9b59298] Agregando columna LIBRE
+  * [67ecf93] Validando que no se redimensionen las particiones libres
+  * [b92ab07] Convirtiendo el botón de Cancelar en boton Salir en Wizard
+
+  [ Luis Alejandro Martínez Faneyth ]
+  * [b9a4af3] Mejorando las Barras de desplazamiento del Particionado
+    automático y total.
+
+  [ Erick Birbe ]
+  * [39ea0b1] Agregando formulario para redimensionar
+  * [2705c2b] Agregando formulario para redimensionar
+  * [7da516e] Poniendo a funcionar por completo del dialogo de
+    redimension
+  * [95bfa60] Limpiando el puntero de seleccion de la tabla
+  * [d6666f0] Poniendo de nuevo a funcionar correctamente el dialogo de
+    particion nueva (POR FIIIIIN)
+  * [2e182c4] - Reordenando lugar de algunos metodos - Llenando datos de
+    la lista de acciones para particion_nueva.py
+  * [ad03fdf] - Validando excepción cuando se hace click y no hay fila
+    seleccionada
+  * [70d4271] Moviendo metodo para agregar particiones a la lista a
+    common.py
+  * [ada2631] Implementando la acción de eliminar particiones
+  * [5796ae4] Activando el boton de deshacer acciones solo cuando
+    existan acciones
+  * [fc6ab18] Corrigiendo BUG que impedia ejecutar acciones al refrescar
+    la tabla
+  * [8ee0bd8] Colocando el tipo correcto al redimensionar una particion
+    lógica
+  * [d1eb55d] Ocultando columnas que no se desean mostrar
+  * [ecbe3fe] Eliminando fragmentos de código innecesarios
+
+  [ Luis Alejandro Martínez Faneyth ]
+  * [3124084] Mejorando rutina que determina el tipo de partición
+    {primary,extended,logical}. Comenzando reestructuración del proceso
+    de particionado.
+  * [aa6343e] Iniciando desarrollo del módulo que realiza las
+    particiones.
+
+  [ Erick Birbe ]
+  * [183431f] Activando columna "Formatear" en la tabla de particiones
+  * [8f2f9f3] Creando nueva clase para escoger el filesystem y punto de
+    montaje. Esta clase es de uso general para el dialogo de crear
+    partición nueva y para el dialogo de usar partición que se creará
+    mas adelante
+  * [a99e0c3] Integrando nuevo panel de sistema de archivos en
+    particion_nueva.py
+  * [ec6a458] Agragando check de formateo de la particion
+  * [e5a6928] Agregando botón de de Usar
+  * [07c31d0] Validando de no usar las particiones extendidas
+  * [fb1e681] Separando acciones de eliminar del modulo
+    particionador_manual.py
+  * [9652239] Activando botón usar particion
+
+  [ Luis Alejandro Martínez Faneyth ]
+  * [62653d4] Limpiando scripts de bash innecesarios. Limpiando clases
+    de particionadores innecesarias. Mejorando rutina de instalación.
+    Mejorando funciones de creación de archivos de configuración.
+
+  [ Erick Birbe ]
+  * [5ff7e95] Comentando codigos incompletos en common.py
+  * [291716d] Limpiando importaciones innecesarias y variables sin usar
+
+  [ Luis Alejandro Martínez Faneyth ]
+  * [b4bce15] Corrigiendo referencia a función espacio_usado movida a
+    canaimainstalador/clases/common.py
+  * [23300c5] Afinando y optimizando proceso de instalación.
+
+  [ Erick Birbe ]
+  * [674517c] Enviando Fin original y Fin Nuevo en la accion
+    redimensionar
+  * [74dd50f] Cambios Varios - Agregando columna de estatus de las
+    particiones - Activando cambio de FS en ventna usar
+  * [8c3554f] Cambiando el nombre a funcion en particion_manual
+  * [07ffce8] Permitiendo el redimensionado solo de los filesystem que
+    tengan herramienta
+  * [78dee70] Mostrando mensaje de error si no hay raiz (/)
+
+  [ Luis Alejandro Martínez Faneyth ]
+  * [5adad72] Eliminando las diapositivas del slider que se muestra
+    durante la instalación. Agregando HTML+SVG para implementar
+    animaciones con sozi.
+
+  [ Erick Birbe ]
+  * [1e123e6] Ignorando archivos de imagines compilados para los slides
+  * [ee01bfd] Corrigiendo la importacion de FPROGS
+  * [6821345] Pasando las acciones a la variable CFG
+
+  [ Luis Alejandro Martínez Faneyth ]
+  * [cd1dddd] Deshabilidatando la conversión SVG > PNG en la carpeta de
+    los slides.
+  * [d04e5aa] Afinando detalles de la instalación. Mejorando información
+    en la pantalla de resumen de datos.
+  * [70208b6] Agregando el elemento "nuevo_fin" al resto de las
+    acciones.
+
+  [ Erick Birbe ]
+  * [fd5983c] Agregando campo de nuevo fin a todas las clases que
+    utilizan las acciones
+  * [c96e976] Separando las particiones 1 sector para que no choquen
+
+  [ Luis Alejandro Martínez Faneyth ]
+  * [7558ec9] Mejrando proceso de instalación, corrigiendo pequeños
+    desajustes.
+  * [bb24119] Progresando en las animaciones sozi para la bienvenida e
+    instalación. Mejorando logo de la aplicación.
+
+  [ Erick Birbe ]
+  * [7e69e53] Agregando Nuevo Fin a lista de acciones en particion_nueva
+  * [74ad9b5] Enviando el tipo de particion con el formato original de
+    parted
+  * [b13a022] Agregando licencia a archivos
+
+  [ Luis Alejandro Martínez Faneyth ]
+  * [37162da] Mejorando validación de errores en la instalación.
+
+  [ Erick Birbe ]
+  * [17c363e] Permitiendo la eliminación de particiones extendidas. Sólo
+    se eliminan las particiones extendidas cuando todas las particiones
+    lógicas internas han sido previamente eliminadas.
+
+  [ Luis Alejandro Martínez Faneyth ]
+  * [3c60bff] Mejorando procesos de instalación.
+  * [c80e222] Mejorando animación durante la instalación.
+  * [0a4ade8] Afinando detalles en el proceso de instalación.
+  * [364f508] Corrigiendo validación de redimension y creación de
+    particiones en particiones.py
+
+  [ Erick Birbe ]
+  * [5b860d8] Corrigiendo import particiones.py
+  * [63ecf9c] Enviando decimales en el inicio y fin de las particiones
+  * [8e9fa9d] Acercando un poco a la izquierda el resumen final de
+    instalacion
+
+  [ Luis Alejandro Martínez Faneyth ]
+  * [5407180] Resolviendo inconsistencia con la creación, borrado,
+    redimensión y montaje de particiones extendidas.
+  * [28b5d3e] Corriendo falla en la determinación del nombre de la
+    partición.
+
+  [ Erick Birbe ]
+  * [b41e4a4] Cambios Varios
+
+  [ Luis Alejandro Martínez Faneyth ]
+  * [b570bba] Mejorando proceso de creación y redimensionamiento de
+    particiones lógicas. Mejorando validación en los particionadores
+    para el número permitido de particiones lógicas. Actualizando TODO.
+
+  [ Erick Birbe ]
+  * [f0b262c] Usando copy() para copiar listas en
+    particion_redimensionar.py. Anteriormente se hacía una asignación
+    simple lo cual causaba que el campo "Nuevo Fin" fuese el mísmo que
+    Fin Original
+
+  [ Luis Alejandro Martínez Faneyth ]
+  * [d3ae360] Asignando límite particiones lógicas dentro de una
+    extendida.
+
+  [ Erick Birbe ]
+  * [1150764] - Comprobando si una filesystem es unknown antes de
+    usarlo. - Ampliando movimiento para la escala del tamaño de
+    particion.
+  * [923b7a6] Validando que no se puedan generar más de 11 particiones
+    lógicas
+  * [b62a7cd] Corrigiendo nombre de punto de montaje "Ninguno" en la
+    tabla
+  * [1a6c924] Usando funciones de common.py en particiones_redimensionar
+
+  [ Luis Alejandro Martínez Faneyth ]
+  * [71311ba] Agregando botones para seleccionar mínimo y máximo de
+    espacio para Canaima en el particionador completo. Arreglo de la
+    creación de usuarios en el sistema instalado. Procedimiento para
+    asignar la bandera de boot.
+
+  [ Erick Birbe ]
+  * [3927161] Cambiando nombre de funciones
+  * [101c7be] Validando los tamaños minimos de los sistemas de archivos
+  * [b59226a] Agregando minimos que faltaron en el commit anterior
+  * [a7f449f] Agregando íconos a los botones
+
+  [ Luis Alejandro Martínez Faneyth ]
+  * [15ea7e9] Mejorando el proceso de instalación.
+
+  [ Erick Birbe ]
+  * [5d9ee67] Utilizando un valor de tamaño de icono que no produzca un
+    warning
+
+  [ Luis Alejandro Martínez Faneyth ]
+  * [932c848] Mejorando las animaciones sozi.
+
+  [ Erick Birbe ]
+  * [834d545] Agregando texto descriptivo antes de la tabla
+  * [b2c39db] Dejando el comentario de la tabla sin line_wrap, tengo que
+    aprender mas pygtk :(
+
+  [ Luis Alejandro Martínez Faneyth ]
+  * [b8514ef] Mejorando SVG del teclado.
+  * [d9bc6a9] Deshabilitando el sozi de inicio, consume muchos recursos
+    en equipos de baja gama.
+  * [347bd0f] Mejorando SVG's de los teclados.
+  * [8ee3f82] Removiendo las animaciones sozi debido a poco rendimiento
+    en equipos de bajos recursos.
+  * [37e1ed3] Arreglando flickering de las barras de las particiones en
+    particion_auto y particion_todo.
+  * [0fdf5a4] Arreglando estilo de la pantalla de información.
+    Arreglando estilo de la pantalla de datos de usuario. Arreglando
+    estilo de la pantalla de accesibilidad.
+  * [180cc48] Preparando empaquetamiento para la versión 2.0
+  * [51fa62d] New development snapshot 2.0+dev20121010121645
+
+ -- Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>  Fri, 09 Nov 2012 11:22:29 -0430
+
+canaima-instalador (1.0-27) stable; urgency=low
 
   [ Luis Alejandro Martínez Faneyth ]
   * [720ff48] Moviendo base del código fuente al primer nivel de la
