@@ -60,9 +60,9 @@ OLDREV="$( echo ${OLDDEBVERSION#${OLDRELVERSION}-} | sed 's/~.*//g' )"
 WARNING "Merging new upstream release ..."
 
 if [ "${TYPE}" = "final-release" ] || [ "${TYPE}" = "test-release" ]; then
-	git merge -q -s recursive -X theirs release
+	git merge -q -s recursive -X theirs --squash release
 elif [ "${TYPE}" = "test-snapshot" ]; then
-	git merge -q -s recursive -X theirs development
+	git merge -q -s recursive -X theirs --squash development
 fi
 
 NEWRELVERSION="$( cat ${VERSION} | grep "VERSION" | sed 's/VERSION=//g' | sed 's/"//g' )"

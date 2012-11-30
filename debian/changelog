@@ -1,3 +1,233 @@
+canaima-instalador (2.0.1-1) stable; urgency=low
+
+  [ Luis Alejandro Martínez Faneyth ]
+  * [2a1f3f7] Agregando Changelog de código fuente (upstream).
+  * [c2a1a58] New development snapshot 2.0+dev20121010121913
+  * [60da36f] prueba
+  * [a18e623] New development snapshot 2.0+dev20121010123645
+  * [8ce055a] Corrigiendo creación de Changelog
+  * [b8670de] New development snapshot 2.0+dev20121010124242
+  * [9f96395] Corrigiendo scripts de generación de snapshots.
+  * [d550397] New development snapshot 2.0+dev20121010125844
+  * [e755a62] Bumping changelog
+  * [2b2b749] New development snapshot 2.0+dev20121010130203
+  * [280eabb] Bumping changelog
+  * [2561f38] New development snapshot 2.0+dev20121010130513
+  * [8e70b95] Corrigiendo error en la generación de los paquetes de
+    prueba.
+  * [16db367] New development snapshot 2.0+dev20121010130703
+  * [dfe460d] Agregando documentación de licencia.
+  * [0bad4c7] Implementado multi-hilos en el proceso de instalación.
+  * [428bdc6] Solucionando problema con el renderizado de webkit.
+  * [411b2cd] New development snapshot 2.0+dev20121011173002
+  * [8ee0aa5] Creando nuevos slides para la animación de instalación.
+    Corrigiendo detalles estéticos del paso de instalación.
+  * [952904e] Actualizando TODO
+  * [70b61dc] New development snapshot 2.0+dev20121012030115
+  * [1325c88] Agregando versiones a dependencias esenciales para evitar
+    errores de lintian. Removiendo shabang del desktop entry para evitar
+    errores de lintian.
+  * [0161c4b] New development snapshot 2.0+dev20121012031326
+  * [b2b9c02] Corrigiendo error en la determinación de la versión para
+    el paquete fuente.
+  * [78eedc5] New development snapshot 2.0+dev20121012032810
+  * [185e9f5] Actualizando TODO
+  * [231ddc8] Corrigiendo la forma en que se determina el directorio
+    donde residen los archivos en ejecución.
+  * [fa3d518] New development snapshot 2.0+dev20121015094014
+  * [482cf5e] Cambiando dependencia de libmagickcore3-extra a
+    libmagickcore-extra para que la compilación no rompa en Debian Sid.
+  * [88bd0b4] New development snapshot 2.0+dev20121015095248
+  * [feab0d4] Corrigiendo deducción de ruta base para los archivos del
+    instalador. Colocando archivos de documentación de proyecto en
+    /usr/share/canaima-instalador/ (cierra ticket #522).
+
+  [ Erick Birbe ]
+  * [97874f8] Ocultando contraseñas en los cuadros de texto (ticket
+    #521)
+
+  [ Luis Alejandro Martínez Faneyth ]
+  * [dddfffe] Colocando archivos de documentación de proyecto en
+    /usr/share/canaima-instalador/ (cierra ticket #522).
+  * [68dc9cb] Corrigiendo deducción de la ruta base para los archivos.
+    Corrigiendo el renderizado de la barra de particiones cuando no
+    existe una tabla de particiones (cierra ticket #536).
+
+  [ Erick Birbe ]
+  * [9283e40] Ordenando widgets en el paso de Configurar Usuario (Ticket
+    #533)
+
+  [ Luis Alejandro Martínez Faneyth ]
+  * [875d55d] Corrigiendo desborde de texto en el título de la
+    bienvenida para resoluciones bajas (cierra ticket #519).
+  * [60149d8] Alargando el tiempo de permanencia de una lámina en la
+    animación de instalación (cierra ticket #527).
+  * [4621d0c] Corrigiendo errores ortográficos y de puntuación (cierra
+    ticket #525).
+  * [e5e21f1] Corrigiendo y reordenando la creación de los archivos
+    /etc/passwd, /etc/group, /etc/inittab y /etc/mtab (cierra ticket
+    #534). Corrigiendo el cambio de contraseña en el usuario root
+    (cierra ticket #530 y #529). Cambiando de orden la reconfiguración
+    de los paquetes base (cierra ticket #535).
+  * [bd22a67] Corrigiendo error de refrescamiento de la leyenda cuando
+    se movía el selector. Corrigiendo diversos errores de desbordamiento
+    de caracteres y alineación de labels (cierra ticket #524).
+  * [030b68a] Actualizando TODO list.
+  * [e56eeb6] New development snapshot 2.0+dev20121018012532
+  * [1a1175b] Corrigiendo detalle de nombre en Makefile.
+  * [796d7a4] New development snapshot 2.0+dev20121018012736
+  * [b4aff47] Asegurando la desinstalación de live-boot y live-config
+    del sistema instalado. Corrigiendo error de importación de librería
+    y parseo de cdroms en el /etc/fstab.
+  * [1d360b4] Actualizando TODO
+  * [650f49f] New development snapshot 2.0+dev20121018131923
+
+  [ Erick Birbe ]
+  * [a010936] Corrigiendo el "Baile" de la barra de tamaño en
+    particion_nueva.py
+
+  [ Luis Alejandro Martínez Faneyth ]
+  * [552389c] Corrigiendo segfault al salir error.
+  * [e4d1b79] Corrigiendo salida correcta de los hilos.
+  * [f993458] New development snapshot 2.0+dev20121018173336
+  * [9bab237] Corrigiendo error de puntuación.
+  * [7e20d54] New development snapshot 2.0+dev20121018175013
+
+  [ Erick Birbe ]
+  * [d77afee] Agregando python-imaging como dependencia
+  * [982cdcf] New development snapshot 2.0+dev20121022115549
+  * [92b424c] Corrigiendo posición de dependencia python-imaging
+  * [1fb93a2] New development snapshot 2.0+dev20121022155238
+
+  [ Luis Alejandro Martínez Faneyth ]
+  * [d6f9716] Omitiendo la copia de nuevos /etc/group y /etc/passwd al
+    sistema instalado.
+  * [d81f222] New development snapshot 2.0+dev20121023160459
+  * [6c974c7] Corrigiendo función de asignación de banderas.
+  * [b93284e] New development snapshot 2.0+dev20121024171545
+  * [dd536e0] Corrigiendo longitud del título de la pantalla de
+    bienvenida.
+  * [c419252] New development snapshot 2.0+dev20121024174936
+
+  [ Erick Birbe ]
+  * [262d76e] Corrigiendo el tamaño usado cuando se crea una particion
+    libre
+
+  [ Luis Alejandro Martínez Faneyth ]
+  * [de4b08c] Corrigiendo UUID para sistemas de archivos que no tienen
+    UUID en el fstab. Quitando soporte a sistema de archivos reiser4 por
+    incompatibilidad con el kernel 2.6.32. Evitando que el check de
+    accesibilidad en GDM se deshabilite cuando seleccionamos OEM.
+  * [332a99f] New development snapshot 2.0+dev20121024181253
+  * [c8d80e8] Corrigiendo casos de particiones que exceden el tamaño del
+    disco.
+  * [aec2ef4] New development snapshot 2.0+dev20121025103802
+
+  [ Erick Birbe ]
+  * [92dabd1] Copiando /etc/mtab antes de comenzar a instalar el burg
+
+  [ Luis Alejandro Martínez Faneyth ]
+  * [4bc57ab] Actualizando TODO. Corrigiendo mensaje de error que
+    aparece a causa de una variable no declarada en clases/barra_auto.py
+    y clases/barra_todo.py. Agregando mecanismo de retención para la
+    escritura de particiones cuando el dispositivo está ocupado.
+    Corrigiendo separación de las particiones lógicas. Agregando un
+    dpkg-reconfigure canaima-escritorio-gnome canaima-base luego de la
+    creación de los usuarios para asegurar que las carpetas estén en su
+    lugar.
+  * [9847b79] New development snapshot 2.0+dev20121026100449
+  * [b88e4cb] Corrigiendo forma en que se determinan los directorios de
+    trabajo. Corrigiendo habilitación del botón siguiente cuando un
+    disco no tiene tabla de particiones.
+  * [e6bb6da] New development snapshot 2.0+dev20121026110146
+
+  [ Erick Birbe ]
+  * [3636554] Eliminando el flag de formateo al espacio libre que queda
+    al borrar una particion
+  * [9ed6340] Corrigiendo el espaciado entre las particiones logicas
+
+  [ Luis Alejandro Martínez Faneyth ]
+  * [7e214fd] Agregando porción de código para incluir los puntos de
+    montaje de la acción "formatear".
+  * [52dceb7] Actualizando TODO. Inhabilitando BTRFS, burg no tiene
+    soporte.
+  * [33973fb] New development snapshot 2.0+dev20121101034922
+
+  [ Erick Birbe ]
+  * [1451611] Cambiando string a "usar" cuando la particion seleccionada
+    es swap
+
+  [ Luis Alejandro Martínez Faneyth ]
+  * [fb6706f] Mejorando la validación de sistemas de archivos
+    soportados. Corrigiendo comando de creación de sistemas de archivos
+    FAT16 y FAT32. Corrigiendo remoción de partición en la acción
+    "borrar" del módulo instalación.
+  * [f6f3aab] New development snapshot 2.0+dev20121102132525
+
+  [ Erick Birbe ]
+  * [9ed79f9] Validando tamaños maximos de las particiones fat16 y hfs
+  * [da80c1c] Corrigiendo validacion de tamaño minimo en redimensionar
+    manual
+
+  [ Luis Alejandro Martínez Faneyth ]
+  * [7c56007] Corrigiendo botón de "mínimo" en particionador automático.
+  * [5ef307a] New development snapshot 2.0+dev20121106103819
+  * [cf831de] Corrigiendo redimensión de sistemas de archivos NTFS.
+  * [29e9a37] New development snapshot 2.0+dev20121106121639
+  * [5909d94] Corrigiendo comando de redimensión para reiserfs, ntfs,
+    fat16 y fat32. Corrigiendo detección de discos, inhabilitando discos
+    montados como "sólo lectura". Corrigiendo instalación del burg en
+    equipos con más de un disco.
+  * [0d7cbb4] New development snapshot 2.0+dev20121106140646
+  * [c8a8638] Evitando la inclusión de basura en los paquetes fuente.
+  * [b5de6dd] New development snapshot 2.0+dev20121106150435
+
+  [ Erick Birbe ]
+  * [2c75637] Dejando un espacio adicional al espacio usado al
+    redimensionar
+
+  [ Luis Alejandro Martínez Faneyth ]
+  * [e55d166] Rehaciendo rutina de redimensión de FS para permitir
+    listas de acciones en vez de una sola. Añadiendo 512MB extra al
+    espacio usado para comptibilidad con algunos FS.
+  * [2b4b1a5] New development snapshot 2.0+dev20121107112428
+  * [f7f1f04] Corrigiendo la obtención del UUID para el /etc/fstab.
+    Corrigiendo la función de crear partición para que permita evitar
+    crear el sistema de archivos. Agregando funcionalidad para
+    especificar el tipo de partición con sfdisk.
+  * [a22324c] New development snapshot 2.0+dev20121109020733
+  * [a0af853] New stable release 2.0
+  * [d48766e] New stable release 2.0
+
+  [ Erick Birbe ]
+  * [27e2137] Colocando label informativo sobre swap y tam. minimo en
+    particionador manual
+
+  [ Luis Alejandro Martínez Faneyth ]
+  * [3be8275] Removiendo carpeta debian del código fuente.
+  * [1c2bbc0] New development snapshot 2.0.1+dev20121120165227
+  * [e8c416f] Corrigiendo error ortográfico en una diapositiva.
+    Agregando rutina para la activación de la swap antes de la copia de
+    archivos con unsquashfs.
+  * [3a1d928] New development snapshot 2.0.1+dev20121120173230
+  * [ca6e774] Corrigiendo rutina que no colocaba punto de montajes de la
+    partición swap en el particionador manual.
+  * [77e4728] New development snapshot 2.0.1+dev20121121193124
+  * [68d32ca] Corrigiendo comando para la activación de swap.
+  * [aec04f8] New development snapshot 2.0.1+dev20121122003516
+  * [a437057] Arreglando ChangeLog.
+  * [58098ea] New development snapshot 2.0.1+dev20121122103737
+  * [f61e759] Mejorando scripts del mantenedor.
+  * [7a96d19] New development snapshot 2.0.1+dev20121122155701
+  * [362bfbb] Mejorando scripts del mantenedor.
+  * [ae80cc8] New development snapshot 2.0.1+dev20121129080854
+  * [1714e80] Deshabilitando squash commit temporalmente.
+  * [357a522] New development snapshot 2.0.1+dev20121129134524
+  * [5b5fd0e] Restaurando carpeta debian en master.
+  * [a986da9] Corrigiendo changelog.
+
+ -- Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>  Fri, 30 Nov 2012 10:14:36 -0430
+
 canaima-instalador (2.0-1) stable; urgency=low
 
   [ Erick Birbe ]
