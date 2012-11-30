@@ -1,0 +1,516 @@
+canaima-instalador (1.0+dev0-1) stable; urgency=low
+
+  [ Luis Alejandro Martínez Faneyth ]
+  * [720ff48] Moviendo base del código fuente al primer nivel de la
+    carpeta.
+  * [c53b965] Mejorando detalles estéticos.
+
+  [ Erick Birbe ]
+  * [58a6cd8] Corrigiendo problemas de identación del codigo
+
+  [ Luis Alejandro Martínez Faneyth ]
+  * [d54e9ca] Agregando colaboradores.
+
+ -- Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>  Fri, 31 Aug 2012 17:43:06 -0430
+
+canaima-instalador (1.0-26) stable; urgency=low
+
+  * [bed9207] Mejorando respuesta de h2kb si num es False.
+
+ -- Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>  Thu, 30 Aug 2012 17:04:23 -0430
+
+canaima-instalador (1.0-25) stable; urgency=low
+
+  * [7373b45] Arreglando detalle con asignación previa de variable.
+
+ -- Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>  Thu, 30 Aug 2012 14:42:03 -0430
+
+canaima-instalador (1.0-24) stable; urgency=low
+
+  * [6db0db9] Removiendo carpeta de ejemplos.
+
+ -- Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>  Thu, 30 Aug 2012 04:23:28 -0430
+
+canaima-instalador (1.0-23) stable; urgency=low
+
+  * [87844f4] Removiendo mensajes innecesarios.
+  * [44ff48c] Corrigiendo lugar de escritura del /etc/default/keyboard.
+    Corrigiendo error resultante del procesamiento de las particiones
+    cuando existe una partición de 0KB o cuando no existe tabla de
+    particiones. Ampliando la escritura de /etc/network/interfaces según
+    el número de interfaces. Sustituyendo "auto" por "allow-hotplug" en
+    las entradas de /etc/network/interfaces para evitar que haga DHCP en
+    el boot. Escribiendo /etc/fstab correctamente.
+  * [c6b725d] Pequeño detalle estético en el Makefile.
+
+ -- Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>  Thu, 30 Aug 2012 04:17:20 -0430
+
+canaima-instalador (1.0-22) stable; urgency=low
+
+  [ William Abrahan Cabrera Reyes ]
+  * [6f0527b] Modificando método para configuración del teclado
+
+  [ Erick Birbe ]
+  * [9effc69] Especificando la distribución de teclado en
+    /etc/default/keyborad (bug #426)
+  * [e3eb045] Corrigiendo error de lintian executable-not-elf-or-script
+  * [586d349] Activando el metodo de configuracion de teclado
+    self.keyboard()
+  * [b08fb5f] Agregandome como Uploader
+
+ -- Erick Birbe <erickcion@gmail.com>  Wed, 22 Aug 2012 09:19:14 -0430
+
+canaima-instalador (1.0-21) stable; urgency=low
+
+  * [fc5d55c] cambiando función para instalar la accesibilidad del gdm
+
+ -- William Abrahan Cabrera Reyes <cabrerawilliam@gmail.com>  Thu, 12 Jul 2012 09:06:22 -0430
+
+canaima-instalador (1.0-20) stable; urgency=low
+
+  * [968485a] devolviendo cambios anteriores
+
+ -- William Abrahan Cabrera Reyes <cabrerawilliam@gmail.com>  Tue, 10 Jul 2012 05:09:24 -0430
+
+canaima-instalador (1.0-19) stable; urgency=low
+
+  * [923a5ae] mostrando archivos que se van copiando al disco
+
+ -- William Abrahan Cabrera Reyes <cabrerawilliam@gmail.com>  Tue, 10 Jul 2012 04:45:48 -0430
+
+canaima-instalador (1.0-18) stable; urgency=low
+
+  * [cd8432d] corrigiendo error de letra faltante
+
+ -- William Abrahan Cabrera Reyes <cabrerawilliam@gmail.com>  Tue, 10 Jul 2012 04:26:32 -0430
+
+canaima-instalador (1.0-17) stable; urgency=low
+
+  * [1e0d059] Eliminando barra de progreso
+
+ -- William Abrahan Cabrera Reyes <cabrerawilliam@gmail.com>  Tue, 10 Jul 2012 04:09:54 -0430
+
+canaima-instalador (1.0-16) stable; urgency=low
+
+  * [de790b0] revirtiendo cambios en el paso de instalación
+
+ -- William Abrahan Cabrera Reyes <cabrerawilliam@gmail.com>  Tue, 10 Jul 2012 02:21:18 -0430
+
+canaima-instalador (1.0-15) stable; urgency=low
+
+  * [2c75cf5] simplificación de la salida del udevadm
+  * [a4f55ed] cambiando udevadm por fdisk
+  * [f724d75] probando cambios en el paso de instalación para evitar
+    congelamiento de la pantalla
+
+ -- William Abrahan Cabrera Reyes <cabrerawilliam@gmail.com>  Tue, 10 Jul 2012 01:07:17 -0430
+
+canaima-instalador (1.0-14) stable; urgency=low
+
+  [ William Abrahan Cabrera Reyes ]
+  * [901d4f0] agregando paquetes faltantes al script de instalación de
+    burg
+
+  [ Erick Birbe ]
+  * [602051a] Creando archivo .gitignore para obviar archivos *.pyc al
+    hacer commits
+  * [5a44f60] Colocando un mensaje de error mas descriptivos
+  * [42683ee] Corrigiendo la detección de los discos duros (bug #487)
+
+  [ William Abrahan Cabrera Reyes ]
+  * [e8c430b] Corregido error en udevadm sobre la deteccion de los
+    discos.
+  * [5f76239] Corregido error en el paso metodo sobre la nueva forma de
+    deteccion de discos
+
+ -- William Abrahan Cabrera Reyes <cabrerawilliam@gmail.com>  Mon, 09 Jul 2012 19:00:10 -0430
+
+canaima-instalador (1.0-13) stable; urgency=low
+
+  * [03e7b47] corrigiendo error en la instalación del paquete canaima-
+    primeros-pasos
+
+ -- William Abrahan Cabrera Reyes <cabrerawilliam@gmail.com>  Sat, 07 Jul 2012 02:08:01 -0430
+
+canaima-instalador (1.0-12) stable; urgency=low
+
+  * [78cd18a] corrigiendo la instalacción erronea de canaima-primeros-
+    pasos
+  * [0845f68] reconfigurando diferentes paquetes para corregir error con
+    el idioma
+
+ -- William Abrahan Cabrera Reyes <cabrerawilliam@gmail.com>  Sat, 07 Jul 2012 01:07:05 -0430
+
+canaima-instalador (1.0-11) stable; urgency=low
+
+  * [4fca059] Error Corregido: el hilo del progressbar cuelga la
+    aplicación
+  * [dcce26c] agregando función relativa a los hilos a la clase metodo
+  * [193436b] corrigiendo error de cuelgues generados por los f*****g
+    hilos en python
+  * [de92f30] corrigiendo la eliminación del nuevo usuario y la copia
+    incorrecta del inittab
+
+ -- William Abrahan Cabrera Reyes <cabrerawilliam@gmail.com>  Fri, 06 Jul 2012 23:12:22 -0430
+
+canaima-instalador (1.0-10) stable; urgency=low
+
+  * [026304f] Error Corregido: faltaba la clase wizard en el makefile
+
+ -- William Abrahan Cabrera Reyes <cabrerawilliam@gmail.com>  Tue, 03 Jul 2012 11:56:26 -0430
+
+canaima-instalador (1.0-9) stable; urgency=low
+
+  * [9f36dab] Error Corregido: faltaba la clase accesibilidad en el
+    makefile
+
+ -- William Abrahan Cabrera Reyes <cabrerawilliam@gmail.com>  Tue, 03 Jul 2012 11:45:37 -0430
+
+canaima-instalador (1.0-8) stable; urgency=low
+
+  * [5171d72] Devolviendo cambios en la función (Culpa de Huntingbears,
+    yo no fui XD)
+
+ -- William Abrahan Cabrera Reyes <cabrerawilliam@gmail.com>  Mon, 02 Jul 2012 18:48:43 -0430
+
+canaima-instalador (1.0-7) stable; urgency=low
+
+  * [5fb5780] Error Corregido: las funciones y variables no aceptan
+    guiones
+
+ -- William Abrahan Cabrera Reyes <cabrerawilliam@gmail.com>  Mon, 02 Jul 2012 18:39:36 -0430
+
+canaima-instalador (1.0-6) stable; urgency=low
+
+  * [9239d25] eliminado codigo innecesario.
+
+ -- William Abrahan Cabrera Reyes <cabrerawilliam@gmail.com>  Thu, 21 Jun 2012 15:29:23 -0430
+
+canaima-instalador (1.0-5) stable; urgency=low
+
+  * [3b9a5a6] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: install-grub.sh
+  * [fb11b0f] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: postrm preinst
+  * [cedb617] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: postrm preinst
+  * [0a1f383] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: postrm
+  * [18a9a3a] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: postrm
+  * [315cf0f] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: Makefile
+  * [d10e266] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: Makefile postrm preinst canaima-oem Default
+  * [34a9a5f] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: postrm preinst
+  * [81bf84e] Error resuelto: Aunque se seleccionara la opción de
+    instalación oem aun intentaba validar los campos
+  * [2dbec13] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: Makefile
+  * [ee0d805] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: Makefile
+  * [8099b94] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: Makefile
+  * [7bcedfb] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: Makefile
+  * [a3a058a] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: oem.py usuario.py
+  * [3ec14ad] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: usuario.py
+  * [5128490] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: canaima-oem oem.py
+  * [3ee011b] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: preinst wait.gif oem.py usuario.html
+  * [341bd0b] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: Makefile preinst usuario.html
+  * [4187dc4] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: oem.py usuario.html
+  * [8f72094] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: oem.py
+  * [5f646a0] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: oem.py
+  * [6732ab9] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: instalacion.py
+  * [dc904a5] Error Corregido no detectaba la lista de particiones
+    creadas manualmente en un punto definido
+  * [d121b9a] Corrección error con lista manual. Agregada opción para
+    incluir imagen de usuario. Agregada opción para que la función
+    lista_particiones para que soporte tambien el parted en español
+  * [f722b7a] Error Corregido: cuando parted está en español no mostraba
+    el tamaño total parando la aplicación al momento de mostrar los
+    discos.
+  * [5547d22] Error Corregido: Canaima Instalador, No cambia los valores
+    de configuración del usuario (Ticket #478)
+  * [85640b7] Error Corregido: Los campos no están bien validados.
+    (#479)
+  * [59d02ad] Error Corregido: La contraseña se imprime en texto plano.
+    (#480)
+  * [2001c3c] Error corregido: Configuración del teclado no se modifica.
+    (#477)
+  * [e14628a] Mejora: Pantalla de accesibilidad en el instalador. Error
+    Corregido: Archivo XML para idioma no está bien formada
+  * [7ebfe14] Eliminado el módulo OEM del instalador
+  * [15b65cc] Eliminando la instalación del OEM
+  * [3b22c03] Agregando funcion para la instalación del paquete canaima-
+    primeros-pasos
+  * [cbd6ed3] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: canaima-instalador.debhelper.log preinst
+  * [ed03292] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos:
+  * [638a405] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: postrm
+  * [7fd99ec] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: Makefile canaima-instalador.desktop canaima-
+    instalador canaima-instalador.py
+  * [3bad882] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos:
+
+ -- William Abrahan Cabrera Reyes <cabrerawilliam@gmail.com>  Wed, 20 Jun 2012 12:02:42 -0430
+
+canaima-instalador (1.0-4) stable; urgency=low
+
+  * [3b9a5a6] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: install-grub.sh
+
+ -- William Abrahan Cabrera Reyes <william@linux.es>  Wed, 09 May 2012 03:25:18 -0430
+
+canaima-instalador (1.0-3) stable; urgency=low
+
+  * [8016885] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: canaima-instalador.py
+  * [560b6b0] Corregido error con la opción instalar todo
+  * [99572ed] Corrección bugs relacionado a la instalacion automática
+  * [f17530b] Añadido punto de montaje e instalación de paquetes
+    necesarios
+  * [ba5708a] Agregada primera parte del particionador manual
+  * [64437a3] Eliminados los binarios innecesarios
+  * [52ebf13] Completado particionado manual
+  * [6de8105] corregido error en particionado manual al buscar el final
+    de la partición
+  * [e9988f6] Corregido error al convertir tamaño de las particiones y
+    agregada partición que será booteable
+  * [d1c045e] Coregido error en la conversión de valores para el final
+    de la partición
+  * [429d480] Error corregido: no se redimensionaba bien la partición
+    NTFS en modo particionado manual y no se formateaba la primera
+    partición lógica que se creaba
+  * [0b88402] Error corregido: cuando no existía la variable
+    cfg['partición'] probocaba una excepción. Aplicada validación que
+    elimina del combobox el punto de montaje que ya haya sido agregado
+  * [e8f89e2] Agregada validación para evitar puntos de montaje
+    repetidos al escoger punto de montaje manual
+  * [77fd608] Error corregido: no se mostraba correctamente el mensaje
+    de información al escoger el método de particionado
+  * [3e5014a] Cambiadas las rutas de los .deb nuevos que se instalarán
+  * [6742694] Agregada información acerca del metodo de particionado
+    manual en la info
+  * [8a44fbf] Agregada validación para obligar al usuario a crear un
+    punto de montaje raiz (/)
+  * [8dcc70f] Error corregido: el diálogo de redimensionamiento de la
+    partición no actualiza si se va hacia atras y se escoga oto disco o
+    particiń para redimensionar
+  * [45fc419] Error corregido: el diálogo del particionado no actualiza
+    si se va hacia atras y se escoge oto disco o partición
+  * [b66b5ab] Eliminada la opción de redimensionar partición ext3
+  * [bcdf752] Agregados los sistemas de archivos soportados por parted
+    en el particionador manual
+  * [180c3de] Agregando nueva dependencia (reiserfsprogs)
+  * [9b6f39c] Error corregido: Variables inexistentes cuando el metodo
+    es 'todo' y el tipo de particioado es 1
+  * [cf1a21c] Error corregido: No detecta el disco donde se instalará
+    burg cuando se redimensiona la partición
+  * [4f1cfee] Error corregido: particionado manual presentaba error con
+    variables
+  * [abe0461] Corregido error: la partición manual desde un espacio
+    vacio daba error
+  * [f67be7a] reescrita función deshacer ya que no estaba optimizada
+  * [f08c342] Añadido paso oem
+  * [fc91446] Error corregido: Si se consigue un disco sin tabla de
+    particiones se cuelga. Error corregido: El ejecutable del oem no
+    estaba definido Agregados nuevos paquetes en el makefile
+  * [71f895c] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: rules
+  * [ec12490] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: Makefile canaima-instalador.debhelper.log
+    canaima-instalador.desktop canaima-instalador canaima-oem canaima-
+    instalador.py wizard.py
+  * [76dadf8] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos:
+  * [e032546] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: Makefile canaima-instalador.debhelper.log
+    canaima-instalador.desktop canaima-instalador canaima-oem canaima-
+    instalador.py wizard.py
+  * [4669fe1] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos:
+  * [8aea33b] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: Makefile canaima-instalador.debhelper.log
+    canaima-instalador.desktop canaima-instalador canaima-oem canaima-
+    instalador.py oem.py usuario.html wizard.py
+  * [805adb2] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos:
+
+ -- William Abrahan Cabrera Reyes <william@linux.es>  Wed, 09 May 2012 03:25:17 -0430
+
+canaima-instalador (1.0-2) stable; urgency=low
+
+  [ William Abrahan Cabrera Reyes ]
+  * [2332842] Eliminando archivos innecesarios
+  * [ef86bf2] Corregido error en el módulo metodo.py
+  * [aabaa78] Corregido error al intentar instalar desde un espacio sin
+    particionar
+  * [bf3396a] Corregido error que eliminaba las particiones cuando se
+    usaba la opción de instalar en el espacio sin particionar
+  * [f96baa1] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: __init__.pyc barra_auto.pyc
+    barra_particiones.pyc distribuciones.pyc __init__.pyc
+    leyenda_auto.pyc leyenda_todo.pyc particiones.pyc lista.py
+    __init__.pyc bienvenida.pyc info.pyc instalacion.pyc metodo.py
+    metodo.pyc particion_todo.pyc teclado.pyc usuario.pyc
+
+  [ root ]
+  * [565699f] Corregido error que impedía instalar con la opción de usar
+    todo el disco
+
+  [ William Abrahan Cabrera Reyes ]
+  * [94620f2] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: barra_todo.pyc general.pyc fstab.pyc
+    particion_auto.pyc particion_todo.pyc particion_auto.pyc wizard.pyc
+  * [790999d] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: canaima-instalador.py
+  * [1ff007d] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: canaima-instalador.py
+
+ -- William Abrahan Cabrera Reyes <william@linux.es>  Thu, 05 Jan 2012 17:30:06 -0430
+
+canaima-instalador (1.0-1) stable; urgency=low
+
+  [ William Abrahan Cabrera Reyes ]
+  * Versión inicial de canaima-instalador para Canaima GNU/Linux
+  [ William Cabrera ]
+  * [9afc96e] Cambios importantes en particionado, copia y post-
+    instalación
+  [ William Abrahan Cabrera Reyes ]
+  * [da5659f] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: rules
+  * [d2e0f67] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: Makefile
+  * [1d3277d] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: Makefile canaima-instalador.debhelper.log
+  * [a0a2dce] cambios en el makefile
+  * [a574117] corrigiendo el archivo makefile
+  * [5cb4cd2] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: canaima-instalador.py banner-app-top.png
+    buscar-discos.png es.png wizard.py
+  * [0b582ac] eliminando archivos innecesarios
+  * [90469aa] corrigiendo archivo makefile
+  * [de49fa1] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: canaima-instalador.py banner-app-top.png
+    buscar-discos.png es.png wizard.py
+  * [f49a127] eliminando archivos innecesarios
+  * [c1d3b01] corrigiendo archivo makefile
+  * [0c5e8c3] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: canaima-instalador.debhelper.log canaima-
+    instalador.py banner-app-top.png buscar-discos.png es.png latam.png
+    us.png carrusel.html image1.jpg image2.jpg image3.jpg image4.jpg
+    image5.jpg image6.jpg image7.jpg image8.jpg jquery-1.js wizard.py
+  * [f33b8ec] eliminando archivos innecesarios
+  * [a1c5722] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: canaima-instalador.py banner-app-top.png
+    buscar-discos.png es.png latam.png us.png carrusel.html image1.jpg
+    image2.jpg image3.jpg image4.jpg image5.jpg image6.jpg image7.jpg
+    image8.jpg jquery-1.js __init__.py bienvenida.py info.py
+    instalacion.py metodo.py particion_auto.py particion_todo.py
+    teclado.py usuario.py wizard.py
+  * [c52d85c] eliminando archivos innecesarios
+  * [9e6c92f] corrigiendo errores de dependencias de modulos y
+    modificando el makefile
+  * [f3d3f61] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: canaima-instalador.debhelper.log canaima-
+    instalador.py banner-app-top.png buscar-discos.png es.png latam.png
+    us.png carrusel.html image1.jpg image2.jpg image3.jpg image4.jpg
+    image5.jpg image6.jpg image7.jpg image8.jpg jquery-1.js __init__.py
+    bienvenida.py info.py instalacion.py metodo.py particion_auto.py
+    particion_todo.py teclado.py usuario.py wizard.py canaima-instalador
+  * [d24c8bd] eliminando archivos innecesarios
+  * [838518f] corrigiendo arhcivo makefile
+  * [e881f60] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: canaima-instalador.py
+  * [4598946] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: Makefile copyright carrusel.html image1.png
+    image2.png image3.png image4.png image5.png image6.png image7.png
+  * [41c2a0b] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: instalacion.py
+  * [d7030e4] Corregido el carrusel y el mensaje final del instalador
+  * [29761f1] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: instalacion.py
+  * [85f3785] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: instalacion.py
+  * [6ea75c0] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: instalacion.py
+  * [e83a312] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: instalacion.py
+  * [995c67d] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: canaima-instalador.py barra_auto.pyc
+    barra_particiones.pyc barra_todo.pyc distribuciones.pyc general.pyc
+    __init__.pyc fstab.pyc particion_auto.pyc particion_todo.pyc
+    leyenda_auto.pyc leyenda_todo.pyc particiones.pyc image1.jpg.png
+    final.py info.pyc instalacion.py instalacion.pyc metodo.pyc
+    particion_auto.pyc particion_todo.pyc teclado.pyc usuario.pyc
+    install-grub.sh wizard.pyc
+  * [52dd946] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: instalacion.py
+  * [64b7736] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: canaima-instalador.py instalacion.py
+  * [c6a6680] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: instalacion.py
+  * [af5741b] Modificando imagen principal del preview y corrigiendo los
+    cambios en la botonera
+  * [639f5c0] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: canaima-instalador.py instalacion.py
+  * [227fb51] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: instalacion.py
+  * [d2b78bf] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: Makefile canaima-instalador-vivo.desktop
+  * [8ab5944] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: canaima-instalador.debhelper.log canaima-
+    instalador.desktop
+  * [1f76d01] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos:
+  * [5a4be15] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: Makefile canaima-instalador.desktop
+  * [7e332db] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos:
+  * [3a9aa46] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: instalacion.py
+  * [bb45031] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: Makefile postinst
+  * [1546b9d] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: postrm
+  * [09e61f8] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: Makefile postrm
+  * [4ffcc56] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: control postinst postrm canaima-
+    instalador.desktop fstab.py carrusel.html
+  * [f767daa] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: Makefile metodo.py
+  * [caff1d2] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: metodo.py
+  * [6398bfb] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: fstab.py metodo.py
+  * [cffc7b6] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: fstab.py instalacion.py
+  * [7970c76] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: fstab.py
+  * [d699131] [ canaima-desarrollador ] Los siguientes archivos han sido
+    modificados/añadidos: fstab.py instalacion.py
+  * [ebec64a] Corrigiendo error en la clase fstab y preparando las
+    funciones para calculo del tamaño de las particiones
+  * [553a962] corregido error con variable inexistente
+  * [a544b2c] Calculo de particiones para instalacion de todo el disco
+
+  [ Luis Alejandro Martínez Faneyth ]
+  * [de71e37] Removiendo residuos de scripts de python precompilados
+    (*.pyc)
+
+ -- Luis Alejandro Martínez Faneyth <martinez.faneyth@gmail.com>  Wed, 28 Dec 2011 14:53:49 -0430

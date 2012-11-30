@@ -1,0 +1,10 @@
+#!/usr/bin/make -f
+
+%:
+	dh ${@} --with python-support
+
+override_dh_auto_build:
+	$(MAKE) DESTDIR=$(CURDIR)/debian/canaima-instalador build
+
+override_dh_auto_install:
+	$(MAKE) DESTDIR=$(CURDIR)/debian/canaima-instalador install
