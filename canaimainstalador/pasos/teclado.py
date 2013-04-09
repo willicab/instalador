@@ -52,7 +52,7 @@ class PasoTeclado(gtk.Fixed):
         self.cmb_dist.connect("changed", self.change_distribucion)
         self.cmb_dist.set_size_request(690, 30)
         self.put(self.cmb_dist, 0, 25)
-        
+
         self.img_distribucion = gtk.Image()
         self.img_distribucion.set_size_request(690, 210)
         self.put(self.img_distribucion, 0, 70)
@@ -69,6 +69,6 @@ class PasoTeclado(gtk.Fixed):
 
     def change_distribucion(self, widget=None):
         self.distribucion = self.lst_distribuciones[self.cmb_dist.get_active()]
-        ProcessGenerator('setxkbmap {0}'.format(self.distribucion))
+        ProcessGenerator('setxkbmap {0} -model pc105'.format(self.distribucion))
         self.img_distribucion.set_from_file(KEY_IMAGE_TMPL.format(self.distribucion))
 
