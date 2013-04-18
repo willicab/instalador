@@ -29,6 +29,7 @@
 [ LISTO ] - Al final de la animación, queda una slide en blanco.
 [ LISTO ] - Arreglar la forma en como se determina el lugar de las cosas en config.py
 [ LISTO ] - La partición boot lógica no es reconocida por burg.
+- Migrar a Gtk3
 - Mejorar mensajes de error de la instalación.
 - Agregar soporte para LVM y RAID.
 - Agregar funcionalidad para instalar desde red y hacia la red (FAI).
