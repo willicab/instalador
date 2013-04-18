@@ -75,6 +75,51 @@ TECLADOS = {
     'us': 'Inglés, Estados Unidos'
     }
 
+# TODO: Automatizar el proceso de nombrar los lenguajes (Verificar normas ISO)
+LENGUAJES = [
+    ('en_AG', 'Inglés, Antigua y Barbuda'),
+    ('en_AU', 'Inglés, Australia'),
+    ('en_BW', 'Inglés, Botswana'),
+    ('en_CA', 'Inglés, Canadá'),
+    ('en_DK', 'Inglés, Dinamarca'),
+    ('en_GB', 'Inglés, Reino Unido'),
+    ('en_HK', 'Inglés, Hong Kong'),
+    ('en_IE', 'Inglés, Irlanda'),
+    ('en_IN', 'Inglés, India'),
+    ('en_NG', 'Inglés, Nigeria'),
+    ('en_NZ', 'Inglés, Nueva Zelanda'),
+    ('en_PH', 'Inglés, Filipinas'),
+    ('en_SG', 'Inglés, Singapur'),
+    ('en_US', 'Inglés, Estados Unidos'),
+    ('en_ZA', 'Inglés, Sur África'),
+    ('en_ZM', 'Inglés, Zambia'),
+    ('en_ZW', 'Inglés, Zimbabue'),
+
+    ('es_AR', 'Español, Argentina'),
+    ('es_BO', 'Español, Bolivia'),
+    ('es_CL', 'Español, Chile'),
+    ('es_CO', 'Español, Colombia'),
+    ('es_CR', 'Español, Costa Rica'),
+    ('es_DO', 'Español, Dominicana'),
+    ('es_EC', 'Español, Ecuador'),
+    ('es_ES', 'Español, España'),
+    ('es_GT', 'Español, Guatemala'),
+    ('es_ES', 'Español, España'),
+    ('es_HN', 'Español, Honduras'),
+    ('es_MX', 'Español, Mexico'),
+    ('es_PA', 'Español, Panamá'),
+    ('es_PE', 'Español, Perú'),
+    ('es_PR', 'Español, Puerto Rico'),
+    ('es_PY', 'Español, Paraguay'),
+    ('es_SV', 'Español, El Salvador'),
+    ('es_US', 'Español, Estados Unidos'),
+    ('es_UY', 'Español, Uruguay'),
+    ('es_VE', 'Español, Venezuela'),
+
+    ('pt_BR', 'Portugués, Brasil'),
+    ('pt_PT', 'Portugués, Portugal'),
+    ]
+
 FSPROGS = {
     'btrfs': [
         ['mkfs.btrfs {0}'],
