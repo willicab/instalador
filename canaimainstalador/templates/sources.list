@@ -1,0 +1,14 @@
+#
+# Repositorios de Canaima GNU/Linux
+#
+
+# Repositorio Antiguo (3.0)
+#deb http://paquetes.canaima.softwarelibre.gob.ve/ roraima main aportes no-libres
+
+# Repositorio Estable (3.1)
+deb http://paquetes.canaima.softwarelibre.gob.ve/ auyantepui main aportes no-libres
+#deb-src http://paquetes.canaima.softwarelibre.gob.ve/ auyantepui main aportes no-libres
+
+# Repositorio de Desarrollo (4.0)
+#deb http://paquetes.canaima.softwarelibre.gob.ve/ kukenan main aportes no-libres
+#deb-src http://paquetes.canaima.softwarelibre.gob.ve/ kukenan main aportes no-libres
