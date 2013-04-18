@@ -31,16 +31,15 @@ import gtk
 from canaimainstalador.config import TECLADOS, KEY_IMAGE_TMPL
 from canaimainstalador.clases.common import ProcessGenerator
 
-class PasoTeclado(gtk.Fixed):
+class PasoTeclado(gtk.VBox):
     def __init__(self, CFG):
-        gtk.Fixed.__init__(self)
+        gtk.VBox.__init__(self)
 
         self.lst_distribuciones = []
         self.distribucion = ''
 
         self.lbl1 = gtk.Label("Escoja una distribución de teclado")
-        self.lbl1.set_size_request(690, 20)
-        self.put(self.lbl1, 0, 0)
+        self.add(self.lbl1)
 
         self.cmb_dist = gtk.combo_box_new_text()
 
@@ -50,20 +49,16 @@ class PasoTeclado(gtk.Fixed):
 
         self.cmb_dist.set_active(0)
         self.cmb_dist.connect("changed", self.change_distribucion)
-        self.cmb_dist.set_size_request(690, 30)
-        self.put(self.cmb_dist, 0, 25)
+        self.add(self.cmb_dist)
 
         self.img_distribucion = gtk.Image()
-        self.img_distribucion.set_size_request(690, 210)
-        self.put(self.img_distribucion, 0, 70)
+        self.add(self.img_distribucion)
 
         self.lbl2 = gtk.Label("Presione algunas teclas para probar la distribución de teclado elegida")
-        self.lbl2.set_size_request(690, 20)
-        self.put(self.lbl2, 0, 285)
+        self.add(self.lbl2)
 
         self.txt_prueba = gtk.Entry()
-        self.txt_prueba.set_size_request(690, 30)
-        self.put(self.txt_prueba, 0, 305)
+        self.add(self.txt_prueba)
 
         self.change_distribucion()
 
