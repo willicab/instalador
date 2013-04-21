@@ -433,8 +433,7 @@ def crear_etc_fstab(mnt, cfg, mountlist, cdroms):
     return True
 
 def crear_passwd_group_inittab_mtab(mnt):
-    if not filecmp.cmp('/usr/share/sysvinit/inittab', '{0}/etc/inittab'.format(mnt)):
-        shutil.copy2('/usr/share/sysvinit/inittab', '{0}/etc/inittab'.format(mnt))
+    shutil.copy2('/usr/share/sysvinit/inittab', '{0}/etc/inittab'.format(mnt))
 
     f = open('{0}/etc/mtab'.format(mnt), 'w')
     f.write('')
