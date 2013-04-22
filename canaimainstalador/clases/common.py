@@ -26,12 +26,13 @@
 #
 # CODE IS POETRY
 
-import re, subprocess, math, cairo, gtk, hashlib, random, string, urllib2, os, glob, parted, crypt, threading, shutil, filecmp
+import re, subprocess, math, cairo, gtk, hashlib, random, string, urllib2, \
+    os, glob, parted, crypt, threading, shutil, filecmp
 
 from canaimainstalador.translator import msj
 from canaimainstalador.config import APP_NAME, APP_COPYRIGHT, APP_DESCRIPTION, \
     APP_URL, LICENSE_FILE, AUTHORS_FILE, TRANSLATORS_FILE, VERSION_FILE, ABOUT_IMAGE, \
-    FSPROGS, FSMIN, FSMAX
+    FSPROGS, FSMIN, FSMAX, SHAREDIR
 
 def AboutWindow(widget=None):
     about = gtk.AboutDialog()
@@ -438,6 +439,17 @@ def crear_passwd_group_inittab_mtab(mnt):
     f = open('{0}/etc/mtab'.format(mnt), 'w')
     f.write('')
     f.close()
+
+    return True
+    
+def crear_archivos_config(mnt, conffilelist):
+    import sys
+    try:
+        for dest, orig in conffilelist:
+            shutil.copy2('{0}/{1}'.format(SHAREDIR, orig), '{0}/{1}'.format(mnt, dest))
+    except Exception as ex:
+        print ex
+        return False
 
     return True
 
