@@ -76,7 +76,11 @@ install:
 	@cp canaima-instalador.desktop $(DESTDIR)/etc/skel/Escritorio/
 	@cp canaima-instalador.py $(DESTDIR)/usr/bin/canaima-instalador
 	@cp -r canaimainstalador $(DESTDIR)/usr/share/pyshared/
-	@cp VERSION AUTHORS LICENSE TRANSLATORS $(DESTDIR)/usr/share/canaima-instalador/
+	@cp VERSION AUTHORS LICENSE TRANSLATORS \
+		$(DESTDIR)/usr/share/canaima-instalador/
+	@cp -r templates/ $(DESTDIR)/usr/share/canaima-instalador/
+	
+	# Removiendo archivos de imagenes innecesarios
 	@rm -rf $(DESTDIR)/usr/share/pyshared/canaimainstalador/data/slides/*.png
 	@rm -rf $(DESTDIR)/usr/share/pyshared/canaimainstalador/data/slides/*.svg
 	@rm -rf $(DESTDIR)/usr/share/pyshared/canaimainstalador/data/img/*.svg
