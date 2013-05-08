@@ -375,29 +375,30 @@ def crear_etc_hosts(mnt, cfg, maq):
 
     return True
 
+#TODO: En el futuro No solo proveer el LAYOUT sino tambien el MODEL
 def crear_etc_default_keyboard(mnt, cfg, key):
-    pattern = "^XKBLAYOUT=*"
-    re_obj = re.compile(pattern)
-    new_value = "XKBLAYOUT=\"" + key + "\"\n"
 
     file_path = mnt + cfg
-    infile = open(file_path, "r")
-    string = ''
+    string = """# Archivo generado por el Instalador de Canaima
 
-    # Busca el valor del pattern
-    is_match = False
-    for line in infile:
-        match = re_obj.search(line)
-        if match :
-            is_match = True
-            string += new_value
-        else:
-            string += line
-    infile.close()
+# Check /usr/share/doc/keyboard-configuration/README.Debian for
+# documentation on what to do after having modified this file.
 
-    # Si no encuentra el pattern lo agrega al final con el valor asignado
-    if not is_match:
-        string += new_value
+# The following variables describe your keyboard and can have the same
+# values as the XkbModel, XkbLayout, XkbVariant and XkbOptions options
+# in /etc/X11/xorg.conf.
+
+
+XKBMODEL='pc105'
+XKBLAYOUT='{0}'
+XKBVARIANT=''
+XKBOPTIONS=''
+
+# If you don't want to use the XKB layout on the console, you can
+# specify an alternative keymap.  Make sure it will be accessible
+# before /usr is mounted.
+# KMAP=/etc/console-setup/defkeymap.kmap.gz
+""".format(key)
 
     # Escribe el archivo modificado
     outfile = open(file_path, "w")
