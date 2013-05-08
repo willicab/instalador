@@ -1,3 +1,20 @@
+DEVELOPMENT SNAPSHOT v2.0.2+dev20130508164831 (05/08/13)
+Creando el /etc/default/keyboard directo desde el instalador
+Preparando plantillas para Canaima 4.0
+Mejorando algunos procesos de instalación
+Permitiendo la instalación de las de plantillas en Makefile
+Eliminando archivos del TODO que ya no se usarán
+Cambiando repositorio a kerepakupai en sources.list
+Insertando función para copiar archivos desde plantillas
+Moviendo archivos de plantillas a una carpeta superior
+Deshaciendo validación de inittab que no funciona sin los alternatives
+Usando gtk.VBox en vez de gtk.Fixed en pasos/teclado.py
+Agregando lista reducida de idiomas prioritarios a traducir
+Agregando tarea al TODO
+Añadiendo modelo de teclado para no desactivar el teclado numerico
+Agregando tareas al TODO. Agregando plantillas a escribir en la instalación.
+Rehabilitando squash commits.
+
 DEVELOPMENT SNAPSHOT v2.0.1+dev20121130084037 (11/30/12)
 Rehabilitando squash commits.
 Deshabilitando squash commit temporalmente.
