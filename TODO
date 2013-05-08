@@ -48,13 +48,11 @@
 	- /etc/apt/sources.list
 	- /etc/default/locale
 	- /etc/locale.gen
-	- /etc/default/keyboard
 	- /etc/default/prelink
 	- /etc/default/rcS
 	- /etc/inittab
 	- /etc/xdg/user-dirs.defaults
 	- /etc/locale.nopurge
 	- /etc/adduser.conf
-	- /etc/NetworkManager/NetworkManager.conf
 	- /usr/share/applications/defaults.list
 
