@@ -27,12 +27,12 @@
 # CODE IS POETRY
 
 import re, subprocess, math, cairo, gtk, hashlib, random, string, urllib2, \
-    os, glob, parted, crypt, threading, shutil, filecmp
+    os, glob, parted, crypt, threading, shutil
 
 from canaimainstalador.translator import msj
 from canaimainstalador.config import APP_NAME, APP_COPYRIGHT, APP_DESCRIPTION, \
     APP_URL, LICENSE_FILE, AUTHORS_FILE, TRANSLATORS_FILE, VERSION_FILE, ABOUT_IMAGE, \
-    FSPROGS, FSMIN, FSMAX, SHAREDIR
+    FSPROGS, FSMIN, FSMAX
 
 def AboutWindow(widget=None):
     about = gtk.AboutDialog()
@@ -45,10 +45,10 @@ def AboutWindow(widget=None):
 
     try:
         f = open(LICENSE_FILE, 'r')
-        license = f.read()
+        license_file = f.read()
         f.close()
     except Exception, msg:
-        license = 'NOT FOUND'
+        license_file = 'NOT FOUND'
 
     try:
         f = open(AUTHORS_FILE, 'r')
@@ -74,7 +74,7 @@ def AboutWindow(widget=None):
 
     about.set_translator_credits(translators)
     about.set_authors(authors)
-    about.set_license(license)
+    about.set_license(license_file)
     about.set_version(version)
 
     about.run()
@@ -111,7 +111,7 @@ def activar_swap(plist):
     for p, m, fs in plist:
         if fs == 'swap':
             cmd = 'swapon {0}'.format(p)
-            salida = subprocess.Popen(
+            subprocess.Popen(
                 cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT
                 ).communicate()[0].split()
     return True
@@ -130,7 +130,7 @@ def mounted_parts(disk):
     return m
 
 def get_windows_part_in(drive):
-    cmd = "os-prober | grep -i 'Windows' | grep '"+drive+"' | awk -F: '{print $1}'"
+    cmd = "os-prober | grep -i 'Windows' | grep '" + drive + "' | awk -F: '{print $1}'"
     salida = subprocess.Popen(
         cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT
         ).communicate()[0].split()
@@ -433,20 +433,10 @@ def crear_etc_fstab(mnt, cfg, mountlist, cdroms):
 
     return True
 
-def crear_passwd_group_inittab_mtab(mnt):
-    shutil.copy2('/usr/share/sysvinit/inittab', '{0}/etc/inittab'.format(mnt))
-
-    f = open('{0}/etc/mtab'.format(mnt), 'w')
-    f.write('')
-    f.close()
-
-    return True
-    
 def crear_archivos_config(mnt, conffilelist):
-    import sys
     try:
-        for dest, orig in conffilelist:
-            shutil.copy2('{0}/{1}'.format(SHAREDIR, orig), '{0}/{1}'.format(mnt, dest))
+        for orig, dest in conffilelist:
+            shutil.copy2(orig, dest)
     except Exception as ex:
         print ex
         return False
@@ -474,7 +464,7 @@ def get_uuid(particion):
 
     for i in salida:
         if re.search('^UUID=*', i):
-            uid = i            
+            uid = i
 
     return uid.replace('"', '')
 
