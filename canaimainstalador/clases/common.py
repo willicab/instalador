@@ -255,7 +255,7 @@ def desinstalar_paquetes(mnt, plist):
 
     for name in plist:
         if ProcessGenerator(
-            'chroot {0} aptitude purge --assume-yes --allow-untrusted -o DPkg::Options::="--force-confmiss" -o DPkg::Options::="--force-confnew" -o DPkg::Options::="--force-overwrite" {1}'.format(mnt, name)
+            'chroot {0} env DEBIAN_FRONTEND="noninteractive" aptitude purge --assume-yes --allow-untrusted -o DPkg::Options::="--force-confmiss" -o DPkg::Options::="--force-confnew" -o DPkg::Options::="--force-overwrite" {1}'.format(mnt, name)
             ).returncode == 0:
             i += 1
 
@@ -270,7 +270,7 @@ def reconfigurar_paquetes(mnt, plist):
 
     for name in plist:
         p = ProcessGenerator(
-            'chroot {0} dpkg-reconfigure {1}'.format(mnt, name)
+            'chroot {0} env DEBIAN_FRONTEND="noninteractive" dpkg-reconfigure {1}'.format(mnt, name)
             )
         if p.returncode == 0:
             i += 1
@@ -280,7 +280,10 @@ def reconfigurar_paquetes(mnt, plist):
     else:
         return False
 
+# TODO: Esto no está implementado en ningun otro lado
 def actualizar_sistema(mnt):
+    """ Este metodo pretende permitir actualizar el sistema si se detecta una 
+    conexion activa a internet"""
     i = 0
 
     if ProcessGenerator(
@@ -289,7 +292,7 @@ def actualizar_sistema(mnt):
         i += 1
 
     if ProcessGenerator(
-        'chroot {0} aptitude update'.format(mnt)
+        'chroot {0} env DEBIAN_FRONTEND="noninteractive" aptitude update'.format(mnt)
         ).returncode == 0:
         i += 1
 
