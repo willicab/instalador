@@ -216,7 +216,6 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
     instpkgs_burg = [
         ['/live/image/pool/main/libx/libx86', 'libx86-1'],
         ['/live/image/pool/main/s/svgalib', 'libsvga1'],
-        ['/live/image/pool/main/libs/libsdl1.2', 'libsdl1.2debian-alsa'],
         ['/live/image/pool/main/libs/libsdl1.2', 'libsdl1.2debian'],
         ['/live/image/pool/main/g/gettext', 'gettext-base'],
         ['/live/image/pool/main/b/burg-themes', 'burg-themes-common'],
