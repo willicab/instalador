@@ -434,6 +434,36 @@ def crear_etc_fstab(mnt, cfg, mountlist, cdroms):
 
     return True
 
+def activar_accesibilidad(mnt):
+
+    # Activa la accesibilidad en GDM3 a traves de las configuraciones del
+    # gsettings
+    gs_file = mnt + "/etc/gdm3/greeter.gsettings"
+    string = """
+# Generado por el Instalador de Canaima
+# Activación de Lector de Pantalla en GDM3
+[org.gnome.desktop.a11y.applications]
+"""
+    try:
+        infile = open(gs_file, "r")
+        file_string = infile.read()
+        string = file_string + string
+    except Exception:
+        return False
+    finally:
+        infile.close()
+
+    # Escribe el archivo modificado
+    try:
+        outfile = open(gs_file, "w")
+        outfile.write(string)
+    except Exception:
+        return False
+    finally:
+        outfile.close()
+
+    return True
+
 def crear_archivos_config(mnt, conffilelist):
     try:
         for orig, dest in conffilelist:
