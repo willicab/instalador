@@ -443,6 +443,7 @@ def activar_accesibilidad(mnt):
 # Generado por el Instalador de Canaima
 # Activación de Lector de Pantalla en GDM3
 [org.gnome.desktop.a11y.applications]
+screen-reader-enabled=true
 """
     try:
         infile = open(gs_file, "r")
