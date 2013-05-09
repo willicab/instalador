@@ -210,8 +210,8 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
         'live-boot-initramfs-tools', 'live-initramfs', 'live-config-sysvinit'
         ]
     reconfpkgs = [
-        'canaima-estilo-visual-gnome', 'canaima-escritorio-gnome',
-        'canaima-base', 'locales'
+        'locales', 'canaima-estilo-visual-gnome', 'canaima-escritorio-gnome',
+        'canaima-base'
         ]
     instpkgs_burg = [
         ['/live/image/pool/main/libx/libx86', 'libx86-1'],
@@ -388,6 +388,7 @@ archivos.', window, bindlist, mountlist)
         UserMessageError('Ocurrió un error montando los sistemas de archivos.',
                          window, bindlist, mountlist)
 
+    # Configuración de archivos del sistema
     label.set_text('Configurando archivos del sistema ...')
     if not crear_archivos_config(mnt=mountpoint, conffilelist=conffilelist):
         UserMessageError('Ocurrió un error configurando archivos del sistema.',
