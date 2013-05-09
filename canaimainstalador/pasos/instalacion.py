@@ -210,9 +210,8 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
         'live-boot-initramfs-tools', 'live-initramfs', 'live-config-sysvinit'
         ]
     reconfpkgs = [
-        'canaima-estilo-visual-gnome', 'canaima-plymouth',
-        'canaima-chat-gnome', 'canaima-bienvenido-gnome',
-        'canaima-escritorio-gnome', 'canaima-base'
+        'canaima-estilo-visual-gnome', 'canaima-escritorio-gnome',
+        'canaima-base'
         ]
     instpkgs_burg = [
         ['/live/image/pool/main/libx/libx86', 'libx86-1'],
