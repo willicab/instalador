@@ -35,7 +35,7 @@ from canaimainstalador.clases.common import UserMessage, ProcessGenerator, \
     crear_etc_hosts, crear_etc_network_interfaces, crear_etc_fstab, \
     assisted_mount, assisted_umount, preseed_debconf_values, mounted_targets, \
     mounted_parts, crear_usuarios, ThreadGenerator, get_windows_part_in, \
-    activar_swap, crear_archivos_config
+    activar_swap, crear_archivos_config, activar_accesibilidad
 from canaimainstalador.config import INSTALL_SLIDES, BAR_ICON, SHAREDIR
 
 gtk.gdk.threads_init()
@@ -230,10 +230,6 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
     instpkgs_cpp = [[
         '/live/image/pool/main/c/canaima-primeros-pasos/',
         'canaima-primeros-pasos'
-        ]]
-    instpkgs_cagg = [[
-        '/live/image/pool/main/c/canaima-accesibilidad-gdm-gnome/',
-        'canaima-accesibilidad-gdm-gnome'
         ]]
     debconflist = [
         'burg-pc burg/linux_cmdline string quiet splash',
@@ -431,9 +427,8 @@ archivos.', window, bindlist, mountlist)
     # Instalar accesibilidad en el GDM
     if gdm:
         label.set_text('Instalando componentes de accesibilidad en GDM ...')
-        if not instalar_paquetes(mnt=mountpoint, dest='/tmp',
-                                 plist=instpkgs_cagg):
-            UserMessageError('Ocurrió un error instalando un paquete.',
+        if not activar_accesibilidad(mnt=mountpoint):
+            UserMessageError('Ocurrió un error activando la accesibilidad.',
                          window, bindlist, mountlist)
 
     # Activa la funcionalidad OEM si ha sido seleccionada por el usuario
