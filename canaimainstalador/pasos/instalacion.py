@@ -176,7 +176,7 @@ def UserMessageError(message, window, bindlist, mountlist):
     módulo'''
 
     UserMessage(
-        message='Ocurrió un error creando una partición.',
+        message,
         title='ERROR',
         mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
         c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
