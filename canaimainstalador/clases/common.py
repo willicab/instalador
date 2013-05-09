@@ -229,6 +229,7 @@ def instalar_paquetes(mnt, dest, plist):
                 pkg = os.path.basename(pkglist[0])
                 pkgpath = pkglist[0]
             else:
+                print "Error al buscar " + pkglist
                 return False
 
             if not os.path.isdir(mnt + dest):
