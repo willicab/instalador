@@ -211,7 +211,7 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
         ]
     reconfpkgs = [
         'canaima-estilo-visual-gnome', 'canaima-escritorio-gnome',
-        'canaima-base'
+        'canaima-base', 'locales'
         ]
     instpkgs_burg = [
         ['/live/image/pool/main/libx/libx86', 'libx86-1'],
@@ -417,17 +417,17 @@ archivos.', window, bindlist, mountlist)
         UserMessageError('Ocurrió un error creando el archivo /etc/fstab.',
                          window, bindlist, mountlist)
 
-#TODO: Averiguar por que reconfigurar_paquetes se repite en la instalación
-#    label.set_text('Configurando detalles del sistema operativo ...')
-#    if not reconfigurar_paquetes(mnt=mountpoint, plist=reconfpkgs):
-#        UserMessageError('Ocurrió un error reconfigurando un paquete.',
-#                         window, bindlist, mountlist)
-
     # Instalar accesibilidad en el GDM
     if gdm:
         label.set_text('Instalando componentes de accesibilidad en GDM ...')
         if not activar_accesibilidad(mnt=mountpoint):
             UserMessageError('Ocurrió un error activando la accesibilidad.',
+                         window, bindlist, mountlist)
+
+    # Reconfigurando paquetes del sistema
+    label.set_text('Configurando detalles del sistema operativo ...')
+    if not reconfigurar_paquetes(mnt=mountpoint, plist=reconfpkgs):
+        UserMessageError('Ocurrió un error reconfigurando un paquete.',
                          window, bindlist, mountlist)
 
     # Activa la funcionalidad OEM si ha sido seleccionada por el usuario
@@ -457,12 +457,6 @@ archivos.', window, bindlist, mountlist)
         UserMessageError('Ocurrió un error creando los usuarios de sistema.',
                          window, bindlist, mountlist)
 
-    label.set_text('Configurando detalles del sistema operativo ...')
-    if not reconfigurar_paquetes(mnt=mountpoint, plist=reconfpkgs):
-        UserMessageError('Ocurrió un error reconfigurando un paquete.',
-                         window, bindlist, mountlist)
-
-    #TODO: REvisar por que se repite
     label.set_text('Removiendo instalador del sistema de archivos ...')
     if not desinstalar_paquetes(mnt=mountpoint, plist=uninstpkgs):
         UserMessageError('Ocurrió un error desinstalando un paquete.',
