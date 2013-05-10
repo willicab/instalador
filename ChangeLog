@@ -1,3 +1,8 @@
+DEVELOPMENT SNAPSHOT v2.0.2+dev20130510165606 (05/10/13)
+Implementando el inicio automático del instalador Colocando el instalador en /etc/xdg/autostart/ para que inicie de forma automática en el liveCD.
+Cambiando la forma de detectar SHAREDIR
+Agragando /etc/timezone a los archivos instalables
+
 DEVELOPMENT SNAPSHOT v2.0.2+dev20130510132508 (05/10/13)
 Agragando /etc/timezone a los archivos instalables
 Agregando dependencia 'libasprintf0c2' para 'gettext-base'
