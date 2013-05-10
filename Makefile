@@ -72,8 +72,10 @@ install:
 	@mkdir -p $(DESTDIR)/usr/share/pyshared
 	@mkdir -p $(DESTDIR)/usr/share/canaima-instalador
 	@mkdir -p $(DESTDIR)/etc/skel/Escritorio
+	@mkdir -p $(DESTDIR)/etc/xdg/autostart/
 
 	@cp canaima-instalador.desktop $(DESTDIR)/etc/skel/Escritorio/
+	@cp canaima-instalador.desktop $(DESTDIR)/etc/xdg/autostart/
 	@cp canaima-instalador.py $(DESTDIR)/usr/bin/canaima-instalador
 	@cp -r canaimainstalador $(DESTDIR)/usr/share/pyshared/
 	@cp VERSION AUTHORS LICENSE TRANSLATORS \
@@ -90,6 +92,7 @@ uninstall:
 	@rm -rf $(DESTDIR)/usr/bin/canaima-instalador
 	@rm -rf $(DESTDIR)/usr/share/pyshared/canaimainstalador
 	@rm -rf $(DESTDIR)/etc/skel/Escritorio/canaima-instalador.desktop
+	@rm -f $(DESTDIR)/etc/xdg/autostart/canaima-instalador.desktop
 
 clean: clean-img clean-pyc
 
