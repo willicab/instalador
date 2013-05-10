@@ -250,6 +250,7 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
                                          mountpoint + '/etc/apt/sources.list' ],
         [SHAREDIR + '/templates/locale', mountpoint + '/etc/default/locale' ],
         [SHAREDIR + '/templates/locale.gen', mountpoint + '/etc/locale.gen' ],
+        [SHAREDIR + '/templates/timezone', mountpoint + '/etc/timezone' ],
         [SHAREDIR + '/templates/adduser.conf',
                                         mountpoint + '/etc/adduser.conf' ],
         # Agregamos mtab para que no falle al instalar Burg

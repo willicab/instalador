@@ -48,6 +48,7 @@
 	- /etc/apt/sources.list
 	- /etc/default/locale
 	- /etc/locale.gen
+	- /etc/timezone
 	- /etc/default/prelink
 	- /etc/default/rcS
 	- /etc/inittab
