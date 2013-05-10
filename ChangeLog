@@ -1,3 +1,19 @@
+DEVELOPMENT SNAPSHOT v2.0.2+dev20130510132508 (05/10/13)
+Agragando /etc/timezone a los archivos instalables
+Agregando dependencia 'libasprintf0c2' para 'gettext-base'
+Corrigiendo la ruta hacia el icono del .desktop
+Imprimiendo mensaje de error para facilitar la depuración
+Eliminando instalación de paquete no presente en la iso
+Asegurando que locales sea el primer paquete en reconfigurarse
+Asegurando que la ejecución de APT en no-interactiva
+Asegurando la configuración de los LACALES durante la instalación
+Agregando llave que faltaba en la configuración de greeter.settings
+Eliminando paquetes a reconfigurar que ya no existen
+Aplicando nuevo metodo para activar la accesibilidad
+Creando metodo nuevo para configuración de a11d
+Corrigiendo paso de parametro erroneo en UserMessageError()
+Creando el /etc/default/keyboard directo desde el instalador
+
 DEVELOPMENT SNAPSHOT v2.0.2+dev20130508164831 (05/08/13)
 Creando el /etc/default/keyboard directo desde el instalador
 Preparando plantillas para Canaima 4.0
