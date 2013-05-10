@@ -17,17 +17,20 @@
 case ${1} in
 
 	purge|remove|upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
+		DESKTOP_FILE='canaima-instalador.desktop'
 		# Para cada usuario en /home/ ...
 		for USERNAME in $( ls -1 "/home/" ); do
+			RUTA="/home/${USERNAME}/Escritorio/${DESKTOP_FILE}"
 			# Y en caso de que el usuario sea un usuario activo (existente en /etc/shadow) ...
 			if [ $( grep -c "${USERNAME}:.*:.*:.*:.*:.*:::" /etc/shadow ) -eq 1 ] \
 			&& [ $( grep -c "${USERNAME}:.*:.*:.*:.*:.*:/bin/.*sh" /etc/passwd ) -eq 1 ] \
-			&& [ -d "/home/${USERNAME}/.config" ] && [ -d "/home/${USERNAME}/Escritorio" ]; then
+			&& [ -f $RUTA ];
+			then
 
 				echo 'Removiendo lanzador de escritorio para el usuario "'${USERNAME}'"'
 
 				# Removemos el lanzador
-				rm -rf /home/${USERNAME}/Escritorio/canaima-instalador.desktop
+				rm -f $RUTA
 			fi
 		done
 	;;
