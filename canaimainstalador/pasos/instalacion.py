@@ -204,7 +204,7 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
     oem = CFG['oem']
     gdm = CFG['gdm']
     mountpoint = '/target'
-    squashfs = '/live/image/live/filesystem.squashfs'
+    squashfs = '/lib/live/mount/medium/live/filesystem.squashfs'
     uninstpkgs = [
         'canaima-instalador', 'live-config', 'live-boot',
         'live-boot-initramfs-tools', 'live-initramfs', 'live-config-sysvinit'
