@@ -28,7 +28,7 @@
 
 import os
 
-curdir = os.path.realpath(__file__)
+curdir = os.path.normpath(os.path.join(os.path.realpath(__file__), '..', '..'))
 
 if curdir[:5] == '/usr/':
     GUIDIR = '/usr/share/pyshared/canaimainstalador'
@@ -36,6 +36,18 @@ if curdir[:5] == '/usr/':
 else:
     GUIDIR = curdir + '/canaimainstalador'
     SHAREDIR = curdir
+
+def get_live_path():
+    live_path = ''
+    if os.path.exists('/lib/live/mount/medium/'):
+        live_path = '/lib/live/mount/medium/'
+    elif os.path.exists('/live/image/'):
+        live_path = '/live/image/'
+    else:
+        raise Exception('Imposible encontrar imagen de disco.')
+
+    print "Utilizando imágen de disco en %s" % live_path
+    return live_path
 
 BAR_ICON = GUIDIR + '/data/img/icon.png'
 ABOUT_IMAGE = GUIDIR + '/data/img/logo.png'

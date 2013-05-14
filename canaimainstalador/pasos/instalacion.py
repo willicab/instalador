@@ -36,7 +36,8 @@ from canaimainstalador.clases.common import UserMessage, ProcessGenerator, \
     assisted_mount, assisted_umount, preseed_debconf_values, mounted_targets, \
     mounted_parts, crear_usuarios, ThreadGenerator, get_windows_part_in, \
     activar_swap, crear_archivos_config, activar_accesibilidad
-from canaimainstalador.config import INSTALL_SLIDES, BAR_ICON, SHAREDIR
+from canaimainstalador.config import INSTALL_SLIDES, BAR_ICON, SHAREDIR, \
+    get_live_path
 
 gtk.gdk.threads_init()
 
@@ -204,7 +205,8 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
     oem = CFG['oem']
     gdm = CFG['gdm']
     mountpoint = '/target'
-    squashfs = '/lib/live/mount/medium/live/filesystem.squashfs'
+    LIVE_PATH = get_live_path()
+    squashfs = LIVE_PATH + 'live/filesystem.squashfs'
     uninstpkgs = [
         'canaima-instalador', 'live-config', 'live-boot',
         'live-boot-initramfs-tools', 'live-initramfs', 'live-config-sysvinit'
@@ -214,20 +216,20 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
         'canaima-base'
         ]
     instpkgs_burg = [
-        ['/live/image/pool/main/libx/libx86', 'libx86-1'],
-        ['/live/image/pool/main/s/svgalib', 'libsvga1'],
-        ['/live/image/pool/main/libs/libsdl1.2', 'libsdl1.2debian'],
-        ['/live/image/pool/main/g/gettext', 'libasprintf0c2'],
-        ['/live/image/pool/main/g/gettext', 'gettext-base'],
-        ['/live/image/pool/main/b/burg-themes', 'burg-themes-common'],
-        ['/live/image/pool/main/b/burg-themes', 'burg-themes'],
-        ['/live/image/pool/main/b/burg', 'burg-common'],
-        ['/live/image/pool/main/b/burg', 'burg-emu'],
-        ['/live/image/pool/main/b/burg', 'burg-pc'],
-        ['/live/image/pool/main/b/burg', 'burg']
+        [LIVE_PATH + 'pool/main/libx/libx86', 'libx86-1'],
+        [LIVE_PATH + 'pool/main/s/svgalib', 'libsvga1'],
+        [LIVE_PATH + 'pool/main/libs/libsdl1.2', 'libsdl1.2debian'],
+        [LIVE_PATH + 'pool/main/g/gettext', 'libasprintf0c2'],
+        [LIVE_PATH + 'pool/main/g/gettext', 'gettext-base'],
+        [LIVE_PATH + 'pool/main/b/burg-themes', 'burg-themes-common'],
+        [LIVE_PATH + 'pool/main/b/burg-themes', 'burg-themes'],
+        [LIVE_PATH + 'pool/main/b/burg', 'burg-common'],
+        [LIVE_PATH + 'pool/main/b/burg', 'burg-emu'],
+        [LIVE_PATH + 'pool/main/b/burg', 'burg-pc'],
+        [LIVE_PATH + 'pool/main/b/burg', 'burg']
         ]
     instpkgs_cpp = [[
-        '/live/image/pool/main/c/canaima-primeros-pasos/',
+        LIVE_PATH + 'pool/main/c/canaima-primeros-pasos/',
         'canaima-primeros-pasos'
         ]]
     debconflist = [
@@ -459,7 +461,7 @@ archivos.', window, bindlist, mountlist)
         UserMessageError('Ocurrió un error creando los usuarios de sistema.',
                          window, bindlist, mountlist)
 
-    label.set_text('Removiendo instalador del sistema de archivos ...')
+    label.set_text('Removiendo datos temporales de instalación ...')
     if not desinstalar_paquetes(mnt=mountpoint, plist=uninstpkgs):
         UserMessageError('Ocurrió un error desinstalando un paquete.',
                          window, bindlist, mountlist)
@@ -477,7 +479,7 @@ debconf.', window, bindlist, mountlist)
         UserMessageError('Ocurrió un error actualizando burg.',
                          window, bindlist, mountlist)
 
-    label.set_text('Generando imagen de arranque ...')
+    label.set_text('Configurando el arranque del sistema ...')
     if ProcessGenerator(
         'chroot {0} /usr/sbin/mkinitramfs -o /boot/{1} {2}'.format(
             mountpoint, 'initrd.img-' + os.uname()[2], os.uname()[2]
