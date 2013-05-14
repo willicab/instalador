@@ -466,7 +466,6 @@ archivos.', window, bindlist, mountlist)
         UserMessageError('Ocurrió un error desinstalando un paquete.',
                          window, bindlist, mountlist)
 
-    #TODO: Instalar el gestor de arranque tiene que ser lo primero?
     label.set_text('Instalando gestor de arranque ...')
     if not preseed_debconf_values(mnt=mountpoint, debconflist=debconflist):
         UserMessageError('Ocurrió un error presembrando las respuestas \
