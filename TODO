@@ -56,4 +56,5 @@
 	- /etc/locale.nopurge
 	- /etc/adduser.conf
 	- /usr/share/applications/defaults.list
+- Convertir el proceso de instalación en un módulo general (núcleo) que pueda ser llamado por cualquier otro tipo de interfaz.
 
