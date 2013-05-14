@@ -1,3 +1,8 @@
+DEVELOPMENT SNAPSHOT v2.0.2+dev20130514172715 (05/14/13)
+Optimizando el assisted_umount con la opción -l
+Agregando tarea al TODO
+Corrigiendo rutas relativas y de squashfs
+
 DEVELOPMENT SNAPSHOT v2.0.2+dev20130514102023 (05/14/13)
 Corrigiendo rutas relativas y de squashfs
 Cambiando la ruta del filesystem.squashfs
