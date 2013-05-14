@@ -1,3 +1,8 @@
+DEVELOPMENT SNAPSHOT v2.0.2+dev20130514102023 (05/14/13)
+Corrigiendo rutas relativas y de squashfs
+Cambiando la ruta del filesystem.squashfs
+Implementando el inicio automático del instalador Colocando el instalador en /etc/xdg/autostart/ para que inicie de forma automática en el liveCD.
+
 DEVELOPMENT SNAPSHOT v2.0.2+dev20130510165606 (05/10/13)
 Implementando el inicio automático del instalador Colocando el instalador en /etc/xdg/autostart/ para que inicie de forma automática en el liveCD.
 Cambiando la forma de detectar SHAREDIR
