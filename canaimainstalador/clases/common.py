@@ -189,7 +189,7 @@ def assisted_umount(sync, plist):
 
     for p, m, fs in plist:
         if os.path.ismount(m):
-            if ProcessGenerator('umount {0}'.format(m)).returncode == 0:
+            if ProcessGenerator('umount -l {0}'.format(m)).returncode == 0:
                 i += 1
         else:
             i += 1
