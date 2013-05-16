@@ -209,7 +209,8 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
     squashfs = LIVE_PATH + 'live/filesystem.squashfs'
     uninstpkgs = [
         'canaima-instalador', 'live-config', 'live-boot',
-        'live-boot-initramfs-tools', 'live-initramfs', 'live-config-sysvinit'
+        'live-boot-initramfs-tools', 'live-initramfs', 'live-config-sysvinit',
+        'live-tools'
         ]
     reconfpkgs = [
         'locales', 'canaima-estilo-visual-gnome', 'canaima-escritorio-gnome',
