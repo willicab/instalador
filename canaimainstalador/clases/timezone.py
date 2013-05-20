@@ -26,7 +26,7 @@ class TimeZone():
         '''
         Constructor
         '''
-        self.zones = []
+        self.tzones = []
         self._parse_file()
 
     def _parse_file(self):
@@ -42,14 +42,24 @@ class TimeZone():
         # Busca las zonas horarias en el archivo
         for line in zones:
             # Obvia los comentarios
-            if line[0] == '#':
+            if line.startswith('#'):
                 continue
             # Extrae solo el nombre de la zona (Columna 3)
-            self.zones.append(line.split('\t')[2].strip())
-        self.zones.sort()
+            self.tzones.append(line.strip().split('\t'))
+        self.tzones.sort()
+
+    def get_country_id(self, tz):
+        c_id = None
+        for line in self.tzones:
+            if line[2] == tz:
+                c_id = line[0]
+        return c_id
 
 if __name__ == "__main__":
 
     zh = TimeZone()
-    for z in zh.zones:
+    for z in zh.tzones:
         print(z)
+
+    print(zh.get_country_id('America/Caracas'))
+    print(zh.get_country_id('America/New_York'))
