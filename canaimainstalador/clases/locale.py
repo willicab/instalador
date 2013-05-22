@@ -17,7 +17,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 @author: Erick Birbe <erickcion@gmail.com>
 '''
 
+
+import xml.dom.minidom
+
 LC_SUPPORTED_FILE = '/usr/share/i18n/SUPPORTED'
+ISO_639_3_FILE = "/usr/share/xml/iso-codes/iso_639_3.xml"
 
 
 def get_country_id(lc):
@@ -32,7 +36,45 @@ def get_language_id(lc):
     return lc.split('_')[0]
 
 
-class Locale():
+#TODO erickcion: Optimizar la lectura de estos archivos para evitar relecturas
+class Iso_369_3(object):
+
+    def __init__(self):
+        self.names = {}
+        document = xml.dom.minidom.parse(ISO_639_3_FILE)
+        entries = document.getElementsByTagName('iso_639_3_entries')[0]
+        self.handle_entries(entries)
+
+    def handle_entries(self, entries):
+        for entry in entries.getElementsByTagName('iso_639_3_entry'):
+            self.handle_entry(entry)
+
+    def handle_entry(self, entry):
+        if (entry.hasAttribute('part1_code')
+            and entry.hasAttribute('name')
+            and entry.hasAttribute('status')
+            and entry.getAttribute('status') == 'Active'):
+
+            code = str(entry.getAttribute('part1_code'))
+            name = str(entry.getAttribute('name'))
+
+            self.names[code] = name
+
+
+class Language(object):
+    def __init__(self):
+        pass
+
+    def get_all(self):
+        isoxml = Iso_369_3()
+        data = []
+        for entry in isoxml.names.items():
+            data.append(entry)
+        return data
+
+
+#TODO erickcion: Optimizar la lectura de estos archivos para evitar relecturas
+class Locale(object):
 
     def __init__(self):
         '''
@@ -56,11 +98,21 @@ class Locale():
             self.supported.append(line.strip().split(' '))
         self.supported.sort()
 
+
 if __name__ == "__main__":
 
+    lang = Language()
+    print lang.get_all()
+
     lc = Locale()
+    print lc.supported
+
+    isoxml = Iso_369_3()
+    print isoxml.names
+
     for locale in lc.supported:
-        print(locale)
-        print('COUNTRY=%s' % get_country_id(locale[0]))
-        print('LANGUAG=%s' % get_language_id(locale[0]))
-        print()
+        if get_language_id(locale[0]) in isoxml.names:
+            print(locale)
+            print('COUNTRY=%s' % get_country_id(locale[0]))
+            print('LANGUAG=%s' % get_language_id(locale[0]))
+            print

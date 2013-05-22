@@ -20,6 +20,36 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 TZ_DATA_FILE = '/usr/share/zoneinfo/zone.tab'
 
 
+class TimeZoneItem():
+
+    country_id = ''
+    coordinates = ''
+    name = ''
+    comments = ''
+
+    def __init__(self, tz_line=None):
+        if tz_line:
+            self.create_from_line(tz_line)
+
+    def create_from_line(self, tz_line):
+        '''Lee una linea del archivo zone.tab, y la convierte en un
+        TimeZoneItem'''
+
+        line = tz_line.strip().split('\t')
+
+        self.country_id = line[0]
+        self.coordinates = line[1]
+        self.name = line[2]
+        # Si tiene comentarios
+        if len(line) >= 4:
+            self.comments = line[3]
+
+    def __lt__(self, other):
+        '''Sobreescribe el ordenamiento (sort) para este tipo de dato, ordena
+        los items alfabeticamente usando el nombre'''
+        return self.name < other.name
+
+
 class TimeZone():
 
     def __init__(self):
@@ -30,9 +60,7 @@ class TimeZone():
         self._parse_file()
 
     def _parse_file(self):
-        '''
-        Lee el archivo de zonas horarias en busca de los nombres
-        '''
+        '''Lee el archivo de zonas horarias en busca de los nombres'''
         try:
             zf = open(TZ_DATA_FILE, 'r')
             zones = zf.readlines()
@@ -44,22 +72,23 @@ class TimeZone():
             # Obvia los comentarios
             if line.startswith('#'):
                 continue
-            # Extrae solo el nombre de la zona (Columna 3)
-            self.tzones.append(line.strip().split('\t'))
+            tzi = TimeZoneItem(line)
+            self.tzones.append(tzi)
+        #Ordena los tz por orden alfabetico
         self.tzones.sort()
 
-    def get_country_id(self, tz):
+    def get_country_id(self, tz_name):
         c_id = None
-        for line in self.tzones:
-            if line[2] == tz:
-                c_id = line[0]
+        for tz in self.tzones:
+            if tz.name == tz_name:
+                c_id = tz.country_id
         return c_id
 
 if __name__ == "__main__":
 
     zh = TimeZone()
     for z in zh.tzones:
-        print(z)
+        print(z.country_id, z.coordinates, z.name, z.comments)
 
     print(zh.get_country_id('America/Caracas'))
     print(zh.get_country_id('America/New_York'))
