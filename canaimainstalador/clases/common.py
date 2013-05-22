@@ -165,10 +165,13 @@ def assisted_mount(sync, bind, plist):
 
         if fs != 'swap':
             if not os.path.ismount(m):
+                #Evita que se abra nautilus al montar las particiones
+                os.system('gsettings set org.gnome.desktop.media-handling automount-open false')
                 if ProcessGenerator(
                     'mount {0} {1} {2} {3}'.format(bindcmd, fscmd, p, m)
                     ).returncode == 0:
                     i += 1
+                os.system('gsettings set org.gnome.desktop.media-handling automount-open true')
             else:
                 i += 1
         else:
@@ -702,7 +705,6 @@ def ProcessGenerator(command):
 
     print strcmd
     cmd = '{0} 1>{1} 2>&1'.format(strcmd, filename)
-
     try:
         os.mkfifo(filename)
         fifo = os.fdopen(os.open(filename, os.O_RDONLY | os.O_NONBLOCK))
