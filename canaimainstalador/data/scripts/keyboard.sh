@@ -10,16 +10,23 @@
 # Verificar este archivo para mantenerlo siempre actualizado con las mejoras que
 # pueda hacer debian
 
-if type locale 2>/dev/null >/dev/null; then
-    eval `locale`
-fi
+#if type locale 2>/dev/null >/dev/null; then
+#    eval `locale`
+#fi
 
-if [ "$LC_CTYPE"  -a "$LC_CTYPE" != C ]; then
-    locale=$LC_CTYPE
+#if [ "$LC_CTYPE"  -a "$LC_CTYPE" != C ]; then
+#    locale=$LC_CTYPE
+#else
+#    locale=C
+#fi
+
+
+if [ "$1" -a "$1" != C ]; then
+    locale=$1
 else
-    locale=C
+    echo "No se ha indicado un valor de LOCALE" 1>&2
+    exit 1
 fi
-
 
 guess_arch () {
     local arch subarch line

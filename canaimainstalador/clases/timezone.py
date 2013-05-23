@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-''' -*- coding: utf-8 -*-
-
+# -*- coding: utf-8 -*-
+'''
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
@@ -76,6 +76,20 @@ class TimeZone():
             self.tzones.append(tzi)
         #Ordena los tz por orden alfabetico
         self.tzones.sort()
+
+    def index_of(self, lang):
+        'Retorna el indice de la lista donde está almacedado lang'
+        i = 0
+        exists = False
+        for tz in self.tzones:
+            if tz.name == lang:
+                exists = True
+                break
+            i += 1
+        if exists:
+            return i
+        else:
+            return -1
 
     def get_country_id(self, tz_name):
         c_id = None

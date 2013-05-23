@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 ''' -*- coding: utf-8 -*-
 
 This program is free software: you can redistribute it and/or modify
@@ -43,13 +44,13 @@ class Iso_369_3(object):
         self.names = {}
         document = xml.dom.minidom.parse(ISO_639_3_FILE)
         entries = document.getElementsByTagName('iso_639_3_entries')[0]
-        self.handle_entries(entries)
+        self._handle_entries(entries)
 
-    def handle_entries(self, entries):
+    def _handle_entries(self, entries):
         for entry in entries.getElementsByTagName('iso_639_3_entry'):
-            self.handle_entry(entry)
+            self._handle_entry(entry)
 
-    def handle_entry(self, entry):
+    def _handle_entry(self, entry):
         if (entry.hasAttribute('part1_code')
             and entry.hasAttribute('name')
             and entry.hasAttribute('status')
@@ -62,15 +63,33 @@ class Iso_369_3(object):
 
 
 class Language(object):
+
+    langs = []
+
     def __init__(self):
-        pass
+        self._get_all()
+
+    def _get_all(self):
+        isoxml = Iso_369_3()
+        for entry in isoxml.names.items():
+            self.langs.append(entry)
 
     def get_all(self):
-        isoxml = Iso_369_3()
-        data = []
-        for entry in isoxml.names.items():
-            data.append(entry)
-        return data
+        return self.langs
+
+    def index_of(self, lang):
+        'Retorna el indice de la lista donde está almacedado lang'
+        i = 0
+        exists = False
+        for l in self.langs:
+            if l[0] == lang:
+                exists = True
+                break
+            i += 1
+        if exists:
+            return i
+        else:
+            return -1
 
 
 #TODO erickcion: Optimizar la lectura de estos archivos para evitar relecturas
