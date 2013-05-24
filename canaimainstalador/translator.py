@@ -9,7 +9,7 @@
 #       (C) 2012 Erick Manuel Birbe Salazar <erickcion@gmail.com>
 #       (C) 2012 Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>
 # LICENCIA: GPL-3
-# ==============================================================================
+# =============================================================================
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -24,52 +24,82 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-from gettext import gettext as _
+import gettext
+import os
 
-MAIN_ROOT_ERROR_MSG = _('Canaima Instalador debe ser ejecutado con permisos de superusuario.')
+# Busqueda del directorio por defecto para los locales
+lc_dir = os.path.join(os.path.dirname(__file__), '..', 'locale')
+if os.path.exists(lc_dir):
+    GETTEXT_LOCALEDIR = lc_dir
+else:
+    GETTEXT_LOCALEDIR = ''  # Directorio por defecto
+
+GETTEXT_DOMAIN = "canaimainstalador"
+_ = gettext.Catalog(GETTEXT_DOMAIN, GETTEXT_LOCALEDIR).gettext
+
+
+#-----------------------------------------------------------------------------#
+MAIN_ROOT_ERROR_MSG = _('Canaima Instalador debe ser ejecutado con permisos \
+de superusuario.')
 MAIN_ROOT_ERROR_TITLE = _('Error de permisología')
+#-----------------------------------------------------------------------------#
+
 
 class msj:
-    'Clase para administrar los mensajes mostrados al usuario'
+    '''Clase para administrar los mensajes mostrados al usuario en el \
+    particionador manual relacionados a las particiones'''
 
     class particion:
         'Mensajes relacionados a las particiones'
 
-        libre = 'Espacio Libre'
-        primaria = 'Primaria'
-        extendida = 'Extendida'
-        logica = 'Lógica'
-        desconocida = 'Desconocido'
+        libre = _('Espacio Libre')
+        primaria = _('Primaria')
+        extendida = _('Extendida')
+        logica = _('Lógica')
+        desconocida = _('Desconocido')
 
         @classmethod
         def get_tipo(self, tipo):
-            if tipo == 'free':      return self.libre
-            if tipo == 'primary':   return self.primaria
-            if tipo == 'extended':  return self.extendida
-            if tipo == 'logical':   return self.logica
+            if tipo == 'free':
+                return self.libre
+            if tipo == 'primary':
+                return self.primaria
+            if tipo == 'extended':
+                return self.extendida
+            if tipo == 'logical':
+                return self.logica
 
             return tipo
 
         @classmethod
         def get_tipo_orig(self, tipo):
-            if tipo == self.libre :     return 'free'
-            if tipo == self.primaria:   return 'primary'
-            if tipo == self.extendida:  return 'extended'
-            if tipo == self.logica:     return 'logical'
-            if tipo == self.desconocida:return 'unknown'
+            if tipo == self.libre:
+                return 'free'
+            if tipo == self.primaria:
+                return 'primary'
+            if tipo == self.extendida:
+                return 'extended'
+            if tipo == self.logica:
+                return 'logical'
+            if tipo == self.desconocida:
+                return 'unknown'
 
             return tipo
 
         @classmethod
         def get_formato(self, formato):
-            if formato == 'free':       return self.libre
-            if formato == 'unknown':    return self.desconocida
-            if formato == 'extended':   return ''
+            if formato == 'free':
+                return self.libre
+            if formato == 'unknown':
+                return self.desconocida
+            if formato == 'extended':
+                return ''
 
             return formato
 
         @classmethod
         def get_dispositivo(self, disp, num):
-            if num == -1:       return ''
+            if num == -1:
+                return ''
 
             return disp
