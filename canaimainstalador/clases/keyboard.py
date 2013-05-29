@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-''' -*- coding: utf-8 -*-
-
+# -*- coding: utf-8 -*-
+'''
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
@@ -16,9 +16,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 @author: Erick Birbe <erickcion@gmail.com>
 '''
-from canaimainstalador.config import GUIDIR
 import subprocess
 import xml.dom.minidom
+from canaimainstalador.config import GUIDIR
 
 XKB_FILE = '/usr/share/X11/xkb/rules/base.xml'
 KB_SCRIPT = GUIDIR + '/data/scripts/keyboard.sh'
@@ -31,21 +31,30 @@ def guess_configuration(locale):
 
 
 class XKB_Layout():
+
     def __init__(self, name, description):
         self.name = name
         self.description = description
 
+    def __lt__(self, other):
+        '''Sobreescribe el ordenamiento (sort) para este tipo de dato, ordena
+        los items alfabeticamente usando el nombre'''
+        return self.description < other.description
 
-#TODO erickcion: Optimizar la lectura de estos archivos para evitar relecturas
-class XKB_Rules(object):
+
+class _XKB_Rules(object):
 
     layouts = []
 
     def __init__(self):
-        self.names = {}
+
+        print "Procesando archivo %s" % XKB_FILE
+
         document = xml.dom.minidom.parse(XKB_FILE)
         layout_entries = document.getElementsByTagName('layoutList')[0]
         self._handle_entries(layout_entries)
+
+        self.layouts.sort()
 
     def _handle_entries(self, entries):
         for entry in entries.getElementsByTagName('layout'):
@@ -73,6 +82,33 @@ class Keyboard(object):
     def all_layouts(self):
         return self.xkb_rules.layouts
 
+    def index_of(self, layout):
+        'Retorna el indice de la lista donde está almacedado layout'
+        i = 0
+        exists = False
+        for lay in self.all_layouts():
+            if lay.name == layout:
+                exists = True
+                break
+            i += 1
+        if exists:
+            return i
+        else:
+            return -1
+
+
+_xkb_rules_cache = None
+
+
+def XKB_Rules():
+    '''Este método nos permite usar la cache para el archivo de \
+    configuraciones de teclado soportadas (XKB_FILE) y de esta manera no \
+    tener que releerlo una y otra vez provocando lentitud en el \
+    procesamiento.'''
+    global _xkb_rules_cache
+    if not _xkb_rules_cache:
+        _xkb_rules_cache = _XKB_Rules()
+    return _xkb_rules_cache
 
 if __name__ == "__main__":
 

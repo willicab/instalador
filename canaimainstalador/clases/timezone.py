@@ -50,7 +50,7 @@ class TimeZoneItem():
         return self.name < other.name
 
 
-class TimeZone():
+class _TimeZone():
 
     def __init__(self):
         '''
@@ -62,6 +62,8 @@ class TimeZone():
     def _parse_file(self):
         '''Lee el archivo de zonas horarias en busca de los nombres'''
         try:
+            print "Procesando archivo %s" % TZ_DATA_FILE
+
             zf = open(TZ_DATA_FILE, 'r')
             zones = zf.readlines()
         except Exception, msg:
@@ -77,12 +79,12 @@ class TimeZone():
         #Ordena los tz por orden alfabetico
         self.tzones.sort()
 
-    def index_of(self, lang):
-        'Retorna el indice de la lista donde está almacedado lang'
+    def index_of(self, tz_name):
+        'Retorna el indice de la lista donde está almacedado tz_name'
         i = 0
         exists = False
         for tz in self.tzones:
-            if tz.name == lang:
+            if tz.name == tz_name:
                 exists = True
                 break
             i += 1
@@ -97,6 +99,20 @@ class TimeZone():
             if tz.name == tz_name:
                 c_id = tz.country_id
         return c_id
+
+
+_timezone_cache = None
+
+
+def TimeZone():
+    '''Este método nos permite usar la cache para el archivo de zonas \
+    horarias (TZ_DATA_FILE) y de esta manera no tener que releerlo una y \
+    otra vez provocando lentitud en el procesamiento.'''
+    global _timezone_cache
+    if not _timezone_cache:
+        _timezone_cache = _TimeZone()
+    return _timezone_cache
+
 
 if __name__ == "__main__":
 
