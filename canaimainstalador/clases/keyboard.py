@@ -25,9 +25,34 @@ KB_SCRIPT = GUIDIR + '/data/scripts/keyboard.sh'
 
 
 def guess_configuration(locale):
+    '''Determina los valores predeterminados de la configuración de teclado a
+    partir de un locale (ej. es_VE) y detectando la arquitectura del sistema'''
     assert locale  # Valida que locale contenga algo
 
-    return subprocess.check_output([KB_SCRIPT, locale]).strip().split('/')
+    output = subprocess.check_output([KB_SCRIPT, locale]).strip().split('/')
+
+    conf = {}
+    conf['LAYOUT'] = output[0]
+    conf['MODEL'] = output[1]
+    conf['VARIANT'] = output[2]
+
+    return conf
+
+
+def keyboard_contents(layout, locale):
+
+    kbd_conf = guess_configuration(locale)
+
+    data = """# KEYBOARD CONFIGURATION FILE
+
+# Consult the keyboard(5) manual page.
+
+XKBLAYOUT='{0}'
+XKBMODEL='{1}'
+XKBVARIANT='{2}'
+XKBOPTIONS=''
+""".format(layout, kbd_conf['MODEL'], kbd_conf['VARIANT'])
+    return data
 
 
 class XKB_Layout():
@@ -115,3 +140,6 @@ if __name__ == "__main__":
     k = Keyboard()
     for ly in k.all_layouts():
         print "%s - (%s)" % (ly.description, ly.name)
+
+    print "----"
+    print keyboard_contents("latam", "es_VE")
