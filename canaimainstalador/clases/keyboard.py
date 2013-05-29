@@ -43,7 +43,8 @@ def keyboard_contents(layout, locale):
 
     kbd_conf = guess_configuration(locale)
 
-    data = """# KEYBOARD CONFIGURATION FILE
+    data = """# Archivo generado por el Instalador de Canaima GNU/Linux
+# KEYBOARD CONFIGURATION FILE
 
 # Consult the keyboard(5) manual page.
 
