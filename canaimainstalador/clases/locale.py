@@ -43,6 +43,31 @@ def get_language_id(lc):
     return lc.split('_')[0].split('.')[0]
 
 
+def locale_content(localeitem):
+    'Genera el contenido para el archivo /etc/default/locale'
+    data = '''# Archivo generado por el Instalador de Canaima GNU/Linux
+LANG="{0}"
+LANGUAGE="{1}:{2}"
+LC_ALL="{0}"
+'''.format(localeitem.line[0], localeitem.get_locale(),
+           get_language_id(localeitem.get_locale()))
+    return data
+
+
+def locale_gen_content(localeitem):
+    'Genera el contenido para el archivo /etc/locale.gen'
+    data = '''# Archivo generado por el Instalador de Canaima GNU/Linux
+#
+# This file lists locales that you wish to have built. You can find a list
+# of valid supported locales at /usr/share/i18n/SUPPORTED, and you can add
+# user defined locales to /usr/local/share/i18n/SUPPORTED. If you change
+# this file, you need to rerun locale-gen.
+
+{0} {1}
+'''.format(localeitem.line[0], localeitem.line[1])
+    return data
+
+
 class _Iso_369_3(object):
 
     def __init__(self):
@@ -62,13 +87,13 @@ class _Iso_369_3(object):
     def _handle_entry(self, entry):
 
         if entry.hasAttribute('part1_code'):
-            code = str(entry.getAttribute('part1_code'))
+            code = entry.getAttribute('part1_code')
         elif entry.hasAttribute('part2_code'):
-            code = str(entry.getAttribute('part2_code'))
+            code = entry.getAttribute('part2_code')
         else:
-            code = str(entry.getAttribute('id'))
+            code = entry.getAttribute('id')
 
-        name = str(entry.getAttribute('name'))
+        name = entry.getAttribute('name')
 
         self.names[code] = name
 
@@ -210,19 +235,22 @@ def Locale():
 if __name__ == "__main__":
 
     lang = Language()
-    print lang.get_all()
+    #print lang.get_all()
 
     lc = Locale()
-    print lc.supported
+    #print lc.supported
 
     isoxml = Iso_369_3()
-    print isoxml.names
+    #print isoxml.names
 
     for locale in lc.supported:
-        if not locale.get_name():
+        if locale.get_name():
             print locale.get_name()
             print locale.line
             print locale.lang_id
             print locale.country_id
             print locale.collation
+            print locale_content(locale)
+            print "----"
+            print locale_gen_content(locale)
             print "----"
