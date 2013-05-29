@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# ==============================================================================
+# =============================================================================
 # PAQUETE: canaima-instalador
 # ARCHIVO: canaimainstalador/translator.py
 # COPYRIGHT:
@@ -35,7 +35,13 @@ else:
     GETTEXT_LOCALEDIR = ''  # Directorio por defecto
 
 GETTEXT_DOMAIN = "canaimainstalador"
-_ = gettext.Catalog(GETTEXT_DOMAIN, GETTEXT_LOCALEDIR).gettext
+
+
+def gettext_install():
+    gettext.install(GETTEXT_DOMAIN, GETTEXT_LOCALEDIR)
+
+
+gettext_install()
 
 
 #-----------------------------------------------------------------------------#
