@@ -27,7 +27,7 @@
 # CODE IS POETRY
 
 from canaimainstalador.clases.keyboard import Keyboard
-from canaimainstalador.clases.locale import Locale
+from canaimainstalador.clases.i18n import Locale
 from canaimainstalador.clases.timezone import TimeZone
 from canaimainstalador.translator import gettext_install
 import gobject
