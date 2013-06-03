@@ -377,8 +377,7 @@ def crear_etc_network_interfaces(mnt, cfg):
             content += '\nauto lo'
             content += '\niface lo inet loopback\n'
         elif re.sub('\d', '', i) == 'eth':
-            content += '\nallow-hotplug {0}'.format(i)
-            content += '\niface {0} inet dhcp\n'.format(i)
+            content += '\nallow-hotplug {0}\n'.format(i)
 
     return create_file(mnt + cfg, content)
 
@@ -395,7 +394,7 @@ def crear_etc_hosts(mnt, cfg, maq):
     content += 'ff00::0\t\tip6-mcastprefix\n'
     content += 'ff02::1\t\tip6-allnodes\n'
     content += 'ff02::2\t\tip6-allrouters\n'
-    content += 'ff02::3\t\tip6-allhosts'
+    content += 'ff02::3\t\tip6-allhosts\n'
 
     return create_file(mnt + cfg, content)
 
@@ -440,7 +439,7 @@ def crear_etc_fstab(mnt, cfg, mountlist, cdroms):
         .format(cd, num)
         ProcessGenerator('mkdir -p {0}'.format(mnt + '/media/cdrom' + num))
 
-    return create_file(mnt + cfg, data)
+    return create_file(mnt + cfg, data + "\n")
 
 
 def activar_accesibilidad(mnt):
