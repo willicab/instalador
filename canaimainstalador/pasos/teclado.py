@@ -61,9 +61,9 @@ class PasoTeclado(gtk.VBox):
         'Constructor'
         gtk.VBox.__init__(self)
 
-        self.keyboard = ''
-        self.timezone = ''
         self.locale = ''
+        self.timezone = ''
+        self.keyboard = ''
 
         lbl_lang = gtk.Label(_("Idioma"))
         self.pack_start(lbl_lang, False, False)
@@ -126,7 +126,7 @@ distribución de teclado elegida"))
 
     def _cmb_lang_changed(self, widget=None):
         ''
-        self.locale = widget.get_active_object().get_locale()
+        self.locale = widget.get_active_object()
         print self.locale
 
     def _cmb_tz_changed(self, widget=None):

@@ -196,9 +196,9 @@ class Teclado():
     def siguiente(self, CFG):
         CFG['locale'] = CFG['w'].formulario('Teclado').locale
         CFG['timezone'] = CFG['w'].formulario('Teclado').timezone
-        CFG['teclado'] = CFG['w'].formulario('Teclado').keyboard
+        CFG['keyboard'] = CFG['w'].formulario('Teclado').keyboard
         print 'Distribución de teclado seleccionada: {0}'\
-            .format(CFG['teclado'])
+            .format(CFG['keyboard'])
 
         CFG['w'].next('Metodo', Metodo, (CFG), PasoMetodo(CFG))
 

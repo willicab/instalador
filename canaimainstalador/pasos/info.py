@@ -73,7 +73,7 @@ class PasoInfo(gtk.Fixed):
         else:
             msg_tipo = ''
 
-        msg_teclado = '● Se utilizará "{0}" como distribución de teclado.'.format(CFG['teclado'])
+        msg_teclado = '● Se utilizará "{0}" como distribución de teclado.'.format(CFG['keyboard'])
         msg_final = 'Presione el botón "Adelante" para iniciar la instalación del sistema. Después de este paso no podrá detener la instalación, así que asegúrese de que sus datos son correctos.'
         msg_titulo = '¡Todo listo!'
 
