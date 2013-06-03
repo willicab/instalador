@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# ==============================================================================
+# =============================================================================
 # PAQUETE: canaima-instalador
 # ARCHIVO: canaimainstalador/pasos/instalacion.py
 # COPYRIGHT:
@@ -9,7 +9,7 @@
 #       (C) 2012 Erick Manuel Birbe Salazar <erickcion@gmail.com>
 #       (C) 2012 Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>
 # LICENCIA: GPL-3
-# ==============================================================================
+# =============================================================================
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -26,20 +26,30 @@
 #
 # CODE IS POETRY
 
-import os, gtk, webkit, sys, Queue, glib, pango, threading
-
-from canaimainstalador.clases.particiones import Particiones
 from canaimainstalador.clases.common import UserMessage, ProcessGenerator, \
     reconfigurar_paquetes, desinstalar_paquetes, instalar_paquetes, \
-    lista_cdroms, crear_etc_default_keyboard, crear_etc_hostname, \
-    crear_etc_hosts, crear_etc_network_interfaces, crear_etc_fstab, \
-    assisted_mount, assisted_umount, preseed_debconf_values, mounted_targets, \
-    mounted_parts, crear_usuarios, ThreadGenerator, get_windows_part_in, \
-    activar_swap, crear_archivos_config, activar_accesibilidad
+    lista_cdroms, crear_etc_hostname, crear_etc_hosts, \
+    crear_etc_network_interfaces, crear_etc_fstab, assisted_mount, \
+    assisted_umount, preseed_debconf_values, mounted_targets, mounted_parts, \
+    crear_usuarios, ThreadGenerator, get_windows_part_in, activar_swap, \
+    crear_archivos_config, activar_accesibilidad, create_file
+from canaimainstalador.clases.particiones import Particiones
 from canaimainstalador.config import INSTALL_SLIDES, BAR_ICON, SHAREDIR, \
     get_live_path
+import Queue
+import gobject
+import gtk
+import os
+import pango
+import sys
+import threading
+import webkit
+from canaimainstalador.clases import keyboard, i18n, timezone
 
-gtk.gdk.threads_init()
+
+
+gobject.threads_init()
+
 
 class PasoInstalacion():
     def __init__(self, CFG):
@@ -79,6 +89,7 @@ class PasoInstalacion():
             event=event
             )
 
+
 class install_window(object):
 
     def __init__(self, title, q_button_a, q_button_b, q_view, q_label, q_win,
@@ -109,9 +120,9 @@ class install_window(object):
         message.set_attributes(attr)
         box.put(message, 50, 200)
 
-        str_intro = 'Puedes seguir probando Canaima presionando "Reiniciar más \
-tarde" o disfrutar de tu sistema operativo instalado presionando "Reiniciar \
-ahora".'
+        str_intro = 'Puedes seguir probando Canaima presionando "Reiniciar \
+más tarde" o disfrutar de tu sistema operativo instalado presionando \
+"Reiniciar ahora".'
         intro = gtk.Label(str_intro)
         intro.set_size_request(640, 40)
         intro.set_alignment(0, 0)
@@ -164,12 +175,13 @@ ahora".'
         ProcessGenerator('reboot')
 
     def show_html(self):
-        glib.idle_add(
+        gobject.idle_add(
             self.view.load_uri, 'file://' + os.path.realpath(INSTALL_SLIDES)
             )
 
     def disable_close(self, widget=None, data=None):
         return True
+
 
 def UserMessageError(message, window, bindlist, mountlist):
     '''Hacemos acá una especie de sobreescritura de UserMessage para resumir
@@ -187,6 +199,36 @@ def UserMessageError(message, window, bindlist, mountlist):
         c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
     )
 
+
+def conf_files_install(cfg, mountpoint):
+
+    lcl = cfg['locale']
+    tzn = cfg['timezone']
+    kbd = cfg['keyboard']
+
+    # ------------------------------------------------- Configuración de idioma
+    # /etc/default/locale
+    data = i18n.locale_content(lcl)
+    if not create_file(mountpoint + '/etc/default/locale', data):
+        return False
+    # /etc/locale.gen
+    data = i18n.locale_gen_content(lcl)
+    if not create_file(mountpoint + '/etc/locale.gen', data):
+        return False
+
+    # ------------------------------------------- Configuración de zona horaria
+    data = tzn + '\n'
+    if not create_file(mountpoint + '/etc/timezone', data):
+        return False
+
+    # ------------------------------------------------ Configuración de teclado
+    data = keyboard.keyboard_contents(kbd, lcl.get_locale())
+    if not create_file(mountpoint + '/etc/default/keyboard', data):
+        return False
+
+    return True
+
+
 def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
     button_a = q_button_a.get()
     button_b = q_button_b.get()
@@ -196,7 +238,6 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
     p = Particiones()
     metodo = CFG['metodo']
     acciones = CFG['acciones']
-    teclado = CFG['teclado']
     passroot = CFG['passroot1']
     nombre = CFG['nombre']
     usuario = CFG['usuario']
@@ -237,7 +278,7 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
         'burg-pc burg/linux_cmdline string quiet splash',
         'burg-pc burg/linux_cmdline_default string quiet splash vga=791',
         'burg-pc burg-pc/install_devices multiselect {0}'.format(
-                                                    ', '.join(p.lista_discos()))
+                                                ', '.join(p.lista_discos()))
         ]
     bindlist = [
         ['/dev', mountpoint + '/dev', ''],
@@ -250,14 +291,11 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
     # Lista de archivos de configuración que se copiaran al disco
     conffilelist = [
         [SHAREDIR + '/templates/sources.list',
-                                         mountpoint + '/etc/apt/sources.list' ],
-        [SHAREDIR + '/templates/locale', mountpoint + '/etc/default/locale' ],
-        [SHAREDIR + '/templates/locale.gen', mountpoint + '/etc/locale.gen' ],
-        [SHAREDIR + '/templates/timezone', mountpoint + '/etc/timezone' ],
+                                        mountpoint + '/etc/apt/sources.list'],
         [SHAREDIR + '/templates/adduser.conf',
-                                        mountpoint + '/etc/adduser.conf' ],
+                                        mountpoint + '/etc/adduser.conf'],
         # Agregamos mtab para que no falle al instalar Burg
-        ['/etc/mtab', mountpoint + '/etc/mtab' ]
+        ['/etc/mtab', mountpoint + '/etc/mtab']
     ]
 
     if not os.path.isdir(mountpoint):
@@ -397,9 +435,13 @@ archivos.', window, bindlist, mountlist)
     if not crear_archivos_config(mnt=mountpoint, conffilelist=conffilelist):
         UserMessageError('Ocurrió un error configurando archivos del sistema.',
                          window, bindlist, mountlist)
+    if not conf_files_install(CFG, mountpoint):
+        UserMessageError('Ocurrió un error configurando archivos del sistema.',
+                         window, bindlist, mountlist)
 
     label.set_text('Configurando interfaces de red ...')
-    if not crear_etc_hostname(mnt=mountpoint, cfg='/etc/hostname', maq=maquina):
+    if not crear_etc_hostname(mnt=mountpoint, cfg='/etc/hostname',
+                              maq=maquina):
         UserMessageError('Ocurrió un error creando el archivo /etc/hostname.',
                          window, bindlist, mountlist)
     if not crear_etc_hosts(mnt=mountpoint, cfg='/etc/hosts', maq=maquina):
@@ -409,12 +451,6 @@ archivos.', window, bindlist, mountlist)
                                         cfg='/etc/network/interfaces'):
         UserMessageError('Ocurrió un error creando el archivo \
 /etc/network/interfaces.', window, bindlist, mountlist)
-
-    label.set_text('Configurando teclado ...')
-    if not crear_etc_default_keyboard(mnt=mountpoint,
-                                      cfg='/etc/default/keyboard', key=teclado):
-        UserMessageError('Ocurrió un error configurando el teclado.',
-                         window, bindlist, mountlist)
 
     label.set_text('Configurando particiones en el sistema ...')
     if not crear_etc_fstab(mnt=mountpoint, cfg='/etc/fstab',
@@ -467,7 +503,6 @@ archivos.', window, bindlist, mountlist)
         UserMessageError('Ocurrió un error desinstalando un paquete.',
                          window, bindlist, mountlist)
 
-    #TODO: Instalar el gestor de arranque tiene que ser lo primero?
     label.set_text('Instalando gestor de arranque ...')
     if not preseed_debconf_values(mnt=mountpoint, debconflist=debconflist):
         UserMessageError('Ocurrió un error presembrando las respuestas \
@@ -491,8 +526,8 @@ debconf.', window, bindlist, mountlist)
     if ProcessGenerator(
         'chroot {0} update-initramfs -u -t'.format(mountpoint)
         ).returncode != 0:
-        UserMessageError('Ocurrió un error actualizando la imagen de arranque.',
-                         window, bindlist, mountlist)
+        UserMessageError('Ocurrió un error actualizando la imagen de \
+arranque.', window, bindlist, mountlist)
 
     # Terminando la instalación
     label.set_text('Desmontando sistema de archivos ...')
@@ -508,4 +543,3 @@ debconf.', window, bindlist, mountlist)
     button_b.show()
     label.hide()
     view.hide()
-
