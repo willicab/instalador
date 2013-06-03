@@ -44,8 +44,7 @@ import pango
 import sys
 import threading
 import webkit
-from canaimainstalador.clases import keyboard, i18n, timezone
-
+from canaimainstalador.clases import keyboard, i18n
 
 
 gobject.threads_init()
