@@ -47,6 +47,23 @@ import threading
 import shutil
 
 
+_live_path = None
+
+
+def get_live_path():
+    global _live_path
+    if not _live_path:
+        if os.path.exists('/lib/live/mount/medium'):
+            _live_path = '/lib/live/mount/medium'
+        elif os.path.exists('/live/image'):
+            _live_path = '/live/image'
+        else:
+            raise Exception('Imposible encontrar imagen de disco.')
+        print "Utilizando imágen de disco en {}".format(_live_path)
+
+    return _live_path
+
+
 def AboutWindow(widget=None):
     about = gtk.AboutDialog()
     about.set_position(gtk.WIN_POS_CENTER_ON_PARENT)
@@ -124,7 +141,9 @@ def mounted_targets(mnt):
 
 
 def activar_swap(plist):
-    for p, m, fs in plist:
+    for part in plist:
+        p = part[0]
+        fs = part[2]
         if fs == 'swap':
             cmd = 'swapon {0}'.format(p)
             subprocess.Popen(
@@ -187,12 +206,14 @@ def assisted_mount(sync, bind, plist):
         if fs != 'swap':
             if not os.path.ismount(m):
                 #Evita que se abra nautilus al montar las particiones
-                os.system('gsettings set org.gnome.desktop.media-handling automount-open false')
+                os.system('gsettings set org.gnome.desktop.media-handling \
+automount-open false')
                 if ProcessGenerator(
                     'mount {0} {1} {2} {3}'.format(bindcmd, fscmd, p, m)
                     ).returncode == 0:
                     i += 1
-                os.system('gsettings set org.gnome.desktop.media-handling automount-open true')
+                os.system('gsettings set org.gnome.desktop.media-handling \
+automount-open true')
             else:
                 i += 1
         else:
@@ -212,9 +233,10 @@ def assisted_umount(sync, plist):
     n = len(plist)
     plist.reverse()
 
-    for p, m, fs in plist:
-        if os.path.ismount(m):
-            if ProcessGenerator('umount -l {0}'.format(m)).returncode == 0:
+    for part in plist:
+        if os.path.ismount(part[1]):
+            if ProcessGenerator('umount -l {0}'.format(part[1])
+                                ).returncode == 0:
                 i += 1
         else:
             i += 1
@@ -244,11 +266,56 @@ def preseed_debconf_values(mnt, debconflist):
         return False
 
 
+def package_path(pkg_name, pkg_source=None, as_list=False):
+    """Retorna la ruta donde deberia estar se almacenado un paquete en el pool
+    del disco de instalacion, si el paramero as_list es True, entonces retorna
+    la ruta en formato adaptado a la funcion common.instalar_paquetes()"""
+
+    pool = 'pool/main'
+
+    if pkg_source:
+        if len(pkg_source) >= 4 and pkg_source[:3] == 'lib':
+            letter = pkg_source[:4]
+        else:
+            letter = pkg_source[0]
+    else:
+        letter = '*'
+        pkg_source = '*'
+
+    live_path = get_live_path()
+    aux_pool = '{0}/{1}/{2}'.format(pool, letter, pkg_source)
+    pkg_path = "{0}/{1}/{2}_*.deb".format(live_path, aux_pool, pkg_name)
+
+    files = glob.glob(pkg_path)
+    if pkg_source == '*'and len(files) > 0:
+        pkg_path = files[0]
+        pkg_source = pkg_path.split('/')[-2]
+        letter = pkg_source[0]
+
+    if as_list:
+        pool_path = '{0}/{1}/{2}'.format(pool, letter, pkg_source)
+        pkg_path = [live_path + '/' + pool_path, pkg_name]
+
+    return pkg_path
+
+
+def is_package_in_pool(pkg_name):
+    """Verifica si existe el disco de instalacion el paquete pkg_name.
+    Retorna True en caso de encontrarlo, False en caso contrario"""
+
+    files = glob.glob(package_path(pkg_name))
+    if len(files) > 0:
+        return True
+    else:
+        return False
+
+
 def instalar_paquetes(mnt, dest, plist):
     i = 0
     n = len(plist)
 
     for loc, name in plist:
+        print loc
         if os.path.isdir(loc):
             pkglist = glob.glob(loc + '/' + name + '_*.deb')
 
@@ -314,7 +381,7 @@ def reconfigurar_paquetes(mnt, plist):
         return False
 
 
-# TODO: Esto no está implementado en ningun otro lado
+# TODO: Esto no está siendo utilizado en ningun lado
 def actualizar_sistema(mnt):
     """ Este metodo pretende permitir actualizar el sistema si se detecta una
     conexion activa a internet"""
@@ -943,10 +1010,20 @@ def validate_maximun_fs_size(formato, tamano):
 
 
 if __name__ == "__main__":
-    print debug_list([1, 2])
-    print debug_list({"casa": [1]})
-    print debug_list("la casa")
-    print debug_list(12.0)
-    print debug_list(gtk)
-
-    create_file('/home/erick/abrete/senamo/locale', debug_list(gtk))
+#==============================================================================
+#    print debug_list([1, 2])
+#    print debug_list({"casa": [1]})
+#    print debug_list("la casa")
+#    print debug_list(12.0)
+#    print debug_list(gtk)
+# 
+#    print package_path('burg-pc')
+#    print is_package_in_pool('burg-pc')
+#    print package_path('aspell-es')
+#    print is_package_in_pool('aspell-es')
+#    print package_path('canaima-primeros-pasos')
+#    print is_package_in_pool('canaima-primeros-pasos')
+#==============================================================================
+    pp = package_path("canaima-primeros-pasositos", as_list=True)
+    print pp
+    print instalar_paquetes("/mnt", "/tmp", [pp])

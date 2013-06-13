@@ -19,12 +19,18 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 import xml.dom.minidom
+from canaimainstalador.clases.common import instalar_paquetes, \
+    is_package_in_pool, package_path
+
 
 LC_SUPPORTED_FILE = '/usr/share/i18n/SUPPORTED'
 ISO_639_3_FILE = "/usr/share/xml/iso-codes/iso_639_3.xml"
+I18N_PACKAGES_FILE = "/usr/lib/canaima-l10n/l10n_pkgs.dict"
 
 
 def get_country_id(lc):
+    """Extrae el id del pais a partir de un locale"""
+
     lc_split = lc.split('_')
     if len(lc_split) > 1:
         # Saneamos el nombre del pais (quitamos '@' y '.')
@@ -37,13 +43,16 @@ def get_country_id(lc):
 
 
 def get_language_id(lc):
+    """Extrae el id del lenguaje a partir de un locale"""
+
     # Usamos split('.') para sanear los lenguajes como Esperanto (eo.UTF-8)
     # los cuales no tienen notación de pais, sino solo el lenguaje
     return lc.split('_')[0].split('.')[0]
 
 
 def locale_content(localeitem):
-    'Genera el contenido para el archivo /etc/default/locale'
+    "Genera el contenido para el archivo /etc/default/locale"
+
     data = '''# Archivo generado por el Instalador de Canaima GNU/Linux
 LANG="{0}"
 LANGUAGE="{1}:{2}"
@@ -54,7 +63,8 @@ LC_ALL="{0}"
 
 
 def locale_gen_content(localeitem):
-    'Genera el contenido para el archivo /etc/locale.gen'
+    "Genera el contenido para el archivo /etc/locale.gen"
+
     data = '''# Archivo generado por el Instalador de Canaima GNU/Linux
 #
 # This file lists locales that you wish to have built. You can find a list
@@ -65,6 +75,59 @@ def locale_gen_content(localeitem):
 {0} {1}
 '''.format(localeitem.line[0], localeitem.line[1])
     return data
+
+
+def package_name(locale, suffix=False):
+    """Compone el nombre el nombre del paquete de lenguajes a partir del locale
+    indicad. Si suffix es igual a True retorna solo el locale transformado al
+    formato del paquete."""
+
+    lc_str = locale.lower().replace('_', '-')
+    if suffix:
+        return lc_str
+    else:
+        return "canaima-l10n-{0}".format(lc_str)
+
+
+def have_language_pack(locale):
+    """Verifica si todos los paquetes adicionales necesarios para la
+    instalación completa del lenguaje estan en el pool del disco."""
+
+    lc_str = package_name(locale, suffix=True)
+    packages = i18n_packages()[lc_str]
+
+    for p in packages:
+        # Toma el primer paquete si hay una condicion
+        if type(p) is type(list()):
+            p = p[0]
+        # Chequea q todos los paquetes esten en el pool para su instalacion
+        if not is_package_in_pool(p):
+            return False
+    return True
+
+
+def install_language_pack(locale, mnt):
+    """Instala los paquetes de idiomas, si se encuentran en el pool/ del disco
+    de instalación. Si el paquete de lenguaje no se encuentra en el disco
+    retorna False y no ejecuta la instalación"""
+
+    lc_str = package_name(locale, True)
+    packages = i18n_packages()[lc_str]
+    plist = []
+
+    if have_language_pack(locale):
+        for p in packages:
+            # Toma el primer paquete si hay una condicion
+            if type(p) is type(list()):
+                p = p[0]
+            plist.append(package_path(p, as_list=True))
+    else:
+        return False
+
+    print packages
+    print plist
+
+    return instalar_paquetes(mnt, '/tmp', plist)
 
 
 class _Iso_369_3(object):
@@ -114,6 +177,7 @@ class Language(object):
 
     def index_of(self, lang):
         'Retorna el indice de la lista donde está almacedado lang'
+
         i = 0
         exists = False
         for l in self.langs:
@@ -145,6 +209,7 @@ class LocaleItem(object):
     def __lt__(self, other):
         '''Sobreescribe el ordenamiento (sort) para este tipo de dato, ordena
         los items alfabeticamente usando el nombre'''
+
         return self.line < other.line
 
     def get_locale(self):
@@ -194,6 +259,7 @@ class _Locale(object):
 
     def index_of(self, locale):
         'Retorna el indice de la lista donde está almacedado locale'
+
         i = 0
         exists = False
         for l in self.supported:
@@ -209,12 +275,14 @@ class _Locale(object):
 
 _iso_369_3_cache = None
 _locale_cache = None
+_i18n_packages = None
 
 
 def Iso_369_3():
     '''Este método nos permite usar la cache para el archivo de la ISO 369-3 \
     y de esta manera no tener que releerlo una y otra vez provocando lentitud \
     en el procesamiento.'''
+
     global _iso_369_3_cache
     if not _iso_369_3_cache:
         _iso_369_3_cache = _Iso_369_3()
@@ -225,10 +293,20 @@ def Locale():
     '''Este método nos permite usar la cache para el archivo de locales \
     soportados (LC_SUPPORTED_FILE) y de esta manera no tener que releerlo una \
     y otra vez provocando lentitud en el procesamiento.'''
+
     global _locale_cache
     if not _locale_cache:
         _locale_cache = _Locale()
     return _locale_cache
+
+
+def i18n_packages():
+    global _i18n_packages
+    if not _i18n_packages:
+        f = open(I18N_PACKAGES_FILE, 'r')
+        data = f.read()
+        _i18n_packages = eval(data)
+    return _i18n_packages
 
 
 if __name__ == "__main__":
@@ -253,3 +331,5 @@ if __name__ == "__main__":
             print "----"
             print locale_gen_content(locale)
             print "----"
+
+    print have_language_pack("es_VE")

@@ -32,10 +32,9 @@ from canaimainstalador.clases.common import UserMessage, ProcessGenerator, \
     crear_etc_network_interfaces, crear_etc_fstab, assisted_mount, \
     assisted_umount, preseed_debconf_values, mounted_targets, mounted_parts, \
     crear_usuarios, ThreadGenerator, get_windows_part_in, activar_swap, \
-    crear_archivos_config, activar_accesibilidad, create_file
+    crear_archivos_config, activar_accesibilidad, create_file, get_live_path
 from canaimainstalador.clases.particiones import Particiones
-from canaimainstalador.config import INSTALL_SLIDES, BAR_ICON, SHAREDIR, \
-    get_live_path
+from canaimainstalador.config import INSTALL_SLIDES, BAR_ICON, SHAREDIR
 import Queue
 import gobject
 import gtk
@@ -45,6 +44,7 @@ import sys
 import threading
 import webkit
 from canaimainstalador.clases import keyboard, i18n
+from canaimainstalador.clases.i18n import install_language_pack
 
 
 gobject.threads_init()
@@ -242,11 +242,12 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
     usuario = CFG['usuario']
     passuser = CFG['passuser1']
     maquina = CFG['maquina']
+    lcl_item = CFG['locale']
     oem = CFG['oem']
     gdm = CFG['gdm']
     mountpoint = '/target'
     LIVE_PATH = get_live_path()
-    squashfs = LIVE_PATH + 'live/filesystem.squashfs'
+    squashfs = LIVE_PATH + '/live/filesystem.squashfs'
     uninstpkgs = [
         'canaima-instalador', 'live-config', 'live-boot',
         'live-boot-initramfs-tools', 'live-initramfs', 'live-config-sysvinit',
@@ -257,20 +258,20 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
         'canaima-base'
         ]
     instpkgs_burg = [
-        [LIVE_PATH + 'pool/main/libx/libx86', 'libx86-1'],
-        [LIVE_PATH + 'pool/main/s/svgalib', 'libsvga1'],
-        [LIVE_PATH + 'pool/main/libs/libsdl1.2', 'libsdl1.2debian'],
-        [LIVE_PATH + 'pool/main/g/gettext', 'libasprintf0c2'],
-        [LIVE_PATH + 'pool/main/g/gettext', 'gettext-base'],
-        [LIVE_PATH + 'pool/main/b/burg-themes', 'burg-themes-common'],
-        [LIVE_PATH + 'pool/main/b/burg-themes', 'burg-themes'],
-        [LIVE_PATH + 'pool/main/b/burg', 'burg-common'],
-        [LIVE_PATH + 'pool/main/b/burg', 'burg-emu'],
-        [LIVE_PATH + 'pool/main/b/burg', 'burg-pc'],
-        [LIVE_PATH + 'pool/main/b/burg', 'burg']
+        [LIVE_PATH + '/pool/main/libx/libx86', 'libx86-1'],
+        [LIVE_PATH + '/pool/main/s/svgalib', 'libsvga1'],
+        [LIVE_PATH + '/pool/main/libs/libsdl1.2', 'libsdl1.2debian'],
+        [LIVE_PATH + '/pool/main/g/gettext', 'libasprintf0c2'],
+        [LIVE_PATH + '/pool/main/g/gettext', 'gettext-base'],
+        [LIVE_PATH + '/pool/main/b/burg-themes', 'burg-themes-common'],
+        [LIVE_PATH + '/pool/main/b/burg-themes', 'burg-themes'],
+        [LIVE_PATH + '/pool/main/b/burg', 'burg-common'],
+        [LIVE_PATH + '/pool/main/b/burg', 'burg-emu'],
+        [LIVE_PATH + '/pool/main/b/burg', 'burg-pc'],
+        [LIVE_PATH + '/pool/main/b/burg', 'burg']
         ]
     instpkgs_cpp = [[
-        LIVE_PATH + 'pool/main/c/canaima-primeros-pasos/',
+        LIVE_PATH + '/pool/main/c/canaima-primeros-pasos/',
         'canaima-primeros-pasos'
         ]]
     debconflist = [
@@ -469,6 +470,12 @@ archivos.', window, bindlist, mountlist)
     if not reconfigurar_paquetes(mnt=mountpoint, plist=reconfpkgs):
         UserMessageError('Ocurrió un error reconfigurando un paquete.',
                          window, bindlist, mountlist)
+
+    # instalación de los paquetes de idiomas
+    label.set_text('Configurando paquetes adicionales de idioma.')
+    if not install_language_pack(lcl_item.get_locale(), mountpoint):
+        print "ADVERTENCIA: No se instalaran los paquetes adicionales del \
+idioma"
 
     # Activa la funcionalidad OEM si ha sido seleccionada por el usuario
     if oem:
