@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# ==============================================================================
+# =============================================================================
 # PAQUETE: canaima-instalador
 # ARCHIVO: canaimainstalador/clases/particion_eliminar.py
 # COPYRIGHT:
@@ -9,7 +9,7 @@
 #       (C) 2012 Erick Manuel Birbe Salazar <erickcion@gmail.com>
 #       (C) 2012 Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>
 # LICENCIA: GPL-3
-# ==============================================================================
+# =============================================================================
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -26,12 +26,15 @@
 #
 # CODE IS POETRY
 
-import gtk
+from canaimainstalador.clases.common import get_row_index, TblCol, \
+    has_next_row, is_primary, is_logic, humanize, PStatus, is_free, UserMessage
+from canaimainstalador.translator import msj, gettext_install
 from copy import copy
+import gtk
 
-from canaimainstalador.clases.common import get_row_index, TblCol, has_next_row, \
-    is_primary, is_logic, humanize, PStatus, is_free, UserMessage
-from canaimainstalador.translator import msj
+
+gettext_install()
+
 
 class Main():
 
@@ -47,10 +50,12 @@ class Main():
             is_clean = True
             for partition in self.lista:
                 if is_logic(partition) and not is_free(partition):
-                    message = "Debe borrar primero las particiones lógicas."
-                    UserMessage(message, 'ERROR', gtk.MESSAGE_ERROR, gtk.BUTTONS_OK)
+                    message = _("You must first delete the logical \
+partitions.")
+                    UserMessage(message, 'ERROR', gtk.MESSAGE_ERROR,
+                                gtk.BUTTONS_OK)
                     is_clean = False
-                    break;
+                    break
             if is_clean:
                 i = get_row_index(self.lista, self.fila_selec)
                 free = self.lista[i + 1]
@@ -115,7 +120,8 @@ class Main():
                                   particion[TblCol.INICIO],
                                   particion[TblCol.FIN],
                                   particion[TblCol.FORMATO],
-                                  msj.particion.get_tipo_orig(particion[TblCol.TIPO]),
+                                  msj.particion.get_tipo_orig(
+                                                       particion[TblCol.TIPO]),
                                   0])
 
     def is_summable(self, otra, actual):

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# ==============================================================================
+# =============================================================================
 # PAQUETE: canaima-instalador
 # ARCHIVO: canaimainstalador/pasos/particion_redimensionar.py
 # COPYRIGHT:
@@ -9,7 +9,7 @@
 #       (C) 2012 Erick Manuel Birbe Salazar <erickcion@gmail.com>
 #       (C) 2012 Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>
 # LICENCIA: GPL-3
-# ==============================================================================
+# =============================================================================
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -26,13 +26,17 @@
 #
 # CODE IS POETRY
 
-import gtk
-from canaimainstalador.clases.common import humanize, TblCol, floatify, PStatus, \
-    get_sector_size, has_next_row, is_free, get_row_index, get_next_row, \
-    validate_minimun_fs_size, validate_maximun_fs_size
-from canaimainstalador.translator import msj
-from copy import copy
+from canaimainstalador.clases.common import humanize, TblCol, floatify, \
+    PStatus, get_sector_size, has_next_row, is_free, get_row_index, \
+    get_next_row, validate_minimun_fs_size, validate_maximun_fs_size
 from canaimainstalador.config import FSMIN, FSMAX, ESPACIO_USADO_EXTRA
+from canaimainstalador.translator import msj, gettext_install
+from copy import copy
+import gtk
+
+
+gettext_install()
+
 
 class Main(gtk.Dialog):
 
@@ -75,7 +79,8 @@ class Main(gtk.Dialog):
         self.lbl_dispositivo.show()
 
         self.lbl_tamano = gtk.Label('Tamaño')
-        self.lbl_tamano_num = gtk.Label(humanize(self.get_new_partition_size()))
+        self.lbl_tamano_num = gtk.Label(
+                                    humanize(self.get_new_partition_size()))
         self.vb_tamano = gtk.VBox()
         self.vb_tamano.add(self.lbl_tamano)
         self.vb_tamano.add(self.lbl_tamano_num)
@@ -96,7 +101,8 @@ class Main(gtk.Dialog):
         self.vb_libre.show_all()
 
         self.lbl_sin_particion = gtk.Label('Sin Particionar')
-        self.lbl_sin_particion_num = gtk.Label(humanize(self.get_unasigned_space()))
+        self.lbl_sin_particion_num = gtk.Label(
+                                        humanize(self.get_unasigned_space()))
         self.vb_sin_particion = gtk.VBox()
         self.vb_sin_particion.add(self.lbl_sin_particion)
         self.vb_sin_particion.add(self.lbl_sin_particion_num)
@@ -183,7 +189,8 @@ class Main(gtk.Dialog):
         # Actualizar los textos con los valores
         self.lbl_tamano_num.set_text(humanize(self.get_new_partition_size()))
         self.lbl_libre_num.set_text(humanize(self.get_free_space()))
-        self.lbl_sin_particion_num.set_text(humanize(self.get_unasigned_space()))
+        self.lbl_sin_particion_num.set_text(
+                                        humanize(self.get_unasigned_space()))
 
     def process_response(self, response=None):
 
@@ -197,7 +204,8 @@ class Main(gtk.Dialog):
         if response == gtk.RESPONSE_OK:
 
             part_actual[TblCol.FIN] = self.escala.get_value()
-            part_actual[TblCol.TAMANO] = humanize(self.get_new_partition_size())
+            part_actual[TblCol.TAMANO] = humanize(
+                                                self.get_new_partition_size())
             part_actual[TblCol.LIBRE] = humanize(self.get_free_space())
             part_actual[TblCol.ESTADO] = PStatus.REDIM
 
@@ -206,7 +214,8 @@ class Main(gtk.Dialog):
                 # Si hay particion libre siguiente, solo modificamos algunos
                 # valores
                 if part_sig:
-                    part_sig[TblCol.INICIO] = part_actual[TblCol.FIN] + self.sector
+                    part_sig[TblCol.INICIO] = part_actual[TblCol.FIN] \
+                    + self.sector
                     tamano = humanize(
                                 part_sig[TblCol.FIN] - part_sig[TblCol.INICIO])
                     part_sig[TblCol.TAMANO] = tamano
@@ -220,10 +229,13 @@ class Main(gtk.Dialog):
                     part_sig[TblCol.TIPO] = part_actual[TblCol.TIPO]
                     part_sig[TblCol.FORMATO] = msj.particion.libre
                     part_sig[TblCol.MONTAJE] = ''
-                    part_sig[TblCol.TAMANO] = humanize(self.get_unasigned_space())
+                    part_sig[TblCol.TAMANO] = humanize(
+                                                    self.get_unasigned_space())
                     part_sig[TblCol.USADO] = humanize(0)
-                    part_sig[TblCol.LIBRE] = humanize(self.get_unasigned_space())
-                    part_sig[TblCol.INICIO] = part_actual[TblCol.FIN] + self.sector
+                    part_sig[TblCol.LIBRE] = humanize(
+                                                    self.get_unasigned_space())
+                    part_sig[TblCol.INICIO] = part_actual[TblCol.FIN] \
+                    + self.sector
                     part_sig[TblCol.FIN] = self.get_maximum_size()
                     part_sig[TblCol.FORMATEAR] = False
                     part_sig[TblCol.ESTADO] = PStatus.FREED
@@ -245,10 +257,12 @@ class Main(gtk.Dialog):
               part_actual[TblCol.DISPOSITIVO],
               part_actual[TblCol.MONTAJE],
               part_actual[TblCol.INICIO],
-              original[TblCol.FIN], # Fin original
+              # Fin original
+              original[TblCol.FIN],
               part_actual[TblCol.FORMATO],
               msj.particion.get_tipo_orig(part_actual[TblCol.TIPO]),
-              part_actual[TblCol.FIN], # Nuevo Fin
+              # Nuevo Fin
+              part_actual[TblCol.FIN],
             ])
         self.destroy()
         return response

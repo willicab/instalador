@@ -27,6 +27,9 @@
 # CODE IS POETRY
 
 import os
+from canaimainstalador.translator import gettext_install
+
+gettext_install()
 
 curdir = os.path.normpath(os.path.join(os.path.realpath(__file__), '..', '..'))
 
@@ -49,10 +52,10 @@ AUTHORS_FILE = SHAREDIR + '/AUTHORS'
 LICENSE_FILE = SHAREDIR + '/LICENSE'
 TRANSLATORS_FILE = SHAREDIR + '/TRANSLATORS'
 
-APP_NAME = 'Canaima Instalador'
-APP_COPYRIGHT = 'Copyright (C) 2012 - Varios autores'
+APP_NAME = _('Canaima Installer')
+APP_COPYRIGHT = _('Copyright (C) 2012 - Several authors')
 APP_URL = 'http://gitorious.org/canaima-gnu-linux/canaima-instalador'
-APP_DESCRIPTION = 'Instalador para Canaima GNU/Linux'
+APP_DESCRIPTION = _('Installer for Canaima GNU/Linux')
 
 ESPACIO_ROOT = 1024.0 * 1024.0              # 1GB
 ESPACIO_VAR = 1024.0 * 896.0                # 896MB

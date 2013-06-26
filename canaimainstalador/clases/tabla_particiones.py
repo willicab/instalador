@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# ==============================================================================
+# =============================================================================
 # PAQUETE: canaima-instalador
 # ARCHIVO: canaimainstalador/clases/tabla_particiones.py
 # COPYRIGHT:
@@ -9,7 +9,7 @@
 #       (C) 2012 Erick Manuel Birbe Salazar <erickcion@gmail.com>
 #       (C) 2012 Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>
 # LICENCIA: GPL-3
-# ==============================================================================
+# =============================================================================
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -26,9 +26,13 @@
 #
 # CODE IS POETRY
 
+from canaimainstalador.clases.common import TblCol
+from canaimainstalador.translator import gettext_install
 import gtk
 
-from canaimainstalador.clases.common import TblCol
+
+gettext_install()
+
 
 class TablaParticiones (gtk.TreeView):
 
@@ -39,8 +43,8 @@ class TablaParticiones (gtk.TreeView):
     def __init__(self):
 
         # Tipos de valores a mostrar en la tabla
-        self.liststore = gtk.ListStore(str, str, str, str, str, str, str, float, \
-                                       float, bool, str)
+        self.liststore = gtk.ListStore(str, str, str, str, str, str, str, \
+                                       float, float, bool, str)
 
         gtk.TreeView.__init__(self, model=self.liststore)
         self.set_headers_clickable(False)
@@ -83,8 +87,8 @@ class TablaParticiones (gtk.TreeView):
         self.doble_click(fila)
 
     def get_fila_seleccionada(self):
-        '''Obtiene la fila que esta seleccionada al momento de su llamado, si no
-        hay filas seleccionadas retornará None'''
+        '''Obtiene la fila que esta seleccionada al momento de su llamado, si
+        no hay filas seleccionadas retornará None'''
 
         obj_seleccion = self.get_selection().get_selected()
         modelo = obj_seleccion[0]
@@ -110,17 +114,17 @@ class TablaParticiones (gtk.TreeView):
         'Crea la tabla'
 
         # Columnas
-        self.nueva_columna_texto("Dispositivo", TblCol.DISPOSITIVO)
-        self.nueva_columna_texto("Tipo", TblCol.TIPO)
-        self.nueva_columna_texto("Formato", TblCol.FORMATO)
-        self.nueva_columna_texto("Montaje", TblCol.MONTAJE)
-        self.nueva_columna_texto("Tamaño", TblCol.TAMANO)
-        self.nueva_columna_texto("Usado", TblCol.USADO)
-        self.nueva_columna_texto("Libre", TblCol.LIBRE)
-        self.nueva_columna_texto("Inicio", TblCol.INICIO)
-        self.nueva_columna_texto("Fin", TblCol.FIN)
-        self.nueva_columna_check("Formatear", TblCol.FORMATEAR)
-        self.nueva_columna_texto("Estado", TblCol.ESTADO)
+        self.nueva_columna_texto(_("Device"), TblCol.DISPOSITIVO)
+        self.nueva_columna_texto(_("Type"), TblCol.TIPO)
+        self.nueva_columna_texto(_("FileSys"), TblCol.FORMATO)
+        self.nueva_columna_texto(_("Mount"), TblCol.MONTAJE)
+        self.nueva_columna_texto(_("Size"), TblCol.TAMANO)
+        self.nueva_columna_texto(_("Used"), TblCol.USADO)
+        self.nueva_columna_texto(_("Free"), TblCol.LIBRE)
+        self.nueva_columna_texto(_("Start"), TblCol.INICIO)
+        self.nueva_columna_texto(_("End"), TblCol.FIN)
+        self.nueva_columna_check(_("Format"), TblCol.FORMATEAR)
+        self.nueva_columna_texto(_("Status"), TblCol.ESTADO)
 
         # Ocultar las columnas que no se desean mostrar
         self.columnas[TblCol.INICIO].set_visible(False)

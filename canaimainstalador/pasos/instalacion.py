@@ -45,8 +45,10 @@ import threading
 import webkit
 from canaimainstalador.clases import keyboard, i18n
 from canaimainstalador.clases.i18n import install_language_pack
+from canaimainstalador.translator import gettext_install
 
 
+gettext_install()
 gobject.threads_init()
 
 
@@ -60,7 +62,7 @@ class PasoInstalacion():
         event = threading.Event()
 
         params = {
-                'title': 'Instalación de Canaima',
+                'title': _('Canaima Installation'),
                 'q_button_a': q_button_a,
                 'q_button_b': q_button_b,
                 'q_view': q_view,
@@ -111,7 +113,7 @@ class install_window(object):
         size = pango.AttrSize(20000, 0, -1)
         attr.insert(size)
 
-        str_message = 'La instalación de Canaima ha terminado'
+        str_message = _('Canaima installation has been completed')
         message = gtk.Label(str_message)
         message.set_size_request(640, 40)
         message.set_alignment(0, 0)
@@ -119,9 +121,8 @@ class install_window(object):
         message.set_attributes(attr)
         box.put(message, 50, 200)
 
-        str_intro = 'Puedes seguir probando Canaima presionando "Reiniciar \
-más tarde" o disfrutar de tu sistema operativo instalado presionando \
-"Reiniciar ahora".'
+        str_intro = 'You can keep trying Canaima pressing "Restart Later" or \
+enjoy your installed operating system by pressing "Restart Now".'
         intro = gtk.Label(str_intro)
         intro.set_size_request(640, 40)
         intro.set_alignment(0, 0)
@@ -143,13 +144,13 @@ más tarde" o disfrutar de tu sistema operativo instalado presionando \
 
         button_a = gtk.Button()
         button_a.set_size_request(150, 30)
-        button_a.set_label('Reiniciar más tarde')
+        button_a.set_label(_('Restart Later'))
         button_a.connect('clicked', self.close)
         box.put(button_a, 390, 440)
 
         button_b = gtk.Button()
         button_b.set_size_request(150, 30)
-        button_b.set_label('Reiniciar ahora')
+        button_b.set_label(_('Restart Now'))
         button_b.connect('clicked', self.reboot)
         box.put(button_b, 540, 440)
 
@@ -304,19 +305,19 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
     #TODO: Esta validación deberia hacerse al inicio de la aplicación y no
     # esperar hasta este punto
     if not os.path.exists(squashfs):
-        UserMessageError('No se encuentra la imagen squashfs.',
+        UserMessageError(_('Not found squashfs image.'),
                          window, bindlist, mountlist)
 
     if not assisted_umount(sync=True, plist=mounted_targets(mnt=mountpoint)):
-        UserMessageError('Ocurrió un error desmontando las particiones.',
+        UserMessageError(_('An error occurred unmounting the partitions.'),
                          window, bindlist, mountlist)
 
     if not assisted_umount(sync=True,
                            plist=mounted_parts(disk=metodo['disco'][0])):
-        UserMessageError('Ocurrió un error desmontando las particiones.',
+        UserMessageError(_('An error occurred unmounting the partitions.'),
                          window, bindlist, mountlist)
 
-    label.set_text('Creando particiones en disco ...')
+    label.set_text('Creating partitions in the disk ...')
     for a in acciones:
         accion = a[0]
         montaje = a[2]
@@ -332,7 +333,7 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
             if not p.crear_particion(
                 drive=disco, start=inicio, end=fin, fs=fs, partype=tipo,
                 format=True):
-                UserMessageError('Ocurrió un error creando una partición.',
+                UserMessageError(_('An error occurred creating a partition.'),
                          window, bindlist, mountlist)
             else:
                 if montaje:
@@ -344,7 +345,7 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
         elif accion == 'borrar':
             particion = p.nombre_particion(disco, tipo, inicio, fin)
             if not p.borrar_particion(drive=disco, part=particion):
-                UserMessageError('Ocurrió un error borrando una partición.',
+                UserMessageError(_('An error occurred removing a partition.'),
                          window, bindlist, mountlist)
             else:
                 for item in mountlist:
@@ -355,14 +356,14 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
             particion = p.nombre_particion(disco, tipo, inicio, fin)
             if not p.redimensionar_particion(drive=disco, part=particion,
                                              newend=nuevo_fin):
-                UserMessageError('Ocurrió un error redimensionando una \
-partición.',
+                UserMessageError(_('An error occurred resizing a partition.'),
                          window, bindlist, mountlist)
 
         elif accion == 'formatear':
             particion = p.nombre_particion(disco, tipo, inicio, fin)
             if not p.formatear_particion(part=particion, fs=fs):
-                UserMessageError('Ocurrió un error formateando una partición.',
+                UserMessageError(_('An error occurred formatting a \
+partition.'),
                          window, bindlist, mountlist)
             else:
                 if montaje:
@@ -399,80 +400,80 @@ partición.',
         if not p.remover_bandera(
             drive=metodo['disco'][0], part=unset_boot, flag='boot'
             ):
-            UserMessageError('Ocurrió un error montando los sistemas de \
-archivos.', window, bindlist, mountlist)
+            UserMessageError(_("An error occurred mounting the filesystem"),
+                             window, bindlist, mountlist)
 
     if set_boot:
         if not p.asignar_bandera(
             drive=metodo['disco'][0], part=set_boot, flag='boot'
             ):
-            UserMessageError('Ocurrió un error montando los sistemas de \
-archivos.', window, bindlist, mountlist)
+            UserMessageError(_("An error occurred mounting the filesystem"),
+                             window, bindlist, mountlist)
 
     if not activar_swap(plist=mountlist):
-        UserMessageError('Ocurrió un error activando la partición swap.',
+        UserMessageError(_("An error occurred activating the swap partition"),
                          window, bindlist, mountlist)
 
-    label.set_text('Montando sistemas de archivos ...')
+    label.set_text(_("Mounting the filesystem ..."))
     if not assisted_mount(sync=True, bind=False, plist=mountlist):
-        UserMessageError('Ocurrió un error montando los sistemas de archivos.',
+        UserMessageError(_("An error occurred mounting the filesystem"),
                          window, bindlist, mountlist)
 
-    label.set_text('Copiando archivos en disco ...')
+    label.set_text(_("Copying files to disk ..."))
     if ProcessGenerator(
         'unsquashfs -f -n -d {0} {1}'.format(mountpoint, squashfs)
         ).returncode != 0:
-        UserMessageError('Ocurrió un error copiando los archivos al disco.',
+        UserMessageError(_("An error occurred copying files to disk."),
                          window, bindlist, mountlist)
 
-    label.set_text('Montando sistema de archivos ...')
+    label.set_text(_("Mounting the filesystem"))
     if not assisted_mount(sync=True, bind=True, plist=bindlist):
-        UserMessageError('Ocurrió un error montando los sistemas de archivos.',
+        UserMessageError(_("An error occurred mounting the filesystem"),
                          window, bindlist, mountlist)
 
     # Configuración de archivos del sistema
-    label.set_text('Configurando archivos del sistema ...')
+    label.set_text(_("Configuring system files ..."))
     if not crear_archivos_config(mnt=mountpoint, conffilelist=conffilelist):
-        UserMessageError('Ocurrió un error configurando archivos del sistema.',
+        UserMessageError(_("An error occurred configuring the system files"),
                          window, bindlist, mountlist)
     if not conf_files_install(CFG, mountpoint):
-        UserMessageError('Ocurrió un error configurando archivos del sistema.',
+        UserMessageError(_("An error occurred configuring the system files"),
                          window, bindlist, mountlist)
 
-    label.set_text('Configurando interfaces de red ...')
+    label.set_text(_("Configuring network interfaces"))
     if not crear_etc_hostname(mnt=mountpoint, cfg='/etc/hostname',
                               maq=maquina):
-        UserMessageError('Ocurrió un error creando el archivo /etc/hostname.',
+        UserMessageError(_("An error occurred creating file /etc/hostname"),
                          window, bindlist, mountlist)
     if not crear_etc_hosts(mnt=mountpoint, cfg='/etc/hosts', maq=maquina):
-        UserMessageError('Ocurrió un error creando el archivo /etc/hosts.',
+        UserMessageError(_("An error occurred creating file /etc/hosts"),
                          window, bindlist, mountlist)
     if not crear_etc_network_interfaces(mnt=mountpoint,
                                         cfg='/etc/network/interfaces'):
-        UserMessageError('Ocurrió un error creando el archivo \
-/etc/network/interfaces.', window, bindlist, mountlist)
+        UserMessageError(_("An error occurred creating file \
+/etc/network/interfaces"), window, bindlist, mountlist)
 
-    label.set_text('Configurando particiones en el sistema ...')
+    label.set_text(_("Registering partitions in the system"))
     if not crear_etc_fstab(mnt=mountpoint, cfg='/etc/fstab',
                            mountlist=mountlist, cdroms=cdroms):
-        UserMessageError('Ocurrió un error creando el archivo /etc/fstab.',
+        UserMessageError(_("An error occurred creating file /etc/fstab"),
                          window, bindlist, mountlist)
 
     # Instalar accesibilidad en el GDM
     if gdm:
-        label.set_text('Instalando componentes de accesibilidad en GDM ...')
+        label.set_text(_("Installing accessibility components in GDM ..."))
         if not activar_accesibilidad(mnt=mountpoint):
-            UserMessageError('Ocurrió un error activando la accesibilidad.',
+            UserMessageError(_("An error occurred activating accesibility."),
                          window, bindlist, mountlist)
 
     # Reconfigurando paquetes del sistema
-    label.set_text('Configurando detalles del sistema operativo ...')
+    label.set_text(_("Configuring additional details on the system ..."))
     if not reconfigurar_paquetes(mnt=mountpoint, plist=reconfpkgs):
-        UserMessageError('Ocurrió un error reconfigurando un paquete.',
+        UserMessageError(_("An error occurred reconfiguring a package."),
                          window, bindlist, mountlist)
 
     # instalación de los paquetes de idiomas
-    label.set_text('Configurando paquetes adicionales de idioma.')
+    label.set_text(_("Configuring additional language packages ..."))
     if not install_language_pack(lcl_item.get_locale(), mountpoint):
         print "ADVERTENCIA: No se instalaran los paquetes adicionales del \
 idioma"
@@ -485,10 +486,10 @@ idioma"
         nml_password = 'canaima'
         nml_name = 'Mantenimiento'
         # Instala Canaima Primeros Pasos
-        label.set_text('Instalando características OEM ...')
+        label.set_text(_("Installing OEM characteristics ..."))
         if not instalar_paquetes(mnt=mountpoint, dest='/tmp',
                                  plist=instpkgs_cpp):
-            UserMessageError('Ocurrió un error instalando un paquete.',
+            UserMessageError(_("An error occurred installing a package"),
                          window, bindlist, mountlist)
     else:
         adm_user = 'root'
@@ -497,52 +498,51 @@ idioma"
         nml_password = passuser
         nml_name = nombre
 
-    label.set_text('Creando usuarios de sistema ...')
+    label.set_text(_("Creating system users ..."))
     if not crear_usuarios(mnt=mountpoint, a_user=adm_user, a_pass=adm_password,
                           n_name=nml_name, n_user=nml_user,
                           n_pass=nml_password):
-        UserMessageError('Ocurrió un error creando los usuarios de sistema.',
+        UserMessageError(_("An error occurred creating system user"),
                          window, bindlist, mountlist)
 
-    label.set_text('Removiendo datos temporales de instalación ...')
+    label.set_text(_("Removing temporary data of installation ..."))
     if not desinstalar_paquetes(mnt=mountpoint, plist=uninstpkgs):
-        UserMessageError('Ocurrió un error desinstalando un paquete.',
+        UserMessageError(_("An error occurred removing a package"),
                          window, bindlist, mountlist)
 
-    label.set_text('Instalando gestor de arranque ...')
+    label.set_text(_("Installing Bootloader ..."))
     if not preseed_debconf_values(mnt=mountpoint, debconflist=debconflist):
-        UserMessageError('Ocurrió un error presembrando las respuestas \
-debconf.', window, bindlist, mountlist)
+        UserMessageError(_("An error occurred preseeding answers in debconf."),
+                         window, bindlist, mountlist)
     if not instalar_paquetes(mnt=mountpoint, dest='/tmp', plist=instpkgs_burg):
-        UserMessageError('Ocurrió un error instalando un paquete.',
+        UserMessageError(_("An error occurred installing a package."),
                          window, bindlist, mountlist)
     if ProcessGenerator('chroot {0} update-burg'.format(mountpoint)
                         ).returncode != 0:
-        UserMessageError('Ocurrió un error actualizando burg.',
+        UserMessageError(_("An error occurred updating BURG."),
                          window, bindlist, mountlist)
 
-    label.set_text('Configurando el arranque del sistema ...')
+    label.set_text(_("Configuring system boot ..."))
     if ProcessGenerator(
         'chroot {0} /usr/sbin/mkinitramfs -o /boot/{1} {2}'.format(
             mountpoint, 'initrd.img-' + os.uname()[2], os.uname()[2]
             )
         ).returncode != 0:
-        UserMessageError('Ocurrió un error generando la imagen de arranque.',
+        UserMessageError(_("An error occurred generating boot image"),
                          window, bindlist, mountlist)
     if ProcessGenerator(
         'chroot {0} update-initramfs -u -t'.format(mountpoint)
         ).returncode != 0:
-        UserMessageError('Ocurrió un error actualizando la imagen de \
-arranque.', window, bindlist, mountlist)
-
-    # Terminando la instalación
-    label.set_text('Desmontando sistema de archivos ...')
-    if not assisted_umount(sync=True, plist=bindlist):
-        UserMessageError('Ocurrió un error desmontando las particiones.',
+        UserMessageError(_("An error occurred updating the boot image."),
                          window, bindlist, mountlist)
 
+    # Terminando la instalación
+    label.set_text(_("Umounting filesistems ..."))
+    if not assisted_umount(sync=True, plist=bindlist):
+        UserMessageError(_("An error occurred umounting partitions."),
+                         window, bindlist, mountlist)
     if not assisted_umount(sync=True, plist=mountlist):
-        UserMessageError('Ocurrió un error desmontando las particiones.',
+        UserMessageError(_("An error occurred umounting partitions."),
                          window, bindlist, mountlist)
 
     button_a.show()

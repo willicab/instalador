@@ -41,6 +41,10 @@ from canaimainstalador.pasos.usuario import PasoUsuario
 import Image
 import gtk
 import re
+from canaimainstalador.translator import gettext_install
+
+
+gettext_install()
 
 
 class Wizard(gtk.Window):
@@ -121,7 +125,7 @@ class Wizard(gtk.Window):
             Cierra la ventana
         '''
         return UserMessage(
-            '¿Está seguro que desea cancelar la instalación?', 'Salir',
+            _('Are you sure you want to cancel the installation?'), _('Exit'),
             gtk.MESSAGE_WARNING, gtk.BUTTONS_YES_NO, c_1=gtk.RESPONSE_YES,
                 f_1=gtk.main_quit, p_1=())
 
@@ -282,7 +286,7 @@ class PartManual():
 
     def siguiente(self, CFG):
         if CFG['w'].formulario('PartManual').raiz == False:
-            message = "Debe existir una partición raiz (/)"
+            message = _("Root partition (/) must exists")
             UserMessage(message, 'ERROR', gtk.MESSAGE_ERROR, gtk.BUTTONS_OK)
             return False
 
@@ -322,44 +326,43 @@ class Usuario():
 
         if CFG['oem'] == False:
             if CFG['passroot1'].strip() == '':
-                message = "Debe escribir una contraseña para el administrador."
+                message = _("You must enter a password for the administrator.")
                 UserMessage(message, 'ERROR', gtk.MESSAGE_ERROR,
                             gtk.BUTTONS_OK)
                 return
             if CFG['passroot1'] != CFG['passroot2']:
-                message = "Las contraseñas de administrador no coinciden."
+                message = _("Administrator passwords do not match.")
                 UserMessage(message, 'ERROR', gtk.MESSAGE_ERROR,
                             gtk.BUTTONS_OK)
                 return
             if CFG['nombre'].strip() == '':
-                message = "Debe escribir un nombre."
+                message = _("You must enter a name.")
                 UserMessage(message, 'ERROR', gtk.MESSAGE_ERROR,
                             gtk.BUTTONS_OK)
                 return
             if CFG['usuario'].strip() == '':
-                message = "Debe escribir un nombre de usuario."
+                message = _("You must enter a user name.")
                 UserMessage(message, 'ERROR', gtk.MESSAGE_ERROR,
                             gtk.BUTTONS_OK)
                 return
             if re.compile('^[a-z][-a-z-0-9]*$').search(CFG['usuario']) == None:
-                message = "El nombre de usuario tiene caracteres inválidos."
+                message = _("The user name has invalid characters.")
                 UserMessage(message, 'ERROR', gtk.MESSAGE_ERROR,
                             gtk.BUTTONS_OK)
                 return
             if CFG['passuser1'].strip() == '':
-                message = "Debe escribir una contraseña para el usuario."
+                message = _("You must enter a password for the user.")
                 UserMessage(message, 'ERROR', gtk.MESSAGE_ERROR,
                             gtk.BUTTONS_OK)
                 return
             if CFG['passuser1'] != CFG['passuser2']:
-                message = "Las contraseñas de usuario no coinciden."
+                message = _("User passwords do not match.")
                 UserMessage(message, 'ERROR', gtk.MESSAGE_ERROR,
                             gtk.BUTTONS_OK)
                 return
             if re.compile("^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*\
 ([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$").search(CFG['maquina']) == None:
-                message = "El nombre de la máquina no está correctamente \
-escrito."
+                message = _("The machine name is not spelled correctly.")
                 UserMessage(message, 'ERROR', gtk.MESSAGE_ERROR,
                             gtk.BUTTONS_OK)
                 return

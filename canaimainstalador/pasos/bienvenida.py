@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# ==============================================================================
+# =============================================================================
 # PAQUETE: canaima-instalador
 # ARCHIVO: canaimainstalador/pasos/bienvenida.py
 # COPYRIGHT:
@@ -9,7 +9,7 @@
 #       (C) 2012 Erick Manuel Birbe Salazar <erickcion@gmail.com>
 #       (C) 2012 Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>
 # LICENCIA: GPL-3
-# ==============================================================================
+# =============================================================================
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -26,17 +26,28 @@
 #
 # CODE IS POETRY
 
-import gtk, pango
+import gtk
+import pango
+from canaimainstalador.translator import gettext_install
+
+
+gettext_install()
+
 
 class PasoBienvenida(gtk.Fixed):
     def __init__(self, CFG):
         gtk.Fixed.__init__(self)
 
-        msg_titulo = 'Bienvenido al asistente de instalación'
-        msg_intro = 'Mediante este asistente usted podrá instalar Canaima en su computador. Antes de continuar, asegúrese de que su equipo cumple con los siguientes requisitos:'
-        msg_disco = '● 6GB de espacio en disco (como mínimo).'
-        msg_memoria = '● 384MB de memoria RAM (como mínimo).'
-        msg_fin = 'Lo invitamos a seguir las instrucciones que se muestran en pantalla.'
+        msg_titulo = _("Welcome to the Install Wizard")
+        msg_intro = _("With this wizard you can easily install Canaima \
+GNU/Linux on your computer. We invite you to follow the instructions \
+displayed on screen.")
+#==============================================================================
+#        msg_disco = '● 6GB de espacio en disco (como mínimo).'
+#        msg_memoria = '● 384MB de memoria RAM (como mínimo).'
+#        msg_fin = 'Lo invitamos a seguir las instrucciones que se muestran \
+# en pantalla.'
+#==============================================================================
 
         attr = pango.AttrList()
         size = pango.AttrSize(20000, 0, -1)
@@ -55,21 +66,22 @@ class PasoBienvenida(gtk.Fixed):
         self.lblintro.set_line_wrap(True)
         self.put(self.lblintro, 50, 170)
 
-        self.lbldisco = gtk.Label(msg_disco)
-        self.lbldisco.set_size_request(640, 20)
-        self.lbldisco.set_alignment(0, 0)
-        self.lblintro.set_line_wrap(True)
-        self.put(self.lbldisco, 50, 220)
-
-        self.lblmemoria = gtk.Label(msg_memoria)
-        self.lblmemoria.set_size_request(640, 20)
-        self.lblmemoria.set_alignment(0, 0)
-        self.lblmemoria.set_line_wrap(True)
-        self.put(self.lblmemoria, 50, 240)
-
-        self.lblfin = gtk.Label(msg_fin)
-        self.lblfin.set_size_request(640, 20)
-        self.lblfin.set_alignment(0, 0)
-        self.lblfin.set_line_wrap(True)
-        self.put(self.lblfin, 50, 270)
-
+#==============================================================================
+#        self.lbldisco = gtk.Label(msg_disco)
+#        self.lbldisco.set_size_request(640, 20)
+#        self.lbldisco.set_alignment(0, 0)
+#        self.lblintro.set_line_wrap(True)
+#        self.put(self.lbldisco, 50, 220)
+#
+#        self.lblmemoria = gtk.Label(msg_memoria)
+#        self.lblmemoria.set_size_request(640, 20)
+#        self.lblmemoria.set_alignment(0, 0)
+#        self.lblmemoria.set_line_wrap(True)
+#        self.put(self.lblmemoria, 50, 240)
+#
+#        self.lblfin = gtk.Label(msg_fin)
+#        self.lblfin.set_size_request(640, 20)
+#        self.lblfin.set_alignment(0, 0)
+#        self.lblfin.set_line_wrap(True)
+#        self.put(self.lblfin, 50, 270)
+#==============================================================================

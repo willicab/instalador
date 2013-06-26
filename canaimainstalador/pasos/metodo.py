@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# ==============================================================================
+# =============================================================================
 # PAQUETE: canaima-instalador
 # ARCHIVO: canaimainstalador/pasos/metodo.py
 # COPYRIGHT:
@@ -9,7 +9,7 @@
 #       (C) 2012 Erick Manuel Birbe Salazar <erickcion@gmail.com>
 #       (C) 2012 Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>
 # LICENCIA: GPL-3
-# ==============================================================================
+# =============================================================================
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -26,12 +26,16 @@
 #
 # CODE IS POETRY
 
+from canaimainstalador.clases.barra_particiones import BarraParticiones
+from canaimainstalador.clases.common import humanize, UserMessage
+from canaimainstalador.clases.particiones import Particiones
+from canaimainstalador.config import ESPACIO_TOTAL, CFG, FSPROGS
+from canaimainstalador.translator import gettext_install
 import gtk
 
-from canaimainstalador.clases.particiones import Particiones
-from canaimainstalador.clases.common import humanize, UserMessage
-from canaimainstalador.clases.barra_particiones import BarraParticiones
-from canaimainstalador.config import ESPACIO_TOTAL, CFG, FSPROGS
+
+gettext_install()
+
 
 class PasoMetodo(gtk.Fixed):
     def __init__(self, CFG):
@@ -41,9 +45,11 @@ class PasoMetodo(gtk.Fixed):
         self.minimo = ESPACIO_TOTAL
         self.part = Particiones()
         self.discos = self.part.lista_discos()
-        print 'Se han encontrado los siguientes discos: {0}'.format(self.discos)
+        print 'Se han encontrado los siguientes discos: {0}' \
+        .format(self.discos)
 
-        self.lbl1 = gtk.Label('Seleccione el disco donde desea instalar el sistema:')
+        self.lbl1 = gtk.Label(_("Select the disk where you want to install \
+Canaima:"))
         self.lbl1.set_size_request(690, 20)
         self.lbl1.set_alignment(0, 0)
         self.put(self.lbl1, 0, 0)
@@ -60,7 +66,7 @@ class PasoMetodo(gtk.Fixed):
         self.barra_part.set_size_request(690, 100)
         self.put(self.barra_part, 0, 60)
 
-        self.lbl2 = gtk.Label('Seleccione el método de instalación:')
+        self.lbl2 = gtk.Label(_("Slelect the installation method:"))
         self.lbl2.set_size_request(690, 20)
         self.lbl2.set_alignment(0, 0)
         self.put(self.lbl2, 0, 165)
@@ -99,11 +105,16 @@ class PasoMetodo(gtk.Fixed):
 
         if len(self.particiones) == 0:
             UserMessage(
-                    message='El disco {0} necesita una tabla de particiones para poder continuar con la instalación. ¿Desea crear una tabla de particiones ahora?.\n\nSi presiona cancelar no podrá utilizar este disco para instalar Canaima.'.format(self.disco),
-                    title='Tabla de particiones no encontrada'.format(self.disco),
+                    message=_("""Disk  "{0}" needs a partition table to \
+continue the installation. Do you want to create a partition table now?
+
+If you press Cancel you can not use that disk to install Canaima.""")\
+                    .format(self.disco),
+                    title=_("Partition table not found."),
                     mtype=gtk.MESSAGE_INFO, buttons=gtk.BUTTONS_OK_CANCEL,
-                    c_1=gtk.RESPONSE_OK, f_1=self.part.nueva_tabla_particiones, p_1=(self.disco, 'msdos'),
-                    c_2=gtk.RESPONSE_OK, f_2=self.seleccionar_disco, p_2=()
+                    c_1=gtk.RESPONSE_OK, f_1=self.part.nueva_tabla_particiones,
+                    p_1=(self.disco, 'msdos'), c_2=gtk.RESPONSE_OK,
+                    f_2=self.seleccionar_disco, p_2=()
                     )
         else:
             try:
@@ -132,7 +143,8 @@ class PasoMetodo(gtk.Fixed):
                 elif t[5] == 'extended':
                     extendidas += 1
 
-            disco_array = [self.disco, mini, mfin, primarias, extendidas, logicas]
+            disco_array = [self.disco, mini, mfin, primarias, extendidas,
+                           logicas]
 
             if self.total >= self.minimo:
                 for p in self.particiones:
@@ -148,16 +160,19 @@ class PasoMetodo(gtk.Fixed):
                                 if logicas < 10:
                                     self.metodos.append({
                                         'tipo': 'REDIM',
-                                        'msg': 'Instalar redimensionando {0} para liberar espacio ({1} libres)'.format(part, humanize(libre)),
+                                        'msg': _("Install resizing {0} to \
+free space ({1} free)").format(part, humanize(libre)),
                                         'part': p,
                                         'disco': disco_array
                                     })
 
                             elif tipo == 'primary' and FSPROGS[fs][1][0] != '':
-                                if (extendidas < 1 and primarias < 4) or (extendidas > 0 and primarias < 2):
+                                if (extendidas < 1 and primarias < 4) \
+                                or (extendidas > 0 and primarias < 2):
                                     self.metodos.append({
                                         'tipo': 'REDIM',
-                                        'msg': 'Instalar redimensionando {0} para liberar espacio ({1} libres)'.format(part, humanize(libre)),
+                                        'msg': _("Install resizing {0} to \
+free up space ({1} free)").format(part, humanize(libre)),
                                         'part': p,
                                         'disco': disco_array
                                     })
@@ -167,30 +182,35 @@ class PasoMetodo(gtk.Fixed):
                             if logicas < 10:
                                 self.metodos.append({
                                     'tipo': 'LIBRE',
-                                    'msg': 'Instalar usando espacio libre disponible ({0})'.format(humanize(tam)),
+                                    'msg': _("Install using available free \
+space ({0})").format(humanize(tam)),
                                     'part': p,
                                     'disco': disco_array
                                 })
 
                         elif tipo == 'primary':
-                            if (extendidas < 1 and primarias < 4) or (extendidas > 0 and primarias < 2):
+                            if (extendidas < 1 and primarias < 4) \
+                            or (extendidas > 0 and primarias < 2):
                                 self.metodos.append({
                                     'tipo': 'LIBRE',
-                                    'msg': 'Instalar usando espacio libre disponible ({0})'.format(humanize(tam)),
+                                    'msg': _("Install using available free \
+space ({0})").format(humanize(tam)),
                                     'part': p,
                                     'disco': disco_array
                                 })
 
                 self.metodos.append({
                     'tipo': 'TODO',
-                    'msg': 'Instalar usando todo el disco ({0})'.format(humanize(self.total)),
+                    'msg': _("Install using the entire disk ({0})") \
+                    .format(humanize(self.total)),
                     'part': disco_array,
                     'disco': disco_array
                 })
 
                 self.metodos.append({
                     'tipo': 'MANUAL',
-                    'msg': 'Instalar editando particiones manualmente'.format(humanize(tam)),
+                    'msg': _("Install editing partitions manually")\
+                    .format(humanize(tam)),
                     'part': disco_array,
                     'disco': disco_array
                 })
@@ -204,7 +224,8 @@ class PasoMetodo(gtk.Fixed):
                 CFG['w'].siguiente.set_sensitive(False)
                 self.cmb_metodo.set_sensitive(False)
 
-            for k in sorted(self.metodos, key=lambda ordn: ordn['tipo'], reverse=True):
+            for k in sorted(self.metodos, key=lambda ordn: ordn['tipo'],
+                            reverse=True):
                 self.cmb_metodo.append_text(k['msg'])
 
             self.cmb_metodo.set_active(0)
@@ -219,17 +240,28 @@ class PasoMetodo(gtk.Fixed):
                 self.metodo = d
 
         if self.metodo['tipo'] == 'TODO':
-            msg = 'Al escoger esta opción el nuevo Sistema Operativo ocupará la totalidad de su disco duro. Tenga en cuenta que se borrarán todos los datos y/o sistemas presentes. Puede aprovechar este momento para realizar un respaldo antes de proseguir con la instalación.'
+            msg = _("By choosing this option, Canaima will occupy all of your \
+hard drive. Note that all data present will be erased. You can take this time \
+to make a backup before proceeding with the installation.")
         elif self.metodo['tipo'] == 'LIBRE':
-            msg = 'Esta opción le permitirá instalar el Sistema Operativo en el espacio libre de {0} que se encuentra en su disco duro, conservando los demás datos y/o sistemas que se encuentren en las demás porciones del disco.'.format(humanize(self.metodo['part'][2] - self.metodo['part'][1]))
+            msg = _("By choosing this option, Canaima will be installed in \
+the free space of {0} that is in you hard disk, preserving the other data and \
+systems that are in the other portions of the disc.") \
+            .format(humanize(self.metodo['part'][2] - self.metodo['part'][1]))
         elif self.metodo['tipo'] == 'REDIM':
-            msg = 'Esta opción permitirá utilizar el espacio libre presente en la partición {0} para instalar el Sistema Operativo. Se redimensionará la partición para liberar el espacio, manteniendo los datos y/o sistemas presentes'.format(self.metodo['part'][0])
+            msg = _("This option will use the free space present in the \
+partition {0} to install Canaima. The partition will be resized to free up \
+space, preserving the data and/or systems present.") \
+            .format(self.metodo['part'][0])
         elif self.metodo['tipo'] == 'MANUAL':
-            msg = 'Si escoge esta opción se abrirá el editor de particiones, que le permitirá ajustar las particiones según más le convenga. No le recomendamos que utilice esta opción a menos que sepa lo que está haciendo.'
+            msg = _("If you choose this option will open the partition \
+editor, allowing you to adjust the partitions according to your convenience. \
+We do not recommend you use this option unless you know what you are doing.")
         elif self.metodo['tipo'] == 'NONE':
-            msg = 'El sistema operativo necesita al menos 6GB libres para poder instalar. Seleccione otro disco duro.'
+
+            msg = _("Canaima needs at least {0} to be installed. Select other \
+disk with more available space.").format(humanize(ESPACIO_TOTAL))
         else:
             pass
 
         self.lbl4.set_text(msg)
-

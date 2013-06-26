@@ -45,9 +45,9 @@ gettext_install()
 
 
 #-----------------------------------------------------------------------------#
-MAIN_ROOT_ERROR_MSG = _('Canaima Instalador debe ser ejecutado con permisos \
-de superusuario.')
-MAIN_ROOT_ERROR_TITLE = _('Error de permisología')
+MAIN_ROOT_ERROR_MSG = _('The installer must be executed with superuser \
+permissions')
+MAIN_ROOT_ERROR_TITLE = _('Permission error')
 #-----------------------------------------------------------------------------#
 
 
@@ -58,11 +58,11 @@ class msj:
     class particion:
         'Mensajes relacionados a las particiones'
 
-        libre = _('Espacio Libre')
-        primaria = _('Primaria')
-        extendida = _('Extendida')
-        logica = _('Lógica')
-        desconocida = _('Desconocido')
+        libre = _('Free Space')
+        primaria = _('Primary')
+        extendida = _('Extended')
+        logica = _('Logic')
+        desconocida = _('Unknown')
 
         @classmethod
         def get_tipo(self, tipo):

@@ -26,12 +26,13 @@
 #
 # CODE IS POETRY
 
-from canaimainstalador.clases.keyboard import Keyboard
 from canaimainstalador.clases.i18n import Locale
 from canaimainstalador.clases.timezone import TimeZone
 from canaimainstalador.translator import gettext_install
 import gobject
 import gtk
+from canaimainstalador.clases.keyboard import Keyboard
+
 
 gettext_install()
 
@@ -65,19 +66,19 @@ class PasoTeclado(gtk.VBox):
         self.timezone = ''
         self.keyboard = ''
 
-        lbl_lang = gtk.Label(_("Idioma"))
+        lbl_lang = gtk.Label(_("Language"))
         self.pack_start(lbl_lang, False, False)
         self._cmb_lang = ComboBoxObject()
         self._build_cmb_lang()
         self.pack_start(self._cmb_lang, False, False)
 
-        lbl_tz = gtk.Label(_("Zona Horaria"))
+        lbl_tz = gtk.Label(_("Timezone"))
         self.pack_start(lbl_tz, False, False)
         self._cmb_tz = ComboBoxObject()
         self._build_cmb_tz()
         self.pack_start(self._cmb_tz, False, False)
 
-        lbl_keyboard = gtk.Label(_("Teclado"))
+        lbl_keyboard = gtk.Label(_("Keyboard"))
         self.pack_start(lbl_keyboard, False, False)
         self._cmb_kbd = ComboBoxObject()
         self._build_cmb_keyboard()
@@ -92,8 +93,8 @@ class PasoTeclado(gtk.VBox):
         #======================================================================
 
         vbox1 = gtk.VBox()
-        lbl2 = gtk.Label(_("Presione algunas teclas para probar la \
-distribución de teclado elegida"))
+        lbl2 = gtk.Label(_("Press some keys to test the chosen keyboard \
+layout"))
         vbox1.pack_start(lbl2, False, False)
         txt_prueba = gtk.Entry()
         vbox1.pack_start(txt_prueba, False, False)
