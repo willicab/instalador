@@ -33,14 +33,14 @@ import gtk
 
 gettext_install()
 
-MSG_ROOT_SPC = _("Espacio principal (/):")
-MSG_SWAP_SPC = _("Espacio de intercambio (swap):")
-MSG_USER_SPC = _("Espacio de usuarios (/home):")
-MSG_APP_SPC = _("Espacio de aplicaciones (/usr):")
-MSG_BOOT_SPC = _("Espacio de arranque (/boot):")
-MSG_VAR_SPC = _("Espacio de variables (/var):")
-MSG_FREE_SPC = _("Espacio Libre:")
-MSG_RESIZE_SPC = _("Partición redimensionada:")
+MSG_ROOT_DIR = _("Root directory (/):")
+MSG_SWAP_SPC = _("Swap space (swap):")
+MSG_USER_DIR = _("User directory (/home):")
+MSG_APP_DIR = _("Appliactions directory (/usr):")
+MSG_BOOT_DIR = _("Boot directory (/boot):")
+MSG_VAR_DIR = _("Variable directory (/var):")
+MSG_FREE_SPC = _("Free space:")
+MSG_RESIZE_SPC = _("Resized space:")
 
 
 class Leyenda(gtk.Fixed):
@@ -108,22 +108,22 @@ class Leyenda(gtk.Fixed):
             size = humanize(i[2] - i[1])
 
             if part == 'ROOT':
-                exec "self.lbl_" + str(j) + ".set_text('" + MSG_ROOT_SPC \
+                exec "self.lbl_" + str(j) + ".set_text('" + MSG_ROOT_DIR \
                 + " '+size)"
             elif part == 'SWAP':
                 exec "self.lbl_" + str(j) + ".set_text('" + MSG_SWAP_SPC \
                 + " '+size)"
             elif part == 'HOME':
-                exec "self.lbl_" + str(j) + ".set_text('" + MSG_USER_SPC \
+                exec "self.lbl_" + str(j) + ".set_text('" + MSG_USER_DIR \
                 + " '+size)"
             elif part == 'USR':
-                exec "self.lbl_" + str(j) + ".set_text('" + MSG_APP_SPC \
+                exec "self.lbl_" + str(j) + ".set_text('" + MSG_APP_DIR \
                 + " '+size)"
             elif part == 'BOOT':
-                exec "self.lbl_" + str(j) + ".set_text('" + MSG_BOOT_SPC \
+                exec "self.lbl_" + str(j) + ".set_text('" + MSG_BOOT_DIR \
                 + " '+size)"
             elif part == 'VAR':
-                exec "self.lbl_" + str(j) + ".set_text('" + MSG_VAR_SPC \
+                exec "self.lbl_" + str(j) + ".set_text('" + MSG_VAR_DIR \
                 + " '+size)"
             elif part == 'LIBRE':
                 exec "self.lbl_" + str(j) + ".set_text('" + MSG_FREE_SPC \

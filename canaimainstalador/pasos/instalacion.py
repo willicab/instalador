@@ -426,7 +426,7 @@ partition.'),
         UserMessageError(_("An error occurred copying files to disk."),
                          window, bindlist, mountlist)
 
-    label.set_text(_("Mounting the filesystem"))
+    label.set_text(_("Mounting the filesystem ..."))
     if not assisted_mount(sync=True, bind=True, plist=bindlist):
         UserMessageError(_("An error occurred mounting the filesystem"),
                          window, bindlist, mountlist)
@@ -440,7 +440,7 @@ partition.'),
         UserMessageError(_("An error occurred configuring the system files"),
                          window, bindlist, mountlist)
 
-    label.set_text(_("Configuring network interfaces"))
+    label.set_text(_("Configuring network interfaces ..."))
     if not crear_etc_hostname(mnt=mountpoint, cfg='/etc/hostname',
                               maq=maquina):
         UserMessageError(_("An error occurred creating file /etc/hostname"),
@@ -453,7 +453,7 @@ partition.'),
         UserMessageError(_("An error occurred creating file \
 /etc/network/interfaces"), window, bindlist, mountlist)
 
-    label.set_text(_("Registering partitions in the system"))
+    label.set_text(_("Registering partitions in the system ..."))
     if not crear_etc_fstab(mnt=mountpoint, cfg='/etc/fstab',
                            mountlist=mountlist, cdroms=cdroms):
         UserMessageError(_("An error occurred creating file /etc/fstab"),

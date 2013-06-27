@@ -161,7 +161,7 @@ If you press Cancel you can not use that disk to install Canaima.""")\
                                     self.metodos.append({
                                         'tipo': 'REDIM',
                                         'msg': _("Install resizing {0} to \
-free space ({1} free)").format(part, humanize(libre)),
+free up space ({1} free)").format(part, humanize(libre)),
                                         'part': p,
                                         'disco': disco_array
                                     })
