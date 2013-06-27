@@ -212,6 +212,12 @@ check-maintdep:
 		exit 1; \
 	fi
 	@echo
-      
-gen-pot:
-	find . -type f -name \*.py | xgettext --language=Python --copyright-holder "Erick Birbe <erickcion@gmail.com>" --package-name "canaima-instalador" --msgid-bugs-address "desarrolladores@canaima.softwarelibre.gob.ve" -F -o locale/messages.pot canaima-instalador.py -f -
+
+gen-pot-template:
+	find . -type f -name \*.py | xgettext --language=Python --copyright-holder \
+	"Erick Birbe <erickcion@gmail.com>" --package-name "canaima-instalador" \
+	--msgid-bugs-address "desarrolladores@canaima.softwarelibre.gob.ve" -F \
+	-o locale/messages.pot -f -
+
+update-po-files: gen-pot-template
+	msgmerge locale/es.po locale/messages.pot -o locale/es.po

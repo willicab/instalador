@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: canaima-instalador\n"
 "Report-Msgid-Bugs-To: desarrolladores@canaima.softwarelibre.gob.ve\n"
-"POT-Creation-Date: 2013-06-27 15:37-0430\n"
+"POT-Creation-Date: 2013-06-27 17:04-0430\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: canaima-instalador.py:49 canaimainstalador/pasos/instalacion.py:65
-#: canaima-instalador.py:49
 msgid "Canaima Installation"
 msgstr ""
 
@@ -48,35 +47,35 @@ msgid "Format this partition"
 msgstr ""
 
 #: canaimainstalador/clases/leyenda.py:36
-msgid "Espacio principal (/):"
+msgid "Root directory (/):"
 msgstr ""
 
 #: canaimainstalador/clases/leyenda.py:37
-msgid "Espacio de intercambio (swap):"
+msgid "Swap space (swap):"
 msgstr ""
 
 #: canaimainstalador/clases/leyenda.py:38
-msgid "Espacio de usuarios (/home):"
+msgid "User directory (/home):"
 msgstr ""
 
 #: canaimainstalador/clases/leyenda.py:39
-msgid "Espacio de aplicaciones (/usr):"
+msgid "Appliactions directory (/usr):"
 msgstr ""
 
 #: canaimainstalador/clases/leyenda.py:40
-msgid "Espacio de arranque (/boot):"
+msgid "Boot directory (/boot):"
 msgstr ""
 
 #: canaimainstalador/clases/leyenda.py:41
-msgid "Espacio de variables (/var):"
+msgid "Variable directory (/var):"
 msgstr ""
 
 #: canaimainstalador/clases/leyenda.py:42
-msgid "Espacio Libre:"
+msgid "Free space:"
 msgstr ""
 
 #: canaimainstalador/clases/leyenda.py:43
-msgid "Partición redimensionada:"
+msgid "Resized space:"
 msgstr ""
 
 #: canaimainstalador/clases/particion_editar.py:51
@@ -347,6 +346,7 @@ msgid "An error occurred activating the swap partition"
 msgstr ""
 
 #: canaimainstalador/pasos/instalacion.py:417
+#: canaimainstalador/pasos/instalacion.py:429
 msgid "Mounting the filesystem ..."
 msgstr ""
 
@@ -356,10 +356,6 @@ msgstr ""
 
 #: canaimainstalador/pasos/instalacion.py:426
 msgid "An error occurred copying files to disk."
-msgstr ""
-
-#: canaimainstalador/pasos/instalacion.py:429
-msgid "Mounting the filesystem"
 msgstr ""
 
 #: canaimainstalador/pasos/instalacion.py:435
@@ -372,7 +368,7 @@ msgid "An error occurred configuring the system files"
 msgstr ""
 
 #: canaimainstalador/pasos/instalacion.py:443
-msgid "Configuring network interfaces"
+msgid "Configuring network interfaces ..."
 msgstr ""
 
 #: canaimainstalador/pasos/instalacion.py:446
@@ -388,7 +384,7 @@ msgid "An error occurred creating file /etc/network/interfaces"
 msgstr ""
 
 #: canaimainstalador/pasos/instalacion.py:456
-msgid "Registering partitions in the system"
+msgid "Registering partitions in the system ..."
 msgstr ""
 
 #: canaimainstalador/pasos/instalacion.py:459
@@ -496,11 +492,7 @@ msgstr ""
 msgid "Partition table not found."
 msgstr ""
 
-#: canaimainstalador/pasos/metodo.py:163
-msgid "Install resizing {0} to free space ({1} free)"
-msgstr ""
-
-#: canaimainstalador/pasos/metodo.py:174
+#: canaimainstalador/pasos/metodo.py:163 canaimainstalador/pasos/metodo.py:174
 msgid "Install resizing {0} to free up space ({1} free)"
 msgstr ""
 

@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: canaima-instalador\n"
 "Report-Msgid-Bugs-To: desarrolladores@canaima.softwarelibre.gob.ve\n"
-"POT-Creation-Date: 2013-06-27 15:37-0430\n"
-"PO-Revision-Date: 2013-06-27 16:54-0430\n"
+"POT-Creation-Date: 2013-06-27 17:04-0430\n"
+"PO-Revision-Date: 2013-06-27 17:11-0430\n"
 "Last-Translator: Erick Birbe <erickcion@gmail.com>\n"
 "Language-Team: Español; Castellano <desarrolladores@canaima.softwarelibre."
 "gob.ve>\n"
@@ -49,36 +49,36 @@ msgid "Format this partition"
 msgstr "Formatear esta partición"
 
 #: canaimainstalador/clases/leyenda.py:36
-msgid "Espacio principal (/):"
-msgstr ""
+msgid "Root directory (/):"
+msgstr "Directorio raíz (/):"
 
 #: canaimainstalador/clases/leyenda.py:37
-msgid "Espacio de intercambio (swap):"
-msgstr ""
+msgid "Swap space (swap):"
+msgstr "Espacio de intercambio (swap):"
 
 #: canaimainstalador/clases/leyenda.py:38
-msgid "Espacio de usuarios (/home):"
-msgstr ""
+msgid "User directory (/home):"
+msgstr "Directorio de usuario (/home):"
 
 #: canaimainstalador/clases/leyenda.py:39
-msgid "Espacio de aplicaciones (/usr):"
-msgstr ""
+msgid "Appliactions directory (/usr):"
+msgstr "Directorio de aplicaciones (/usr):"
 
 #: canaimainstalador/clases/leyenda.py:40
-msgid "Espacio de arranque (/boot):"
-msgstr ""
+msgid "Boot directory (/boot):"
+msgstr "Directorio de arranque (/boot):"
 
 #: canaimainstalador/clases/leyenda.py:41
-msgid "Espacio de variables (/var):"
-msgstr ""
+msgid "Variable directory (/var):"
+msgstr "Directorio variable (/var):"
 
 #: canaimainstalador/clases/leyenda.py:42
-msgid "Espacio Libre:"
-msgstr ""
+msgid "Free space:"
+msgstr "Espacio Libre:"
 
 #: canaimainstalador/clases/leyenda.py:43
-msgid "Partición redimensionada:"
-msgstr ""
+msgid "Resized space:"
+msgstr "Espacio redimensionado:"
 
 #: canaimainstalador/clases/particion_editar.py:51
 msgid "Edit existing partition"
@@ -363,6 +363,7 @@ msgid "An error occurred activating the swap partition"
 msgstr "Ocurrió un error activando la partición swap."
 
 #: canaimainstalador/pasos/instalacion.py:417
+#: canaimainstalador/pasos/instalacion.py:429
 msgid "Mounting the filesystem ..."
 msgstr "Montando el sistema de archivos ..."
 
@@ -374,13 +375,9 @@ msgstr "Copiando archivos al disco ..."
 msgid "An error occurred copying files to disk."
 msgstr "Ocurrió un error copiando los archivos al disco."
 
-#: canaimainstalador/pasos/instalacion.py:429
-msgid "Mounting the filesystem"
-msgstr ""
-
 #: canaimainstalador/pasos/instalacion.py:435
 msgid "Configuring system files ..."
-msgstr "Configurando el sistema de archivos ..."
+msgstr "Configurando archivos del sistema ..."
 
 #: canaimainstalador/pasos/instalacion.py:437
 #: canaimainstalador/pasos/instalacion.py:440
@@ -388,8 +385,8 @@ msgid "An error occurred configuring the system files"
 msgstr "Ocurrió un error configurando los archivos del sistema."
 
 #: canaimainstalador/pasos/instalacion.py:443
-msgid "Configuring network interfaces"
-msgstr ""
+msgid "Configuring network interfaces ..."
+msgstr "Configurando interfaces de red ..."
 
 #: canaimainstalador/pasos/instalacion.py:446
 msgid "An error occurred creating file /etc/hostname"
@@ -404,8 +401,8 @@ msgid "An error occurred creating file /etc/network/interfaces"
 msgstr "Ocurrió un error creando el archivo /etc/network/interfaces"
 
 #: canaimainstalador/pasos/instalacion.py:456
-msgid "Registering partitions in the system"
-msgstr ""
+msgid "Registering partitions in the system ..."
+msgstr "Registrando particiones en el sistema ..."
 
 #: canaimainstalador/pasos/instalacion.py:459
 msgid "An error occurred creating file /etc/fstab"
@@ -516,11 +513,7 @@ msgstr ""
 msgid "Partition table not found."
 msgstr "Tabla de particiones no encontrada."
 
-#: canaimainstalador/pasos/metodo.py:163
-msgid "Install resizing {0} to free space ({1} free)"
-msgstr ""
-
-#: canaimainstalador/pasos/metodo.py:174
+#: canaimainstalador/pasos/metodo.py:163 canaimainstalador/pasos/metodo.py:174
 msgid "Install resizing {0} to free up space ({1} free)"
 msgstr "Install resizing {0} to free space ({1} free)"
 
