@@ -226,17 +226,25 @@ check-maintdep:
 	@echo
 
 gen-pot-template:
+
 	find . -type f -name \*.py | xgettext --language=Python --copyright-holder \
 	"Erick Birbe <erickcion@gmail.com>" --package-name "canaima-instalador" \
 	--msgid-bugs-address "desarrolladores@canaima.softwarelibre.gob.ve" -F \
 	-o locale/messages.pot -f -
 
 update-po-files: gen-pot-template
+
 	msgmerge locale/es.po locale/messages.pot -o locale/es.po
 
 gen-mo-files:
+
 	mkdir -p locale/es/LC_MESSAGES/
 	msgfmt locale/es.po -o locale/es/LC_MESSAGES/$(DOMAIN_NAME).mo
 
 clean-mo-files:
-	rm -r locale/*/
+	for LC in $(LC_DIRS); do \
+		LOCALE_DIR=locale/$${LC}; \
+		if [ -d $${LOCALE_DIR} ]; then \
+			rm -r $${LOCALE_DIR}/; \
+		fi; \
+	done
