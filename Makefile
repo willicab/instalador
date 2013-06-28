@@ -221,3 +221,7 @@ gen-pot-template:
 
 update-po-files: gen-pot-template
 	msgmerge locale/es.po locale/messages.pot -o locale/es.po
+
+gen-mo-files:
+	mkdir -p locale/es/LC_MESSAGES/
+	msgfmt locale/es.po -o locale/es/LC_MESSAGES/canaimainstalador.mo
