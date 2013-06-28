@@ -20,14 +20,14 @@ GNUPG = $(shell which gpg)
 MD5SUM = $(shell which md5sum)
 TAR = $(shell which tar)
 BASHISMS = $(shell which checkbashisms)
+LC_DIRS = $(shell ls locale)
 
-SCRIPTS = "debian/preinst install" "debian/postinst configure" "debian/prerm remove" "debian/postrm remove"
+# Variables de tradicciones
+DOMAIN_NAME = canaimainstalador
 
 all: build
 
-build: gen-img
-
-	@echo "Nada para compilar!"
+build: gen-img gen-mo-files
 
 gen-img: clean-img
 
@@ -68,26 +68,48 @@ clean-pyc:
 
 install:
 
-	@mkdir -p $(DESTDIR)/usr/bin
-	@mkdir -p $(DESTDIR)/usr/share/pyshared
-	@mkdir -p $(DESTDIR)/usr/share/canaima-instalador
-	@mkdir -p $(DESTDIR)/etc/skel/Escritorio
+	mkdir -p $(DESTDIR)/usr/bin
+	mkdir -p $(DESTDIR)/usr/share/pyshared
+	mkdir -p $(DESTDIR)/usr/share/canaima-instalador
+	mkdir -p $(DESTDIR)/etc/skel/Escritorio
+	mkdir -p $(DESTDIR)/etc/xdg/autostart/
 
-	@cp canaima-instalador.desktop $(DESTDIR)/etc/skel/Escritorio/
-	@cp canaima-instalador.py $(DESTDIR)/usr/bin/canaima-instalador
-	@cp -r canaimainstalador $(DESTDIR)/usr/share/pyshared/
-	@cp VERSION AUTHORS LICENSE TRANSLATORS $(DESTDIR)/usr/share/canaima-instalador/
-	@rm -rf $(DESTDIR)/usr/share/pyshared/canaimainstalador/data/slides/*.png
-	@rm -rf $(DESTDIR)/usr/share/pyshared/canaimainstalador/data/slides/*.svg
-	@rm -rf $(DESTDIR)/usr/share/pyshared/canaimainstalador/data/img/*.svg
+	cp canaima-instalador.desktop $(DESTDIR)/etc/skel/Escritorio/
+	cp canaima-instalador.desktop $(DESTDIR)/etc/xdg/autostart/
+	cp -r canaimainstalador $(DESTDIR)/usr/share/pyshared/
+	cp VERSION AUTHORS LICENSE TRANSLATORS \
+		$(DESTDIR)/usr/share/canaima-instalador/
+	cp -r templates/ $(DESTDIR)/usr/share/canaima-instalador/
+
+	cp canaima-instalador.py $(DESTDIR)/usr/bin/canaima-instalador
+	chmod +x $(DESTDIR)/usr/bin/canaima-instalador
+
+	# Instalar traducciones
+	mkdir -p $(DESTDIR)/usr/share/locale/
+	for LC in $(LC_DIRS); do \
+		LOCALE_DIR=locale/$${LC}; \
+		if [ -d $${LOCALE_DIR} ]; then \
+			cp -r $${LOCALE_DIR} $(DESTDIR)/usr/share/locale/; \
+		fi; \
+	done
+
+
+	# Removiendo archivos de imagenes innecesarios
+	rm -rf $(DESTDIR)/usr/share/pyshared/canaimainstalador/data/slides/*.png
+	rm -rf $(DESTDIR)/usr/share/pyshared/canaimainstalador/data/slides/*.svg
+	rm -rf $(DESTDIR)/usr/share/pyshared/canaimainstalador/data/img/*.svg
 
 uninstall:
 
-	@rm -rf $(DESTDIR)/usr/bin/canaima-instalador
-	@rm -rf $(DESTDIR)/usr/share/pyshared/canaimainstalador
-	@rm -rf $(DESTDIR)/etc/skel/Escritorio/canaima-instalador.desktop
+	rm -rf $(DESTDIR)/usr/bin/canaima-instalador
+	rm -rf $(DESTDIR)/usr/share/pyshared/canaimainstalador
+	rm -rf $(DESTDIR)/etc/skel/Escritorio/canaima-instalador.desktop
+	rm -f $(DESTDIR)/etc/xdg/autostart/canaima-instalador.desktop
 
-clean: clean-img clean-pyc
+	# Desinstalar traducciones
+	rm -f $(DESTDIR)/usr/share/locale/*/LC_MESSAGES/$(DOMAIN_NAME).mo
+
+clean: clean-img clean-pyc clean-mo-files
 
 reinstall: uninstall install
 
@@ -205,4 +227,27 @@ check-maintdep:
 		exit 1; \
 	fi
 	@echo
-       
+
+gen-pot-template:
+
+	find . -type f -name \*.py | xgettext --language=Python --copyright-holder \
+	"Erick Birbe <erickcion@gmail.com>" --package-name "canaima-instalador" \
+	--msgid-bugs-address "desarrolladores@canaima.softwarelibre.gob.ve" -F \
+	-o locale/messages.pot -f -
+
+update-po-files: gen-pot-template
+
+	msgmerge locale/es.po locale/messages.pot -o locale/es.po
+
+gen-mo-files:
+
+	mkdir -p locale/es/LC_MESSAGES/
+	msgfmt locale/es.po -o locale/es/LC_MESSAGES/$(DOMAIN_NAME).mo
+
+clean-mo-files:
+	for LC in $(LC_DIRS); do \
+		LOCALE_DIR=locale/$${LC}; \
+		if [ -d $${LOCALE_DIR} ]; then \
+			rm -r $${LOCALE_DIR}/; \
+		fi; \
+	done

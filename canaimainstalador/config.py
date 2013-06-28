@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# ==============================================================================
+# =============================================================================
 # PAQUETE: canaima-instalador
 # ARCHIVO: canaimainstalador/config.py
 # COPYRIGHT:
@@ -9,7 +9,7 @@
 #       (C) 2012 Erick Manuel Birbe Salazar <erickcion@gmail.com>
 #       (C) 2012 Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>
 # LICENCIA: GPL-3
-# ==============================================================================
+# =============================================================================
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -27,10 +27,13 @@
 # CODE IS POETRY
 
 import os
+from canaimainstalador.translator import gettext_install
+
+gettext_install()
 
 curdir = os.path.normpath(os.path.join(os.path.realpath(__file__), '..', '..'))
 
-if curdir == '/usr/share/pyshared':
+if curdir[:5] == '/usr/':
     GUIDIR = '/usr/share/pyshared/canaimainstalador'
     SHAREDIR = '/usr/share/canaima-instalador'
 else:
@@ -49,10 +52,10 @@ AUTHORS_FILE = SHAREDIR + '/AUTHORS'
 LICENSE_FILE = SHAREDIR + '/LICENSE'
 TRANSLATORS_FILE = SHAREDIR + '/TRANSLATORS'
 
-APP_NAME = 'Canaima Instalador'
-APP_COPYRIGHT = 'Copyright (C) 2012 - Varios autores'
+APP_NAME = _('Canaima Installer')
+APP_COPYRIGHT = _('Copyright (C) 2012 - Several authors')
 APP_URL = 'http://gitorious.org/canaima-gnu-linux/canaima-instalador'
-APP_DESCRIPTION = 'Instalador para Canaima GNU/Linux'
+APP_DESCRIPTION = _('Installer for Canaima GNU/Linux')
 
 ESPACIO_ROOT = 1024.0 * 1024.0              # 1GB
 ESPACIO_VAR = 1024.0 * 896.0                # 896MB
@@ -69,16 +72,12 @@ CFG = {
     's': []
     }
 
-TECLADOS = {
-    'es': 'Español, España',
-    'latam': 'Español, Latinoamérica',
-    'us': 'Inglés, Estados Unidos'
-    }
-
 FSPROGS = {
     'btrfs': [
         ['mkfs.btrfs {0}'],
-        ['btrfsck {1}', 'umount /mnt || true', 'sync', 'mount -t btrfs {1} /mnt', 'sync', 'btrfs filesystem resize {0} /mnt', 'umount /mnt', 'sync'],
+        ['btrfsck {1}', 'umount /mnt || true', 'sync',
+         'mount -t btrfs {1} /mnt', 'sync', 'btrfs filesystem resize {0} /mnt',
+         'umount /mnt', 'sync'],
         ['btrfsck {1}'],
         ['sfdisk --id {0} {1} 83']
         ],
@@ -114,8 +113,10 @@ FSPROGS = {
         ],
     'ntfs': [
         ['mkfs.ntfs -q -F {0}'],
-        ['ntfsresize -P -i -f -v {1}', 'ntfsresize -P -f -n -s {0} {1}', 'echo y | ntfsresize -P -f -s {0} {1}'],
-        ['ntfsresize -P -i -f -v {1}', 'ntfsresize -P -f -n {1}', 'echo y | ntfsresize -P -f {1}'],
+        ['ntfsresize -P -i -f -v {1}', 'ntfsresize -P -f -n -s {0} {1}',
+         'echo y | ntfsresize -P -f -s {0} {1}'],
+        ['ntfsresize -P -i -f -v {1}', 'ntfsresize -P -f -n {1}',
+         'echo y | ntfsresize -P -f {1}'],
         ['sfdisk --id {0} {1} 7']
         ],
     'hfs+': [
@@ -150,8 +151,10 @@ FSPROGS = {
         ],
     'reiserfs': [
         ['mkfs.reiserfs -q -f -f {0}'],
-        ['reiserfsck -q -y --fix-fixable {1} || true', 'echo y | resize_reiserfs -s {0} {1}'],
-        ['reiserfsck -q -y --fix-fixable {1} || true', 'echo y | resize_reiserfs {1}'],
+        ['reiserfsck -q -y --fix-fixable {1} || true',
+         'echo y | resize_reiserfs -s {0} {1}'],
+        ['reiserfsck -q -y --fix-fixable {1} || true',
+         'echo y | resize_reiserfs {1}'],
         ['sfdisk --id {0} {1} 83']
         ],
     'xfs': [
@@ -180,6 +183,6 @@ FSMIN = {
     }
 
 FSMAX = {
-    'fat16': 1024 * 1024 * 4, # 4 Gb
-    'hfs': 1024 * 1024 * 2, # 2 Gb
+    'fat16': 1024 * 1024 * 4,
+    'hfs': 1024 * 1024 * 2,
     }

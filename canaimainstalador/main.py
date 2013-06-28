@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# ==============================================================================
+# =============================================================================
 # PAQUETE: canaima-instalador
 # ARCHIVO: canaimainstalador/main.py
 # COPYRIGHT:
@@ -9,7 +9,7 @@
 #       (C) 2012 Erick Manuel Birbe Salazar <erickcion@gmail.com>
 #       (C) 2012 Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>
 # LICENCIA: GPL-3
-# ==============================================================================
+# =============================================================================
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -26,22 +26,27 @@
 #
 # CODE IS POETRY
 
-# Módulos globales
-import gtk, re, Image
-
-# Módulos locales
+from canaimainstalador.clases.common import UserMessage, AboutWindow, \
+    aconnect, debug_list
+from canaimainstalador.config import BAR_ICON
 from canaimainstalador.pasos.bienvenida import PasoBienvenida
-from canaimainstalador.pasos.teclado import PasoTeclado
+from canaimainstalador.pasos.info import PasoInfo
+from canaimainstalador.pasos.instalacion import PasoInstalacion
 from canaimainstalador.pasos.metodo import PasoMetodo
 from canaimainstalador.pasos.particion_auto import PasoPartAuto
-from canaimainstalador.pasos.particion_todo import PasoPartTodo
 from canaimainstalador.pasos.particion_manual import PasoPartManual
-from canaimainstalador.pasos.instalacion import PasoInstalacion
+from canaimainstalador.pasos.particion_todo import PasoPartTodo
+from canaimainstalador.pasos.teclado import PasoTeclado
 from canaimainstalador.pasos.usuario import PasoUsuario
-from canaimainstalador.pasos.info import PasoInfo
-from canaimainstalador.clases.common import UserMessage, AboutWindow, aconnect, \
-    debug_list
-from canaimainstalador.config import BAR_ICON
+import Image
+import gtk
+import re
+from canaimainstalador.translator import gettext_install
+import pango
+
+
+gettext_install()
+
 
 class Wizard(gtk.Window):
     def __init__(self, ancho, alto, titulo, banner):
@@ -71,11 +76,28 @@ class Wizard(gtk.Window):
         self.banner = gtk.Image()
         self.banner.set_from_file(banner)
         self.banner.set_size_request(ancho, self.banner_h)
-        self.c_principal.put(self.banner, 0, 0)
+
+        # Creo el contenedor del banner y el texto del banner
+        banner_container = gtk.Fixed()
+        banner_container.set_size_request(self.banner_w, self.banner_h)
+
+        attr = pango.AttrList()
+        attr.insert(pango.AttrSize(25000, 0, -1))
+        attr.insert(pango.AttrStyle(pango.STYLE_ITALIC, 0, -1))
+        attr.insert(pango.AttrWeight(pango.WEIGHT_BOLD, 0, -1))
+
+        lbl1 = gtk.Label(_("Canaima Installation"))
+        lbl1.set_attributes(attr)
+
+        banner_container.put(self.banner, 0, 0)
+        banner_container.put(lbl1, 100, 10)
+
+        self.c_principal.put(banner_container, 0, 0)
 
         # Creo el contenedor de los pasos
         self.c_pasos = gtk.VBox()
-        self.c_pasos.set_size_request((ancho - 10), (alto - 50 - self.banner_h))
+        self.c_pasos.set_size_request((ancho - 10),
+                                      (alto - 50 - self.banner_h))
         self.c_principal.put(self.c_pasos, 5, (self.banner_h + 5))
 
         # Creo la botonera
@@ -120,10 +142,9 @@ class Wizard(gtk.Window):
             Cierra la ventana
         '''
         return UserMessage(
-            '¿Está seguro que desea cancelar la instalación?', 'Salir',
+            _('Are you sure you want to cancel the installation?'), _('Exit'),
             gtk.MESSAGE_WARNING, gtk.BUTTONS_YES_NO, c_1=gtk.RESPONSE_YES,
-            f_1=gtk.main_quit, p_1=()
-            )
+                f_1=gtk.main_quit, p_1=())
 
     def next(self, nombre, init, params, paso):
         '''
@@ -164,12 +185,14 @@ class Wizard(gtk.Window):
         else:
             return False
 
+
 class Bienvenida():
     '''
         Inicia el paso que muestra el mensaje de bienvenida
     '''
     def __init__(self, CFG):
-        CFG['s'] = aconnect(CFG['w'].siguiente, CFG['s'], self.siguiente, (CFG))
+        CFG['s'] = aconnect(CFG['w'].siguiente, CFG['s'], self.siguiente,
+                            (CFG))
         CFG['w'].anterior.set_sensitive(False)
 
     def init(self, CFG):
@@ -177,6 +200,7 @@ class Bienvenida():
 
     def siguiente(self, CFG):
         CFG['w'].next('Teclado', Teclado, (CFG), PasoTeclado(CFG))
+
 
 class Teclado():
     '''
@@ -191,10 +215,14 @@ class Teclado():
         CFG['w'].previous('Bienvenida', Bienvenida, (CFG))
 
     def siguiente(self, CFG):
-        CFG['teclado'] = CFG['w'].formulario('Teclado').distribucion
-        print 'Distribución de teclado seleccionada: {0}'.format(CFG['teclado'])
+        CFG['locale'] = CFG['w'].formulario('Teclado').locale
+        CFG['timezone'] = CFG['w'].formulario('Teclado').timezone
+        CFG['keyboard'] = CFG['w'].formulario('Teclado').keyboard
+        print 'Distribución de teclado seleccionada: {0}'\
+            .format(CFG['keyboard'])
 
         CFG['w'].next('Metodo', Metodo, (CFG), PasoMetodo(CFG))
+
 
 class Metodo():
     '''
@@ -211,17 +239,20 @@ class Metodo():
     def siguiente(self, CFG):
         CFG['metodo'] = CFG['w'].formulario('Metodo').metodo
         CFG['particiones'] = CFG['w'].formulario('Metodo').particiones
-        print 'El metodo de instalación escogido es: {0}'.format(CFG['metodo']['tipo'])
+        print 'El metodo de instalación escogido es: {0}'\
+            .format(CFG['metodo']['tipo'])
         print 'CFG: {0}'.format(debug_list(CFG))
 
         if CFG['metodo']['tipo'] == 'MANUAL':
             CFG['w'].next('PartManual', PartManual, (CFG), PasoPartManual(CFG))
-        elif CFG['metodo']['tipo'] == 'TODO' or CFG['metodo']['tipo'] == 'LIBRE':
+        elif CFG['metodo']['tipo'] == 'TODO' \
+        or CFG['metodo']['tipo'] == 'LIBRE':
             CFG['w'].next('PartTodo', PartTodo, (CFG), PasoPartTodo(CFG))
         elif CFG['metodo']['tipo'] == 'REDIM':
             CFG['w'].next('PartAuto', PartAuto, (CFG), PasoPartAuto(CFG))
         else:
             pass
+
 
 class PartTodo():
     '''
@@ -240,6 +271,7 @@ class PartTodo():
         CFG['w'].next('Usuario', Usuario, (CFG), PasoUsuario(CFG))
         print 'CFG: {0}'.format(CFG)
 
+
 class PartAuto():
     '''
         Inicia el paso que redimensiona la partición
@@ -257,6 +289,7 @@ class PartAuto():
         CFG['w'].next('Usuario', Usuario, (CFG), PasoUsuario(CFG))
         print 'CFG: {0}'.format(CFG)
 
+
 class PartManual():
     '''
         Inicia el paso que particiona el disco
@@ -270,13 +303,14 @@ class PartManual():
 
     def siguiente(self, CFG):
         if CFG['w'].formulario('PartManual').raiz == False:
-            message = "Debe existir una partición raiz (/)"
+            message = _("Root partition (/) must exists")
             UserMessage(message, 'ERROR', gtk.MESSAGE_ERROR, gtk.BUTTONS_OK)
             return False
 
         CFG['acciones'] = CFG['w'].formulario('PartManual').acciones
         CFG['w'].next('Usuario', Usuario, (CFG), PasoUsuario(CFG))
         print 'CFG: {0}'.format(CFG)
+
 
 class Usuario():
     '''
@@ -293,55 +327,69 @@ class Usuario():
         CFG['w'].previous('Metodo', Metodo, (CFG))
 
     def siguiente(self, CFG):
-        CFG['passroot1'] = CFG['w'].formulario('Usuario').txtpassroot1.get_text()
-        CFG['passroot2'] = CFG['w'].formulario('Usuario').txtpassroot2.get_text()
+        CFG['passroot1'] = CFG['w'].formulario('Usuario').txtpassroot1\
+            .get_text()
+        CFG['passroot2'] = CFG['w'].formulario('Usuario').txtpassroot2\
+            .get_text()
         CFG['nombre'] = CFG['w'].formulario('Usuario').txtnombre.get_text()
         CFG['usuario'] = CFG['w'].formulario('Usuario').txtusuario.get_text()
-        CFG['passuser1'] = CFG['w'].formulario('Usuario').txtpassuser1.get_text()
-        CFG['passuser2'] = CFG['w'].formulario('Usuario').txtpassuser2.get_text()
+        CFG['passuser1'] = CFG['w'].formulario('Usuario').txtpassuser1\
+            .get_text()
+        CFG['passuser2'] = CFG['w'].formulario('Usuario').txtpassuser2\
+            .get_text()
         CFG['maquina'] = CFG['w'].formulario('Usuario').txtmaquina.get_text()
         CFG['oem'] = CFG['w'].formulario('Usuario').chkoem.get_active()
         CFG['gdm'] = CFG['w'].formulario('Usuario').chkgdm.get_active()
 
         if CFG['oem'] == False:
             if CFG['passroot1'].strip() == '':
-                message = "Debe escribir una contraseña para el administrador."
-                UserMessage(message, 'ERROR', gtk.MESSAGE_ERROR, gtk.BUTTONS_OK)
+                message = _("You must enter a password for the administrator.")
+                UserMessage(message, 'ERROR', gtk.MESSAGE_ERROR,
+                            gtk.BUTTONS_OK)
                 return
             if CFG['passroot1'] != CFG['passroot2']:
-                message = "Las contraseñas de administrador no coinciden."
-                UserMessage(message, 'ERROR', gtk.MESSAGE_ERROR, gtk.BUTTONS_OK)
+                message = _("Administrator passwords do not match.")
+                UserMessage(message, 'ERROR', gtk.MESSAGE_ERROR,
+                            gtk.BUTTONS_OK)
                 return
             if CFG['nombre'].strip() == '':
-                message = "Debe escribir un nombre."
-                UserMessage(message, 'ERROR', gtk.MESSAGE_ERROR, gtk.BUTTONS_OK)
+                message = _("You must enter a name.")
+                UserMessage(message, 'ERROR', gtk.MESSAGE_ERROR,
+                            gtk.BUTTONS_OK)
                 return
             if CFG['usuario'].strip() == '':
-                message = "Debe escribir un nombre de usuario."
-                UserMessage(message, 'ERROR', gtk.MESSAGE_ERROR, gtk.BUTTONS_OK)
+                message = _("You must enter a user name.")
+                UserMessage(message, 'ERROR', gtk.MESSAGE_ERROR,
+                            gtk.BUTTONS_OK)
                 return
             if re.compile('^[a-z][-a-z-0-9]*$').search(CFG['usuario']) == None:
-                message = "El nombre de usuario tiene caracteres inválidos."
-                UserMessage(message, 'ERROR', gtk.MESSAGE_ERROR, gtk.BUTTONS_OK)
+                message = _("The user name has invalid characters.")
+                UserMessage(message, 'ERROR', gtk.MESSAGE_ERROR,
+                            gtk.BUTTONS_OK)
                 return
             if CFG['passuser1'].strip() == '':
-                message = "Debe escribir una contraseña para el usuario."
-                UserMessage(message, 'ERROR', gtk.MESSAGE_ERROR, gtk.BUTTONS_OK)
+                message = _("You must enter a password for the user.")
+                UserMessage(message, 'ERROR', gtk.MESSAGE_ERROR,
+                            gtk.BUTTONS_OK)
                 return
             if CFG['passuser1'] != CFG['passuser2']:
-                message = "Las contraseñas de usuario no coinciden."
-                UserMessage(message, 'ERROR', gtk.MESSAGE_ERROR, gtk.BUTTONS_OK)
+                message = _("User passwords do not match.")
+                UserMessage(message, 'ERROR', gtk.MESSAGE_ERROR,
+                            gtk.BUTTONS_OK)
                 return
-            if re.compile("^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$").search(CFG['maquina']) == None:
-                message = "El nombre de la máquina no está correctamente escrito."
-                UserMessage(message, 'ERROR', gtk.MESSAGE_ERROR, gtk.BUTTONS_OK)
+            if re.compile("^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*\
+([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$").search(CFG['maquina']) == None:
+                message = _("The machine name is not spelled correctly.")
+                UserMessage(message, 'ERROR', gtk.MESSAGE_ERROR,
+                            gtk.BUTTONS_OK)
                 return
 
         CFG['w'].next('Info', Info, (CFG), PasoInfo(CFG))
 
+
 class Info():
     '''
-        Inicia el paso que muestr la información general de la instalación
+        Inicia el paso que muestra la información general de la instalación
     '''
     def __init__(self, CFG):
         CFG['s'] = aconnect(CFG['w'].siguiente, CFG['s'], self.siguiente, CFG)

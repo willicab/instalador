@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# ==============================================================================
+# =============================================================================
 # PAQUETE: canaima-instalador
 # ARCHIVO: canaimainstalador/clases/particiones.py
 # COPYRIGHT:
@@ -9,7 +9,7 @@
 #       (C) 2012 Erick Manuel Birbe Salazar <erickcion@gmail.com>
 #       (C) 2012 Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>
 # LICENCIA: GPL-3
-# ==============================================================================
+# =============================================================================
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -26,10 +26,11 @@
 #
 # CODE IS POETRY
 
-import parted, _ped
-
-from canaimainstalador.clases.common import ProcessGenerator, espacio_usado, assisted_mount, assisted_umount
+from canaimainstalador.clases.common import ProcessGenerator, espacio_usado
 from canaimainstalador.config import FSPROGS
+import _ped
+import parted
+
 
 class Particiones():
     def __init__(self):
@@ -263,7 +264,7 @@ class Particiones():
         - inicio: donde comenzará la partición, en kB
         - fin: donde terminará la partición, en kB
         '''
-        i= 0
+        i = 0
 
         if fs in FSPROGS:
             for mkfs in FSPROGS[fs][0]:
@@ -438,7 +439,7 @@ class Particiones():
         dev = parted.Device(drive)
         disk = parted.Disk(dev)
         partition = disk.getPartitionByPath(part)
-        
+
         if flag == 'boot':
             pedflag = _ped.PARTITION_BOOT
 
@@ -453,4 +454,3 @@ class Particiones():
                 return False
         else:
             return False
-

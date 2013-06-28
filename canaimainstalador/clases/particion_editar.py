@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# ==============================================================================
+# =============================================================================
 # PAQUETE: canaima-instalador
 # ARCHIVO: canaimainstalador/clases/particion_editar.py
 # COPYRIGHT:
@@ -9,7 +9,7 @@
 #       (C) 2012 Erick Manuel Birbe Salazar <erickcion@gmail.com>
 #       (C) 2012 Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>
 # LICENCIA: GPL-3
-# ==============================================================================
+# =============================================================================
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -26,16 +26,17 @@
 #
 # CODE IS POETRY
 
-import gtk
-
 from canaimainstalador.clases.common import TblCol, get_row_index, PStatus, \
     validate_maximun_fs_size, validate_minimun_fs_size, UserMessage, humanize
-from canaimainstalador.clases.frame_fs import frame_fs
-from canaimainstalador.translator import msj
+from canaimainstalador.clases.frame_fs import frame_fs, MSG_ENTER_MANUAL, \
+    MSG_NONE
 from canaimainstalador.config import FSMIN, FSMAX
+from canaimainstalador.translator import msj, gettext_install
+import gtk
 
-txt_manual = 'Escoger manualmente...'
-txt_ninguno = 'Ninguno'
+
+gettext_install()
+
 
 class Main(gtk.Dialog):
 
@@ -47,7 +48,7 @@ class Main(gtk.Dialog):
 
         gtk.Window.__init__(self, gtk.WINDOW_TOPLEVEL)
         self.set_position(gtk.WIN_POS_CENTER_ALWAYS)
-        self.set_title("Editar partición existente")
+        self.set_title(_("Edit existing partition"))
         self.set_resizable(0)
 
         self.add_button(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL)
@@ -70,17 +71,19 @@ class Main(gtk.Dialog):
         self.fs_box.cmb_tipo.set_sensitive(False)
 
         # Filesystem
-        self.select_item(self.fs_box.cmb_fs, self.particion_act[TblCol.FORMATO])
+        self.select_item(self.fs_box.cmb_fs,
+                         self.particion_act[TblCol.FORMATO])
         self.fs_box.cmb_fs.connect('changed', self.cmb_fs_changed)
 
         # Montaje
         montaje = self.particion_act[TblCol.MONTAJE]
-        if montaje == '': montaje = txt_ninguno
+        if montaje == '':
+            montaje = MSG_NONE
         try:
             self.select_item(self.fs_box.cmb_montaje, montaje)
         except ValueError, e:
             print e
-            self.select_item(self.fs_box.cmb_montaje, txt_manual)
+            self.select_item(self.fs_box.cmb_montaje, MSG_ENTER_MANUAL)
             self.fs_box.entrada.set_text(montaje)
 
         # Formatear
@@ -111,9 +114,9 @@ class Main(gtk.Dialog):
             formatear = self.fs_box.formatear.get_active()
             montaje = self.fs_box.cmb_montaje.get_active_text()
 
-            if montaje == txt_manual:
+            if montaje == MSG_ENTER_MANUAL:
                 montaje = self.fs_box.entrada.get_text().strip()
-            elif montaje == txt_ninguno:
+            elif montaje == MSG_NONE:
                 montaje = ''
 
             tmp[TblCol.FORMATO] = filesystem
@@ -144,9 +147,9 @@ class Main(gtk.Dialog):
 
     def set_format_label(self, fs):
         if fs == 'swap' and self.particion_act[TblCol.FORMATO] == 'swap':
-            self.fs_box.formatear.set_label("Usar esta partición")
+            self.fs_box.formatear.set_label(_("Use this partition"))
         else:
-            self.fs_box.formatear.set_label("Formatear esta partición")
+            self.fs_box.formatear.set_label(_("Format this partition"))
 
     def cmb_fs_changed(self, widget):
 
@@ -171,18 +174,21 @@ class Main(gtk.Dialog):
 
     def validate_fs_size(self):
         formato = self.fs_box.cmb_fs.get_active_text()
-        tamano = self.particion_act[TblCol.FIN] - self.particion_act[TblCol.INICIO]
+        tamano = self.particion_act[TblCol.FIN] \
+        - self.particion_act[TblCol.INICIO]
         estatus = True
 
         if not validate_minimun_fs_size(formato, tamano):
             estatus = False
-            msg = "%s debe tener un tamaño mínimo de %s." % (formato, humanize(FSMIN[formato]))
+            msg = _("{0} must have a minimum size of {1}.")\
+            .format(formato, humanize(FSMIN[formato]))
             UserMessage(msg, 'Información', gtk.MESSAGE_INFO, gtk.BUTTONS_OK)
 
         if not validate_maximun_fs_size(formato, tamano):
             estatus = False
-            msg = "%s debe tener un tamaño máximo de %s." % (formato, humanize(FSMAX[formato]))
-            UserMessage(msg, 'Información', gtk.MESSAGE_INFO, gtk.BUTTONS_OK)
+            msg = _("{0} must have a maximum size of {1}.")\
+            .format(formato, humanize(FSMAX[formato]))
+            UserMessage(msg, _('Information'), gtk.MESSAGE_INFO,
+                        gtk.BUTTONS_OK)
 
         return estatus
-

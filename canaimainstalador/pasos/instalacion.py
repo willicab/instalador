@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# ==============================================================================
+# =============================================================================
 # PAQUETE: canaima-instalador
 # ARCHIVO: canaimainstalador/pasos/instalacion.py
 # COPYRIGHT:
@@ -9,7 +9,7 @@
 #       (C) 2012 Erick Manuel Birbe Salazar <erickcion@gmail.com>
 #       (C) 2012 Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>
 # LICENCIA: GPL-3
-# ==============================================================================
+# =============================================================================
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -26,19 +26,31 @@
 #
 # CODE IS POETRY
 
-import os, gtk, webkit, sys, Queue, glib, pango, threading, shutil
-
-from canaimainstalador.clases.particiones import Particiones
 from canaimainstalador.clases.common import UserMessage, ProcessGenerator, \
-    reconfigurar_paquetes, desinstalar_paquetes, instalar_paquetes, lista_cdroms, \
-    crear_etc_default_keyboard, crear_etc_hostname, crear_etc_hosts, \
+    reconfigurar_paquetes, desinstalar_paquetes, instalar_paquetes, \
+    lista_cdroms, crear_etc_hostname, crear_etc_hosts, \
     crear_etc_network_interfaces, crear_etc_fstab, assisted_mount, \
-    assisted_umount, preseed_debconf_values, mounted_targets, \
-    mounted_parts, crear_usuarios, ThreadGenerator, crear_passwd_group_inittab_mtab, \
-    get_windows_part_in, activar_swap
-from canaimainstalador.config import INSTALL_SLIDES, BAR_ICON
+    assisted_umount, preseed_debconf_values, mounted_targets, mounted_parts, \
+    crear_usuarios, ThreadGenerator, get_windows_part_in, activar_swap, \
+    crear_archivos_config, activar_accesibilidad, create_file, get_live_path
+from canaimainstalador.clases.particiones import Particiones
+from canaimainstalador.config import INSTALL_SLIDES, BAR_ICON, SHAREDIR
+import Queue
+import gobject
+import gtk
+import os
+import pango
+import sys
+import threading
+import webkit
+from canaimainstalador.clases import keyboard, i18n
+from canaimainstalador.clases.i18n import install_language_pack
+from canaimainstalador.translator import gettext_install
 
-gtk.gdk.threads_init()
+
+gettext_install()
+gobject.threads_init()
+
 
 class PasoInstalacion():
     def __init__(self, CFG):
@@ -50,7 +62,7 @@ class PasoInstalacion():
         event = threading.Event()
 
         params = {
-                'title': 'Instalación de Canaima',
+                'title': _('Canaima Installation'),
                 'q_button_a': q_button_a,
                 'q_button_b': q_button_b,
                 'q_view': q_view,
@@ -78,8 +90,12 @@ class PasoInstalacion():
             event=event
             )
 
+
 class install_window(object):
-    def __init__(self, title, q_button_a, q_button_b, q_view, q_label, q_win, event):
+
+    def __init__(self, title, q_button_a, q_button_b, q_view, q_label, q_win,
+                 event):
+
         window = gtk.Window()
         window.set_border_width(0)
         window.set_title(title)
@@ -97,7 +113,7 @@ class install_window(object):
         size = pango.AttrSize(20000, 0, -1)
         attr.insert(size)
 
-        str_message = 'La instalación de Canaima ha terminado'
+        str_message = _('Canaima installation has been completed')
         message = gtk.Label(str_message)
         message.set_size_request(640, 40)
         message.set_alignment(0, 0)
@@ -105,7 +121,8 @@ class install_window(object):
         message.set_attributes(attr)
         box.put(message, 50, 200)
 
-        str_intro = 'Puedes seguir probando Canaima presionando "Reiniciar más tarde" o disfrutar de tu sistema operativo instalado presionando "Reiniciar ahora".'
+        str_intro = 'You can keep trying Canaima pressing "Restart Later" or \
+enjoy your installed operating system by pressing "Restart Now".'
         intro = gtk.Label(str_intro)
         intro.set_size_request(640, 40)
         intro.set_alignment(0, 0)
@@ -127,13 +144,13 @@ class install_window(object):
 
         button_a = gtk.Button()
         button_a.set_size_request(150, 30)
-        button_a.set_label('Reiniciar más tarde')
+        button_a.set_label(_('Restart Later'))
         button_a.connect('clicked', self.close)
         box.put(button_a, 390, 440)
 
         button_b = gtk.Button()
         button_b.set_size_request(150, 30)
-        button_b.set_label('Reiniciar ahora')
+        button_b.set_label(_('Restart Now'))
         button_b.connect('clicked', self.reboot)
         box.put(button_b, 540, 440)
 
@@ -158,12 +175,59 @@ class install_window(object):
         ProcessGenerator('reboot')
 
     def show_html(self):
-        glib.idle_add(
+        gobject.idle_add(
             self.view.load_uri, 'file://' + os.path.realpath(INSTALL_SLIDES)
             )
 
     def disable_close(self, widget=None, data=None):
         return True
+
+
+def UserMessageError(message, window, bindlist, mountlist):
+    '''Hacemos acá una especie de sobreescritura de UserMessage para resumir
+    líneas de código, ya que será un método de uso frecuente en este
+    módulo'''
+
+    UserMessage(
+        message,
+        title='ERROR',
+        mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
+        c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
+        c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
+        c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
+        c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
+        c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
+    )
+
+
+def conf_files_install(cfg, mountpoint):
+
+    lcl = cfg['locale']
+    tzn = cfg['timezone']
+    kbd = cfg['keyboard']
+
+    # ------------------------------------------------- Configuración de idioma
+    # /etc/default/locale
+    data = i18n.locale_content(lcl)
+    if not create_file(mountpoint + '/etc/default/locale', data):
+        return False
+    # /etc/locale.gen
+    data = i18n.locale_gen_content(lcl)
+    if not create_file(mountpoint + '/etc/locale.gen', data):
+        return False
+
+    # ------------------------------------------- Configuración de zona horaria
+    data = tzn + '\n'
+    if not create_file(mountpoint + '/etc/timezone', data):
+        return False
+
+    # ------------------------------------------------ Configuración de teclado
+    data = keyboard.keyboard_contents(kbd, lcl.get_locale())
+    if not create_file(mountpoint + '/etc/default/keyboard', data):
+        return False
+
+    return True
+
 
 def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
     button_a = q_button_a.get()
@@ -174,50 +238,48 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
     p = Particiones()
     metodo = CFG['metodo']
     acciones = CFG['acciones']
-    teclado = CFG['teclado']
     passroot = CFG['passroot1']
     nombre = CFG['nombre']
     usuario = CFG['usuario']
     passuser = CFG['passuser1']
     maquina = CFG['maquina']
+    lcl_item = CFG['locale']
     oem = CFG['oem']
     gdm = CFG['gdm']
     mountpoint = '/target'
-    squashfs = '/live/image/live/filesystem.squashfs'
+    LIVE_PATH = get_live_path()
+    squashfs = LIVE_PATH + '/live/filesystem.squashfs'
     uninstpkgs = [
         'canaima-instalador', 'live-config', 'live-boot',
-        'live-boot-initramfs-tools', 'live-initramfs', 'live-config-sysvinit'
+        'live-boot-initramfs-tools', 'live-initramfs', 'live-config-sysvinit',
+        'live-tools'
         ]
     reconfpkgs = [
-        'canaima-estilo-visual-gnome', 'canaima-plymouth',
-        'canaima-chat-gnome', 'canaima-bienvenido-gnome',
-        'canaima-escritorio-gnome', 'canaima-base'
+        'locales', 'canaima-estilo-visual-gnome', 'canaima-escritorio-gnome',
+        'canaima-base'
         ]
     instpkgs_burg = [
-        ['/live/image/pool/main/libx/libx86', 'libx86-1'],
-        ['/live/image/pool/main/s/svgalib', 'libsvga1'],
-        ['/live/image/pool/main/libs/libsdl1.2', 'libsdl1.2debian-alsa'],
-        ['/live/image/pool/main/libs/libsdl1.2', 'libsdl1.2debian'],
-        ['/live/image/pool/main/g/gettext', 'gettext-base'],
-        ['/live/image/pool/main/b/burg-themes', 'burg-themes-common'],
-        ['/live/image/pool/main/b/burg-themes', 'burg-themes'],
-        ['/live/image/pool/main/b/burg', 'burg-common'],
-        ['/live/image/pool/main/b/burg', 'burg-emu'],
-        ['/live/image/pool/main/b/burg', 'burg-pc'],
-        ['/live/image/pool/main/b/burg', 'burg']
+        [LIVE_PATH + '/pool/main/libx/libx86', 'libx86-1'],
+        [LIVE_PATH + '/pool/main/s/svgalib', 'libsvga1'],
+        [LIVE_PATH + '/pool/main/libs/libsdl1.2', 'libsdl1.2debian'],
+        [LIVE_PATH + '/pool/main/g/gettext', 'libasprintf0c2'],
+        [LIVE_PATH + '/pool/main/g/gettext', 'gettext-base'],
+        [LIVE_PATH + '/pool/main/b/burg-themes', 'burg-themes-common'],
+        [LIVE_PATH + '/pool/main/b/burg-themes', 'burg-themes'],
+        [LIVE_PATH + '/pool/main/b/burg', 'burg-common'],
+        [LIVE_PATH + '/pool/main/b/burg', 'burg-emu'],
+        [LIVE_PATH + '/pool/main/b/burg', 'burg-pc'],
+        [LIVE_PATH + '/pool/main/b/burg', 'burg']
         ]
     instpkgs_cpp = [[
-        '/live/image/pool/main/c/canaima-primeros-pasos/',
+        LIVE_PATH + '/pool/main/c/canaima-primeros-pasos/',
         'canaima-primeros-pasos'
-        ]]
-    instpkgs_cagg = [[
-        '/live/image/pool/main/c/canaima-accesibilidad-gdm-gnome/',
-        'canaima-accesibilidad-gdm-gnome'
         ]]
     debconflist = [
         'burg-pc burg/linux_cmdline string quiet splash',
         'burg-pc burg/linux_cmdline_default string quiet splash vga=791',
-        'burg-pc burg-pc/install_devices multiselect {0}'.format(', '.join(p.lista_discos()))
+        'burg-pc burg-pc/install_devices multiselect {0}'.format(
+                                                ', '.join(p.lista_discos()))
         ]
     bindlist = [
         ['/dev', mountpoint + '/dev', ''],
@@ -227,48 +289,35 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
         ]
     mountlist = []
 
+    # Lista de archivos de configuración que se copiaran al disco
+    conffilelist = [
+        [SHAREDIR + '/templates/sources.list',
+                                        mountpoint + '/etc/apt/sources.list'],
+        [SHAREDIR + '/templates/adduser.conf',
+                                        mountpoint + '/etc/adduser.conf'],
+        # Agregamos mtab para que no falle al instalar Burg
+        ['/etc/mtab', mountpoint + '/etc/mtab']
+    ]
+
     if not os.path.isdir(mountpoint):
         os.makedirs(mountpoint)
 
+    #TODO: Esta validación deberia hacerse al inicio de la aplicación y no
+    # esperar hasta este punto
     if not os.path.exists(squashfs):
-        UserMessage(
-            message='No se encuentra la imagen squashfs.',
-            title='ERROR',
-            mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
-            c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
-            c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
-            c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
-            c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
-            c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
-            )
+        UserMessageError(_('Not found squashfs image.'),
+                         window, bindlist, mountlist)
 
     if not assisted_umount(sync=True, plist=mounted_targets(mnt=mountpoint)):
-        UserMessage(
-            message='Ocurrió un error desmontando las particiones.',
-            title='ERROR',
-            mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
-            c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
-            c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
-            c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
-            c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
-            c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
-            )
+        UserMessageError(_('An error occurred unmounting the partitions.'),
+                         window, bindlist, mountlist)
 
-    if not assisted_umount(
-        sync=True, plist=mounted_parts(disk=metodo['disco'][0])
-        ):
-        UserMessage(
-            message='Ocurrió un error desmontando las particiones.',
-            title='ERROR',
-            mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
-            c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
-            c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
-            c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
-            c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
-            c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
-            )
+    if not assisted_umount(sync=True,
+                           plist=mounted_parts(disk=metodo['disco'][0])):
+        UserMessageError(_('An error occurred unmounting the partitions.'),
+                         window, bindlist, mountlist)
 
-    label.set_text('Creando particiones en disco ...')
+    label.set_text('Creating partitions in the disk ...')
     for a in acciones:
         accion = a[0]
         montaje = a[2]
@@ -282,18 +331,10 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
 
         if accion == 'crear':
             if not p.crear_particion(
-                drive=disco, start=inicio, end=fin, fs=fs, partype=tipo, format=True
-                ):
-                UserMessage(
-                    message='Ocurrió un error creando una partición.',
-                    title='ERROR',
-                    mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
-                    c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
-                    c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
-                    c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
-                    c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
-                    c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
-                    )
+                drive=disco, start=inicio, end=fin, fs=fs, partype=tipo,
+                format=True):
+                UserMessageError(_('An error occurred creating a partition.'),
+                         window, bindlist, mountlist)
             else:
                 if montaje:
                     mountlist.append([
@@ -304,16 +345,8 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
         elif accion == 'borrar':
             particion = p.nombre_particion(disco, tipo, inicio, fin)
             if not p.borrar_particion(drive=disco, part=particion):
-                UserMessage(
-                    message='Ocurrió un error borrando una partición.',
-                    title='ERROR',
-                    mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
-                    c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
-                    c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
-                    c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
-                    c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
-                    c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
-                    )
+                UserMessageError(_('An error occurred removing a partition.'),
+                         window, bindlist, mountlist)
             else:
                 for item in mountlist:
                     if item[0] == particion:
@@ -321,33 +354,17 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
 
         elif accion == 'redimensionar':
             particion = p.nombre_particion(disco, tipo, inicio, fin)
-            if not p.redimensionar_particion(
-                drive=disco, part=particion, newend=nuevo_fin
-                ):
-                UserMessage(
-                    message='Ocurrió un error redimensionando una partición.',
-                    title='ERROR',
-                    mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
-                    c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
-                    c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
-                    c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
-                    c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
-                    c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
-                    )
+            if not p.redimensionar_particion(drive=disco, part=particion,
+                                             newend=nuevo_fin):
+                UserMessageError(_('An error occurred resizing a partition.'),
+                         window, bindlist, mountlist)
 
         elif accion == 'formatear':
             particion = p.nombre_particion(disco, tipo, inicio, fin)
             if not p.formatear_particion(part=particion, fs=fs):
-                UserMessage(
-                    message='Ocurrió un error formateando una partición.',
-                    title='ERROR',
-                    mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
-                    c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
-                    c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
-                    c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
-                    c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
-                    c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
-                    )
+                UserMessageError(_('An error occurred formatting a \
+partition.'),
+                         window, bindlist, mountlist)
             else:
                 if montaje:
                     mountlist.append([
@@ -383,274 +400,97 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
         if not p.remover_bandera(
             drive=metodo['disco'][0], part=unset_boot, flag='boot'
             ):
-            UserMessage(
-                message='Ocurrió un error montando los sistemas de archivos.',
-                title='ERROR',
-                mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
-                c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
-                c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
-                c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
-                c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
-                c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
-                )
+            UserMessageError(_("An error occurred mounting the filesystem"),
+                             window, bindlist, mountlist)
 
     if set_boot:
         if not p.asignar_bandera(
             drive=metodo['disco'][0], part=set_boot, flag='boot'
             ):
-            UserMessage(
-                message='Ocurrió un error montando los sistemas de archivos.',
-                title='ERROR',
-                mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
-                c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
-                c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
-                c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
-                c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
-                c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
-                )
+            UserMessageError(_("An error occurred mounting the filesystem"),
+                             window, bindlist, mountlist)
 
     if not activar_swap(plist=mountlist):
-        UserMessage(
-            message='Ocurrió un error activando la partición swap.',
-            title='ERROR',
-            mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
-            c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
-            c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
-            c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
-            c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
-            c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
-            )
+        UserMessageError(_("An error occurred activating the swap partition"),
+                         window, bindlist, mountlist)
 
-    label.set_text('Montando sistemas de archivos ...')
+    label.set_text(_("Mounting the filesystem ..."))
     if not assisted_mount(sync=True, bind=False, plist=mountlist):
-        UserMessage(
-            message='Ocurrió un error montando los sistemas de archivos.',
-            title='ERROR',
-            mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
-            c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
-            c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
-            c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
-            c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
-            c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
-            )
+        UserMessageError(_("An error occurred mounting the filesystem"),
+                         window, bindlist, mountlist)
 
-    label.set_text('Copiando archivos en disco ...')
+    label.set_text(_("Copying files to disk ..."))
     if ProcessGenerator(
         'unsquashfs -f -n -d {0} {1}'.format(mountpoint, squashfs)
         ).returncode != 0:
-        UserMessage(
-            message='Ocurrió un error copiando los archivos al disco.',
-            title='ERROR',
-            mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
-            c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
-            c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
-            c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
-            c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
-            c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
-            )
+        UserMessageError(_("An error occurred copying files to disk."),
+                         window, bindlist, mountlist)
 
-    label.set_text('Montando sistema de archivos ...')
+    label.set_text(_("Mounting the filesystem ..."))
     if not assisted_mount(sync=True, bind=True, plist=bindlist):
-        UserMessage(
-            message='Ocurrió un error montando los sistemas de archivos.',
-            title='ERROR',
-            mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
-            c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
-            c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
-            c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
-            c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
-            c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
-            )
+        UserMessageError(_("An error occurred mounting the filesystem"),
+                         window, bindlist, mountlist)
 
-    label.set_text('Instalando gestor de arranque ...')
+    # Configuración de archivos del sistema
+    label.set_text(_("Configuring system files ..."))
+    if not crear_archivos_config(mnt=mountpoint, conffilelist=conffilelist):
+        UserMessageError(_("An error occurred configuring the system files"),
+                         window, bindlist, mountlist)
+    if not conf_files_install(CFG, mountpoint):
+        UserMessageError(_("An error occurred configuring the system files"),
+                         window, bindlist, mountlist)
 
-    #Montamos /etc/mtab para que no de errores al intalar burg
-    shutil.copy2('/etc/mtab', '{0}/etc/mtab'.format(mountpoint))
-
-    if not preseed_debconf_values(mnt=mountpoint, debconflist=debconflist):
-        UserMessage(
-            message='Ocurrió un error presembrando las respuestas debconf.',
-            title='ERROR',
-            mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
-            c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
-            c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
-            c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
-            c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
-            c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
-            )
-
-    if not instalar_paquetes(mnt=mountpoint, dest='/tmp', plist=instpkgs_burg):
-        UserMessage(
-            message='Ocurrió un error instalando un paquete.',
-            title='ERROR',
-            mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
-            c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
-            c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
-            c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
-            c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
-            c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
-            )
-
-    if ProcessGenerator(
-        'chroot {0} update-burg'.format(mountpoint)
-        ).returncode != 0:
-        UserMessage(
-            message='Ocurrió un error actualizando burg.',
-            title='ERROR',
-            mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
-            c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
-            c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
-            c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
-            c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
-            c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
-            )
-
-    label.set_text('Generando imagen de arranque ...')
-    if ProcessGenerator(
-        'chroot {0} /usr/sbin/mkinitramfs -o /boot/{1} {2}'.format(
-            mountpoint, 'initrd.img-' + os.uname()[2], os.uname()[2]
-            )
-        ).returncode != 0:
-        UserMessage(
-            message='Ocurrió un error generando la imagen de arranque.',
-            title='ERROR',
-            mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
-            c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
-            c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
-            c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
-            c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
-            c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
-            )
-
-    if ProcessGenerator(
-        'chroot {0} update-initramfs -u -t'.format(mountpoint)
-        ).returncode != 0:
-        UserMessage(
-            message='Ocurrió un error actualizando la imagen de arranque.',
-            title='ERROR',
-            mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
-            c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
-            c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
-            c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
-            c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
-            c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
-            )
-
-    label.set_text('Configurando detalles del sistema operativo ...')
-    if not reconfigurar_paquetes(mnt=mountpoint, plist=reconfpkgs):
-        UserMessage(
-            message='Ocurrió un error reconfigurando un paquete.',
-            title='ERROR',
-            mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
-            c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
-            c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
-            c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
-            c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
-            c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
-            )
-
-    label.set_text('Configurando interfaces de red ...')
-    if not crear_etc_hostname(mnt=mountpoint, cfg='/etc/hostname', maq=maquina):
-        UserMessage(
-            message='Ocurrió un error creando el archivo /etc/hostname.',
-            title='ERROR',
-            mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
-            c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
-            c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
-            c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
-            c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
-            c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
-            )
-
+    label.set_text(_("Configuring network interfaces ..."))
+    if not crear_etc_hostname(mnt=mountpoint, cfg='/etc/hostname',
+                              maq=maquina):
+        UserMessageError(_("An error occurred creating file /etc/hostname"),
+                         window, bindlist, mountlist)
     if not crear_etc_hosts(mnt=mountpoint, cfg='/etc/hosts', maq=maquina):
-        UserMessage(
-            message='Ocurrió un error creando el archivo /etc/hosts.',
-            title='ERROR',
-            mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
-            c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
-            c_2=gtk.RESPONSE_OK, f_2=sys.exit, p_2=(1,)
-            )
+        UserMessageError(_("An error occurred creating file /etc/hosts"),
+                         window, bindlist, mountlist)
+    if not crear_etc_network_interfaces(mnt=mountpoint,
+                                        cfg='/etc/network/interfaces'):
+        UserMessageError(_("An error occurred creating file \
+/etc/network/interfaces"), window, bindlist, mountlist)
 
-    if not crear_etc_network_interfaces(
-        mnt=mountpoint, cfg='/etc/network/interfaces'
-        ):
-        UserMessage(
-            message='Ocurrió un error creando el archivo /etc/network/interfaces.',
-            title='ERROR',
-            mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
-            c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
-            c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
-            c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
-            c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
-            c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
-            )
+    label.set_text(_("Registering partitions in the system ..."))
+    if not crear_etc_fstab(mnt=mountpoint, cfg='/etc/fstab',
+                           mountlist=mountlist, cdroms=cdroms):
+        UserMessageError(_("An error occurred creating file /etc/fstab"),
+                         window, bindlist, mountlist)
 
-    label.set_text('Configurando teclado ...')
-    if not crear_etc_default_keyboard(
-        mnt=mountpoint, cfg='/etc/canaima-base/alternatives/keyboard',
-        key=teclado
-        ):
-        UserMessage(
-            message='Ocurrió un error configurando el teclado.',
-            title='ERROR',
-            mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
-            c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
-            c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
-            c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
-            c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
-            c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
-            )
+    # Instalar accesibilidad en el GDM
+    if gdm:
+        label.set_text(_("Installing accessibility components in GDM ..."))
+        if not activar_accesibilidad(mnt=mountpoint):
+            UserMessageError(_("An error occurred activating accesibility."),
+                         window, bindlist, mountlist)
 
-    label.set_text('Configurando particiones en /etc/fstab ...')
-    if not crear_etc_fstab(
-        mnt=mountpoint, cfg='/etc/fstab',
-        mountlist=mountlist, cdroms=cdroms
-        ):
-        UserMessage(
-            message='Ocurrió un error creando el archivo /etc/fstab.',
-            title='ERROR',
-            mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
-            c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
-            c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
-            c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
-            c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
-            c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
-            )
+    # Reconfigurando paquetes del sistema
+    label.set_text(_("Configuring additional details on the system ..."))
+    if not reconfigurar_paquetes(mnt=mountpoint, plist=reconfpkgs):
+        UserMessageError(_("An error occurred reconfiguring a package."),
+                         window, bindlist, mountlist)
 
-    label.set_text('Configurando usuarios y grupos ...')
-    if not crear_passwd_group_inittab_mtab(mnt=mountpoint):
-        UserMessage(
-            message='Ocurrió un error configurando usuarios y grupos.',
-            title='ERROR',
-            mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
-            c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
-            c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
-            c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
-            c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
-            c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
-            )
+    # instalación de los paquetes de idiomas
+    label.set_text(_("Configuring additional language packages ..."))
+    if not install_language_pack(lcl_item.get_locale(), mountpoint):
+        print "ADVERTENCIA: No se instalaran los paquetes adicionales del \
+idioma"
 
+    # Activa la funcionalidad OEM si ha sido seleccionada por el usuario
     if oem:
         adm_user = 'root'
         adm_password = 'root'
         nml_user = 'canaima'
         nml_password = 'canaima'
         nml_name = 'Mantenimiento'
-
-        if not instalar_paquetes(
-            mnt=mountpoint, dest='/tmp', plist=instpkgs_cpp
-            ):
-            UserMessage(
-                message='Ocurrió un error instalando un paquete.',
-                title='ERROR',
-                mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
-                c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
-                c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
-                c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
-                c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
-                c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
-                )
-
+        # Instala Canaima Primeros Pasos
+        label.set_text(_("Installing OEM characteristics ..."))
+        if not instalar_paquetes(mnt=mountpoint, dest='/tmp',
+                                 plist=instpkgs_cpp):
+            UserMessageError(_("An error occurred installing a package"),
+                         window, bindlist, mountlist)
     else:
         adm_user = 'root'
         adm_password = passroot
@@ -658,92 +498,54 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
         nml_password = passuser
         nml_name = nombre
 
-    if gdm:
-        if not instalar_paquetes(
-            mnt=mountpoint, dest='/tmp', plist=instpkgs_cagg
-            ):
-            UserMessage(
-                message='Ocurrió un error instalando un paquete.',
-                title='ERROR',
-                mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
-                c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
-                c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
-                c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
-                c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
-                c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
-                )
+    label.set_text(_("Creating system users ..."))
+    if not crear_usuarios(mnt=mountpoint, a_user=adm_user, a_pass=adm_password,
+                          n_name=nml_name, n_user=nml_user,
+                          n_pass=nml_password):
+        UserMessageError(_("An error occurred creating system user"),
+                         window, bindlist, mountlist)
 
-    label.set_text('Creando usuarios de sistema ...')
-    if not crear_usuarios(
-        mnt=mountpoint, a_user=adm_user, a_pass=adm_password,
-        n_name=nml_name, n_user=nml_user, n_pass=nml_password
-        ):
-        UserMessage(
-            message='Ocurrió un error creando los usuarios de sistema.',
-            title='ERROR',
-            mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
-            c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
-            c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
-            c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
-            c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
-            c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
-            )
-
-    label.set_text('Configurando detalles del sistema operativo ...')
-    if not reconfigurar_paquetes(
-        mnt=mountpoint, plist=['canaima-escritorio-gnome', 'canaima-base']
-        ):
-        UserMessage(
-            message='Ocurrió un error reconfigurando un paquete.',
-            title='ERROR',
-            mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
-            c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
-            c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
-            c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
-            c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
-            c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
-            )
-
-    label.set_text('Removiendo instalador del sistema de archivos ...')
+    label.set_text(_("Removing temporary data of installation ..."))
     if not desinstalar_paquetes(mnt=mountpoint, plist=uninstpkgs):
-        UserMessage(
-            message='Ocurrió un error desinstalando un paquete.',
-            title='ERROR',
-            mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
-            c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
-            c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
-            c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
-            c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
-            c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
-            )
+        UserMessageError(_("An error occurred removing a package"),
+                         window, bindlist, mountlist)
 
-    label.set_text('Desmontando sistema de archivos ...')
+    label.set_text(_("Installing Bootloader ..."))
+    if not preseed_debconf_values(mnt=mountpoint, debconflist=debconflist):
+        UserMessageError(_("An error occurred preseeding answers in debconf."),
+                         window, bindlist, mountlist)
+    if not instalar_paquetes(mnt=mountpoint, dest='/tmp', plist=instpkgs_burg):
+        UserMessageError(_("An error occurred installing a package."),
+                         window, bindlist, mountlist)
+    if ProcessGenerator('chroot {0} update-burg'.format(mountpoint)
+                        ).returncode != 0:
+        UserMessageError(_("An error occurred updating BURG."),
+                         window, bindlist, mountlist)
+
+    label.set_text(_("Configuring system boot ..."))
+    if ProcessGenerator(
+        'chroot {0} /usr/sbin/mkinitramfs -o /boot/{1} {2}'.format(
+            mountpoint, 'initrd.img-' + os.uname()[2], os.uname()[2]
+            )
+        ).returncode != 0:
+        UserMessageError(_("An error occurred generating boot image"),
+                         window, bindlist, mountlist)
+    if ProcessGenerator(
+        'chroot {0} update-initramfs -u -t'.format(mountpoint)
+        ).returncode != 0:
+        UserMessageError(_("An error occurred updating the boot image."),
+                         window, bindlist, mountlist)
+
+    # Terminando la instalación
+    label.set_text(_("Umounting filesistems ..."))
     if not assisted_umount(sync=True, plist=bindlist):
-        UserMessage(
-            message='Ocurrió un error desmontando las particiones.',
-            title='ERROR',
-            mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
-            c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
-            c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
-            c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
-            c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
-            c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
-            )
-
+        UserMessageError(_("An error occurred umounting partitions."),
+                         window, bindlist, mountlist)
     if not assisted_umount(sync=True, plist=mountlist):
-        UserMessage(
-            message='Ocurrió un error desmontando las particiones.',
-            title='ERROR',
-            mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
-            c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
-            c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
-            c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
-            c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
-            c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
-            )
+        UserMessageError(_("An error occurred umounting partitions."),
+                         window, bindlist, mountlist)
 
     button_a.show()
     button_b.show()
     label.hide()
     view.hide()
-

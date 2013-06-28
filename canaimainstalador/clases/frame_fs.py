@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# ==============================================================================
+# =============================================================================
 # PAQUETE: canaima-instalador
 # ARCHIVO: canaimainstalador/clases/frame_fs.py
 # COPYRIGHT:
@@ -9,7 +9,7 @@
 #       (C) 2012 Erick Manuel Birbe Salazar <erickcion@gmail.com>
 #       (C) 2012 Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>
 # LICENCIA: GPL-3
-# ==============================================================================
+# =============================================================================
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -33,6 +33,10 @@ from canaimainstalador.translator import msj
 from canaimainstalador.config import FSPROGS
 
 
+MSG_ENTER_MANUAL = _("Enter manually...")
+MSG_NONE = _("None")
+
+
 class frame_fs(gtk.Table):
     '''
     Este marco será insertado tanto en la ventana de particiones nuevas como en
@@ -51,7 +55,7 @@ class frame_fs(gtk.Table):
         self.parent_diag = parent_diag
 
         #Tipo de partición
-        self.lbl1 = gtk.Label('Tipo de partición:')
+        self.lbl1 = gtk.Label(_("Partition type:"))
         self.lbl1.set_alignment(0, 0.5)
         self.attach(self.lbl1, 0, 1, 0, 1)
         self.lbl1.show()
@@ -71,11 +75,10 @@ class frame_fs(gtk.Table):
         self.cmb_tipo.show()
 
         #Sistema de Archivos
-        self.lbl2 = gtk.Label('Sistema de Archivos:')
+        self.lbl2 = gtk.Label(_("File system:"))
         self.lbl2.set_alignment(0, 0.5)
         self.attach(self.lbl2, 0, 1, 1, 2)
         self.lbl2.show()
-
 
         self.cmb_fs = gtk.combo_box_new_text()
         self.cmb_fs_fill()
@@ -84,7 +87,7 @@ class frame_fs(gtk.Table):
         self.cmb_fs.show()
 
         # Punto de Montaje
-        self.lbl3 = gtk.Label('Punto de Montaje:')
+        self.lbl3 = gtk.Label(_("Mount point:"))
         self.lbl3.set_alignment(0, 0.5)
         self.lbl3.set_size_request(200, 30)
         self.attach(self.lbl3, 0, 1, 2, 3)
@@ -101,7 +104,7 @@ class frame_fs(gtk.Table):
         self.attach(self.entrada, 1, 2, 2, 3)
         self.entrada.connect("changed", self.validate_m_point)
 
-        self.formatear = gtk.CheckButton("Formatear esta partición")
+        self.formatear = gtk.CheckButton(_("Format this partition"))
         self.attach(self.formatear, 1, 2, 3, 4)
         self.formatear.set_visible(is_usable(self.part_act))
         self.formatear.connect("toggled", self.cmb_fs_on_changed)
@@ -146,8 +149,8 @@ class frame_fs(gtk.Table):
         self.cmb_montaje_add('/usr')
         self.cmb_montaje_add('/usr/local')
         self.cmb_montaje_add('/var')
-        self.cmb_montaje_add('Ninguno')
-        self.cmb_montaje_add('Escoger manualmente...')
+        self.cmb_montaje_add(MSG_NONE)
+        self.cmb_montaje_add(MSG_ENTER_MANUAL)
         self.cmb_montaje.set_active(0)
 
     def cmb_montaje_add(self, point):
@@ -163,7 +166,7 @@ class frame_fs(gtk.Table):
 
     def cmb_montaje_on_changed(self, widget=None):
         montaje = widget.get_active_text()
-        if montaje == 'Escoger manualmente...':
+        if montaje == MSG_ENTER_MANUAL:
             self.entrada.show()
             self.validate_m_point(self.entrada)
         else:

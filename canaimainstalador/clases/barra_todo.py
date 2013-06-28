@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# ==============================================================================
+# =============================================================================
 # PAQUETE: canaima-instalador
 # ARCHIVO: canaimainstalador/clases/barra_todo.py
 # COPYRIGHT:
@@ -9,7 +9,7 @@
 #       (C) 2012 Erick Manuel Birbe Salazar <erickcion@gmail.com>
 #       (C) 2012 Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>
 # LICENCIA: GPL-3
-# ==============================================================================
+# =============================================================================
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -29,8 +29,9 @@
 import gtk
 
 from canaimainstalador.clases.common import set_color, draw_rounded
-from canaimainstalador.config import ESPACIO_TOTAL, ESPACIO_SWAP, ESPACIO_ROOT, \
-    ESPACIO_BOOT, ESPACIO_VAR, ESPACIO_USR
+from canaimainstalador.config import ESPACIO_TOTAL, ESPACIO_SWAP, \
+    ESPACIO_ROOT, ESPACIO_BOOT, ESPACIO_VAR, ESPACIO_USR
+
 
 class BarraTodo(gtk.DrawingArea):
     def __init__(self, parent):
@@ -79,42 +80,56 @@ class BarraTodo(gtk.DrawingArea):
             fin_2 = self.current
             ini_3 = fin_2
             fin_3 = self.total
-            p_1 = [self.forma.split(':')[0], ini_1, fin_1, 0, 'ext4', 'primary', '', 0, 0, 0, 1]
-            p_2 = [self.forma.split(':')[1], ini_2, fin_2, 0, 'swap', 'primary', '', 0, 0, 0, 1]
-            p_3 = [self.forma.split(':')[2], ini_3, fin_3, 0, 'free', 'primary', '', 0, 0, 0, 1]
+            p_1 = [self.forma.split(':')[0], ini_1, fin_1, 0, 'ext4',
+                   'primary', '', 0, 0, 0, 1]
+            p_2 = [self.forma.split(':')[1], ini_2, fin_2, 0, 'swap',
+                   'primary', '', 0, 0, 0, 1]
+            p_3 = [self.forma.split(':')[2], ini_3, fin_3, 0, 'free',
+                   'primary', '', 0, 0, 0, 1]
             self.p.nuevas = [p_1, p_2, p_3]
 
         elif self.forma == 'ROOT:HOME:SWAP:LIBRE':
             ini_1 = 0
-            fin_1 = (ESPACIO_ROOT + ESPACIO_BOOT + ESPACIO_VAR + ESPACIO_USR) * self.factor
+            fin_1 = (ESPACIO_ROOT + ESPACIO_BOOT + ESPACIO_VAR + ESPACIO_USR) \
+            * self.factor
             ini_2 = fin_1
             fin_2 = self.current - self.swap
             ini_3 = fin_2
             fin_3 = self.current
             ini_4 = fin_3
             fin_4 = self.total
-            p_1 = [self.forma.split(':')[0], ini_1, fin_1, 0, 'ext4', 'primary', '', 0, 0, 0, 1]
-            p_2 = [self.forma.split(':')[1], ini_2, fin_2, 0, 'xfs', 'primary', '', 0, 0, 0, 1]
-            p_3 = [self.forma.split(':')[2], ini_3, fin_3, 0, 'swap', 'primary', '', 0, 0, 0, 1]
-            p_4 = [self.forma.split(':')[3], ini_4, fin_4, 0, 'free', 'primary', '', 0, 0, 0, 1]
+            p_1 = [self.forma.split(':')[0], ini_1, fin_1, 0, 'ext4',
+                   'primary', '', 0, 0, 0, 1]
+            p_2 = [self.forma.split(':')[1], ini_2, fin_2, 0, 'xfs',
+                   'primary', '', 0, 0, 0, 1]
+            p_3 = [self.forma.split(':')[2], ini_3, fin_3, 0, 'swap',
+                   'primary', '', 0, 0, 0, 1]
+            p_4 = [self.forma.split(':')[3], ini_4, fin_4, 0, 'free',
+                   'primary', '', 0, 0, 0, 1]
             self.p.nuevas = [p_1, p_2, p_3, p_4]
 
         elif self.forma == 'BOOT:ROOT:HOME:SWAP:LIBRE':
             ini_1 = 0
             fin_1 = ESPACIO_BOOT * self.factor
             ini_2 = fin_1
-            fin_2 = fin_1 + (ESPACIO_ROOT + ESPACIO_VAR + ESPACIO_USR) * self.factor
+            fin_2 = fin_1 + (ESPACIO_ROOT + ESPACIO_VAR + ESPACIO_USR) \
+            * self.factor
             ini_3 = fin_2
             fin_3 = self.current - self.swap
             ini_4 = fin_3
             fin_4 = self.current
             ini_5 = fin_4
             fin_5 = self.total
-            p_1 = [self.forma.split(':')[0], ini_1, fin_1, 0, 'ext4', 'primary', '', 0, 0, 0, 1]
-            p_2 = [self.forma.split(':')[1], ini_2, fin_2, 0, 'ext4', 'primary', '', 0, 0, 0, 1]
-            p_3 = [self.forma.split(':')[2], ini_3, fin_3, 0, 'xfs', 'primary', '', 0, 0, 0, 1]
-            p_4 = [self.forma.split(':')[3], ini_4, fin_4, 0, 'swap', 'primary', '', 0, 0, 0, 1]
-            p_5 = [self.forma.split(':')[4], ini_5, fin_5, 0, 'free', 'primary', '', 0, 0, 0, 1]
+            p_1 = [self.forma.split(':')[0], ini_1, fin_1, 0, 'ext4',
+                   'primary', '', 0, 0, 0, 1]
+            p_2 = [self.forma.split(':')[1], ini_2, fin_2, 0, 'ext4',
+                   'primary', '', 0, 0, 0, 1]
+            p_3 = [self.forma.split(':')[2], ini_3, fin_3, 0, 'xfs',
+                   'primary', '', 0, 0, 0, 1]
+            p_4 = [self.forma.split(':')[3], ini_4, fin_4, 0, 'swap',
+                   'primary', '', 0, 0, 0, 1]
+            p_5 = [self.forma.split(':')[4], ini_5, fin_5, 0, 'free',
+                   'primary', '', 0, 0, 0, 1]
             self.p.nuevas = [p_1, p_2, p_3, p_4, p_5]
 
         elif self.forma == 'BOOT:ROOT:VAR:USR:HOME:SWAP:LIBRE':
@@ -132,13 +147,20 @@ class BarraTodo(gtk.DrawingArea):
             fin_6 = self.current
             ini_7 = fin_6
             fin_7 = self.total
-            p_1 = [self.forma.split(':')[0], ini_1, fin_1, 0, 'ext4', 'primary', '', 0, 0, 0, 1]
-            p_2 = [self.forma.split(':')[1], ini_2, fin_2, 0, 'ext4', 'primary', '', 0, 0, 0, 1]
-            p_3 = [self.forma.split(':')[2], ini_3, fin_3, 0, 'ext4', 'primary', '', 0, 0, 0, 1]
-            p_4 = [self.forma.split(':')[3], ini_4, fin_4, 0, 'ext4', 'primary', '', 0, 0, 0, 1]
-            p_5 = [self.forma.split(':')[4], ini_5, fin_5, 0, 'xfs', 'primary', '', 0, 0, 0, 1]
-            p_6 = [self.forma.split(':')[5], ini_6, fin_6, 0, 'swap', 'primary', '', 0, 0, 0, 1]
-            p_7 = [self.forma.split(':')[6], ini_7, fin_7, 0, 'free', 'primary', '', 0, 0, 0, 1]
+            p_1 = [self.forma.split(':')[0], ini_1, fin_1, 0, 'ext4',
+                   'primary', '', 0, 0, 0, 1]
+            p_2 = [self.forma.split(':')[1], ini_2, fin_2, 0, 'ext4',
+                   'primary', '', 0, 0, 0, 1]
+            p_3 = [self.forma.split(':')[2], ini_3, fin_3, 0, 'ext4',
+                   'primary', '', 0, 0, 0, 1]
+            p_4 = [self.forma.split(':')[3], ini_4, fin_4, 0, 'ext4',
+                   'primary', '', 0, 0, 0, 1]
+            p_5 = [self.forma.split(':')[4], ini_5, fin_5, 0, 'xfs',
+                   'primary', '', 0, 0, 0, 1]
+            p_6 = [self.forma.split(':')[5], ini_6, fin_6, 0, 'swap',
+                   'primary', '', 0, 0, 0, 1]
+            p_7 = [self.forma.split(':')[6], ini_7, fin_7, 0, 'free',
+                   'primary', '', 0, 0, 0, 1]
             self.p.nuevas = [p_1, p_2, p_3, p_4, p_5, p_6, p_7]
 
         else:
@@ -201,7 +223,8 @@ class BarraTodo(gtk.DrawingArea):
 
             if len(self.p.nuevas) - 1 > 4:
                 self.p.acciones.append(
-                    ['crear', None, None, self.ini, self.ini + self.current - 0.5, 'extended', 'extended', 0]
+                    ['crear', None, None, self.ini, self.ini + self.current \
+                     - 0.5, 'extended', 'extended', 0]
                     )
                 a_tipo = 'logical'
             else:
@@ -212,15 +235,18 @@ class BarraTodo(gtk.DrawingArea):
                 a_tipo = 'logical'
             else:
                 if self.extendidas < 1:
-                    if self.primarias + self.extendidas + len(self.p.nuevas) - 1 > 4:
+                    if self.primarias + self.extendidas + len(self.p.nuevas) \
+                    - 1 > 4:
                         self.p.acciones.append(
-                            ['crear', None, None, self.ini, self.ini + self.current - 0.5, 'extended', 'extended', 0]
+                            ['crear', None, None, self.ini, self.ini \
+                             + self.current - 0.5, 'extended', 'extended', 0]
                             )
                         a_tipo = 'logical'
                     else:
                         a_tipo = 'primary'
                 else:
-                    if self.primarias + self.extendidas + len(self.p.nuevas) - 1 > 4:
+                    if self.primarias + self.extendidas + len(self.p.nuevas) \
+                    - 1 > 4:
                         a_tipo = 'FAIL'
                     else:
                         a_tipo = 'primary'
@@ -298,4 +324,3 @@ class BarraTodo(gtk.DrawingArea):
                 self.p.libre = self.total - x
                 self.p.leyenda.expose()
                 self.queue_draw()
-

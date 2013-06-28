@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# ==============================================================================
+# =============================================================================
 # PAQUETE: canaima-instalador
 # ARCHIVO: canaimainstalador/clases/leyenda.py
 # COPYRIGHT:
@@ -9,7 +9,7 @@
 #       (C) 2012 Erick Manuel Birbe Salazar <erickcion@gmail.com>
 #       (C) 2012 Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>
 # LICENCIA: GPL-3
-# ==============================================================================
+# =============================================================================
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -26,9 +26,22 @@
 #
 # CODE IS POETRY
 
+from canaimainstalador.clases.common import humanize
+from canaimainstalador.translator import gettext_install
 import gtk
 
-from canaimainstalador.clases.common import humanize
+
+gettext_install()
+
+MSG_ROOT_DIR = _("Root directory (/):")
+MSG_SWAP_SPC = _("Swap space (swap):")
+MSG_USER_DIR = _("User directory (/home):")
+MSG_APP_DIR = _("Appliactions directory (/usr):")
+MSG_BOOT_DIR = _("Boot directory (/boot):")
+MSG_VAR_DIR = _("Variable directory (/var):")
+MSG_FREE_SPC = _("Free space:")
+MSG_RESIZE_SPC = _("Resized space:")
+
 
 class Leyenda(gtk.Fixed):
     def __init__(self, parent):
@@ -95,21 +108,29 @@ class Leyenda(gtk.Fixed):
             size = humanize(i[2] - i[1])
 
             if part == 'ROOT':
-                exec "self.lbl_" + str(j) + ".set_text('Espacio principal (/): '+size)"
+                exec "self.lbl_" + str(j) + ".set_text('" + MSG_ROOT_DIR \
+                + " '+size)"
             elif part == 'SWAP':
-                exec "self.lbl_" + str(j) + ".set_text('Espacio de intercambio (swap): '+size)"
+                exec "self.lbl_" + str(j) + ".set_text('" + MSG_SWAP_SPC \
+                + " '+size)"
             elif part == 'HOME':
-                exec "self.lbl_" + str(j) + ".set_text('Espacio de usuarios (/home): '+size)"
+                exec "self.lbl_" + str(j) + ".set_text('" + MSG_USER_DIR \
+                + " '+size)"
             elif part == 'USR':
-                exec "self.lbl_" + str(j) + ".set_text('Espacio de aplicaciones (/usr): '+size)"
+                exec "self.lbl_" + str(j) + ".set_text('" + MSG_APP_DIR \
+                + " '+size)"
             elif part == 'BOOT':
-                exec "self.lbl_" + str(j) + ".set_text('Espacio de arranque (/boot): '+size)"
+                exec "self.lbl_" + str(j) + ".set_text('" + MSG_BOOT_DIR \
+                + " '+size)"
             elif part == 'VAR':
-                exec "self.lbl_" + str(j) + ".set_text('Espacio de variables (/var): '+size)"
+                exec "self.lbl_" + str(j) + ".set_text('" + MSG_VAR_DIR \
+                + " '+size)"
             elif part == 'LIBRE':
-                exec "self.lbl_" + str(j) + ".set_text('Espacio Libre: '+size)"
+                exec "self.lbl_" + str(j) + ".set_text('" + MSG_FREE_SPC \
+                + " '+size)"
             elif part == 'PART':
-                exec "self.lbl_" + str(j) + ".set_text('Partición redimensionada: '+size)"
+                exec "self.lbl_" + str(j) + ".set_text('" + MSG_RESIZE_SPC \
+                + " '+size)"
 
             j += 1
 
