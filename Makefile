@@ -76,11 +76,13 @@ install:
 
 	cp canaima-instalador.desktop $(DESTDIR)/etc/skel/Escritorio/
 	cp canaima-instalador.desktop $(DESTDIR)/etc/xdg/autostart/
-	cp canaima-instalador.py $(DESTDIR)/usr/bin/canaima-instalador
 	cp -r canaimainstalador $(DESTDIR)/usr/share/pyshared/
 	cp VERSION AUTHORS LICENSE TRANSLATORS \
 		$(DESTDIR)/usr/share/canaima-instalador/
 	cp -r templates/ $(DESTDIR)/usr/share/canaima-instalador/
+
+	cp canaima-instalador.py $(DESTDIR)/usr/bin/canaima-instalador
+	chmod +x $(DESTDIR)/usr/bin/canaima-instalador
 
 	# Instalar traducciones
 	for LC in $(LC_DIRS); do \
