@@ -85,6 +85,7 @@ install:
 	chmod +x $(DESTDIR)/usr/bin/canaima-instalador
 
 	# Instalar traducciones
+	mkdir -p $(DESTDIR)/usr/share/locale/
 	for LC in $(LC_DIRS); do \
 		LOCALE_DIR=locale/$${LC}; \
 		if [ -d $${LOCALE_DIR} ]; then \
