@@ -88,7 +88,7 @@ install:
 	for LC in $(LC_DIRS); do \
 		LOCALE_DIR=locale/$${LC}; \
 		if [ -d $${LOCALE_DIR} ]; then \
-			cp -r $${LOCALE_DIR}/ $(DESTDIR)/usr/share/locale/; \
+			cp -r $${LOCALE_DIR} $(DESTDIR)/usr/share/locale/; \
 		fi; \
 	done
 
