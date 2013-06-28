@@ -32,6 +32,7 @@ from canaimainstalador.translator import gettext_install
 import gobject
 import gtk
 from canaimainstalador.clases.keyboard import Keyboard
+from canaimainstalador.clases.common import ProcessGenerator
 
 
 gettext_install()
@@ -138,6 +139,7 @@ layout"))
     def _cmb_kbd_changed(self, widget=None):
         ''
         self.keyboard = widget.get_active_object().name
+        ProcessGenerator('setxkbmap {0} -model pc105'.format(self.keyboard))
         print self.keyboard
 
     def reset_form(self):

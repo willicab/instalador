@@ -77,7 +77,7 @@ class Wizard(gtk.Window):
         self.banner.set_from_file(banner)
         self.banner.set_size_request(ancho, self.banner_h)
 
-        # Creo el contenedor del banner
+        # Creo el contenedor del banner y el texto del banner
         banner_container = gtk.Fixed()
         banner_container.set_size_request(self.banner_w, self.banner_h)
 
