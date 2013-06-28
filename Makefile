@@ -225,3 +225,6 @@ update-po-files: gen-pot-template
 gen-mo-files:
 	mkdir -p locale/es/LC_MESSAGES/
 	msgfmt locale/es.po -o locale/es/LC_MESSAGES/canaimainstalador.mo
+
+clean-mo-files:
+	rm -r locale/es/
