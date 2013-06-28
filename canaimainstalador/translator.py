@@ -32,7 +32,7 @@ lc_dir = os.path.join(os.path.dirname(__file__), '..', 'locale')
 if os.path.exists(lc_dir):
     GETTEXT_LOCALEDIR = lc_dir
 else:
-    GETTEXT_LOCALEDIR = ''  # Directorio por defecto
+    GETTEXT_LOCALEDIR = '/usr/share/locale'  # Directorio por defecto
 
 GETTEXT_DOMAIN = "canaimainstalador"
 
