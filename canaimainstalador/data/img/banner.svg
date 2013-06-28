@@ -14,7 +14,7 @@
    height="80"
    id="svg2"
    sodipodi:version="0.32"
-   inkscape:version="0.47 r22583"
+   inkscape:version="0.48.3.1 r9886"
    sodipodi:docname="banner.svg"
    inkscape:output_extension="org.inkscape.output.svg.inkscape"
    version="1.0"
@@ -5017,10 +5017,10 @@
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="1366"
-     inkscape:window-height="712"
+     inkscape:window-width="1280"
+     inkscape:window-height="976"
      inkscape:window-x="0"
-     inkscape:window-y="25"
+     inkscape:window-y="26"
      showguides="true"
      inkscape:guide-bbox="true"
      inkscape:window-maximized="1" />
@@ -5176,26 +5176,26 @@
     <text
        sodipodi:linespacing="97.000003%"
        id="text3125"
-       y="544.67633"
-       x="402.90936"
+       y="399.75845"
+       x="407.87231"
        style="font-size:11.70254326px;font-style:normal;font-weight:normal;text-align:center;line-height:97.00000286%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
        xml:space="preserve"><tspan
          id="tspan3129"
          style="font-size:36px;font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:97.00000286%;writing-mode:lr-tb;text-anchor:start;font-family:Century Schoolbook L;-inkscape-font-specification:Century Schoolbook L Bold Italic"
-         y="544.67633"
-         x="402.90936"
+         y="399.75845"
+         x="407.87231"
          sodipodi:role="line">Instalación de Canaima</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-weight:normal;line-height:100%;letter-spacing:0px;word-spacing:0px;fill:#616161;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
-       x="404.95337"
-       y="562.70502"
+       x="405.94595"
+       y="412.82419"
        id="text4410"
        sodipodi:linespacing="100%"><tspan
          sodipodi:role="line"
          id="tspan4412"
-         x="404.95337"
-         y="562.70502"
+         x="405.94595"
+         y="412.82419"
          style="font-size:16px;font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#616161;fill-opacity:1;font-family:Century Schoolbook L;-inkscape-font-specification:Century Schoolbook L Bold Italic">Sembrando  libertades para potenciar comunidades</tspan></text>
     <g
        transform="matrix(0.48540346,0,0,0.48540346,320.67729,505.45237)"

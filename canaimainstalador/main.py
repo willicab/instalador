@@ -42,6 +42,7 @@ import Image
 import gtk
 import re
 from canaimainstalador.translator import gettext_install
+import pango
 
 
 gettext_install()
@@ -75,7 +76,23 @@ class Wizard(gtk.Window):
         self.banner = gtk.Image()
         self.banner.set_from_file(banner)
         self.banner.set_size_request(ancho, self.banner_h)
-        self.c_principal.put(self.banner, 0, 0)
+
+        # Creo el contenedor del banner
+        banner_container = gtk.Fixed()
+        banner_container.set_size_request(self.banner_w, self.banner_h)
+
+        attr = pango.AttrList()
+        attr.insert(pango.AttrSize(25000, 0, -1))
+        attr.insert(pango.AttrStyle(pango.STYLE_ITALIC, 0, -1))
+        attr.insert(pango.AttrWeight(pango.WEIGHT_BOLD, 0, -1))
+
+        lbl1 = gtk.Label(_("Canaima Installation"))
+        lbl1.set_attributes(attr)
+
+        banner_container.put(self.banner, 0, 0)
+        banner_container.put(lbl1, 100, 10)
+
+        self.c_principal.put(banner_container, 0, 0)
 
         # Creo el contenedor de los pasos
         self.c_pasos = gtk.VBox()
