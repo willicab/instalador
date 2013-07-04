@@ -51,8 +51,7 @@ class PasoPartManual(gtk.VBox):
         label = gtk.Label(_("""Use the following table to modify disk \
 partitions to your liking. We recommend:
 - Establish a minimum of {0} for the root partition (/).
-- Create a swap space.""")
-.format(humanize(ESPACIO_TOTAL)))
+- Create a swap space.""").format(humanize(ESPACIO_TOTAL)))
         label.set_line_wrap(False)
         label.set_justify(gtk.JUSTIFY_LEFT)
         label.set_alignment(0, 0)

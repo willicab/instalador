@@ -32,7 +32,7 @@ from canaimainstalador.clases.particiones import Particiones
 from canaimainstalador.config import ESPACIO_TOTAL, CFG, FSPROGS
 from canaimainstalador.translator import gettext_install
 import gtk
-from canaimainstalador.mod_accesible import atk_acc, atk_acc_vd
+from canaimainstalador.mod_accesible import atk_acc, atk_label
 
 
 gettext_install()
@@ -82,16 +82,10 @@ Canaima:"))
         self.lbl4.set_size_request(690, 90)
         self.lbl4.set_alignment(0, 0)
         self.lbl4.set_line_wrap(True)
+        atk_label(self.lbl4)
         self.put(self.lbl4, 0, 225)
 
         atk_acc(self.cmb_metodo, self.lbl2)
-        #======================================================================
-        # # Mensaje para el lector de pantalla
-        # acc_msg = "{0} {1} {2}".format(self.lbl2.get_text(),
-        #                                      widget.get_active_text(),
-        #                                      msg)
-        # atk_acc_vd(self.cmb_metodo, acc_msg)
-        #======================================================================
 
         self.cmb_discos.set_active(0)
 

@@ -46,6 +46,7 @@ import webkit
 from canaimainstalador.clases import keyboard, i18n
 from canaimainstalador.clases.i18n import install_language_pack
 from canaimainstalador.translator import gettext_install
+from canaimainstalador.mod_accesible import atk_acc_vd
 
 
 gettext_install()
@@ -121,8 +122,8 @@ class install_window(object):
         message.set_attributes(attr)
         box.put(message, 50, 200)
 
-        str_intro = 'You can keep trying Canaima pressing "Restart Later" or \
-enjoy your installed operating system by pressing "Restart Now".'
+        str_intro = _('You can keep trying Canaima pressing "Restart Later" \
+or enjoy your installed operating system by pressing "Restart Now".')
         intro = gtk.Label(str_intro)
         intro.set_size_request(640, 40)
         intro.set_alignment(0, 0)
@@ -153,6 +154,9 @@ enjoy your installed operating system by pressing "Restart Now".'
         button_b.set_label(_('Restart Now'))
         button_b.connect('clicked', self.reboot)
         box.put(button_b, 540, 440)
+
+        box.set_flags(gtk.CAN_FOCUS)
+        atk_acc_vd(box, str_message + ". " + str_intro)
 
         window.show_all()
 
@@ -547,5 +551,5 @@ idioma"
 
     button_a.show()
     button_b.show()
-    label.hide()
-    view.hide()
+    label.get_parent().remove(label)
+    view.get_parent().remove(view)

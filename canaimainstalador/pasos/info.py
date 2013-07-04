@@ -29,75 +29,101 @@
 import gtk
 import pango
 from canaimainstalador.translator import gettext_install
+from canaimainstalador.mod_accesible import atk_acc_vd
 
 
 gettext_install()
 
 
 class PasoInfo(gtk.Fixed):
+
+    msg_titulo = None
+    msg_nombre = None
+    msg_usuario = None
+    msg_maquina = None
+    msg_metodo = None
+    msg_tipo = None
+    msg_teclado = None
+    msg_final = None
+
     def __init__(self, CFG):
         gtk.Fixed.__init__(self)
 
         if CFG['oem'] == False:
-            msg_nombre = _('● Your full name will be set to "{0}".') \
+            msg_nombre = _('- Your full name will be set to "{0}".') \
             .format(CFG['nombre'])
-            msg_usuario = _('● I will create a user account named "{0}".') \
+            msg_usuario = _('- An user account named "{0}" will be created.') \
             .format(CFG['usuario'])
-            msg_maquina = _('● I will use "{0}" to identify your computer on \
-the local network.').format(CFG['maquina'])
+            msg_maquina = _('- The machine name "{0}" will be used to \
+identify your computer on the local network.').format(CFG['maquina'])
         else:
-            msg_nombre = _('● Your full name will be required on the first \
+            msg_nombre = _('- Your full name will be required on the first \
 login.')
-            msg_usuario = _('● Your username will be required in the first \
-login')
-            msg_maquina = _('● The machine name will be required in the first \
-login')
+            msg_usuario = _('- Your username will be required in the first \
+login.')
+            msg_maquina = _('- The machine name will be required in the first \
+login.')
 
         if CFG['metodo']['tipo'] == 'MANUAL':
-            msg_metodo = _('● The installation must follow the directions \
+            msg_metodo = _('- The installation must follow the directions \
 provided in the manual partitioning.')
 
         elif CFG['metodo']['tipo'] == 'TODO':
-            msg_metodo = _('● The installation will use the entire disk  \
+            msg_metodo = _('- The installation will use the entire disk  \
 "{0}".').format(CFG['metodo']['disco'][0])
 
         elif CFG['metodo']['tipo'] == 'LIBRE':
-            msg_metodo = _('● The installer will use existing free space.')
+            msg_metodo = _('- The installation will use existing free space.')
 
         elif CFG['metodo']['tipo'] == 'REDIM':
-            msg_metodo = _('● The installer will release space resizing an \
+            msg_metodo = _('- The installation will release space resizing an \
 existing partition.')
 
         if CFG['metodo']['tipo'] != 'MANUAL':
             if CFG['forma'] == 'ROOT:SWAP:LIBRE' or \
                 CFG['forma'] == 'PART:ROOT:SWAP':
-                msg_tipo = '● La instalación se realizará en una partición \
-para el sistema y otra para la swap.'
+                msg_tipo = _('- The installation will take place in a \
+partition for the system and other for swap.')
 
             elif CFG['forma'] == 'ROOT:HOME:SWAP:LIBRE' or \
                 CFG['forma'] == 'PART:ROOT:HOME:SWAP':
-                msg_tipo = _('● The installation will take place in several \
+                msg_tipo = _('- The installation will take place in several \
 partitions: "Root (/)", "/home" and "swap".')
 
             elif CFG['forma'] == 'BOOT:ROOT:HOME:SWAP:LIBRE' or \
                 CFG['forma'] == 'PART:BOOT:ROOT:HOME:SWAP':
-                msg_tipo = _('● The installation will take place in several \
+                msg_tipo = _('- The installation will take place in several \
 partitions: "/boot", "Root (/)", "/home" and "swap".')
 
             elif CFG['forma'] == 'BOOT:ROOT:VAR:USR:HOME:SWAP:LIBRE' or \
                 CFG['forma'] == 'PART:BOOT:ROOT:VAR:USR:HOME:SWAP':
-                msg_tipo = _('● The installation will take place in several \
+                msg_tipo = _('- The installation will take place in several \
 partitions: "/boot", "Root (/)", "/var", "/usr", "/home" y "swap".')
 
         else:
             msg_tipo = ''
 
-        msg_teclado = _('● "{0}" will be used as keyboard layout.') \
+        msg_teclado = _('- "{0}" will be used as keyboard layout.') \
         .format(CFG['keyboard'])
+
+        msg_titulo = _('All ready!')
         msg_final = _('Press "Next" to start installing the system. After \
 this step you can not stop the installation, so make sure your data is \
 correct.')
-        msg_titulo = _('All ready!')
+
+        msg_confirm = """
+{}
+{}
+{}
+{}
+{}
+{}
+
+{}
+""".format(msg_usuario, msg_nombre, msg_teclado, msg_maquina, \
+           msg_metodo, msg_tipo, msg_final)
+        # Limpiamos texto de las varaiables vacias.
+        msg_confirm.replace("\nNone", "")
 
         attr = pango.AttrList()
         size = pango.AttrSize(20000, 0, -1)
@@ -108,46 +134,13 @@ correct.')
         self.lbltitulo.set_alignment(0, 0)
         self.lbltitulo.set_attributes(attr)
         self.lbltitulo.set_line_wrap(True)
-        self.put(self.lbltitulo, 50, 90)
+        self.put(self.lbltitulo, 20, 60)
 
-        self.lblusuario = gtk.Label(msg_usuario)
-        self.lblusuario.set_size_request(640, 20)
-        self.lblusuario.set_alignment(0, 0)
+        self.lblusuario = gtk.Label()
+        self.lblusuario.set_markup(msg_confirm)
+        self.lblusuario.set_size_request(640, -1)
         self.lblusuario.set_line_wrap(True)
-        self.put(self.lblusuario, 50, 130)
+        self.put(self.lblusuario, 20, 100)
 
-        self.lblnombre = gtk.Label(msg_nombre)
-        self.lblnombre.set_size_request(640, 20)
-        self.lblnombre.set_alignment(0, 0)
-        self.lblnombre.set_line_wrap(True)
-        self.put(self.lblnombre, 50, 150)
-
-        self.lblteclado = gtk.Label(msg_teclado)
-        self.lblteclado.set_size_request(640, 20)
-        self.lblteclado.set_alignment(0, 0)
-        self.lblteclado.set_line_wrap(True)
-        self.put(self.lblteclado, 50, 170)
-
-        self.lblmaquina = gtk.Label(msg_maquina)
-        self.lblmaquina.set_size_request(640, 20)
-        self.lblmaquina.set_alignment(0, 0)
-        self.lblmaquina.set_line_wrap(True)
-        self.put(self.lblmaquina, 50, 190)
-
-        self.lblmetodo = gtk.Label(msg_metodo)
-        self.lblmetodo.set_size_request(640, 20)
-        self.lblmetodo.set_alignment(0, 0)
-        self.lblmetodo.set_line_wrap(True)
-        self.put(self.lblmetodo, 50, 210)
-
-        self.lbltipo = gtk.Label(msg_tipo)
-        self.lbltipo.set_size_request(640, 20)
-        self.lbltipo.set_alignment(0, 0)
-        self.lbltipo.set_line_wrap(True)
-        self.put(self.lbltipo, 50, 230)
-
-        self.lblmsg = gtk.Label(msg_final)
-        self.lblmsg.set_size_request(640, 50)
-        self.lblmsg.set_alignment(0, 0)
-        self.lblmsg.set_line_wrap(True)
-        self.put(self.lblmsg, 50, 280)
+        self.set_flags(gtk.CAN_FOCUS)
+        atk_acc_vd(self, msg_titulo + ". " + msg_confirm)
