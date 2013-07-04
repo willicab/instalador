@@ -197,6 +197,9 @@ class Bienvenida():
 
     def init(self, CFG):
         CFG['w'].next('Bienvenida', Bienvenida, (CFG), PasoBienvenida(CFG))
+        # Otorgamos el foco inicialmente al panel para que el lector de 
+        # pantalla pueda leer el texto de introducción.
+        CFG['w'].pasos['Bienvenida'].grab_focus()
 
     def siguiente(self, CFG):
         CFG['w'].next('Teclado', Teclado, (CFG), PasoTeclado(CFG))

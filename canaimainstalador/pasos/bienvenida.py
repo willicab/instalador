@@ -29,6 +29,7 @@
 import gtk
 import pango
 from canaimainstalador.translator import gettext_install
+from canaimainstalador.mod_accesible import atk_acc_vd
 
 
 gettext_install()
@@ -42,12 +43,6 @@ class PasoBienvenida(gtk.Fixed):
         msg_intro = _("With this wizard you can easily install Canaima \
 GNU/Linux on your computer. We invite you to follow the instructions \
 displayed on screen.")
-#==============================================================================
-#        msg_disco = '● 6GB de espacio en disco (como mínimo).'
-#        msg_memoria = '● 384MB de memoria RAM (como mínimo).'
-#        msg_fin = 'Lo invitamos a seguir las instrucciones que se muestran \
-# en pantalla.'
-#==============================================================================
 
         attr = pango.AttrList()
         size = pango.AttrSize(20000, 0, -1)
@@ -58,30 +53,16 @@ displayed on screen.")
         self.lbltitulo.set_alignment(0, 0)
         self.lbltitulo.set_attributes(attr)
         self.lbltitulo.set_line_wrap(True)
+        #self.lbltitulo.set_selectable(True)
         self.put(self.lbltitulo, 50, 90)
 
         self.lblintro = gtk.Label(msg_intro)
         self.lblintro.set_size_request(640, 40)
         self.lblintro.set_alignment(0, 0)
         self.lblintro.set_line_wrap(True)
+        #self.lblintro.set_selectable(True)
         self.put(self.lblintro, 50, 170)
 
-#==============================================================================
-#        self.lbldisco = gtk.Label(msg_disco)
-#        self.lbldisco.set_size_request(640, 20)
-#        self.lbldisco.set_alignment(0, 0)
-#        self.lblintro.set_line_wrap(True)
-#        self.put(self.lbldisco, 50, 220)
-#
-#        self.lblmemoria = gtk.Label(msg_memoria)
-#        self.lblmemoria.set_size_request(640, 20)
-#        self.lblmemoria.set_alignment(0, 0)
-#        self.lblmemoria.set_line_wrap(True)
-#        self.put(self.lblmemoria, 50, 240)
-#
-#        self.lblfin = gtk.Label(msg_fin)
-#        self.lblfin.set_size_request(640, 20)
-#        self.lblfin.set_alignment(0, 0)
-#        self.lblfin.set_line_wrap(True)
-#        self.put(self.lblfin, 50, 270)
-#==============================================================================
+        self.set_flags(gtk.CAN_FOCUS)
+        atk_acc_vd(self, msg_titulo + " " + msg_intro)
+        self.grab_focus()
