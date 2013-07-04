@@ -33,6 +33,7 @@ import gobject
 import gtk
 from canaimainstalador.clases.keyboard import Keyboard
 from canaimainstalador.clases.common import ProcessGenerator
+from canaimainstalador.mod_accesible import atk_acc
 
 
 gettext_install()
@@ -71,18 +72,21 @@ class PasoTeclado(gtk.VBox):
         self.pack_start(lbl_lang, False, False)
         self._cmb_lang = ComboBoxObject()
         self._build_cmb_lang()
+        atk_acc(self._cmb_lang, lbl_lang)
         self.pack_start(self._cmb_lang, False, False)
 
         lbl_tz = gtk.Label(_("Timezone"))
         self.pack_start(lbl_tz, False, False)
         self._cmb_tz = ComboBoxObject()
         self._build_cmb_tz()
+        atk_acc(self._cmb_tz, lbl_tz)
         self.pack_start(self._cmb_tz, False, False)
 
         lbl_keyboard = gtk.Label(_("Keyboard"))
         self.pack_start(lbl_keyboard, False, False)
         self._cmb_kbd = ComboBoxObject()
         self._build_cmb_keyboard()
+        atk_acc(self._cmb_kbd, lbl_keyboard)
         self.pack_start(self._cmb_kbd, False, False)
 
         hsep1 = gtk.HSeparator()
@@ -98,6 +102,7 @@ class PasoTeclado(gtk.VBox):
 layout"))
         vbox1.pack_start(lbl2, False, False)
         txt_prueba = gtk.Entry()
+        atk_acc(txt_prueba, lbl2)
         vbox1.pack_start(txt_prueba, False, False)
         self.pack_end(vbox1, False, False)
 

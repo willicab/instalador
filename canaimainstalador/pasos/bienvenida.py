@@ -65,4 +65,3 @@ displayed on screen.")
 
         self.set_flags(gtk.CAN_FOCUS)
         atk_acc_vd(self, msg_titulo + " " + msg_intro)
-        self.grab_focus()
