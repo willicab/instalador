@@ -1,16 +1,3 @@
-canaima-instalador (2.0.2+dev20130514172715-1~1.gbp699426) UNRELEASED; urgency=low
-
-  ** SNAPSHOT build @69942662fa54c82606a73736c20b7b58569348f2 **
-
-  * [18c7b21] Corrigiendo errores y advertencias de lintian
-  * [0e75de8] Agregando ruta de licencia en copyrigth
-  * [7012b52] Cambiando los proceso de pos y pre instalación
-  * [f457db1] Corrigiendo ejecución del postrm
-  * [d2cd5da] Agregando dependencia con canaima-l10n
-  * [6994266] Agregando dependencia a gettext
-
- -- Erick Birbe <erickcion@gmail.com>  Fri, 28 Jun 2013 17:31:35 -0430
-
 canaima-instalador (2.0.1-1) stable; urgency=low
 
   [ Luis Alejandro Martínez Faneyth ]
