@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: canaima-instalador\n"
 "Report-Msgid-Bugs-To: desarrolladores@canaima.softwarelibre.gob.ve\n"
 "POT-Creation-Date: 2013-06-27 17:04-0430\n"
-"PO-Revision-Date: 2013-06-27 17:11-0430\n"
+"PO-Revision-Date: 2013-07-12 11:41-0430\n"
 "Last-Translator: Erick Birbe <erickcion@gmail.com>\n"
 "Language-Team: Español; Castellano <desarrolladores@canaima.softwarelibre."
 "gob.ve>\n"
@@ -715,7 +715,7 @@ msgstr "Primaria"
 
 #: canaimainstalador/translator.py:63
 msgid "Extended"
-msgstr "Extandida"
+msgstr "Extendida"
 
 #: canaimainstalador/translator.py:64
 msgid "Logic"
@@ -727,4 +727,4 @@ msgstr "Desconocida"
 
 #: test/translation/translation.py:22 test/translation/translation.py:24
 msgid "Hola"
-msgstr ""
+msgstr "Hellouu"
