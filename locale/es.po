@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: canaima-instalador\n"
 "Report-Msgid-Bugs-To: desarrolladores@canaima.softwarelibre.gob.ve\n"
-"POT-Creation-Date: 2013-07-04 14:10-0430\n"
-"PO-Revision-Date: 2013-07-04 14:11-0430\n"
+"POT-Creation-Date: 2013-07-10 14:52-0430\n"
+"PO-Revision-Date: 2013-07-10 16:03-0430\n"
 "Last-Translator: Erick Birbe <erickcion@gmail.com>\n"
 "Language-Team: Español; Castellano <desarrolladores@canaima.softwarelibre."
 "gob.ve>\n"
@@ -283,8 +283,8 @@ msgid ""
 "- The installation will take place in a partition for the system and other "
 "for swap."
 msgstr ""
-"- La instalación se realizará en varias particiones: \"Raiz (/)\", \"/home\" "
-"y \"swap\"."
+"- La instalación se realizará en una partición para el sistema y otra de "
+"intercambio."
 
 #: canaimainstalador/pasos/info.py:90
 msgid ""
@@ -346,6 +346,173 @@ msgstr "Reiniciar Luego"
 #: canaimainstalador/pasos/instalacion.py:154
 msgid "Restart Now"
 msgstr "Reiniciar Ahora"
+
+#: canaimainstalador/pasos/instalacion.py:312
+msgid "Not found squashfs image."
+msgstr "No se encontró la imagen squashfs."
+
+#: canaimainstalador/pasos/instalacion.py:316
+#: canaimainstalador/pasos/instalacion.py:321
+msgid "An error occurred unmounting the partitions."
+msgstr "Ocurrió un error desmontando las particiones."
+
+#: canaimainstalador/pasos/instalacion.py:324
+msgid "Creating partitions in the disk ..."
+msgstr "Creando particiones en el disco ..."
+
+#: canaimainstalador/pasos/instalacion.py:340
+msgid "An error occurred creating a partition."
+msgstr "Ocurrió un error creando una partición."
+
+#: canaimainstalador/pasos/instalacion.py:352
+msgid "An error occurred removing a partition."
+msgstr "Ocurrió un error removiendo una partición."
+
+#: canaimainstalador/pasos/instalacion.py:363
+msgid "An error occurred resizing a partition."
+msgstr "Ocurrió un error redimensionando una partición."
+
+#: canaimainstalador/pasos/instalacion.py:369
+msgid "An error occurred formatting a partition."
+msgstr "Ocurrió un error formateando una partición."
+
+#: canaimainstalador/pasos/instalacion.py:407
+#: canaimainstalador/pasos/instalacion.py:414
+#: canaimainstalador/pasos/instalacion.py:423
+#: canaimainstalador/pasos/instalacion.py:435
+msgid "An error occurred mounting the filesystem"
+msgstr "Ocurrió un error montando el sistema de archivos."
+
+#: canaimainstalador/pasos/instalacion.py:418
+msgid "An error occurred activating the swap partition"
+msgstr "Ocurrió un error activando la partición swap."
+
+#: canaimainstalador/pasos/instalacion.py:421
+#: canaimainstalador/pasos/instalacion.py:433
+msgid "Mounting the filesystem ..."
+msgstr "Montando el sistema de archivos ..."
+
+#: canaimainstalador/pasos/instalacion.py:426
+msgid "Copying files to disk ..."
+msgstr "Copiando archivos al disco ..."
+
+#: canaimainstalador/pasos/instalacion.py:430
+msgid "An error occurred copying files to disk."
+msgstr "Ocurrió un error copiando los archivos al disco."
+
+#: canaimainstalador/pasos/instalacion.py:439
+msgid "Configuring system files ..."
+msgstr "Configurando archivos del sistema ..."
+
+#: canaimainstalador/pasos/instalacion.py:441
+#: canaimainstalador/pasos/instalacion.py:444
+msgid "An error occurred configuring the system files"
+msgstr "Ocurrió un error configurando los archivos del sistema."
+
+#: canaimainstalador/pasos/instalacion.py:447
+msgid "Configuring network interfaces ..."
+msgstr "Configurando interfaces de red ..."
+
+#: canaimainstalador/pasos/instalacion.py:450
+msgid "An error occurred creating file /etc/hostname"
+msgstr "Ocurrió un error creando el archivo /etc/hostname"
+
+#: canaimainstalador/pasos/instalacion.py:453
+msgid "An error occurred creating file /etc/hosts"
+msgstr "Ocurrió un error creando el archivo /etc/hosts"
+
+#: canaimainstalador/pasos/instalacion.py:457
+msgid "An error occurred creating file /etc/network/interfaces"
+msgstr "Ocurrió un error creando el archivo /etc/network/interfaces"
+
+#: canaimainstalador/pasos/instalacion.py:460
+msgid "Registering partitions in the system ..."
+msgstr "Registrando particiones en el sistema ..."
+
+#: canaimainstalador/pasos/instalacion.py:463
+msgid "An error occurred creating file /etc/fstab"
+msgstr "Ocurrió un error creando el archivo /etc/fstab"
+
+#: canaimainstalador/pasos/instalacion.py:468
+msgid "Installing accessibility components in GDM ..."
+msgstr "Instalando los componentes de accesibilidad en GDM ..."
+
+#: canaimainstalador/pasos/instalacion.py:470
+msgid "An error occurred activating accesibility."
+msgstr "Ocurrió un error activando la accesibilidad."
+
+#: canaimainstalador/pasos/instalacion.py:474
+msgid "Configuring additional details on the system ..."
+msgstr "Configurando detalles adicionales en el sistema ..."
+
+#: canaimainstalador/pasos/instalacion.py:476
+msgid "An error occurred reconfiguring a package."
+msgstr "Ocurrió un error reconfigurando un paquete."
+
+#: canaimainstalador/pasos/instalacion.py:480
+msgid "Configuring additional language packages ..."
+msgstr "Configurando paquetes adicionales de idioma ..."
+
+#: canaimainstalador/pasos/instalacion.py:493
+msgid "Installing OEM characteristics ..."
+msgstr "Instalando características OEM ..."
+
+#: canaimainstalador/pasos/instalacion.py:496
+msgid "An error occurred installing a package"
+msgstr "Ocurrió un error instalando un paquete."
+
+#: canaimainstalador/pasos/instalacion.py:505
+msgid "Creating system users ..."
+msgstr "Creando los usuarios del sistema ..."
+
+#: canaimainstalador/pasos/instalacion.py:509
+msgid "An error occurred creating system user"
+msgstr "Ocurrió un error creando los usuarios del sistema."
+
+#: canaimainstalador/pasos/instalacion.py:512
+msgid "Removing temporary data of installation ..."
+msgstr "Removiendo datos temporales de la instalación ..."
+
+#: canaimainstalador/pasos/instalacion.py:514
+msgid "An error occurred removing a package"
+msgstr "Ocurrió un error removiendo un paquete."
+
+#: canaimainstalador/pasos/instalacion.py:517
+msgid "Installing Bootloader ..."
+msgstr "Instalando el gestor de arranque .."
+
+#: canaimainstalador/pasos/instalacion.py:519
+msgid "An error occurred preseeding answers in debconf."
+msgstr "Ocurrió un error pre-sembrando las respuestas en debconf."
+
+#: canaimainstalador/pasos/instalacion.py:522
+msgid "An error occurred installing a package."
+msgstr "Ocurrió un error instalando un paquete."
+
+#: canaimainstalador/pasos/instalacion.py:526
+msgid "An error occurred updating BURG."
+msgstr "Ocurrió un error actualizado el BURG."
+
+#: canaimainstalador/pasos/instalacion.py:529
+msgid "Configuring system boot ..."
+msgstr "Configurando el arranque del sistema ..."
+
+#: canaimainstalador/pasos/instalacion.py:535
+msgid "An error occurred generating boot image"
+msgstr "Ocurrió un error generando la imagen de arranque."
+
+#: canaimainstalador/pasos/instalacion.py:540
+msgid "An error occurred updating the boot image."
+msgstr "Ocurrió un error actualizando la imagen de arranque."
+
+#: canaimainstalador/pasos/instalacion.py:544
+msgid "Umounting filesistems ..."
+msgstr "Desmontando el sistema de archivos ..."
+
+#: canaimainstalador/pasos/instalacion.py:546
+#: canaimainstalador/pasos/instalacion.py:549
+msgid "An error occurred umounting partitions."
+msgstr "Ocurrió un error desmontando las particiones."
 
 #: canaimainstalador/pasos/metodo.py:52
 msgid "Select the disk where you want to install Canaima:"
@@ -517,7 +684,7 @@ msgstr "Máximo"
 
 #: canaimainstalador/pasos/teclado.py:71
 msgid "Language"
-msgstr "Lenguaje"
+msgstr "Idioma"
 
 #: canaimainstalador/pasos/teclado.py:78
 msgid "Timezone"
@@ -602,120 +769,3 @@ msgstr "Desconocida"
 #: test/translation/translation.py:22 test/translation/translation.py:24
 msgid "Hola"
 msgstr "Hello"
-
-#~ msgid "Not found squashfs image."
-#~ msgstr "No se encontró la imagen squashfs."
-
-#~ msgid "An error occurred unmounting the partitions."
-#~ msgstr "Ocurrió un error desmontando las particiones."
-
-#~ msgid "An error occurred creating a partition."
-#~ msgstr "Ocurrió un error creando una partición."
-
-#~ msgid "An error occurred removing a partition."
-#~ msgstr "Ocurrió un error removiendo una partición."
-
-#~ msgid "An error occurred resizing a partition."
-#~ msgstr "Ocurrió un error redimensionando una partición."
-
-#~ msgid "An error occurred formatting a partition."
-#~ msgstr "Ocurrió un error formateando una partición."
-
-#~ msgid "An error occurred mounting the filesystem"
-#~ msgstr "Ocurrió un error montando el sistema de archivos."
-
-#~ msgid "An error occurred activating the swap partition"
-#~ msgstr "Ocurrió un error activando la partición swap."
-
-#~ msgid "Mounting the filesystem ..."
-#~ msgstr "Montando el sistema de archivos ..."
-
-#~ msgid "Copying files to disk ..."
-#~ msgstr "Copiando archivos al disco ..."
-
-#~ msgid "An error occurred copying files to disk."
-#~ msgstr "Ocurrió un error copiando los archivos al disco."
-
-#~ msgid "Configuring system files ..."
-#~ msgstr "Configurando archivos del sistema ..."
-
-#~ msgid "An error occurred configuring the system files"
-#~ msgstr "Ocurrió un error configurando los archivos del sistema."
-
-#~ msgid "Configuring network interfaces ..."
-#~ msgstr "Configurando interfaces de red ..."
-
-#~ msgid "An error occurred creating file /etc/hostname"
-#~ msgstr "Ocurrió un error creando el archivo /etc/hostname"
-
-#~ msgid "An error occurred creating file /etc/hosts"
-#~ msgstr "Ocurrió un error creando el archivo /etc/hosts"
-
-#~ msgid "An error occurred creating file /etc/network/interfaces"
-#~ msgstr "Ocurrió un error creando el archivo /etc/network/interfaces"
-
-#~ msgid "Registering partitions in the system ..."
-#~ msgstr "Registrando particiones en el sistema ..."
-
-#~ msgid "An error occurred creating file /etc/fstab"
-#~ msgstr "Ocurrió un error creando el archivo /etc/fstab"
-
-#~ msgid "Installing accessibility components in GDM ..."
-#~ msgstr "Instalando los componentes de accesibilidad en GDM ..."
-
-#~ msgid "An error occurred activating accesibility."
-#~ msgstr "Ocurrió un error activando la accesibilidad."
-
-#~ msgid "Configuring additional details on the system ..."
-#~ msgstr "Configurando detalles adicionales en el sistema ..."
-
-#~ msgid "An error occurred reconfiguring a package."
-#~ msgstr "Ocurrió un error reconfigurando un paquete."
-
-#~ msgid "Configuring additional language packages ..."
-#~ msgstr "Configurando paquetes adicionales de idioma ..."
-
-#~ msgid "Installing OEM characteristics ..."
-#~ msgstr "Instalando características OEM ..."
-
-#~ msgid "An error occurred installing a package"
-#~ msgstr "Ocurrió un error instalando un paquete."
-
-#~ msgid "Creating system users ..."
-#~ msgstr "Creando los usuarios del sistema ..."
-
-#~ msgid "An error occurred creating system user"
-#~ msgstr "Ocurrió un error creando los usuarios del sistema."
-
-#~ msgid "Removing temporary data of installation ..."
-#~ msgstr "Removiendo datos temporales de la instalación ..."
-
-#~ msgid "An error occurred removing a package"
-#~ msgstr "Ocurrió un error removiendo un paquete."
-
-#~ msgid "Installing Bootloader ..."
-#~ msgstr "Instalando el gestor de arranque .."
-
-#~ msgid "An error occurred preseeding answers in debconf."
-#~ msgstr "Ocurrió un error pre-sembrando las respuestas en debconf."
-
-#~ msgid "An error occurred installing a package."
-#~ msgstr "Ocurrió un error instalando un paquete."
-
-#~ msgid "An error occurred updating BURG."
-#~ msgstr "Ocurrió un error actualizado el BURG."
-
-#~ msgid "Configuring system boot ..."
-#~ msgstr "Configurando el arranque del sistema ..."
-
-#~ msgid "An error occurred generating boot image"
-#~ msgstr "Ocurrió un error generando la imagen de arranque."
-
-#~ msgid "An error occurred updating the boot image."
-#~ msgstr "Ocurrió un error actualizando la imagen de arranque."
-
-#~ msgid "Umounting filesistems ..."
-#~ msgstr "Desmontando el sistema de archivos ..."
-
-#~ msgid "An error occurred umounting partitions."
-#~ msgstr "Ocurrió un error desmontando las particiones."

@@ -321,7 +321,7 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
         UserMessageError(_('An error occurred unmounting the partitions.'),
                          window, bindlist, mountlist)
 
-    label.set_text('Creating partitions in the disk ...')
+    label.set_text(_('Creating partitions in the disk ...'))
     for a in acciones:
         accion = a[0]
         montaje = a[2]
