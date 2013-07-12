@@ -266,34 +266,41 @@ def preseed_debconf_values(mnt, debconflist):
         return False
 
 
-def package_path(pkg_name, pkg_source=None, as_list=False):
+def _get_source_pkg_char(source_pkg):
+    if len(source_pkg) >= 4 and source_pkg[:3] == 'lib':
+        char = source_pkg[:4]
+    else:
+        char = source_pkg[0]
+
+    return char
+
+
+def package_path(pkg_name, source_pkg=None, as_list=False):
     """Retorna la ruta donde deberia estar se almacenado un paquete en el pool
     del disco de instalacion, si el paramero as_list es True, entonces retorna
     la ruta en formato adaptado a la funcion common.instalar_paquetes()"""
 
     pool = 'pool/main'
 
-    if pkg_source:
-        if len(pkg_source) >= 4 and pkg_source[:3] == 'lib':
-            letter = pkg_source[:4]
-        else:
-            letter = pkg_source[0]
+    if source_pkg:
+        source_char = _get_source_pkg_char(source_pkg)
     else:
-        letter = '*'
-        pkg_source = '*'
+        source_char = '*'
+        source_pkg = '*'
 
     live_path = get_live_path()
-    aux_pool = '{0}/{1}/{2}'.format(pool, letter, pkg_source)
+    aux_pool = '{0}/{1}/{2}'.format(pool, source_char, source_pkg)
     pkg_path = "{0}/{1}/{2}_*.deb".format(live_path, aux_pool, pkg_name)
 
     files = glob.glob(pkg_path)
-    if pkg_source == '*'and len(files) > 0:
+
+    if source_pkg == '*' and len(files) > 0:
         pkg_path = files[0]
-        pkg_source = pkg_path.split('/')[-2]
-        letter = pkg_source[0]
+        source_pkg = pkg_path.split('/')[-2]
+        source_char = _get_source_pkg_char(source_pkg)
 
     if as_list:
-        pool_path = '{0}/{1}/{2}'.format(pool, letter, pkg_source)
+        pool_path = '{0}/{1}/{2}'.format(pool, source_char, source_pkg)
         pkg_path = [live_path + '/' + pool_path, pkg_name]
 
     return pkg_path
@@ -1024,6 +1031,6 @@ if __name__ == "__main__":
 #    print package_path('canaima-primeros-pasos')
 #    print is_package_in_pool('canaima-primeros-pasos')
 #==============================================================================
-    pp = package_path("canaima-primeros-pasositos", as_list=True)
+    pp = package_path("libreoffice-help-es", as_list=True)
     print pp
     print instalar_paquetes("/mnt", "/tmp", [pp])
