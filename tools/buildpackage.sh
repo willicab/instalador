@@ -81,7 +81,7 @@ NEWDEBVERSION="${NEWRELVERSION}-${NEWREV}"
 
 WARNING "Generating Debian changelog ..."
 if [ "${TYPE}" = "final-release" ]; then
-	OPTIONS="-kE78DAA2E -tc --git-tag --git-retag"
+	OPTIONS="-tc --git-tag --git-retag"
 	git dch --new-version="${NEWDEBVERSION}" --release --auto --id-length=7 --full
 elif [ "${TYPE}" = "test-snapshot" ] || [ "${TYPE}" = "test-release" ]; then
 	OPTIONS="-us -uc"
