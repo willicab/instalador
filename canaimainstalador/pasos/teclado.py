@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# ==============================================================================
+# =============================================================================
 # PAQUETE: canaima-instalador
 # ARCHIVO: canaimainstalador/pasos/teclado.py
 # COPYRIGHT:
@@ -9,7 +9,7 @@
 #       (C) 2012 Erick Manuel Birbe Salazar <erickcion@gmail.com>
 #       (C) 2012 Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>
 # LICENCIA: GPL-3
-# ==============================================================================
+# =============================================================================
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -26,49 +26,137 @@
 #
 # CODE IS POETRY
 
+from canaimainstalador.clases.i18n import Locale
+from canaimainstalador.clases.timezone import TimeZone
+from canaimainstalador.translator import gettext_install
+import gobject
 import gtk
-
-from canaimainstalador.config import TECLADOS, KEY_IMAGE_TMPL
+from canaimainstalador.clases.keyboard import Keyboard
 from canaimainstalador.clases.common import ProcessGenerator
+from canaimainstalador.mod_accesible import atk_acc
 
-class PasoTeclado(gtk.Fixed):
+
+gettext_install()
+
+
+class ComboBoxObject(gtk.ComboBox):
+
+    def __init__(self):
+
+        self._store = gtk.ListStore(str, gobject.TYPE_PYOBJECT)
+        gtk._gtk.ComboBox.__init__(self, self._store)
+
+        cell = gtk.CellRendererText()
+        self.pack_start(cell, True)
+        self.add_attribute(cell, "text", 0)
+
+    def append(self, value, obj):
+        self._store.append([value, obj])
+
+    def get_active_object(self):
+        return self._store.get(self.get_active_iter(), 1)[0]
+
+
+class PasoTeclado(gtk.VBox):
+    'Presenta todo el proceso configuración de idioma y teclado'
+
     def __init__(self, CFG):
-        gtk.Fixed.__init__(self)
+        'Constructor'
+        gtk.VBox.__init__(self)
 
-        self.lst_distribuciones = []
-        self.distribucion = ''
+        self.locale = ''
+        self.timezone = ''
+        self.keyboard = ''
 
-        self.lbl1 = gtk.Label("Escoja una distribución de teclado")
-        self.lbl1.set_size_request(690, 20)
-        self.put(self.lbl1, 0, 0)
+        lbl_lang = gtk.Label(_("Language"))
+        self.pack_start(lbl_lang, False, False)
+        self._cmb_lang = ComboBoxObject()
+        self._build_cmb_lang()
+        atk_acc(self._cmb_lang, lbl_lang)
+        self.pack_start(self._cmb_lang, False, False)
 
-        self.cmb_dist = gtk.combo_box_new_text()
+        lbl_tz = gtk.Label(_("Timezone"))
+        self.pack_start(lbl_tz, False, False)
+        self._cmb_tz = ComboBoxObject()
+        self._build_cmb_tz()
+        atk_acc(self._cmb_tz, lbl_tz)
+        self.pack_start(self._cmb_tz, False, False)
 
-        for l1, l2 in TECLADOS.items():
-            self.lst_distribuciones.append(l1)
-            self.cmb_dist.append_text(l2)
+        lbl_keyboard = gtk.Label(_("Keyboard"))
+        self.pack_start(lbl_keyboard, False, False)
+        self._cmb_kbd = ComboBoxObject()
+        self._build_cmb_keyboard()
+        atk_acc(self._cmb_kbd, lbl_keyboard)
+        self.pack_start(self._cmb_kbd, False, False)
 
-        self.cmb_dist.set_active(0)
-        self.cmb_dist.connect("changed", self.change_distribucion)
-        self.cmb_dist.set_size_request(690, 30)
-        self.put(self.cmb_dist, 0, 25)
-        
-        self.img_distribucion = gtk.Image()
-        self.img_distribucion.set_size_request(690, 210)
-        self.put(self.img_distribucion, 0, 70)
+        hsep1 = gtk.HSeparator()
+        self.pack_start(hsep1)
 
-        self.lbl2 = gtk.Label("Presione algunas teclas para probar la distribución de teclado elegida")
-        self.lbl2.set_size_request(690, 20)
-        self.put(self.lbl2, 0, 285)
+        #======================================================================
+        # self._img_distribucion = gtk.Image()
+        # self.add(self._img_distribucion)
+        #======================================================================
 
-        self.txt_prueba = gtk.Entry()
-        self.txt_prueba.set_size_request(690, 30)
-        self.put(self.txt_prueba, 0, 305)
+        vbox1 = gtk.VBox()
+        lbl2 = gtk.Label(_("Press some keys to test the chosen keyboard \
+layout"))
+        vbox1.pack_start(lbl2, False, False)
+        txt_prueba = gtk.Entry()
+        atk_acc(txt_prueba, lbl2)
+        vbox1.pack_start(txt_prueba, False, False)
+        self.pack_end(vbox1, False, False)
 
-        self.change_distribucion()
+        self.reset_form()
 
-    def change_distribucion(self, widget=None):
-        self.distribucion = self.lst_distribuciones[self.cmb_dist.get_active()]
-        ProcessGenerator('setxkbmap {0}'.format(self.distribucion))
-        self.img_distribucion.set_from_file(KEY_IMAGE_TMPL.format(self.distribucion))
+    def _build_cmb_lang(self):
 
+        lc = Locale()
+
+        for l in lc.supported:
+            self._cmb_lang.append(l.get_name(), l)
+
+        self._cmb_lang.connect('changed', self._cmb_lang_changed)
+
+    def _build_cmb_tz(self):
+        tz = TimeZone()
+        for tz_item in tz.tzones:
+            self._cmb_tz.append(tz_item.name, tz_item)
+
+        self._cmb_tz.connect('changed', self._cmb_tz_changed)
+
+    def _build_cmb_keyboard(self):
+        kbd = Keyboard()
+        for lay in kbd.all_layouts():
+            self._cmb_kbd.append(lay.description, lay)
+
+        self._cmb_kbd.connect("changed", self._cmb_kbd_changed)
+
+    def _cmb_lang_changed(self, widget=None):
+        ''
+        self.locale = widget.get_active_object()
+        print self.locale
+
+    def _cmb_tz_changed(self, widget=None):
+        ''
+        self.timezone = widget.get_active_object().name
+        print self.timezone
+
+    def _cmb_kbd_changed(self, widget=None):
+        ''
+        self.keyboard = widget.get_active_object().name
+        ProcessGenerator('setxkbmap {0} -model pc105'.format(self.keyboard))
+        print self.keyboard
+
+    def reset_form(self):
+        '''Reinicia los campos a sus valores predeterminados'''
+        # Lenguaje predeterminado
+        i = Locale().index_of('es_VE')
+        self._cmb_lang.set_active(i)
+
+        # Zona horaria predeterminada
+        i = TimeZone().index_of('America/Caracas')
+        self._cmb_tz.set_active(i)
+
+        # Teclado predeterminado
+        i = Keyboard().index_of('latam')
+        self._cmb_kbd.set_active(i)

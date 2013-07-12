@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# ==============================================================================
+# =============================================================================
 # PAQUETE: canaima-instalador
 # ARCHIVO: canaimainstalador/pasos/particion_manual.py
 # COPYRIGHT:
@@ -9,7 +9,7 @@
 #       (C) 2012 Erick Manuel Birbe Salazar <erickcion@gmail.com>
 #       (C) 2012 Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>
 # LICENCIA: GPL-3
-# ==============================================================================
+# =============================================================================
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -26,15 +26,15 @@
 #
 # CODE IS POETRY
 
-import gtk
-
+from canaimainstalador.clases import particion_nueva, \
+    particion_redimensionar, particion_eliminar, particion_editar
 from canaimainstalador.clases.common import floatify, humanize, TblCol, \
     is_primary, is_usable, PStatus, is_resizable, is_free, debug_list, is_logic
-from canaimainstalador.clases import particion_nueva, particion_redimensionar, \
-    particion_eliminar, particion_editar
 from canaimainstalador.clases.tabla_particiones import TablaParticiones
-from canaimainstalador.translator import msj
 from canaimainstalador.config import ESPACIO_TOTAL
+from canaimainstalador.translator import msj
+import gtk
+
 
 class PasoPartManual(gtk.VBox):
 
@@ -48,11 +48,10 @@ class PasoPartManual(gtk.VBox):
         #self.tabla.set_doble_click(self.activar_tabla);
         self.tabla.set_seleccionar(self.table_row_selected)
 
-        label = gtk.Label("""Utilice la siguiente tabla para modificar \
-las particiones en disco a su gusto. Le recomendamos:
-- Establecer un minimo de {0} para la partición raíz (/).
-- Crear un área de intercambio (swap)."""
-.format(humanize(ESPACIO_TOTAL)))
+        label = gtk.Label(_("""Use the following table to modify disk \
+partitions to your liking. We recommend:
+- Establish a minimum of {0} for the root partition (/).
+- Create a swap space.""").format(humanize(ESPACIO_TOTAL)))
         label.set_line_wrap(False)
         label.set_justify(gtk.JUSTIFY_LEFT)
         label.set_alignment(0, 0)
@@ -68,7 +67,7 @@ las particiones en disco a su gusto. Le recomendamos:
         self.pack_start(self.scroll, True, True, 10)
 
         # btn_nueva
-        self.btn_nueva = gtk.Button("Nueva")
+        self.btn_nueva = gtk.Button(_("New..."))
         image = gtk.Image()
         image.set_from_stock(gtk.STOCK_ADD, gtk.ICON_SIZE_SMALL_TOOLBAR)
         self.btn_nueva.set_image(image)
@@ -76,7 +75,7 @@ las particiones en disco a su gusto. Le recomendamos:
         self.btn_nueva.connect("clicked", self.new_partition)
 
         # btn_editar
-        self.btn_editar = gtk.Button("Editar")
+        self.btn_editar = gtk.Button(_("Edit..."))
         image = gtk.Image()
         image.set_from_stock(gtk.STOCK_EDIT, gtk.ICON_SIZE_SMALL_TOOLBAR)
         self.btn_editar.set_image(image)
@@ -84,7 +83,7 @@ las particiones en disco a su gusto. Le recomendamos:
         self.btn_editar.connect("clicked", self.edit_partition)
 
         # btn_eliminar
-        self.btn_eliminar = gtk.Button("Eliminar")
+        self.btn_eliminar = gtk.Button(_("Delete"))
         image = gtk.Image()
         image.set_from_stock(gtk.STOCK_REMOVE, gtk.ICON_SIZE_SMALL_TOOLBAR)
         self.btn_eliminar.set_image(image)
@@ -92,7 +91,7 @@ las particiones en disco a su gusto. Le recomendamos:
         self.btn_eliminar.connect("clicked", self.delete_partition)
 
         # btn_redimension
-        self.btn_redimension = gtk.Button("Redimensionar")
+        self.btn_redimension = gtk.Button(_("Resize..."))
         image = gtk.Image()
         image.set_from_stock(gtk.STOCK_INDENT, gtk.ICON_SIZE_SMALL_TOOLBAR)
         self.btn_redimension.set_image(image)
@@ -100,7 +99,7 @@ las particiones en disco a su gusto. Le recomendamos:
         self.btn_redimension.connect("clicked", self.resize_partition)
 
         # btn_deshacer
-        self.btn_deshacer = gtk.Button("Deshacer todo")
+        self.btn_deshacer = gtk.Button(_("Undo all"))
         image = gtk.Image()
         image.set_from_stock(gtk.STOCK_UNDO, gtk.ICON_SIZE_SMALL_TOOLBAR)
         self.btn_deshacer.set_image(image)
@@ -123,7 +122,7 @@ las particiones en disco a su gusto. Le recomendamos:
         '''
         Inicializa todas las variables
         '''
-        self.lista = []         #Lista de las particiones hechas
+        self.lista = []         # Lista de las particiones hechas
         self.acciones = []      # Almacena las acciones pendientes a realizar
         self.fila_selec = None  # Ultima fila seleccionada de la tabla
         self.raiz = False
@@ -149,13 +148,13 @@ las particiones en disco a su gusto. Le recomendamos:
                        msj.particion.get_dispositivo(p_disp, p_num),
                        msj.particion.get_tipo(p_tipo),
                        msj.particion.get_formato(p_format),
-                       '', # Punto de montaje
+                       '',
                        humanize(floatify(p_tam)),
                        humanize(p_usado),
                        humanize(p_libre),
                        p_ini,
                        p_fin,
-                       False, # Formatear
+                       False,
                        PStatus.NORMAL,
                    ]
                 self.lista.append(fila)
@@ -169,7 +168,6 @@ las particiones en disco a su gusto. Le recomendamos:
         self.btn_editar.set_sensitive(False)
         self.btn_redimension.set_sensitive(False)
         self.btn_eliminar.set_sensitive(False)
-
 
     def table_row_selected(self, fila):
         '''Acciones a tomar cuando una fila de la tabla es seleccionada'''
@@ -262,15 +260,13 @@ las particiones en disco a su gusto. Le recomendamos:
     def order_list(self):
         'Ordena la lista por el inicio de la particion (metodo burbuja)'
         tamano = len(self.lista)
-        for i in range(tamano):
-            i = i # Solo para quitar el warning (unused variable)
-            for k in range(tamano - 1):
-                ini = self.lista[k][TblCol.INICIO]
-                ini_sig = self.lista[k + 1][TblCol.INICIO]
-                if ini > ini_sig:
-                    f_temp = self.lista[k]
-                    self.lista[k] = self.lista[k + 1]
-                    self.lista[k + 1] = f_temp
+        for k in range(tamano - 1):
+            ini = self.lista[k][TblCol.INICIO]
+            ini_sig = self.lista[k + 1][TblCol.INICIO]
+            if ini > ini_sig:
+                f_temp = self.lista[k]
+                self.lista[k] = self.lista[k + 1]
+                self.lista[k + 1] = f_temp
 
     def delete_partition(self, widget):
         self.set_buttons_insensitives()
@@ -286,8 +282,8 @@ las particiones en disco a su gusto. Le recomendamos:
     def resize_partition(self, widget):
         self.set_buttons_insensitives()
         widget.set_sensitive(False)
-        w_redim = particion_redimensionar.Main(self.disco, self.lista, self.fila_selec, \
-                                               self.acciones)
+        w_redim = particion_redimensionar.Main(self.disco, self.lista,
+                                               self.fila_selec, self.acciones)
         self.acciones = w_redim.acciones
         self.lista = w_redim.lista
         self.fill_table()
@@ -311,7 +307,8 @@ las particiones en disco a su gusto. Le recomendamos:
     def edit_partition(self, widget):
         self.set_buttons_insensitives()
         widget.set_sensitive(False)
-        w_usar = particion_editar.Main(self.lista, self.fila_selec, self.acciones)
+        w_usar = particion_editar.Main(self.lista, self.fila_selec,
+                                       self.acciones)
         self.lista = w_usar.lista
         self.acciones = w_usar.acciones
         self.fill_table()
@@ -324,4 +321,3 @@ las particiones en disco a su gusto. Le recomendamos:
         print "---ACCIONES---"
         print debug_list(self.acciones)
         print "--------------"
-

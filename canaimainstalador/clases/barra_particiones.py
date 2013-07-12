@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# ==============================================================================
+# =============================================================================
 # PAQUETE: canaima-instalador
 # ARCHIVO: canaimainstalador/clases/barra_particiones.py
 # COPYRIGHT:
@@ -9,7 +9,7 @@
 #       (C) 2012 Erick Manuel Birbe Salazar <erickcion@gmail.com>
 #       (C) 2012 Luis Alejandro Martínez Faneyth <luis@huntingbears.com.ve>
 # LICENCIA: GPL-3
-# ==============================================================================
+# =============================================================================
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -26,10 +26,13 @@
 #
 # CODE IS POETRY
 
+from canaimainstalador.clases.common import draw_rounded, set_color
+from canaimainstalador.translator import gettext_install
 import gtk
 
-from canaimainstalador.clases.common import set_color
-from canaimainstalador.clases.common import draw_rounded
+
+gettext_install()
+
 
 class BarraParticiones(gtk.DrawingArea):
     def __init__(self, parent):
@@ -79,4 +82,3 @@ class BarraParticiones(gtk.DrawingArea):
             draw_rounded(cr, (x1, y1, x2, y2), r)
             cr.set_source(set_color(fs, self.alto))
             cr.fill()
-

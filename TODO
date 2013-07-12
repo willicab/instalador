@@ -29,6 +29,7 @@
 [ LISTO ] - Al final de la animación, queda una slide en blanco.
 [ LISTO ] - Arreglar la forma en como se determina el lugar de las cosas en config.py
 [ LISTO ] - La partición boot lógica no es reconocida por burg.
+- Migrar a Gtk3
 - Mejorar mensajes de error de la instalación.
 - Agregar soporte para LVM y RAID.
 - Agregar funcionalidad para instalar desde red y hacia la red (FAI).
@@ -43,3 +44,17 @@
 - Hacer instalador accesible (personas con discapacidad visual y motora).
 - Identificar los sistemas operativos presentes en las particiones.
 - Identificar en el gráfico de cairo las particiones.
+- El instalador debe escribir los siguientes archivos de configuración:
+	- /etc/apt/sources.list
+	- /etc/default/locale
+	- /etc/locale.gen
+	- /etc/timezone
+	- /etc/default/prelink
+	- /etc/default/rcS
+	- /etc/inittab
+	- /etc/xdg/user-dirs.defaults
+	- /etc/locale.nopurge
+	- /etc/adduser.conf
+	- /usr/share/applications/defaults.list
+- Convertir el proceso de instalación en un módulo general (núcleo) que pueda ser llamado por cualquier otro tipo de interfaz.
+
