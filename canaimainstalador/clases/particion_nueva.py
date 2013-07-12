@@ -39,6 +39,50 @@ import gtk
 gettext_install()
 
 
+class FS_Size_Extry(gtk.HBox):
+
+    units = "TB", "GB", "MB", "KB", "B"
+    convert = {"TB": 3, "GB": 2, "MB": 1, "KB": 0, "B":-1}
+
+    def __init__(self, homogeneous=False, spacing=0):
+        gtk.HBox.__init__(self, homogeneous, spacing)
+
+        self.txt_size = gtk.Entry()
+        self.txt_size.show()
+
+        self.cmb_unit = gtk.combo_box_new_text()
+        self._cmb_unit_fill()
+        self.cmb_unit.show()
+
+        self.pack_start(self.txt_size)
+        self.pack_start(self.cmb_unit)
+        self.show()
+
+    def _validate_unit(self, unit):
+        if unit not in self.units:
+            raise Exception("Unidad no reconocida {}".format(unit))
+
+    def _cmb_unit_fill(self):
+        for u in self.units:
+            self.cmb_unit.append_text(u)
+
+    def convert_to_unit(self, size, unit, new_unit):
+        self._validate_unit(unit)
+        operation = self.convert[new_unit] - self.convert[unit]
+        print operation
+        if operation < 0:
+            print size * pow(1024, -operation)
+        else:
+            print size / pow(1024, operation)
+
+    def fse_set_data(self, size, unit):
+        '''Asigna los valores que iran en el componente'''
+        self._validate_unit(unit)
+
+        self.txt_size.set_text(str(size))
+        self.cmb_unit.set_active(self.units.index(unit))
+
+
 class Main(gtk.Dialog):
 
     inicio_part = 0
@@ -84,10 +128,13 @@ class Main(gtk.Dialog):
                                           self.inicio_part))
         self.lblsize.show()
 
+        self.size_entry = FS_Size_Extry()
+        self.size_entry.fse_set_data(self.escala.get_value(), "GB")
+
         hbox = gtk.VBox()
         hbox.show()
         hbox.pack_start(self.escala)
-        hbox.pack_start(self.lblsize)
+        hbox.pack_start(self.size_entry)
 
         fs_container = frame_fs(self, self.lista, self.particion_act)
         self.cmb_tipo = fs_container.cmb_tipo
@@ -262,3 +309,6 @@ class Main(gtk.Dialog):
             self.escala.set_value(self.inicio_part + FSMAX[formato])
 
         return estatus
+
+fse = FS_Size_Extry()
+fse.convert_to_unit(3145728, "KB", "B")
