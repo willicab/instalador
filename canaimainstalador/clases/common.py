@@ -731,6 +731,7 @@ def floatify(num):
 
 
 def redondear(w, dec=0):
+    #FIXME: Why not simply use built-in function round(x, n) here?
     if type(w) == int:
         return w
     if dec == 0:
