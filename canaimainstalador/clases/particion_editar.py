@@ -182,7 +182,8 @@ class Main(gtk.Dialog):
             estatus = False
             msg = _("{0} must have a minimum size of {1}.")\
             .format(formato, humanize(FSMIN[formato]))
-            UserMessage(msg, 'Información', gtk.MESSAGE_INFO, gtk.BUTTONS_OK)
+            UserMessage(msg, _('Information'), gtk.MESSAGE_INFO,
+                        gtk.BUTTONS_OK)
 
         if not validate_maximun_fs_size(formato, tamano):
             estatus = False
