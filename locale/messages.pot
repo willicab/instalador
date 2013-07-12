@@ -8,16 +8,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: canaima-instalador\n"
 "Report-Msgid-Bugs-To: desarrolladores@canaima.softwarelibre.gob.ve\n"
-"POT-Creation-Date: 2013-06-27 17:04-0430\n"
+"POT-Creation-Date: 2013-07-10 14:52-0430\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: canaima-instalador.py:49 canaimainstalador/pasos/instalacion.py:65
+#: canaima-instalador.py:49 canaimainstalador/main.py:89
+#: canaimainstalador/pasos/instalacion.py:66
 msgid "Canaima Installation"
 msgstr ""
 
@@ -169,318 +170,336 @@ msgstr ""
 msgid "Installer for Canaima GNU/Linux"
 msgstr ""
 
-#: canaimainstalador/main.py:128
+#: canaimainstalador/main.py:145
 msgid "Are you sure you want to cancel the installation?"
 msgstr ""
 
-#: canaimainstalador/main.py:128
+#: canaimainstalador/main.py:145
 msgid "Exit"
 msgstr ""
 
-#: canaimainstalador/main.py:289
+#: canaimainstalador/main.py:309
 msgid "Root partition (/) must exists"
 msgstr ""
 
-#: canaimainstalador/main.py:329
+#: canaimainstalador/main.py:349
 msgid "You must enter a password for the administrator."
 msgstr ""
 
-#: canaimainstalador/main.py:334
+#: canaimainstalador/main.py:354
 msgid "Administrator passwords do not match."
 msgstr ""
 
-#: canaimainstalador/main.py:339
+#: canaimainstalador/main.py:359
 msgid "You must enter a name."
 msgstr ""
 
-#: canaimainstalador/main.py:344
+#: canaimainstalador/main.py:364
 msgid "You must enter a user name."
 msgstr ""
 
-#: canaimainstalador/main.py:349
+#: canaimainstalador/main.py:369
 msgid "The user name has invalid characters."
 msgstr ""
 
-#: canaimainstalador/main.py:354
+#: canaimainstalador/main.py:374
 msgid "You must enter a password for the user."
 msgstr ""
 
-#: canaimainstalador/main.py:359
+#: canaimainstalador/main.py:379
 msgid "User passwords do not match."
 msgstr ""
 
-#: canaimainstalador/main.py:365
+#: canaimainstalador/main.py:385
 msgid "The machine name is not spelled correctly."
 msgstr ""
 
-#: canaimainstalador/pasos/bienvenida.py:41
+#: canaimainstalador/pasos/bienvenida.py:42
 msgid "Welcome to the Install Wizard"
 msgstr ""
 
-#: canaimainstalador/pasos/bienvenida.py:42
+#: canaimainstalador/pasos/bienvenida.py:43
 msgid ""
 "With this wizard you can easily install Canaima GNU/Linux on your computer. "
 "We invite you to follow the instructions displayed on screen."
 msgstr ""
 
-#: canaimainstalador/pasos/info.py:42
-msgid "● Your full name will be set to \"{0}\"."
-msgstr ""
-
-#: canaimainstalador/pasos/info.py:44
-msgid "● I will create a user account named \"{0}\"."
-msgstr ""
-
-#: canaimainstalador/pasos/info.py:46
-msgid "● I will use \"{0}\" to identify your computer on the local network."
-msgstr ""
-
-#: canaimainstalador/pasos/info.py:49
-msgid "● Your full name will be required on the first login."
-msgstr ""
-
-#: canaimainstalador/pasos/info.py:51
-msgid "● Your username will be required in the first login"
-msgstr ""
-
 #: canaimainstalador/pasos/info.py:53
-msgid "● The machine name will be required in the first login"
+msgid "- Your full name will be set to \"{0}\"."
+msgstr ""
+
+#: canaimainstalador/pasos/info.py:55
+msgid "- An user account named \"{0}\" will be created."
 msgstr ""
 
 #: canaimainstalador/pasos/info.py:57
 msgid ""
-"● The installation must follow the directions provided in the manual "
-"partitioning."
+"- The machine name \"{0}\" will be used to identify your computer on the "
+"local network."
 msgstr ""
 
-#: canaimainstalador/pasos/info.py:61
-msgid "● The installation will use the entire disk  \"{0}\"."
+#: canaimainstalador/pasos/info.py:60
+msgid "- Your full name will be required on the first login."
 msgstr ""
 
-#: canaimainstalador/pasos/info.py:65
-msgid "● The installer will use existing free space."
+#: canaimainstalador/pasos/info.py:62
+msgid "- Your username will be required in the first login."
+msgstr ""
+
+#: canaimainstalador/pasos/info.py:64
+msgid "- The machine name will be required in the first login."
 msgstr ""
 
 #: canaimainstalador/pasos/info.py:68
-msgid "● The installer will release space resizing an existing partition."
+msgid ""
+"- The installation must follow the directions provided in the manual "
+"partitioning."
+msgstr ""
+
+#: canaimainstalador/pasos/info.py:72
+msgid "- The installation will use the entire disk  \"{0}\"."
+msgstr ""
+
+#: canaimainstalador/pasos/info.py:76
+msgid "- The installation will use existing free space."
 msgstr ""
 
 #: canaimainstalador/pasos/info.py:79
+msgid "- The installation will release space resizing an existing partition."
+msgstr ""
+
+#: canaimainstalador/pasos/info.py:85
 msgid ""
-"● The installation will take place in several partitions: \"Root (/)\", \"/"
+"- The installation will take place in a partition for the system and other "
+"for swap."
+msgstr ""
+
+#: canaimainstalador/pasos/info.py:90
+msgid ""
+"- The installation will take place in several partitions: \"Root (/)\", \"/"
 "home\" and \"swap\"."
 msgstr ""
 
-#: canaimainstalador/pasos/info.py:84
+#: canaimainstalador/pasos/info.py:95
 msgid ""
-"● The installation will take place in several partitions: \"/boot\", \"Root "
+"- The installation will take place in several partitions: \"/boot\", \"Root "
 "(/)\", \"/home\" and \"swap\"."
 msgstr ""
 
-#: canaimainstalador/pasos/info.py:89
+#: canaimainstalador/pasos/info.py:100
 msgid ""
-"● The installation will take place in several partitions: \"/boot\", \"Root "
+"- The installation will take place in several partitions: \"/boot\", \"Root "
 "(/)\", \"/var\", \"/usr\", \"/home\" y \"swap\"."
 msgstr ""
 
-#: canaimainstalador/pasos/info.py:95
-msgid "● \"{0}\" will be used as keyboard layout."
+#: canaimainstalador/pasos/info.py:106
+msgid "- \"{0}\" will be used as keyboard layout."
 msgstr ""
 
-#: canaimainstalador/pasos/info.py:97
+#: canaimainstalador/pasos/info.py:109
+msgid "All ready!"
+msgstr ""
+
+#: canaimainstalador/pasos/info.py:110
 msgid ""
 "Press \"Next\" to start installing the system. After this step you can not "
 "stop the installation, so make sure your data is correct."
 msgstr ""
 
-#: canaimainstalador/pasos/info.py:100
-msgid "All ready!"
-msgstr ""
-
-#: canaimainstalador/pasos/instalacion.py:116
+#: canaimainstalador/pasos/instalacion.py:117
 msgid "Canaima installation has been completed"
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:147
+#: canaimainstalador/pasos/instalacion.py:125
+msgid ""
+"You can keep trying Canaima pressing \"Restart Later\" or enjoy your "
+"installed operating system by pressing \"Restart Now\"."
+msgstr ""
+
+#: canaimainstalador/pasos/instalacion.py:148
 msgid "Restart Later"
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:153
+#: canaimainstalador/pasos/instalacion.py:154
 msgid "Restart Now"
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:308
+#: canaimainstalador/pasos/instalacion.py:312
 msgid "Not found squashfs image."
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:312
-#: canaimainstalador/pasos/instalacion.py:317
+#: canaimainstalador/pasos/instalacion.py:316
+#: canaimainstalador/pasos/instalacion.py:321
 msgid "An error occurred unmounting the partitions."
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:336
+#: canaimainstalador/pasos/instalacion.py:324
+msgid "Creating partitions in the disk ..."
+msgstr ""
+
+#: canaimainstalador/pasos/instalacion.py:340
 msgid "An error occurred creating a partition."
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:348
+#: canaimainstalador/pasos/instalacion.py:352
 msgid "An error occurred removing a partition."
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:359
+#: canaimainstalador/pasos/instalacion.py:363
 msgid "An error occurred resizing a partition."
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:365
+#: canaimainstalador/pasos/instalacion.py:369
 msgid "An error occurred formatting a partition."
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:403
-#: canaimainstalador/pasos/instalacion.py:410
-#: canaimainstalador/pasos/instalacion.py:419
-#: canaimainstalador/pasos/instalacion.py:431
+#: canaimainstalador/pasos/instalacion.py:407
+#: canaimainstalador/pasos/instalacion.py:414
+#: canaimainstalador/pasos/instalacion.py:423
+#: canaimainstalador/pasos/instalacion.py:435
 msgid "An error occurred mounting the filesystem"
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:414
+#: canaimainstalador/pasos/instalacion.py:418
 msgid "An error occurred activating the swap partition"
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:417
-#: canaimainstalador/pasos/instalacion.py:429
+#: canaimainstalador/pasos/instalacion.py:421
+#: canaimainstalador/pasos/instalacion.py:433
 msgid "Mounting the filesystem ..."
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:422
+#: canaimainstalador/pasos/instalacion.py:426
 msgid "Copying files to disk ..."
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:426
+#: canaimainstalador/pasos/instalacion.py:430
 msgid "An error occurred copying files to disk."
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:435
+#: canaimainstalador/pasos/instalacion.py:439
 msgid "Configuring system files ..."
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:437
-#: canaimainstalador/pasos/instalacion.py:440
+#: canaimainstalador/pasos/instalacion.py:441
+#: canaimainstalador/pasos/instalacion.py:444
 msgid "An error occurred configuring the system files"
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:443
+#: canaimainstalador/pasos/instalacion.py:447
 msgid "Configuring network interfaces ..."
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:446
+#: canaimainstalador/pasos/instalacion.py:450
 msgid "An error occurred creating file /etc/hostname"
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:449
+#: canaimainstalador/pasos/instalacion.py:453
 msgid "An error occurred creating file /etc/hosts"
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:453
+#: canaimainstalador/pasos/instalacion.py:457
 msgid "An error occurred creating file /etc/network/interfaces"
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:456
+#: canaimainstalador/pasos/instalacion.py:460
 msgid "Registering partitions in the system ..."
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:459
+#: canaimainstalador/pasos/instalacion.py:463
 msgid "An error occurred creating file /etc/fstab"
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:464
+#: canaimainstalador/pasos/instalacion.py:468
 msgid "Installing accessibility components in GDM ..."
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:466
+#: canaimainstalador/pasos/instalacion.py:470
 msgid "An error occurred activating accesibility."
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:470
+#: canaimainstalador/pasos/instalacion.py:474
 msgid "Configuring additional details on the system ..."
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:472
+#: canaimainstalador/pasos/instalacion.py:476
 msgid "An error occurred reconfiguring a package."
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:476
+#: canaimainstalador/pasos/instalacion.py:480
 msgid "Configuring additional language packages ..."
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:489
+#: canaimainstalador/pasos/instalacion.py:493
 msgid "Installing OEM characteristics ..."
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:492
+#: canaimainstalador/pasos/instalacion.py:496
 msgid "An error occurred installing a package"
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:501
+#: canaimainstalador/pasos/instalacion.py:505
 msgid "Creating system users ..."
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:505
+#: canaimainstalador/pasos/instalacion.py:509
 msgid "An error occurred creating system user"
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:508
+#: canaimainstalador/pasos/instalacion.py:512
 msgid "Removing temporary data of installation ..."
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:510
+#: canaimainstalador/pasos/instalacion.py:514
 msgid "An error occurred removing a package"
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:513
+#: canaimainstalador/pasos/instalacion.py:517
 msgid "Installing Bootloader ..."
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:515
+#: canaimainstalador/pasos/instalacion.py:519
 msgid "An error occurred preseeding answers in debconf."
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:518
+#: canaimainstalador/pasos/instalacion.py:522
 msgid "An error occurred installing a package."
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:522
+#: canaimainstalador/pasos/instalacion.py:526
 msgid "An error occurred updating BURG."
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:525
+#: canaimainstalador/pasos/instalacion.py:529
 msgid "Configuring system boot ..."
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:531
+#: canaimainstalador/pasos/instalacion.py:535
 msgid "An error occurred generating boot image"
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:536
+#: canaimainstalador/pasos/instalacion.py:540
 msgid "An error occurred updating the boot image."
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:540
+#: canaimainstalador/pasos/instalacion.py:544
 msgid "Umounting filesistems ..."
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:542
-#: canaimainstalador/pasos/instalacion.py:545
+#: canaimainstalador/pasos/instalacion.py:546
+#: canaimainstalador/pasos/instalacion.py:549
 msgid "An error occurred umounting partitions."
 msgstr ""
 
-#: canaimainstalador/pasos/metodo.py:51
+#: canaimainstalador/pasos/metodo.py:52
 msgid "Select the disk where you want to install Canaima:"
 msgstr ""
 
-#: canaimainstalador/pasos/metodo.py:69
+#: canaimainstalador/pasos/metodo.py:71
 msgid "Slelect the installation method:"
 msgstr ""
 
-#: canaimainstalador/pasos/metodo.py:108
+#: canaimainstalador/pasos/metodo.py:113
 msgid ""
 "Disk  \"{0}\" needs a partition table to continue the installation. Do you "
 "want to create a partition table now?\n"
@@ -488,79 +507,91 @@ msgid ""
 "If you press Cancel you can not use that disk to install Canaima."
 msgstr ""
 
-#: canaimainstalador/pasos/metodo.py:113
+#: canaimainstalador/pasos/metodo.py:118
 msgid "Partition table not found."
 msgstr ""
 
-#: canaimainstalador/pasos/metodo.py:163 canaimainstalador/pasos/metodo.py:174
+#: canaimainstalador/pasos/metodo.py:168 canaimainstalador/pasos/metodo.py:179
 msgid "Install resizing {0} to free up space ({1} free)"
 msgstr ""
 
-#: canaimainstalador/pasos/metodo.py:185 canaimainstalador/pasos/metodo.py:196
+#: canaimainstalador/pasos/metodo.py:190 canaimainstalador/pasos/metodo.py:201
 msgid "Install using available free space ({0})"
 msgstr ""
 
-#: canaimainstalador/pasos/metodo.py:204
+#: canaimainstalador/pasos/metodo.py:209
 msgid "Install using the entire disk ({0})"
 msgstr ""
 
-#: canaimainstalador/pasos/metodo.py:212
+#: canaimainstalador/pasos/metodo.py:217
 msgid "Install editing partitions manually"
 msgstr ""
 
-#: canaimainstalador/pasos/metodo.py:243
+#: canaimainstalador/pasos/metodo.py:248
 msgid ""
 "By choosing this option, Canaima will occupy all of your hard drive. Note "
 "that all data present will be erased. You can take this time to make a "
 "backup before proceeding with the installation."
 msgstr ""
 
-#: canaimainstalador/pasos/metodo.py:247
+#: canaimainstalador/pasos/metodo.py:252
 msgid ""
 "By choosing this option, Canaima will be installed in the free space of {0} "
 "that is in you hard disk, preserving the other data and systems that are in "
 "the other portions of the disc."
 msgstr ""
 
-#: canaimainstalador/pasos/metodo.py:252
+#: canaimainstalador/pasos/metodo.py:257
 msgid ""
 "This option will use the free space present in the partition {0} to install "
 "Canaima. The partition will be resized to free up space, preserving the data "
 "and/or systems present."
 msgstr ""
 
-#: canaimainstalador/pasos/metodo.py:257
+#: canaimainstalador/pasos/metodo.py:262
 msgid ""
 "If you choose this option will open the partition editor, allowing you to "
 "adjust the partitions according to your convenience. We do not recommend you "
 "use this option unless you know what you are doing."
 msgstr ""
 
-#: canaimainstalador/pasos/metodo.py:262
+#: canaimainstalador/pasos/metodo.py:267
 msgid ""
 "Canaima needs at least {0} to be installed. Select other disk with more "
 "available space."
 msgstr ""
 
-#: canaimainstalador/pasos/particion_auto.py:52
-#: canaimainstalador/pasos/particion_todo.py:50
+#: canaimainstalador/pasos/particion_auto.py:53
+#: canaimainstalador/pasos/particion_todo.py:51
 msgid ""
 "Select the partition layout to use. Use the selector to indicate the size "
 "you want to use for installation of Canaima."
 msgstr ""
 
-#: canaimainstalador/pasos/particion_auto.py:76
-#: canaimainstalador/pasos/particion_todo.py:74
+#: canaimainstalador/pasos/particion_auto.py:62
+#: canaimainstalador/pasos/particion_todo.py:69
+msgid ""
+"Select this button to use the maximum disk space for the Canaima installation"
+msgstr ""
+
+#: canaimainstalador/pasos/particion_auto.py:71
+#: canaimainstalador/pasos/particion_todo.py:60
+msgid ""
+"Select this button to use the minimum disk space for the Canaima installation"
+msgstr ""
+
+#: canaimainstalador/pasos/particion_auto.py:84
+#: canaimainstalador/pasos/particion_todo.py:82
 msgid "Install everything in a single partition."
 msgstr ""
 
-#: canaimainstalador/pasos/particion_auto.py:82
-#: canaimainstalador/pasos/particion_todo.py:80
+#: canaimainstalador/pasos/particion_auto.py:90
+#: canaimainstalador/pasos/particion_todo.py:88
 msgid "Separate /home partition (recommended)."
 msgstr ""
 
-#: canaimainstalador/pasos/particion_auto.py:89
-#: canaimainstalador/pasos/particion_todo.py:87
+#: canaimainstalador/pasos/particion_auto.py:97
+#: canaimainstalador/pasos/particion_todo.py:95
 msgid "Separate /home and /boot."
 msgstr ""
 
@@ -572,85 +603,85 @@ msgid ""
 "- Create a swap space."
 msgstr ""
 
-#: canaimainstalador/pasos/particion_manual.py:71
+#: canaimainstalador/pasos/particion_manual.py:70
 msgid "New..."
 msgstr ""
 
-#: canaimainstalador/pasos/particion_manual.py:79
+#: canaimainstalador/pasos/particion_manual.py:78
 msgid "Edit..."
 msgstr ""
 
-#: canaimainstalador/pasos/particion_manual.py:87
+#: canaimainstalador/pasos/particion_manual.py:86
 msgid "Delete"
 msgstr ""
 
-#: canaimainstalador/pasos/particion_manual.py:95
+#: canaimainstalador/pasos/particion_manual.py:94
 msgid "Resize..."
 msgstr ""
 
-#: canaimainstalador/pasos/particion_manual.py:103
+#: canaimainstalador/pasos/particion_manual.py:102
 msgid "Undo all"
 msgstr ""
 
-#: canaimainstalador/pasos/particion_todo.py:59
+#: canaimainstalador/pasos/particion_todo.py:63
 msgid "Minimum"
 msgstr ""
 
-#: canaimainstalador/pasos/particion_todo.py:65
+#: canaimainstalador/pasos/particion_todo.py:72
 msgid "Maximum"
 msgstr ""
 
-#: canaimainstalador/pasos/teclado.py:69
+#: canaimainstalador/pasos/teclado.py:71
 msgid "Language"
 msgstr ""
 
-#: canaimainstalador/pasos/teclado.py:75
+#: canaimainstalador/pasos/teclado.py:78
 msgid "Timezone"
 msgstr ""
 
-#: canaimainstalador/pasos/teclado.py:81
+#: canaimainstalador/pasos/teclado.py:85
 msgid "Keyboard"
 msgstr ""
 
-#: canaimainstalador/pasos/teclado.py:96
+#: canaimainstalador/pasos/teclado.py:101
 msgid "Press some keys to test the chosen keyboard layout"
 msgstr ""
 
-#: canaimainstalador/pasos/usuario.py:47
+#: canaimainstalador/pasos/usuario.py:48
 msgid "Configuration for the administrator account"
 msgstr ""
 
-#: canaimainstalador/pasos/usuario.py:53
+#: canaimainstalador/pasos/usuario.py:55
 msgid "OEM Installation (Ignore this setting and makes it at the first start)."
 msgstr ""
 
-#: canaimainstalador/pasos/usuario.py:58
+#: canaimainstalador/pasos/usuario.py:60
 msgid "Enable Accessibility in the user login screen (GDM)."
 msgstr ""
 
-#: canaimainstalador/pasos/usuario.py:62
-#: canaimainstalador/pasos/usuario.py:106
+#: canaimainstalador/pasos/usuario.py:64
+#: canaimainstalador/pasos/usuario.py:114
 msgid "Enter a password:"
 msgstr ""
 
-#: canaimainstalador/pasos/usuario.py:70
-#: canaimainstalador/pasos/usuario.py:114
+#: canaimainstalador/pasos/usuario.py:73
+#: canaimainstalador/pasos/usuario.py:123
 msgid "Repeat the password:"
 msgstr ""
 
-#: canaimainstalador/pasos/usuario.py:78
+#: canaimainstalador/pasos/usuario.py:82
 msgid "Machine name:"
 msgstr ""
 
-#: canaimainstalador/pasos/usuario.py:87
+#: canaimainstalador/pasos/usuario.py:92
 msgid "Configuration for the user account"
 msgstr ""
 
-#: canaimainstalador/pasos/usuario.py:92
+#: canaimainstalador/pasos/usuario.py:98
 msgid "Full name:"
 msgstr ""
 
-#: canaimainstalador/pasos/usuario.py:99
+#: canaimainstalador/pasos/usuario.py:106
 msgid "User name:"
 msgstr ""
 

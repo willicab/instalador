@@ -29,6 +29,7 @@
 from canaimainstalador.translator import gettext_install
 import gtk
 import pango
+from canaimainstalador.mod_accesible import atk_label, atk_acc
 
 
 gettext_install()
@@ -48,6 +49,7 @@ class PasoUsuario(gtk.HBox):
 account"))
         self.lbltitle1.set_alignment(0, 0.5)
         self.lbltitle1.set_attributes(attr)
+        atk_label(self.lbltitle1)
         table.attach(self.lbltitle1, 0, 2, 0, 1)
 
         self.chkoem = gtk.CheckButton(_("OEM Installation (Ignore this \
@@ -65,6 +67,7 @@ login screen (GDM)."))
 
         self.txtpassroot1 = gtk.Entry()
         self.txtpassroot1.set_visibility(False)
+        atk_acc(self.txtpassroot1, self.lblpassroot1)
         table.attach(self.txtpassroot1, 1, 2, 3, 4)
 
         self.lblpassroot2 = gtk.Label(_("Repeat the password:"))
@@ -73,6 +76,7 @@ login screen (GDM)."))
 
         self.txtpassroot2 = gtk.Entry()
         self.txtpassroot2.set_visibility(False)
+        atk_acc(self.txtpassroot2, self.lblpassroot2)
         table.attach(self.txtpassroot2, 1, 2, 4, 5)
 
         self.lblmaquina = gtk.Label(_("Machine name:"))
@@ -82,11 +86,13 @@ login screen (GDM)."))
         self.txtmaquina = gtk.Entry()
         self.txtmaquina.set_text('canaima-popular')
         self.txtmaquina.set_max_length(255)
+        atk_acc(self.txtmaquina, self.lblmaquina)
         table.attach(self.txtmaquina, 1, 2, 5, 6)
 
         self.lbltitle2 = gtk.Label(_("Configuration for the user account"))
         self.lbltitle2.set_alignment(0, 0.5)
         self.lbltitle2.set_attributes(attr)
+        atk_label(self.lbltitle2)
         table.attach(self.lbltitle2, 0, 2, 6, 7)
 
         self.lblnombre = gtk.Label(_("Full name:"))
@@ -94,6 +100,7 @@ login screen (GDM)."))
         table.attach(self.lblnombre, 0, 1, 7, 8)
 
         self.txtnombre = gtk.Entry()
+        atk_acc(self.txtnombre, self.lblnombre)
         table.attach(self.txtnombre, 1, 2, 7, 8)
 
         self.lblusuario = gtk.Label(_("User name:"))
@@ -101,6 +108,7 @@ login screen (GDM)."))
         table.attach(self.lblusuario, 0, 1, 8, 9)
 
         self.txtusuario = gtk.Entry()
+        atk_acc(self.txtusuario, self.lblusuario)
         table.attach(self.txtusuario, 1, 2, 8, 9)
 
         self.lblpassuser1 = gtk.Label(_("Enter a password:"))
@@ -109,6 +117,7 @@ login screen (GDM)."))
 
         self.txtpassuser1 = gtk.Entry()
         self.txtpassuser1.set_visibility(False)
+        atk_acc(self.txtpassuser1, self.lblpassuser1)
         table.attach(self.txtpassuser1, 1, 2, 9, 10)
 
         self.lblpassuser2 = gtk.Label(_("Repeat the password:"))
@@ -117,6 +126,7 @@ login screen (GDM)."))
 
         self.txtpassuser2 = gtk.Entry()
         self.txtpassuser2.set_visibility(False)
+        atk_acc(self.txtpassuser2, self.lblpassuser2)
         table.attach(self.txtpassuser2, 1, 2, 10, 11)
 
         self.pack_start(table, padding=40)

@@ -32,6 +32,7 @@ from canaimainstalador.clases.particiones import Particiones
 from canaimainstalador.config import ESPACIO_TOTAL, CFG, FSPROGS
 from canaimainstalador.translator import gettext_install
 import gtk
+from canaimainstalador.mod_accesible import atk_acc, atk_label
 
 
 gettext_install()
@@ -57,6 +58,7 @@ Canaima:"))
         self.cmb_discos = gtk.combo_box_new_text()
         self.cmb_discos.set_size_request(690, 30)
         self.put(self.cmb_discos, 0, 25)
+        atk_acc(self.cmb_discos, self.lbl1)
         self.cmb_discos.connect('changed', self.seleccionar_disco)
 
         for d in self.discos:
@@ -73,14 +75,17 @@ Canaima:"))
 
         self.cmb_metodo = gtk.combo_box_new_text()
         self.cmb_metodo.set_size_request(690, 30)
-        self.put(self.cmb_metodo, 0, 190)
         self.cmb_metodo.connect('changed', self.establecer_metodo)
+        self.put(self.cmb_metodo, 0, 190)
 
         self.lbl4 = gtk.Label()
         self.lbl4.set_size_request(690, 90)
         self.lbl4.set_alignment(0, 0)
         self.lbl4.set_line_wrap(True)
+        atk_label(self.lbl4)
         self.put(self.lbl4, 0, 225)
+
+        atk_acc(self.cmb_metodo, self.lbl2)
 
         self.cmb_discos.set_active(0)
 

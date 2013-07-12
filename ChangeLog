@@ -1,19 +1,60 @@
-DEVELOPMENT SNAPSHOT v2.0.2+dev20130514172715 (05/14/13)
+STABLE RELEASE v2.0.2 (07/12/13)
+Quitando clave GPG forzada en buildpackage.sh
+Agregando Img del slide para la versión 4.0
+Mejorando la determinación de la ruta de los paquetes en el pool
+Provocando la instalación del meta-paquete de idioma
+Traduciendo texto que no pasaba por gettext
+Agregando accesibilidad a interfaz grafica
+Agregando libreria de accesibilidad
+Activando accesibilidad en PasoTeclado
+Activando accesibilidad en la bienvenida
+Colocando la ruta por defecto de traducciones como lo recomienda el manual DevHelp
+Nuevamente corrigiendo la instalacion de los locales
+Corrigiendo la ruta de las traducciones al instalar
+Dando permisos de ejecución al ejecutable principal
+Borrando correctamente los archivos .mo
+Configurando el makefile para la instalacion
+Limpiando los archivos .mo desde el makefile
+Generando .mo desde el Makefile y eliminando algunos templates
+Activando la prueba del teclado en el campo de texto
+Modificando el banner para que sea traducible
+Actualizando la traduccion al español
+Traduciendo al español (es.po)
+Generando plantilla de traducciones messages.pot
+Activando los llamados a gettext y traduciendo cadenas al ingles
+Instalacion de paquetes adicionales de lenguaje
+Corrigiendo codificacion de caracteres
+Eliminando import innecesario
+Merge remote-tracking branch 'origin/development' into development
+Añadiendo script para la generación de un diccionario de paquetes según localización.
+Ignorando carpeta de traducciones
+Merge branch 'keyboard' into development
+Ejecutando la configuración de idioma, teclado y zoha horaria
+Corrigiendo detalles de archivos de configuracion
+Creando metodo generico para escribir los archivos de cofiguracion
+Cambiando el nombre al modulo locale.py por i18n.py
+Metodos para generar archivo /etc/default/keyboard
+Metodos para generar archivos locale y locale.gen
+Implementando la internacionalización en la interfaz gtk
+Terminando modulos para el manejo de las traducciones
+Instalando metodo _() de la manera recomendada en la documentacion
+Añadiendo el soporte a i18n a traves de gettext
+Cargando datos de idioma y teclado en la interfaz grafica
+Desplegando selector de idioma y zona horaria en instalador
+Se evita que se abra el nautilus al montar las particiones
+Generando módulo python para extrarer los locales
+Agregando función para extraer el ID del pais desde la ZH
+Cambiando nombre de script keyboard.sh a minusculas
+Agregando clase para obtener las zonas horarias
+Eliminando live-tools de la instalación final
+Optimizando el assisted_umount con la opción -l
+Agregando script para determinar modelo de teclado
 Optimizando el assisted_umount con la opción -l
 Agregando tarea al TODO
 Corrigiendo rutas relativas y de squashfs
-
-DEVELOPMENT SNAPSHOT v2.0.2+dev20130514102023 (05/14/13)
-Corrigiendo rutas relativas y de squashfs
 Cambiando la ruta del filesystem.squashfs
 Implementando el inicio automático del instalador Colocando el instalador en /etc/xdg/autostart/ para que inicie de forma automática en el liveCD.
-
-DEVELOPMENT SNAPSHOT v2.0.2+dev20130510165606 (05/10/13)
-Implementando el inicio automático del instalador Colocando el instalador en /etc/xdg/autostart/ para que inicie de forma automática en el liveCD.
 Cambiando la forma de detectar SHAREDIR
-Agragando /etc/timezone a los archivos instalables
-
-DEVELOPMENT SNAPSHOT v2.0.2+dev20130510132508 (05/10/13)
 Agragando /etc/timezone a los archivos instalables
 Agregando dependencia 'libasprintf0c2' para 'gettext-base'
 Corrigiendo la ruta hacia el icono del .desktop
@@ -28,9 +69,6 @@ Aplicando nuevo metodo para activar la accesibilidad
 Creando metodo nuevo para configuración de a11d
 Corrigiendo paso de parametro erroneo en UserMessageError()
 Creando el /etc/default/keyboard directo desde el instalador
-
-DEVELOPMENT SNAPSHOT v2.0.2+dev20130508164831 (05/08/13)
-Creando el /etc/default/keyboard directo desde el instalador
 Preparando plantillas para Canaima 4.0
 Mejorando algunos procesos de instalación
 Permitiendo la instalación de las de plantillas en Makefile
@@ -44,9 +82,8 @@ Agregando lista reducida de idiomas prioritarios a traducir
 Agregando tarea al TODO
 Añadiendo modelo de teclado para no desactivar el teclado numerico
 Agregando tareas al TODO. Agregando plantillas a escribir en la instalación.
-Rehabilitando squash commits.
 
-DEVELOPMENT SNAPSHOT v2.0.1+dev20121130084037 (11/30/12)
+STABLE RELEASE v2.0.1 (11/30/12)
 Rehabilitando squash commits.
 Deshabilitando squash commit temporalmente.
 

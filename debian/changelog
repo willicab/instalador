@@ -1,3 +1,18 @@
+canaima-instalador (2.0.2-1) kerepakupai; urgency=low
+
+  * [18c7b21] Corrigiendo errores y advertencias de lintian
+  * [0e75de8] Agregando ruta de licencia en copyrigth
+  * [7012b52] Cambiando los proceso de pos y pre instalación
+  * [f457db1] Corrigiendo ejecución del postrm
+  * [d2cd5da] Agregando dependencia con canaima-l10n
+  * [6994266] Agregando dependencia a gettext
+  * [4425006] Importing New Upstream Release (2.0.2+dev20130514172715)
+  * [3ba6aa7] Corrigiendo error ortográfico en es.po
+  * [5592055] Procesando strings que no pasaban por gettext
+  * [f062fcd] corrigiendo changelog
+
+ -- Erick Birbe <erickcion@gmail.com>  Fri, 12 Jul 2013 16:37:36 -0430
+
 canaima-instalador (2.0.1-1) stable; urgency=low
 
   [ Luis Alejandro Martínez Faneyth ]

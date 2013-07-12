@@ -121,6 +121,7 @@ def install_language_pack(locale, mnt):
             if type(p) is type(list()):
                 p = p[0]
             plist.append(package_path(p, as_list=True))
+        plist.append(package_name(locale))
     else:
         return False
 

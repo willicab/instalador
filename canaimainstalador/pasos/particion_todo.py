@@ -31,6 +31,7 @@ from canaimainstalador.clases.leyenda import Leyenda
 from canaimainstalador.config import ESPACIO_TOTAL
 from canaimainstalador.translator import gettext_install
 import gtk
+from canaimainstalador.mod_accesible import atk_label
 
 
 gettext_install()
@@ -53,18 +54,25 @@ indicate the size you want to use for installation of Canaima.")
         self.lbl1.set_size_request(690, 35)
         self.lbl1.set_alignment(0, 0)
         self.lbl1.set_line_wrap(True)
+        atk_label(self.lbl1)
         self.put(self.lbl1, 0, 0)
 
+        tip_msg = _("Select this button to use the minimum disk \
+space for the Canaima installation")
         self.tam_min = gtk.Button()
         self.tam_min.set_label(_("Minimum"))
         self.tam_min.set_size_request(80, 25)
         self.tam_min.connect('clicked', self.set_min)
+        self.tam_min.set_tooltip_text(tip_msg)
         self.put(self.tam_min, 525, 40)
 
+        tip_msg = _("Select this button to use the maximum disk \
+space for the Canaima installation")
         self.tam_max = gtk.Button()
         self.tam_max.set_label(_('Maximum'))
         self.tam_max.set_size_request(80, 25)
         self.tam_max.connect('clicked', self.set_max)
+        self.tam_max.set_tooltip_text(tip_msg)
         self.put(self.tam_max, 610, 40)
 
         self.barra = BarraTodo(self)
