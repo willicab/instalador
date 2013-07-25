@@ -1,3 +1,33 @@
+- Migrar a Gtk3
+- Mejorar mensajes de error de la instalación.
+- Agregar soporte para LVM y RAID.
+- Agregar funcionalidad para instalar desde red y hacia la red (FAI).
+- Agregar selector python-cairo al particionador manual (pantalla ppal, nueva partición y redimensionar).
+- Agregar manual de usuario y manual para el desarrollador.
+- Hacer instalador con python-setuptools.
+- Agregar opción para mover partición o redimensionar desde el principio al particionador manual.
+- Configuración de parámetros a partir de archivos .conf
+- Implementar alineaciones óptimas de particiones.
+- Hacer instalador accesible (personas con discapacidad visual y motora).
+- Identificar los sistemas operativos presentes en las particiones.
+- Identificar en el gráfico de cairo las particiones.
+- El instalador debe escribir los siguientes archivos de configuración:
+	[ LISTO ] - /etc/apt/sources.list
+	[ LISTO ] - /etc/default/locale
+	[ LISTO ] - /etc/locale.gen
+	[ LISTO ] - /etc/timezone
+	- /etc/default/prelink
+	- /etc/default/rcS
+	- /etc/inittab
+	- /etc/xdg/user-dirs.defaults
+	- /etc/locale.nopurge
+	[ LISTO ] - /etc/adduser.conf
+	- /usr/share/applications/defaults.list
+- Convertir el proceso de instalación en un módulo general (núcleo) que pueda ser llamado por cualquier otro tipo de interfaz.
+- Hacer que la lectura de los archivos de idiomas, zonas horarias y teclados sea mucho más rapida y eficiente.
+- Traducir las cadenas de texto de idiomas y zonas horarias y teclado que se leen del sistema.
+[ LISTO ] - Agregar pantalla para selección de zona horaria y escribir el archivo /etc/localetime adecuadamente.
+[ LISTO ] - Ampliar opciones de selección de idioma y distribuciones de teclado, configurando el idioma de Canaima adecuadamente.
 [ LISTO ] - Particionado Manual
 [ LISTO ] - Instalación OEM
 [ LISTO ] - Separar la busqueda de discos de la clase de paso
@@ -29,32 +59,3 @@
 [ LISTO ] - Al final de la animación, queda una slide en blanco.
 [ LISTO ] - Arreglar la forma en como se determina el lugar de las cosas en config.py
 [ LISTO ] - La partición boot lógica no es reconocida por burg.
-- Migrar a Gtk3
-- Mejorar mensajes de error de la instalación.
-- Agregar soporte para LVM y RAID.
-- Agregar funcionalidad para instalar desde red y hacia la red (FAI).
-- Agregar selector python-cairo al particionador manual (pantalla ppal, nueva partición y redimensionar).
-- Agregar manual de usuario y manual para el desarrollador.
-- Hacer instalador con python-setuptools.
-- Agregar opción para mover partición o redimensionar desde el principio al particionador manual.
-- Configuración de parámetros a partir de archivos .conf
-- Agregar pantalla para selección de zona horaria y escribir el archivo /etc/localetime adecuadamente.
-- Ampliar opciones de selección de idioma y distribuciones de teclado, configurando el idioma de Canaima adecuadamente.
-- Implementar alineaciones óptimas de particiones.
-- Hacer instalador accesible (personas con discapacidad visual y motora).
-- Identificar los sistemas operativos presentes en las particiones.
-- Identificar en el gráfico de cairo las particiones.
-- El instalador debe escribir los siguientes archivos de configuración:
-	- /etc/apt/sources.list
-	- /etc/default/locale
-	- /etc/locale.gen
-	- /etc/timezone
-	- /etc/default/prelink
-	- /etc/default/rcS
-	- /etc/inittab
-	- /etc/xdg/user-dirs.defaults
-	- /etc/locale.nopurge
-	- /etc/adduser.conf
-	- /usr/share/applications/defaults.list
-- Convertir el proceso de instalación en un módulo general (núcleo) que pueda ser llamado por cualquier otro tipo de interfaz.
-
