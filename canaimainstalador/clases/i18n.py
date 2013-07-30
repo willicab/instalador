@@ -116,12 +116,12 @@ def install_language_pack(locale, mnt):
     plist = []
 
     if have_language_pack(locale):
+        packages.append(package_name(locale))
         for p in packages:
             # Toma el primer paquete si hay una condicion
             if type(p) is type(list()):
                 p = p[0]
             plist.append(package_path(p, as_list=True))
-        plist.append(package_name(locale))
     else:
         return False
 
