@@ -391,7 +391,6 @@ class Usuario():
         CFG['w'].pasos['Info'].grab_focus()
 
 
-
 class Info():
     '''
         Inicia el paso que muestra la información general de la instalación

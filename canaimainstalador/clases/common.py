@@ -321,8 +321,15 @@ def instalar_paquetes(mnt, dest, plist):
     i = 0
     n = len(plist)
 
-    for loc, name in plist:
-        print loc
+    for package in plist:
+
+        # Valida que se pueda extraer ruta y nombre del paquete
+        try:
+            loc, name = package
+        except Exception as exc:
+            print exc
+            return False
+
         if os.path.isdir(loc):
             pkglist = glob.glob(loc + '/' + name + '_*.deb')
 
