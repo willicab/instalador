@@ -1,3 +1,58 @@
+DEVELOPMENT SNAPSHOT v2.0.3+dev20130730150612 (07/30/13)
+Actualizando TODO
+Agregando paquete de idioma en la lista correcta
+Valida que hay ruta y nombre en lista de paquetes
+Invirtiendo lista TODO y marcando tareas terminadas
+Quitando clave GPG forzada en buildpackage.sh
+Agregando Img del slide para la versión 4.0
+Mejorando la determinación de la ruta de los paquetes en el pool
+Provocando la instalación del meta-paquete de idioma
+Traduciendo texto que no pasaba por gettext
+Agregando accesibilidad a interfaz grafica
+Agregando libreria de accesibilidad
+Activando accesibilidad en PasoTeclado
+Activando accesibilidad en la bienvenida
+Colocando la ruta por defecto de traducciones como lo recomienda el manual DevHelp
+Nuevamente corrigiendo la instalacion de los locales
+Corrigiendo la ruta de las traducciones al instalar
+Dando permisos de ejecución al ejecutable principal
+Borrando correctamente los archivos .mo
+Configurando el makefile para la instalacion
+Limpiando los archivos .mo desde el makefile
+Generando .mo desde el Makefile y eliminando algunos templates
+Activando la prueba del teclado en el campo de texto
+Modificando el banner para que sea traducible
+Actualizando la traduccion al español
+Traduciendo al español (es.po)
+Generando plantilla de traducciones messages.pot
+Activando los llamados a gettext y traduciendo cadenas al ingles
+Instalacion de paquetes adicionales de lenguaje
+Corrigiendo codificacion de caracteres
+Eliminando import innecesario
+Merge remote-tracking branch 'origin/development' into development
+Añadiendo script para la generación de un diccionario de paquetes según localización.
+Ignorando carpeta de traducciones
+Merge branch 'keyboard' into development
+Ejecutando la configuración de idioma, teclado y zoha horaria
+Corrigiendo detalles de archivos de configuracion
+Creando metodo generico para escribir los archivos de cofiguracion
+Cambiando el nombre al modulo locale.py por i18n.py
+Metodos para generar archivo /etc/default/keyboard
+Metodos para generar archivos locale y locale.gen
+Implementando la internacionalización en la interfaz gtk
+Terminando modulos para el manejo de las traducciones
+Instalando metodo _() de la manera recomendada en la documentacion
+Añadiendo el soporte a i18n a traves de gettext
+Cargando datos de idioma y teclado en la interfaz grafica
+Desplegando selector de idioma y zona horaria en instalador
+Se evita que se abra el nautilus al montar las particiones
+Generando módulo python para extrarer los locales
+Agregando función para extraer el ID del pais desde la ZH
+Cambiando nombre de script keyboard.sh a minusculas
+Agregando clase para obtener las zonas horarias
+Eliminando live-tools de la instalación final
+Optimizando el assisted_umount con la opción -l
+
 DEVELOPMENT SNAPSHOT v2.0.2+dev20130514172715 (05/14/13)
 Optimizando el assisted_umount con la opción -l
 Agregando tarea al TODO
