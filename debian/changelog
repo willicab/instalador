@@ -1,3 +1,11 @@
+canaima-instalador (2.0.4-1) kerepakupai; urgency=low
+
+  * corrigiendo los img de los slides
+  * Corrigiendo errores de traduccion
+  * Agregando cadena de texto al gettext
+
+ -- Erick Birbe <erickcion@gmail.com>  Wed, 31 Jul 2013 09:35:37 -0430
+
 canaima-instalador (2.0.3-1) kerepakupai; urgency=low
 
   * Agregando paquete de idioma en la lista correcta
