@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: canaima-instalador\n"
 "Report-Msgid-Bugs-To: desarrolladores@canaima.softwarelibre.gob.ve\n"
 "POT-Creation-Date: 2013-07-10 14:52-0430\n"
-"PO-Revision-Date: 2013-07-10 16:03-0430\n"
+"PO-Revision-Date: 2013-07-31 09:14-0430\n"
 "Last-Translator: Erick Birbe <erickcion@gmail.com>\n"
 "Language-Team: Español; Castellano <desarrolladores@canaima.softwarelibre."
 "gob.ve>\n"
@@ -635,12 +635,12 @@ msgstr "Instalar todo en una sola partición."
 #: canaimainstalador/pasos/particion_auto.py:90
 #: canaimainstalador/pasos/particion_todo.py:88
 msgid "Separate /home partition (recommended)."
-msgstr "Separar la partición /home (recomandado)."
+msgstr "Separar la partición /home (recomendado)."
 
 #: canaimainstalador/pasos/particion_auto.py:97
 #: canaimainstalador/pasos/particion_todo.py:95
 msgid "Separate /home and /boot."
-msgstr "Separar la partición /home y /boot (recomandado)."
+msgstr "Separar la partición /home y /boot."
 
 #: canaimainstalador/pasos/particion_manual.py:51
 msgid ""
