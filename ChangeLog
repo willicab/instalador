@@ -1,6 +1,15 @@
-STABLE RELEASE v2.0.3 (07/30/13)
+DEVELOPMENT SNAPSHOT v2.0.4+dev20130731092953 (07/31/13)
+Agregando cadena de texto al gettext
+Corrigiendo errores de traducción
+Merge remote-tracking branch 'origin/development' into development
+corrigiendo img en los sildes
+Actualizando TODO
 
-STABLE RELEASE v2.0.2 (07/12/13)
+DEVELOPMENT SNAPSHOT v2.0.3+dev20130730150612 (07/30/13)
+Actualizando TODO
+Agregando paquete de idioma en la lista correcta
+Valida que hay ruta y nombre en lista de paquetes
+Invirtiendo lista TODO y marcando tareas terminadas
 Quitando clave GPG forzada en buildpackage.sh
 Agregando Img del slide para la versión 4.0
 Mejorando la determinación de la ruta de los paquetes en el pool

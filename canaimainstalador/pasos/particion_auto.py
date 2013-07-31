@@ -101,7 +101,7 @@ space for the Canaima installation")
         self.option_3.set_size_request(350, 20)
         self.put(self.option_3, 0, 235)
 
-        msg_4 = "Separate /home, /boot, /var and /usr."
+        msg_4 = _("Separate /home, /boot, /var and /usr.")
         self.option_4 = gtk.RadioButton(self.option_1, msg_4)
         self.option_4.connect("toggled", self.change_option,
                               "PART:BOOT:ROOT:VAR:USR:HOME:SWAP")
