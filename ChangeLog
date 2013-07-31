@@ -1,3 +1,10 @@
+DEVELOPMENT SNAPSHOT v2.0.4+dev20130731092953 (07/31/13)
+Agregando cadena de texto al gettext
+Corrigiendo errores de traducción
+Merge remote-tracking branch 'origin/development' into development
+corrigiendo img en los sildes
+Actualizando TODO
+
 DEVELOPMENT SNAPSHOT v2.0.3+dev20130730150612 (07/30/13)
 Actualizando TODO
 Agregando paquete de idioma en la lista correcta
