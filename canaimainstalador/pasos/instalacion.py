@@ -260,7 +260,7 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
         ]
     reconfpkgs = [
         'locales', 'canaima-estilo-visual-gnome', 'canaima-escritorio-gnome',
-        'canaima-base'
+        'canaima-base', 'tzdata'
         ]
     instpkgs_burg = [
         [LIVE_PATH + '/pool/main/libx/libx86', 'libx86-1'],
