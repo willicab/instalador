@@ -3,10 +3,10 @@
     <header>
         <script type="text/javascript" src="jquery.js"></script>
         <script type="text/javascript">
-            var max = 13;
+            var max = 14;
             var i = 0;
             var speed = 3000;
-            var delay = 20000;
+            var delay = speed + 20000;
 
             $(document).ready(function(){
                 setInterval("mover()", delay);
@@ -75,6 +75,8 @@
                     <li><img src="slides/slide_12.jpg" /></li>
                     <li><img src="slides/slide_13.jpg" /></li>
                     <li><img src="slides/slide_14.jpg" /></li>
+                    <!-- Slide 1 again for clean restarting transition -->
+                    <li><img src="slides/slide_1.jpg" /></li>
                 </ul>
             </div>
         </div>
