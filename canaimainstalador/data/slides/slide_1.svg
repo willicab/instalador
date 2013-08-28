@@ -2316,14 +2316,14 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.7"
-     inkscape:cx="330.27319"
-     inkscape:cy="145.08828"
+     inkscape:cx="141.70176"
+     inkscape:cy="87.945423"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
      borderlayer="true"
-     inkscape:window-width="1366"
-     inkscape:window-height="705"
+     inkscape:window-width="1280"
+     inkscape:window-height="963"
      inkscape:window-x="0"
      inkscape:window-y="28"
      inkscape:window-maximized="1" />
@@ -3162,55 +3162,31 @@
     </g>
     <text
        sodipodi:linespacing="97.000003%"
-       id="text3125"
-       y="765.9137"
-       x="27.237701"
-       style="font-size:17.21947098px;font-style:normal;font-weight:normal;text-align:center;line-height:97.00000286%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
-       xml:space="preserve"><tspan
-         id="tspan3129"
-         style="font-size:26.48573685px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:97.00000286%;writing-mode:lr-tb;text-anchor:start;font-family:Century Schoolbook L;-inkscape-font-specification:Century Schoolbook L Italic"
-         y="765.9137"
-         x="27.237701"
-         sodipodi:role="line">está comenzando</tspan></text>
-    <text
-       sodipodi:linespacing="97.000003%"
        id="text3125-4"
        y="734.95599"
        x="29.409531"
-       style="font-size:17.21947098px;font-style:normal;font-weight:normal;text-align:center;line-height:97.00000286%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       style="font-size:64px;font-style:normal;font-weight:normal;text-align:center;line-height:97.00000285999999505%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
        xml:space="preserve"><tspan
          id="tspan3129-0"
-         style="font-size:70.62863159px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:97.00000286%;writing-mode:lr-tb;text-anchor:start;font-family:Century Schoolbook L;-inkscape-font-specification:Century Schoolbook L Italic"
+         style="font-size:64px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:97.00000285999999505%;writing-mode:lr-tb;text-anchor:start;font-family:Century Schoolbook L;-inkscape-font-specification:Century Schoolbook L Italic"
          y="734.95599"
          x="29.409531"
-         sodipodi:role="line">Instalación</tspan></text>
-    <text
-       sodipodi:linespacing="97.000003%"
-       id="text3125-9"
-       y="667.17432"
-       x="28.164701"
-       style="font-size:17.21947098px;font-style:normal;font-weight:normal;text-align:center;line-height:97.00000286%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
-       xml:space="preserve"><tspan
-         id="tspan3129-5"
-         style="font-size:26.48573685px;font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:97.00000286%;writing-mode:lr-tb;text-anchor:start;font-family:Century Schoolbook L;-inkscape-font-specification:Century Schoolbook L Bold Italic"
-         y="667.17432"
-         x="28.164701"
-         sodipodi:role="line">El proceso de</tspan></text>
+         sodipodi:role="line">Instalación en Proceso</tspan></text>
     <text
        sodipodi:linespacing="97.000003%"
        id="text3125-3"
        y="834.20929"
-       x="27.237701"
+       x="351.18338"
        style="font-size:17.21947098px;font-style:normal;font-weight:normal;text-align:center;line-height:97.00000286%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
        xml:space="preserve"><tspan
          id="tspan3129-7"
-         style="font-size:26.48573685px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:97.00000286%;writing-mode:lr-tb;text-anchor:start;font-family:Century Schoolbook L;-inkscape-font-specification:Century Schoolbook L Italic"
+         style="font-size:26.48573685px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:97.00000286%;writing-mode:lr-tb;text-anchor:middle;font-family:Century Schoolbook L;-inkscape-font-specification:Century Schoolbook L Italic"
          y="834.20929"
-         x="27.237701"
+         x="351.18338"
          sodipodi:role="line">Disfruta de un recorrido por las características</tspan><tspan
-         style="font-size:26.48573685px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:97.00000286%;writing-mode:lr-tb;text-anchor:start;font-family:Century Schoolbook L;-inkscape-font-specification:Century Schoolbook L Italic"
+         style="font-size:26.48573685px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:97.00000286%;writing-mode:lr-tb;text-anchor:middle;font-family:Century Schoolbook L;-inkscape-font-specification:Century Schoolbook L Italic"
          y="859.90045"
-         x="27.237701"
+         x="351.18338"
          sodipodi:role="line"
          id="tspan9419">más resaltantes de Canaima mientras esperas.</tspan></text>
   </g>
