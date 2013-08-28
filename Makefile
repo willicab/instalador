@@ -73,9 +73,8 @@ install:
 	mkdir -p $(DESTDIR)/usr/share/canaima-instalador
 	mkdir -p $(DESTDIR)/etc/skel/Escritorio
 	mkdir -p $(DESTDIR)/etc/xdg/autostart/
+	mkdir -p $(DESTDIR)/usr/share/applications/
 
-	cp canaima-instalador.desktop $(DESTDIR)/etc/skel/Escritorio/
-	cp canaima-instalador.desktop $(DESTDIR)/etc/xdg/autostart/
 	cp -r canaimainstalador $(DESTDIR)/usr/share/pyshared/
 	cp VERSION AUTHORS LICENSE TRANSLATORS \
 		$(DESTDIR)/usr/share/canaima-instalador/
@@ -93,21 +92,32 @@ install:
 		fi; \
 	done
 
-
 	# Removiendo archivos de imagenes innecesarios
 	rm -rf $(DESTDIR)/usr/share/pyshared/canaimainstalador/data/slides/*.png
 	rm -rf $(DESTDIR)/usr/share/pyshared/canaimainstalador/data/slides/*.svg
 	rm -rf $(DESTDIR)/usr/share/pyshared/canaimainstalador/data/img/*.svg
 
+	# Accesos directos
+	cp canaima-instalador.desktop $(DESTDIR)/etc/skel/Escritorio/
+	cp canaima-instalador.desktop $(DESTDIR)/etc/xdg/autostart/
+	cp canaima-instalador.desktop $(DESTDIR)/usr/share/applications/
+
 uninstall:
 
-	rm -rf $(DESTDIR)/usr/bin/canaima-instalador
-	rm -rf $(DESTDIR)/usr/share/pyshared/canaimainstalador
-	rm -rf $(DESTDIR)/etc/skel/Escritorio/canaima-instalador.desktop
+	rm -f $(DESTDIR)/usr/bin/canaima-instalador
+	rm -rf $(DESTDIR)/usr/share/pyshared/canaimainstalador/
+
+	# Remover accesos directos
+	rm -f $(DESTDIR)/etc/skel/Escritorio/canaima-instalador.desktop
 	rm -f $(DESTDIR)/etc/xdg/autostart/canaima-instalador.desktop
+	rm -f $(DESTDIR)/usr/share/applications/canaima-instalador.desktop
 
 	# Desinstalar traducciones
 	rm -f $(DESTDIR)/usr/share/locale/*/LC_MESSAGES/$(DOMAIN_NAME).mo
+	# Removiendo accesos directos
+	rm -f $(DESTDIR)/usr/share/applications/canaima-instalador.desktop \
+	  $(DESTDIR)/etc/xdg/autostart/canaima-instalador.desktop \
+	  $(DESTDIR)/etc/skel/Escritorio/canaima-instalador.desktop
 
 clean: clean-img clean-pyc clean-mo-files
 
