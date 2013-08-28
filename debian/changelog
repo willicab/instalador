@@ -1,3 +1,115 @@
+canaima-instalador (2.0.5-1) kerepakupai; urgency=low
+
+  [ Orlando Fiol ]
+  * [fa47178] Se evita que se abra el nautilus al montar las particiones.
+    Cierra la incidencia #652
+    http://trac.canaima.softwarelibre.gob.ve/canaima/ticket/652
+
+  [ Erick Birbe ]
+  * [6f84309] Desplegando selector de idioma y zona horaria en instalador
+  * [5a1a982] Cargando datos de idioma y teclado en la interfaz grafica
+  * [daf2fac] Añadiendo el soporte a i18n a traves de gettext
+  * [21c2189] Instalando metodo _() de la manera recomendada en la documentacion
+  * [7df75d3] Terminando modulos para el manejo de las traducciones.
+    Se completaron operaciones que eran necesarias y tambien se
+    optimizo a traves de cache el llamado a las clases que ejecutan
+    algun tipo de lectura de archivos para agilizar los procesos.
+  * [dfdfa1f] Implementando la internacionalización en la interfaz gtk
+  * [3dcab89] Metodos para generar archivos locale y locale.gen
+  * [95cc50f] Metodos para generar archivo /etc/default/keyboard
+  * [f175427] Cambiando el nombre al modulo locale.py por i18n.py.
+    Este cambio se debe a imcompatibilidad en los llamados que las
+    clases internas de python hacen a su propio modulo 'locale', de
+    este modo no habra choque entre los nombres.
+  * [59cefe4] Creando metodo generico para escribir los archivos de cofiguracion.
+    El metodo create_file() ubicado en common permite crear un archivo
+    con un contenido especifico.
+  * [18751c6] Corrigiendo detalles de archivos de configuracion
+  * [e5b33df] Ejecutando la configuración de idioma, teclado y zoha horaria.
+    En instalación.py se colocaron los llamados a los metodos
+    procedimientos necesarios para configurar el sistema destino
+    con su respectivo idioma, zona horaria y teclado.
+  * [a06d7a5] Ignorando carpeta de traducciones
+
+  [ Luis Alejandro Martínez Faneyth ]
+  * [108f944] Añadiendo script para la generación de un diccionario de paquetes según localización.
+
+  [ Erick Birbe ]
+  * [f5426e3] Eliminando import innecesario
+  * [e512ccf] Corrigiendo codificacion de caracteres
+  * [152705d] Instalacion de paquetes adicionales de lenguaje.
+    Para que esta funcionalidad este completa al momento de empaquetar,
+    sera necesario agregar la dependencia canaima-l10n la cual es la
+    que registra los paquetes de traduccion adicionales por idioma.
+  * [f46c83f] Activando los llamados a gettext y traduciendo cadenas al ingles.
+    A partir de este momento comienza a realizarse la traducción del
+    instalador. En este commit se hacen los llamados a gettext en todas
+    las cadenas de texto y se cambiaron los mensajes del español al
+    ingles.
+  * [c3a1a2d] Generando plantilla de traducciones messages.pot
+  * [54c34e7] Traduciendo al español (es.po)
+  * [f24b855] Actualizando la traduccion al español
+  * [17414cb] Modificando el banner para que sea traducible
+  * [f353a3a] Activando la prueba del teclado en el campo de texto
+  * [d7adc2e] Generando .mo desde el Makefile y eliminando algunos templates
+  * [db94bbd] Limpiando los archivos .mo desde el makefile
+  * [eea3cd6] Configurando el makefile para la instalacion
+  * [0f78e0a] Borrando correctamente los archivos .mo
+  * [2c13751] Dando permisos de ejecución al ejecutable principal
+  * [0a583d2] Corrigiendo la ruta de las traducciones al instalar
+  * [a843a7e] Nuevamente corrigiendo la instalacion de los locales
+  * [d4813c6] Colocando la ruta por defecto de traducciones como lo recomienda el manual DevHelp
+  * [2134b98] Activando accesibilidad en la bienvenida
+  * [5e2428f] Activando accesibilidad en PasoTeclado
+  * [c06c901] Agregando libreria de accesibilidad
+  * [03779fe] Agregando accesibilidad a interfaz grafica
+  * [be7c44d] Traduciendo texto que no pasaba por gettext
+  * [3ae25a0] Provocando la instalación del meta-paquete de idioma
+  * [44fa0c3] Mejorando la determinación de la ruta de los paquetes en el pool.
+    Existia un problema en el cual el metodo indicaba mal la letra del
+    paquete fuente si el nombre de este comenzaba con 'lib*'.
+
+  [ Carlos Espinoza ]
+  * [b0c9c9a] Agregando Img del slide para la versión 4.0
+
+  [ Erick Birbe ]
+  * [dd212aa] Quitando clave GPG forzada en buildpackage.sh
+  * [e79a358] New stable release 2.0.2
+  * [d40fdc4] Invirtiendo lista TODO y marcando tareas terminadas
+  * [f1fefbc] Valida que hay ruta y nombre en lista de paquetes
+  * [f77ca4d] Agregando paquete de idioma en la lista correcta
+  * [5e3c4ee] Actualizando TODO
+  * [3da8d38] New development snapshot 2.0.3+dev20130730150612
+  * [86aa970] New stable release 2.0.3
+
+  [ Carlos Espinoza ]
+  * [a1fb2ed] corrigiendo img en los sildes
+
+  [ Erick Birbe ]
+  * [4205114] Corrigiendo errores de traducción
+  * [6be5009] Agregando cadena de texto al gettext
+  * [00d78d4] New development snapshot 2.0.4+dev20130731092953
+  * [0ec370f] New stable release 2.0.4
+  * [1e0cd45] Animación inicial de instalación menos confusa (ticket #566)
+  * [24d88fa] Mejorando presentación de Diapositivas (Ticket #565)
+  * [fa04879] Corrigiendo error de automontaje de nautilus (#652)
+  * [e52dc48] Configurando la hora segun la zona horaria (ticket #705)
+    Se implementó la reconfiguración del paquete tzdata luego de
+    insertar el archivo /etc/timezone. El error reportado en #705
+    configuraba la hora en UTC aunque el archivo timezone indicara
+    otra zona.
+  * [b1db624] Corrigiendo error de traduccion es.po
+  * [962e90e] Mejorando la transicion final del slideshow
+  * [c957411] Nueva imágen de presentación para Guacharo (tkt #564)
+  * [54cbb28] Adaptando el .desktop para los menus
+  * [584f838] Configurando una entrada de menu para el instalador (tkt #729)
+  * [af8c6b8] Creando carpeta usr/share/applucations y removiendo .desktop
+  * [599f504] Mopdificando formato de los merge
+  * [e7599f2] New development snapshot 2.0.5+dev20130828164005
+  * [5d37c8d] New stable release 2.0.5
+
+ -- Erick Birbe <erickcion@gmail.com>  Wed, 28 Aug 2013 16:57:10 -0430
+
 canaima-instalador (2.0.4-1) kerepakupai; urgency=low
 
   * corrigiendo los img de los slides
