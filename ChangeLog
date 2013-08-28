@@ -1,23 +1,6 @@
-DEVELOPMENT SNAPSHOT v2.0.5+dev20130828164005 (08/28/13)
-Mopdificando formato de los merge
-Creando carpeta usr/share/applucations y removiendo .desktop
-Configurando una entrada de menu para el instalador (tkt #729)
-Adaptando el .desktop para los menus
-Nueva imágen de presentación para Guacharo (tkt #564)
-Mejorando la transicion final del slideshow
-Corrigiendo error de traduccion es.po
-Configurando la hora segun la zona horaria (ticket #705)
-Corrigiendo error de automontaje de nautilus (#652)
-Mejorando presentación de Diapositivas (Ticket #565)
-Animación inicial de instalación menos confusa (ticket #566)
-Agregando cadena de texto al gettext
+STABLE RELEASE v2.0.5 (08/28/13)
 
-DEVELOPMENT SNAPSHOT v2.0.4+dev20130731092953 (07/31/13)
-Agregando cadena de texto al gettext
-Corrigiendo errores de traducción
-Merge remote-tracking branch 'origin/development' into development
-corrigiendo img en los sildes
-Actualizando TODO
+STABLE RELEASE v2.0.4 (07/31/13)
 
 STABLE RELEASE v2.0.3 (07/30/13)
 
