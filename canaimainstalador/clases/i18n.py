@@ -97,11 +97,13 @@ def have_language_pack(locale):
     packages = i18n_packages()[lc_str]
 
     for p in packages:
+        print "Checking", p
         # Toma el primer paquete si hay una condicion
         if type(p) is type(list()):
             p = p[0]
         # Chequea q todos los paquetes esten en el pool para su instalacion
         if not is_package_in_pool(p):
+            print "{} is not in pool"
             return False
     return True
 
@@ -321,16 +323,16 @@ if __name__ == "__main__":
     isoxml = Iso_369_3()
     #print isoxml.names
 
-    for locale in lc.supported:
-        if locale.get_name():
-            print locale.get_name()
-            print locale.line
-            print locale.lang_id
-            print locale.country_id
-            print locale.collation
-            print locale_content(locale)
-            print "----"
-            print locale_gen_content(locale)
-            print "----"
+    #~ for locale in lc.supported:
+        #~ if locale.get_name():
+            #~ print locale.get_name()
+            #~ print locale.line
+            #~ print locale.lang_id
+            #~ print locale.country_id
+            #~ print locale.collation
+            #~ print locale_content(locale)
+            #~ print "----"
+            #~ print locale_gen_content(locale)
+            #~ print "----"
 
     print have_language_pack("es_VE")
