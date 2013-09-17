@@ -1,3 +1,12 @@
+canaima-instalador (2.0.6-1) kerepakupai; urgency=low
+
+  * [05936ae] Pidiendo reconfiguracion de Software Center.
+    Se reconfigura el software-center para poder forzar la
+    actualizacion del xapian-index.
+  * [5ad889f] Algunas impresiones nada mas
+
+ -- Erick Birbe <erickcion@gmail.com>  Tue, 17 Sep 2013 10:40:12 -0430
+
 canaima-instalador (2.0.5-1) kerepakupai; urgency=low
 
   [ Orlando Fiol ]
