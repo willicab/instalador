@@ -260,7 +260,7 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
         ]
     reconfpkgs = [
         'locales', 'canaima-estilo-visual-gnome', 'canaima-escritorio-gnome',
-        'canaima-base', 'tzdata', 'software-center'
+        'canaima-base', 'tzdata', 'software-center', 'console-data'
         ]
     instpkgs_burg = [
         [LIVE_PATH + '/pool/main/libx/libx86', 'libx86-1'],
@@ -283,7 +283,17 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
         'burg-pc burg/linux_cmdline string quiet splash',
         'burg-pc burg/linux_cmdline_default string quiet splash vga=791',
         'burg-pc burg-pc/install_devices multiselect {0}'.format(
-                                                ', '.join(p.lista_discos()))
+                                                ', '.join(p.lista_discos())),
+        #TODO: Automatizar la configuración del teclado de las TTY
+        "console-data console-data/keymap/qwerty/layout select Latin American",
+        "console-data console-data/keymap/family select qwerty",
+        "console-common console-data/keymap/family select qwerty",
+        "console-data console-data/keymap/qwerty/latin_american/variant \
+select Standard",
+        "console-data console-data/keymap/qwerty/latin_american/standard/\
+keymap select Standard",
+        "console-data console-data/keymap/policy select Select keymap from \
+arch list"
         ]
     bindlist = [
         ['/dev', mountpoint + '/dev', ''],
