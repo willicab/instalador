@@ -29,8 +29,11 @@
 from canaimainstalador.clases.i18n import Locale
 from canaimainstalador.clases.timezone import TimeZone
 from canaimainstalador.translator import gettext_install
-import gobject
-import gtk
+#import gobject
+from gi.repository import GObject as gobject
+#import gtk
+#
+from gi.repository import Gtk as gtk
 from canaimainstalador.clases.keyboard import Keyboard
 from canaimainstalador.clases.common import ProcessGenerator
 from canaimainstalador.mod_accesible import atk_acc
@@ -39,22 +42,29 @@ from canaimainstalador.mod_accesible import atk_acc
 gettext_install()
 
 
-class ComboBoxObject(gtk.ComboBox):
+class ComboBoxObject():
 
     def __init__(self):
 
         self._store = gtk.ListStore(str, gobject.TYPE_PYOBJECT)
-        gtk._gtk.ComboBox.__init__(self, self._store)
+        
 
         cell = gtk.CellRendererText()
-        self.pack_start(cell, True)
-        self.add_attribute(cell, "text", 0)
+        self.cmb=gtk.ComboBox.new_with_model(self._store)
+        self.cmb.pack_start(cell, True)
+        self.cmb.add_attribute(cell, "text", 0)
+        self.cmb.get_active_object=self.get_active_object
+
 
     def append(self, value, obj):
-        self._store.append([value, obj])
+        self.cmb.get_model().append([value, obj])
+    def connect(self,senal,callback):
+        self.cmb.connect(senal,callback)
+    def set_active(self,boolean):
+        self.cmb.set_active(boolean)
 
     def get_active_object(self):
-        return self._store.get(self.get_active_iter(), 1)[0]
+        return self._store.get(self.cmb.get_active_iter(), 1)[0]
 
 
 class PasoTeclado(gtk.VBox):
@@ -69,28 +79,28 @@ class PasoTeclado(gtk.VBox):
         self.keyboard = ''
 
         lbl_lang = gtk.Label(_("Language"))
-        self.pack_start(lbl_lang, False, False)
+        self.pack_start(lbl_lang, False, False,0)
         self._cmb_lang = ComboBoxObject()
         self._build_cmb_lang()
-        atk_acc(self._cmb_lang, lbl_lang)
-        self.pack_start(self._cmb_lang, False, False)
+        #atk_acc(self._cmb_lang, lbl_lang)
+        self.pack_start(self._cmb_lang.cmb, False, False,0)
 
         lbl_tz = gtk.Label(_("Timezone"))
-        self.pack_start(lbl_tz, False, False)
+        self.pack_start(lbl_tz, False, False,0)
         self._cmb_tz = ComboBoxObject()
         self._build_cmb_tz()
-        atk_acc(self._cmb_tz, lbl_tz)
-        self.pack_start(self._cmb_tz, False, False)
+        #atk_acc(self._cmb_tz, lbl_tz)
+        self.pack_start(self._cmb_tz.cmb, False, False,0)
 
         lbl_keyboard = gtk.Label(_("Keyboard"))
-        self.pack_start(lbl_keyboard, False, False)
+        self.pack_start(lbl_keyboard, False, False,0)
         self._cmb_kbd = ComboBoxObject()
         self._build_cmb_keyboard()
-        atk_acc(self._cmb_kbd, lbl_keyboard)
-        self.pack_start(self._cmb_kbd, False, False)
+        #atk_acc(self._cmb_kbd, lbl_keyboard)
+        self.pack_start(self._cmb_kbd.cmb, False, False,0)
 
         hsep1 = gtk.HSeparator()
-        self.pack_start(hsep1)
+        self.pack_start(hsep1,True,False,0)
 
         #======================================================================
         # self._img_distribucion = gtk.Image()
@@ -100,18 +110,17 @@ class PasoTeclado(gtk.VBox):
         vbox1 = gtk.VBox()
         lbl2 = gtk.Label(_("Press some keys to test the chosen keyboard \
 layout"))
-        vbox1.pack_start(lbl2, False, False)
+        vbox1.pack_start(lbl2, False, False,0)
         txt_prueba = gtk.Entry()
-        atk_acc(txt_prueba, lbl2)
-        vbox1.pack_start(txt_prueba, False, False)
-        self.pack_end(vbox1, False, False)
+        #atk_acc(txt_prueba, lbl2)
+        vbox1.pack_start(txt_prueba, False, False,0)
+        self.pack_end(vbox1, False, False,0)
 
         self.reset_form()
 
     def _build_cmb_lang(self):
 
         lc = Locale()
-
         for l in lc.supported:
             self._cmb_lang.append(l.get_name(), l)
 

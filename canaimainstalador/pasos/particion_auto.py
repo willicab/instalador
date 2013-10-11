@@ -30,7 +30,8 @@ from canaimainstalador.clases.barra_auto import BarraAuto
 from canaimainstalador.clases.leyenda import Leyenda
 from canaimainstalador.config import ESPACIO_TOTAL, ESPACIO_USADO_EXTRA
 from canaimainstalador.translator import gettext_install
-import gtk
+#import gtk
+from gi.repository import Gtk as gtk
 from canaimainstalador.mod_accesible import atk_label
 
 

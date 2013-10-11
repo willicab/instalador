@@ -31,7 +31,8 @@ from canaimainstalador.clases.common import humanize, UserMessage
 from canaimainstalador.clases.particiones import Particiones
 from canaimainstalador.config import ESPACIO_TOTAL, CFG, FSPROGS
 from canaimainstalador.translator import gettext_install
-import gtk
+#import gtk
+from gi.repository import Gtk as gtk
 from canaimainstalador.mod_accesible import atk_acc, atk_label
 
 
@@ -55,7 +56,8 @@ Canaima:"))
         self.lbl1.set_alignment(0, 0)
         self.put(self.lbl1, 0, 0)
 
-        self.cmb_discos = gtk.combo_box_new_text()
+        #self.cmb_discos = gtk.combo_box_new_text()
+        self.cmb_discos = gtk.ComboBoxText()
         self.cmb_discos.set_size_request(690, 30)
         self.put(self.cmb_discos, 0, 25)
         atk_acc(self.cmb_discos, self.lbl1)

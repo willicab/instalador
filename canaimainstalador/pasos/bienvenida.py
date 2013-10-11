@@ -26,7 +26,8 @@
 #
 # CODE IS POETRY
 
-import gtk
+#import gtk
+from gi.repository import Gtk as gtk
 import pango
 from canaimainstalador.translator import gettext_install
 from canaimainstalador.mod_accesible import atk_acc_vd
@@ -44,24 +45,28 @@ class PasoBienvenida(gtk.Fixed):
 GNU/Linux on your computer. We invite you to follow the instructions \
 displayed on screen.")
 
-        attr = pango.AttrList()
-        size = pango.AttrSize(20000, 0, -1)
-        attr.insert(size)
+        #attr = pango.AttrList()
+        #size = pango.AttrSize(20000, 0, -1)
+        #attr.insert(size)
 
-        self.lbltitulo = gtk.Label(msg_titulo)
+        self.lbltitulo = gtk.Label(label=msg_titulo)
         self.lbltitulo.set_size_request(640, 80)
         self.lbltitulo.set_alignment(0, 0)
-        self.lbltitulo.set_attributes(attr)
+        #self.lbltitulo.set_attributes(attr)
+        self.lbltitulo.set_markup("<span font_size='20000'>"+msg_titulo+"</span>")
+
+
         self.lbltitulo.set_line_wrap(True)
         #self.lbltitulo.set_selectable(True)
         self.put(self.lbltitulo, 50, 90)
 
-        self.lblintro = gtk.Label(msg_intro)
+        self.lblintro = gtk.Label(label=msg_intro)
         self.lblintro.set_size_request(640, 40)
         self.lblintro.set_alignment(0, 0)
         self.lblintro.set_line_wrap(True)
         #self.lblintro.set_selectable(True)
         self.put(self.lblintro, 50, 170)
 
-        self.set_flags(gtk.CAN_FOCUS)
+        #self.set_state_flags(gtk.CAN_FOCUS)
+        self.set_can_focus(True)
         atk_acc_vd(self, msg_titulo + " " + msg_intro)

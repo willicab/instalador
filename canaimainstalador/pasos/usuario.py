@@ -27,7 +27,8 @@
 # CODE IS POETRY
 
 from canaimainstalador.translator import gettext_install
-import gtk
+#import gtk
+from gi.repository import Gtk as gtk
 import pango
 from canaimainstalador.mod_accesible import atk_label, atk_acc
 

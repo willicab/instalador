@@ -28,7 +28,8 @@
 
 from canaimainstalador.clases.common import humanize
 from canaimainstalador.translator import gettext_install
-import gtk
+#import gtk
+from gi.repository import Gtk as gtk
 
 
 gettext_install()

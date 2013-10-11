@@ -32,7 +32,8 @@ from canaimainstalador.clases.frame_fs import frame_fs, MSG_ENTER_MANUAL, \
     MSG_NONE
 from canaimainstalador.config import FSMIN, FSMAX
 from canaimainstalador.translator import msj, gettext_install
-import gtk
+#import gtk
+from gi.repository import Gtk as gtk
 
 
 gettext_install()

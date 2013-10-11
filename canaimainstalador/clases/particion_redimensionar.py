@@ -32,7 +32,8 @@ from canaimainstalador.clases.common import humanize, TblCol, floatify, \
 from canaimainstalador.config import FSMIN, FSMAX, ESPACIO_USADO_EXTRA
 from canaimainstalador.translator import msj, gettext_install
 from copy import copy
-import gtk
+#import gtk
+from gi.repository import Gtk as gtk
 
 
 gettext_install()

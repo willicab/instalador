@@ -39,7 +39,8 @@ from canaimainstalador.pasos.particion_todo import PasoPartTodo
 from canaimainstalador.pasos.teclado import PasoTeclado
 from canaimainstalador.pasos.usuario import PasoUsuario
 import Image
-import gtk
+#import gtk
+from gi.repository import Gtk as gtk
 import re
 from canaimainstalador.translator import gettext_install
 import pango
@@ -54,8 +55,8 @@ class Wizard(gtk.Window):
         self.actual = ''
 
         # Creo la ventana
-        gtk.Window.__init__(self, gtk.WINDOW_TOPLEVEL)
-        gtk.Window.set_position(self, gtk.WIN_POS_CENTER_ALWAYS)
+        gtk.Window.__init__(self, gtk.WindowType.TOPLEVEL)
+        gtk.Window.set_position(self, gtk.WindowPosition.CENTER_ALWAYS)
         self.set_icon_from_file(BAR_ICON)
         self.titulo = titulo
         self.set_title(titulo)
@@ -81,13 +82,14 @@ class Wizard(gtk.Window):
         banner_container = gtk.Fixed()
         banner_container.set_size_request(self.banner_w, self.banner_h)
 
-        attr = pango.AttrList()
-        attr.insert(pango.AttrSize(25000, 0, -1))
-        attr.insert(pango.AttrStyle(pango.STYLE_ITALIC, 0, -1))
-        attr.insert(pango.AttrWeight(pango.WEIGHT_BOLD, 0, -1))
+        #attr = pango.AttrList()
+        #attr.change(pango.AttrSize(25000, 0, -1))
+        #attr.change(pango.AttrStyle(pango.STYLE_ITALIC, 0, -1))
+        #attr.change(pango.AttrWeight(pango.WEIGHT_BOLD, 0, -1))
 
-        lbl1 = gtk.Label(_("Canaima Installation"))
-        lbl1.set_attributes(attr)
+        lbl1 = gtk.Label(label=_("Canaima Installation"))
+        lbl1.set_markup("<b><i>"+_("Canaima Installation")+"</i></b>")
+        #lbl1.set_attributes(attr)
 
         banner_container.put(self.banner, 0, 0)
         banner_container.put(lbl1, 100, 10)
@@ -143,8 +145,10 @@ class Wizard(gtk.Window):
         '''
         return UserMessage(
             _('Are you sure you want to cancel the installation?'), _('Exit'),
-            gtk.MESSAGE_WARNING, gtk.BUTTONS_YES_NO, c_1=gtk.RESPONSE_YES,
-                f_1=gtk.main_quit, p_1=())
+            gtk.MessageType.WARNING, gtk.ButtonsType.YES_NO,c_1=gtk.ResponseType.YES, f_1=gtk.main_quit,p_1=())
+
+            #gtk.MESSAGE_WARNING, gtk.BUTTONS_YES_NO, c_1=gtk.RESPONSE_YES,
+            #    f_1=gtk.main_quit, p_1=())
 
     def next(self, nombre, init, params, paso):
         '''
@@ -153,7 +157,7 @@ class Wizard(gtk.Window):
         if not nombre in self.pasos:
             if self.actual != nombre:
                 if self.actual != '':
-                    self.pasos[self.actual].hide_all()
+                    self.pasos[self.actual].hide()
                 self.actual = nombre
 
             init(params)
@@ -307,7 +311,7 @@ class PartManual():
     def siguiente(self, CFG):
         if CFG['w'].formulario('PartManual').raiz == False:
             message = _("Root partition (/) must exists")
-            UserMessage(message, 'ERROR', gtk.MESSAGE_ERROR, gtk.BUTTONS_OK)
+            UserMessage(message, 'ERROR', gtk.MessageType.ERROR, gtk.ButtonsType.OK)
             return False
 
         CFG['acciones'] = CFG['w'].formulario('PartManual').acciones
@@ -347,44 +351,44 @@ class Usuario():
         if CFG['oem'] == False:
             if CFG['passroot1'].strip() == '':
                 message = _("You must enter a password for the administrator.")
-                UserMessage(message, 'ERROR', gtk.MESSAGE_ERROR,
-                            gtk.BUTTONS_OK)
+                UserMessage(message, 'ERROR', gtk.MessageType.ERROR,
+                            gtk.ButtonsType.OK)
                 return
             if CFG['passroot1'] != CFG['passroot2']:
                 message = _("Administrator passwords do not match.")
-                UserMessage(message, 'ERROR', gtk.MESSAGE_ERROR,
-                            gtk.BUTTONS_OK)
+                UserMessage(message, 'ERROR', gtk.MessageType.ERROR,
+                            gtk.ButtonsType.OK)
                 return
             if CFG['nombre'].strip() == '':
                 message = _("You must enter a name.")
-                UserMessage(message, 'ERROR', gtk.MESSAGE_ERROR,
-                            gtk.BUTTONS_OK)
+                UserMessage(message, 'ERROR', gtk.MessageType.ERROR,
+                            gtk.ButtonsType.OK)
                 return
             if CFG['usuario'].strip() == '':
                 message = _("You must enter a user name.")
-                UserMessage(message, 'ERROR', gtk.MESSAGE_ERROR,
-                            gtk.BUTTONS_OK)
+                UserMessage(message, 'ERROR', gtk.MessageType.ERROR,
+                            gtk.ButtonsType.OK)
                 return
             if re.compile('^[a-z][-a-z-0-9]*$').search(CFG['usuario']) == None:
                 message = _("The user name has invalid characters.")
-                UserMessage(message, 'ERROR', gtk.MESSAGE_ERROR,
-                            gtk.BUTTONS_OK)
+                UserMessage(message, 'ERROR', gtk.MessageType.ERROR,
+                            gtk.ButtonsType.OK)
                 return
             if CFG['passuser1'].strip() == '':
                 message = _("You must enter a password for the user.")
-                UserMessage(message, 'ERROR', gtk.MESSAGE_ERROR,
-                            gtk.BUTTONS_OK)
+                UserMessage(message, 'ERROR', gtk.MessageType.ERROR,
+                            gtk.ButtonsType.OK)
                 return
             if CFG['passuser1'] != CFG['passuser2']:
                 message = _("User passwords do not match.")
-                UserMessage(message, 'ERROR', gtk.MESSAGE_ERROR,
-                            gtk.BUTTONS_OK)
+                UserMessage(message, 'ERROR', gtk.MessageType.ERROR,
+                            gtk.ButtonsType.OK)
                 return
             if re.compile("^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*\
 ([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$").search(CFG['maquina']) == None:
                 message = _("The machine name is not spelled correctly.")
-                UserMessage(message, 'ERROR', gtk.MESSAGE_ERROR,
-                            gtk.BUTTONS_OK)
+                UserMessage(message, 'ERROR', gtk.MessageType.ERROR,
+                            gtk.ButtonsType.OK)
                 return
 
         CFG['w'].next('Info', Info, (CFG), PasoInfo(CFG))

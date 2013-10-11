@@ -34,7 +34,8 @@ import re
 import subprocess
 import math
 import cairo
-import gtk
+#import gtk
+from gi.repository import Gtk as gtk
 import hashlib
 import random
 import string

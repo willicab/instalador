@@ -30,7 +30,8 @@ from canaimainstalador.clases.common import get_row_index, TblCol, \
     has_next_row, is_primary, is_logic, humanize, PStatus, is_free, UserMessage
 from canaimainstalador.translator import msj, gettext_install
 from copy import copy
-import gtk
+#import gtk
+from gi.repository import Gtk as gtk
 
 
 gettext_install()

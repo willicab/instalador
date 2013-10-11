@@ -26,7 +26,8 @@
 #
 # CODE IS POETRY
 
-import gtk
+#import gtk
+from gi.repository import Gtk as gtk
 from canaimainstalador.clases.common import is_logic, has_extended, TblCol, \
     is_usable
 from canaimainstalador.translator import msj

@@ -33,7 +33,8 @@ from canaimainstalador.clases.common import floatify, humanize, TblCol, \
 from canaimainstalador.clases.tabla_particiones import TablaParticiones
 from canaimainstalador.config import ESPACIO_TOTAL
 from canaimainstalador.translator import msj
-import gtk
+#import gtk
+from gi.repository import Gtk as gtk
 
 
 class PasoPartManual(gtk.VBox):

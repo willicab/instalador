@@ -36,13 +36,16 @@ from canaimainstalador.clases.common import UserMessage, ProcessGenerator, \
 from canaimainstalador.clases.particiones import Particiones
 from canaimainstalador.config import INSTALL_SLIDES, BAR_ICON, SHAREDIR
 import Queue
-import gobject
-import gtk
+#import gobject
+from gi.repository import GObject as gobject
+#import gtk
+from gi.repository import Gtk as gtk
 import os
 import pango
 import sys
 import threading
-import webkit
+#import webkit
+from gi.repository import WebKit as webkit
 from canaimainstalador.clases import keyboard, i18n
 from canaimainstalador.clases.i18n import install_language_pack
 from canaimainstalador.translator import gettext_install

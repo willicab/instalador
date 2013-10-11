@@ -26,7 +26,8 @@
 #
 # CODE IS POETRY
 
-import gtk
+#import gtk
+from gi.repository import Gtk as gtk
 
 from canaimainstalador.clases.common import set_color, draw_rounded
 from canaimainstalador.config import ESPACIO_TOTAL, ESPACIO_SWAP, \

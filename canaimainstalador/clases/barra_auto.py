@@ -29,7 +29,8 @@
 from canaimainstalador.clases.common import draw_rounded, set_color
 from canaimainstalador.config import ESPACIO_TOTAL, ESPACIO_SWAP, \
     ESPACIO_ROOT, ESPACIO_BOOT, ESPACIO_VAR, ESPACIO_USR
-import gtk
+#import gtk
+from gi.repository import Gtk as gtk
 
 
 class BarraAuto(gtk.DrawingArea):
