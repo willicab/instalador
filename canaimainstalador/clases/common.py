@@ -205,18 +205,10 @@ def assisted_mount(sync, bind, plist):
 
         if fs != 'swap':
             if not os.path.ismount(m):
-                #Evita que se abra nautilus al montar las particiones
-                # TODO: Validar la existencia de gsettings
-                # TODO: Leer valor de esta llave en gsettings para luego
-                # devolverla a su valor original
-                os.system('gsettings set org.gnome.desktop.media-handling \
-automount false')
                 if ProcessGenerator(
                     'mount {0} {1} {2} {3}'.format(bindcmd, fscmd, p, m)
                     ).returncode == 0:
                     i += 1
-                os.system('gsettings set org.gnome.desktop.media-handling \
-automount true')
             else:
                 i += 1
         else:

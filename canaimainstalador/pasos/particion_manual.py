@@ -68,41 +68,41 @@ partitions to your liking. We recommend:
 
         # btn_nueva
         self.btn_nueva = gtk.Button(_("New..."))
-        image = gtk.Image()
-        image.set_from_stock(gtk.STOCK_ADD, gtk.ICON_SIZE_SMALL_TOOLBAR)
-        self.btn_nueva.set_image(image)
+        #image = gtk.Image()
+        #image.set_from_stock(gtk.STOCK_ADD, gtk.ICON_SIZE_SMALL_TOOLBAR)
+        #self.btn_nueva.set_image(image)
         self.btn_nueva.show()
         self.btn_nueva.connect("clicked", self.new_partition)
 
         # btn_editar
         self.btn_editar = gtk.Button(_("Edit..."))
-        image = gtk.Image()
-        image.set_from_stock(gtk.STOCK_EDIT, gtk.ICON_SIZE_SMALL_TOOLBAR)
-        self.btn_editar.set_image(image)
+        #image = gtk.Image()
+        #image.set_from_stock(gtk.STOCK_EDIT, gtk.ICON_SIZE_SMALL_TOOLBAR)
+        #self.btn_editar.set_image(image)
         self.btn_editar.show()
         self.btn_editar.connect("clicked", self.edit_partition)
 
         # btn_eliminar
         self.btn_eliminar = gtk.Button(_("Delete"))
-        image = gtk.Image()
-        image.set_from_stock(gtk.STOCK_REMOVE, gtk.ICON_SIZE_SMALL_TOOLBAR)
-        self.btn_eliminar.set_image(image)
+        #image = gtk.Image()
+        #image.set_from_stock(gtk.STOCK_REMOVE, gtk.ICON_SIZE_SMALL_TOOLBAR)
+        #self.btn_eliminar.set_image(image)
         self.btn_eliminar.show()
         self.btn_eliminar.connect("clicked", self.delete_partition)
 
         # btn_redimension
         self.btn_redimension = gtk.Button(_("Resize..."))
-        image = gtk.Image()
-        image.set_from_stock(gtk.STOCK_INDENT, gtk.ICON_SIZE_SMALL_TOOLBAR)
-        self.btn_redimension.set_image(image)
+        #image = gtk.Image()
+        #image.set_from_stock(gtk.STOCK_INDENT, gtk.ICON_SIZE_SMALL_TOOLBAR)
+        #self.btn_redimension.set_image(image)
         self.btn_redimension.show()
         self.btn_redimension.connect("clicked", self.resize_partition)
 
         # btn_deshacer
         self.btn_deshacer = gtk.Button(_("Undo all"))
-        image = gtk.Image()
-        image.set_from_stock(gtk.STOCK_UNDO, gtk.ICON_SIZE_SMALL_TOOLBAR)
-        self.btn_deshacer.set_image(image)
+        #image = gtk.Image()
+        #image.set_from_stock(gtk.STOCK_UNDO, gtk.ICON_SIZE_SMALL_TOOLBAR)
+        #self.btn_deshacer.set_image(image)
         self.btn_deshacer.show()
         self.btn_deshacer.connect("clicked", self.undo_all_actions)
 
