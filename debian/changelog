@@ -1,3 +1,26 @@
+canaima-instalador (2.0.7-1) kerepakupai; urgency=low
+
+  * [4ba4724] Configurando idioma latino en Consolas TTY.
+    Hace una reconfiguracion del paquete console-data basandose en
+    los preseeds agregados para poder  configurar correctamente el
+    teclado en las consolas TTY. Este proceso hay que automatizarlo
+    ya que cada teclado deberia poder configurarse segun la seleccion
+    del usuario en el asistente.
+  * [4f6978c] Desincorporando la configuración de gsettings para el "automount"
+    La desactivación del comportamiendo del automount y automount-open
+    está ahora a cargo de un script externo que se ejecuta al iniciar
+    el sistema. Ya esta fracción de codigo no es necesaria y pudiera
+    en todo caso entorpecer la configuración ya hecha por el script
+    externo.
+  * [5c0f1f5] Quitando iconos a los botones del particionador manual.
+    Se han removido ya que en el tema oficial de Canaima 4.0 hacen
+    que se expandan los botones por fuera del tamaño maximo de la
+    ventana.
+  * [1835e1d] New development snapshot 2.0.7+dev20131023161117
+  * [33a3605] New stable release 2.0.7
+
+ -- Erick Birbe <erickcion@gmail.com>  Wed, 23 Oct 2013 16:18:06 -0430
+
 canaima-instalador (2.0.6-1) kerepakupai; urgency=low
 
   * [05936ae] Pidiendo reconfiguracion de Software Center.
