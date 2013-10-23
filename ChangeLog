@@ -1,3 +1,9 @@
+DEVELOPMENT SNAPSHOT v2.0.7+dev20131023161117 (10/23/13)
+Quitando iconos a los botones del particionador manual
+Desincorporando la configuración de gsettings para el "automount"
+Configurando idioma latino en Consolas TTY
+Dummy
+
 DEVELOPMENT SNAPSHOT v2.0.6+dev20130917103728 (09/17/13)
 Dummy
 Merge remote-tracking branch 'origin/development' into development
