@@ -280,7 +280,6 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
         'canaima-primeros-pasos'
         ]]
     debconflist = [
-        'burg-pc burg/linux_cmdline string quiet splash',
         'burg-pc burg/linux_cmdline_default string quiet splash vga=791',
         'burg-pc burg-pc/install_devices multiselect {0}'.format(
                                                 ', '.join(p.lista_discos())),
