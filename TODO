@@ -28,7 +28,7 @@
 - Traducir las cadenas de texto de idiomas y zonas horarias y teclado que se leen del sistema.
 - Probar Instalación de paquetes con un archivo sources.list temporal que apunte al pool del CD/DVD
 
-###
+####
 
 [ LISTO ] - Agregar pantalla para selección de zona horaria y escribir el archivo /etc/localetime adecuadamente.
 [ LISTO ] - Ampliar opciones de selección de idioma y distribuciones de teclado, configurando el idioma de Canaima adecuadamente.
