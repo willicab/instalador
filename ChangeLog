@@ -1,41 +1,6 @@
-DEVELOPMENT SNAPSHOT v2.0.8+dev20131025093930 (10/25/13)
-dummy
-Removiendo preseed para 'burg/linux_cmdline' (tkt #792)
-Quitando iconos a los botones del particionador manual
+STABLE RELEASE v2.0.8 (10/25/13)
 
-DEVELOPMENT SNAPSHOT v2.0.7+dev20131023161117 (10/23/13)
-Quitando iconos a los botones del particionador manual
-Desincorporando la configuración de gsettings para el "automount"
-Configurando idioma latino en Consolas TTY
-Dummy
-
-DEVELOPMENT SNAPSHOT v2.0.6+dev20130917103728 (09/17/13)
-Dummy
-Merge remote-tracking branch 'origin/development' into development
-Algunas impresiones nada mas
-Pidiendo reconfiguracion de Software Center
-Mopdificando formato de los merge
-
-DEVELOPMENT SNAPSHOT v2.0.5+dev20130828164005 (08/28/13)
-Mopdificando formato de los merge
-Creando carpeta usr/share/applucations y removiendo .desktop
-Configurando una entrada de menu para el instalador (tkt #729)
-Adaptando el .desktop para los menus
-Nueva imágen de presentación para Guacharo (tkt #564)
-Mejorando la transicion final del slideshow
-Corrigiendo error de traduccion es.po
-Configurando la hora segun la zona horaria (ticket #705)
-Corrigiendo error de automontaje de nautilus (#652)
-Mejorando presentación de Diapositivas (Ticket #565)
-Animación inicial de instalación menos confusa (ticket #566)
-Agregando cadena de texto al gettext
-
-DEVELOPMENT SNAPSHOT v2.0.4+dev20130731092953 (07/31/13)
-Agregando cadena de texto al gettext
-Corrigiendo errores de traducción
-Merge remote-tracking branch 'origin/development' into development
-corrigiendo img en los sildes
-Actualizando TODO
+STABLE RELEASE v2.0.7 (10/23/13)
 
 STABLE RELEASE v2.0.6 (09/17/13)
 
