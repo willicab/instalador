@@ -1,3 +1,8 @@
+DEVELOPMENT SNAPSHOT v2.0.8+dev20131025093930 (10/25/13)
+dummy
+Removiendo preseed para 'burg/linux_cmdline' (tkt #792)
+Quitando iconos a los botones del particionador manual
+
 DEVELOPMENT SNAPSHOT v2.0.7+dev20131023161117 (10/23/13)
 Quitando iconos a los botones del particionador manual
 Desincorporando la configuración de gsettings para el "automount"
