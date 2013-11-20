@@ -37,7 +37,7 @@ def atk_acc(objeto, etiqueta):
     return
 
     relation_set = atk_l.ref_relation_set()
-    relation = Atk.Relation.new((atk_obj,) 1, Atk.RelationType.LABEL_FOR)
+    relation = Atk.Relation.new((atk_obj,), 1, Atk.RelationType.LABEL_FOR)
     relation_set.add(relation)
 
 
