@@ -32,14 +32,13 @@ from canaimainstalador.clases.common import humanize, TblCol, floatify, \
 from canaimainstalador.config import FSMIN, FSMAX, ESPACIO_USADO_EXTRA
 from canaimainstalador.translator import msj, gettext_install
 from copy import copy
-#import gtk
-from gi.repository import Gtk as gtk
+from gi.repository import Gtk
 
 
 gettext_install()
 
 
-class Main(gtk.Dialog):
+class Main(Gtk.Dialog):
 
     def __init__(self, disco, lista, fila, acciones):
         self.sector = get_sector_size(disco)
@@ -52,21 +51,21 @@ class Main(gtk.Dialog):
         self.fin = fila[TblCol.FIN]
         self.usado = floatify(fila[TblCol.USADO])
 
-        gtk.Window.__init__(self, gtk.WINDOW_TOPLEVEL)
-        gtk.Window.set_position(self, gtk.WIN_POS_CENTER_ALWAYS)
+        Gtk.Window.__init__(self, Gtk.WindowType.TOPLEVEL)
+        Gtk.Window.set_position(self, Gtk.WindowPosition.CENTER_ALWAYS)
 
         self.set_title("Redimensionar Partición")
         self.set_size_request(400, 200)
         self.set_resizable(0)
 
-        self.add_button(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL)
-        self.add_button(gtk.STOCK_OK, gtk.RESPONSE_OK)
-        self.set_response_sensitive(gtk.RESPONSE_OK, False)
-        self.set_default_response(gtk.RESPONSE_CANCEL)
+        self.add_button(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL)
+        self.add_button(Gtk.STOCK_OK, Gtk.ResponseType.OK)
+        self.set_response_sensitive(Gtk.ResponseType.OK, False)
+        self.set_default_response(Gtk.ResponseType.CANCEL)
 
-        self.escala = gtk.HScale()
+        self.escala = Gtk.HScale()
         self.escala.set_draw_value(False)
-        adj = gtk.Adjustment(self.fin,
+        adj = Gtk.Adjustment(self.fin,
                             self.inicio,
                             self.get_maximum_size(),
                             1.0,
@@ -76,53 +75,53 @@ class Main(gtk.Dialog):
         self.escala.set_adjustment(adj)
         self.escala.show()
 
-        self.lbl_dispositivo = gtk.Label("Partición '%s'" % self.dispositivo)
+        self.lbl_dispositivo = Gtk.Label("Partición '%s'" % self.dispositivo)
         self.lbl_dispositivo.show()
 
-        self.lbl_tamano = gtk.Label('Tamaño')
-        self.lbl_tamano_num = gtk.Label(
+        self.lbl_tamano = Gtk.Label('Tamaño')
+        self.lbl_tamano_num = Gtk.Label(
                                     humanize(self.get_new_partition_size()))
-        self.vb_tamano = gtk.VBox()
+        self.vb_tamano = Gtk.VBox()
         self.vb_tamano.add(self.lbl_tamano)
         self.vb_tamano.add(self.lbl_tamano_num)
         self.vb_tamano.show_all()
 
-        self.lbl_usado = gtk.Label('Usado')
-        self.lbl_usado_num = gtk.Label(humanize(self.usado))
-        self.vb_usado = gtk.VBox()
+        self.lbl_usado = Gtk.Label('Usado')
+        self.lbl_usado_num = Gtk.Label(humanize(self.usado))
+        self.vb_usado = Gtk.VBox()
         self.vb_usado.add(self.lbl_usado)
         self.vb_usado.add(self.lbl_usado_num)
         self.vb_usado.show_all()
 
-        self.lbl_libre = gtk.Label('Libre')
-        self.lbl_libre_num = gtk.Label(humanize(self.get_free_space()))
-        self.vb_libre = gtk.VBox()
+        self.lbl_libre = Gtk.Label('Libre')
+        self.lbl_libre_num = Gtk.Label(humanize(self.get_free_space()))
+        self.vb_libre = Gtk.VBox()
         self.vb_libre.add(self.lbl_libre)
         self.vb_libre.add(self.lbl_libre_num)
         self.vb_libre.show_all()
 
-        self.lbl_sin_particion = gtk.Label('Sin Particionar')
-        self.lbl_sin_particion_num = gtk.Label(
+        self.lbl_sin_particion = Gtk.Label('Sin Particionar')
+        self.lbl_sin_particion_num = Gtk.Label(
                                         humanize(self.get_unasigned_space()))
-        self.vb_sin_particion = gtk.VBox()
+        self.vb_sin_particion = Gtk.VBox()
         self.vb_sin_particion.add(self.lbl_sin_particion)
         self.vb_sin_particion.add(self.lbl_sin_particion_num)
         self.vb_sin_particion.show_all()
 
-        self.hb_leyenda = gtk.HBox()
+        self.hb_leyenda = Gtk.HBox()
         self.hb_leyenda.add(self.vb_tamano)
         self.hb_leyenda.add(self.vb_usado)
         self.hb_leyenda.add(self.vb_libre)
         self.hb_leyenda.add(self.vb_sin_particion)
         self.hb_leyenda.show_all()
 
-        self.cont = gtk.VBox()
+        self.cont = Gtk.VBox()
         self.cont.add(self.lbl_dispositivo)
         self.cont.add(self.hb_leyenda)
         self.cont.add(self.escala)
         self.cont.show()
 
-        self.vbox.pack_start(self.cont)
+        self.vbox.pack_start(self.cont, True, True, 0)
 
         self.process_response(self.run())
 
@@ -172,20 +171,20 @@ class Main(gtk.Dialog):
         'Acciones a tomar cuando se mueve el valor de la escala'
 
         # No reducir menos del espacio minimo
-        tamano = adjustment.value - self.inicio
+        tamano = adjustment.get_value() - self.inicio
         if not validate_minimun_fs_size(self.formato, tamano):
             adjustment.set_value(self.inicio + FSMIN[self.formato])
         elif not validate_maximun_fs_size(self.formato, tamano):
             adjustment.set_value(self.inicio + FSMAX[self.formato])
         # No reducir menos del espacio usado
-        elif adjustment.value <= self.get_used_space():
+        elif adjustment.get_value() <= self.get_used_space():
             adjustment.set_value(self.get_used_space())
 
         # Activa el boton de aceptar sólo si se ha modificado el valor
-        if adjustment.value == self.fin:
-            self.set_response_sensitive(gtk.RESPONSE_OK, False)
+        if adjustment.get_value() == self.fin:
+            self.set_response_sensitive(Gtk.ResponseType.OK, False)
         else:
-            self.set_response_sensitive(gtk.RESPONSE_OK, True)
+            self.set_response_sensitive(Gtk.ResponseType.OK, True)
 
         # Actualizar los textos con los valores
         self.lbl_tamano_num.set_text(humanize(self.get_new_partition_size()))
@@ -202,7 +201,7 @@ class Main(gtk.Dialog):
         original = copy(part_actual)
         part_sig = self.get_next_free_partition()
 
-        if response == gtk.RESPONSE_OK:
+        if response == Gtk.ResponseType.OK:
 
             part_actual[TblCol.FIN] = self.escala.get_value()
             part_actual[TblCol.TAMANO] = humanize(

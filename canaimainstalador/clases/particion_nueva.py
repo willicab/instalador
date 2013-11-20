@@ -33,21 +33,20 @@ from canaimainstalador.clases.frame_fs import frame_fs, MSG_ENTER_MANUAL, \
     MSG_NONE
 from canaimainstalador.config import FSMIN, FSMAX
 from canaimainstalador.translator import msj, gettext_install
-#import gtk
-from gi.repository import Gtk as gtk
+from gi.repository import Gtk
 
 
 gettext_install()
 
 
-class Main(gtk.Dialog):
+class Main(Gtk.Dialog):
 
     inicio_part = 0
     fin_part = 0
 
     def __init__(self, padre):
-        gtk.Window.__init__(self, gtk.WINDOW_TOPLEVEL)
-        gtk.Window.set_position(self, gtk.WIN_POS_CENTER_ALWAYS)
+        Gtk.Window.__init__(self, Gtk.WindowType.TOPLEVEL)
+        Gtk.Window.set_position(self, Gtk.WindowPosition.CENTER_ALWAYS)
         self.disco = padre.disco
         self.sector = get_sector_size(self.disco)
         self.lista = padre.lista
@@ -63,17 +62,17 @@ class Main(gtk.Dialog):
         self.set_title(_("New partition"))
         self.set_resizable(0)
 
-        self.add_button(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL)
-        self.add_button(gtk.STOCK_OK, gtk.RESPONSE_OK)
-        self.set_default_response(gtk.RESPONSE_CANCEL)
+        self.add_button(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL)
+        self.add_button(Gtk.STOCK_OK, Gtk.ResponseType.OK)
+        self.set_default_response(Gtk.ResponseType.CANCEL)
 
-        #Tamaño de la partición
-        lbl_tamano = gtk.Label(_("Size:"))
+        # Tamaño de la partición
+        lbl_tamano = Gtk.Label(_("Size:"))
         lbl_tamano.set_alignment(0, 0.5)
         lbl_tamano.show()
-        adj = gtk.Adjustment(self.fin_part, self.inicio_part, self.fin_part, \
+        adj = Gtk.Adjustment(self.fin_part, self.inicio_part, self.fin_part, \
                              1.0, 1024.0, 0.0)
-        self.escala = gtk.HScale()
+        self.escala = Gtk.HScale()
         self.escala.set_digits(0)
         self.escala.set_draw_value(False)
         self.escala.set_adjustment(adj)
@@ -81,14 +80,14 @@ class Main(gtk.Dialog):
         self.escala.connect("value-changed", self.escala_on_changed)
         self.escala.show()
 
-        self.lblsize = gtk.Label(humanize(self.escala.get_value() - \
+        self.lblsize = Gtk.Label(humanize(self.escala.get_value() - \
                                           self.inicio_part))
         self.lblsize.show()
 
-        hbox = gtk.VBox()
+        hbox = Gtk.VBox()
         hbox.show()
-        hbox.pack_start(self.escala)
-        hbox.pack_start(self.lblsize)
+        hbox.pack_start(self.escala, True, True, 0)
+        hbox.pack_start(self.lblsize, True, True, 0)
 
         fs_container = frame_fs(self, self.lista, self.particion_act)
         self.cmb_tipo = fs_container.cmb_tipo
@@ -102,12 +101,12 @@ class Main(gtk.Dialog):
         fs_container.formatear.set_sensitive(False)
 
         # Contenedor General
-        self.cont = gtk.VBox()
-        self.cont.pack_start(lbl_tamano)
-        self.cont.pack_start(hbox, padding=15)
-        self.cont.pack_start(fs_container)
+        self.cont = Gtk.VBox()
+        self.cont.pack_start(lbl_tamano, True, True, 0)
+        self.cont.pack_start(hbox, True, True, padding=15)
+        self.cont.pack_start(fs_container, True, True, 0)
         self.cont.show()
-        self.vbox.pack_start(self.cont)
+        self.vbox.pack_start(self.cont, True, True, 0)
 
         response = self.run()
         self.process_response(response)
@@ -117,7 +116,7 @@ class Main(gtk.Dialog):
         if not response:
             return response
 
-        if response == gtk.RESPONSE_OK:
+        if response == Gtk.ResponseType.OK:
             tipo = self.cmb_tipo.get_active_text()
             formato = self.cmb_fs.get_active_text()
             montaje = self.cmb_montaje.get_active_text()
@@ -251,15 +250,15 @@ class Main(gtk.Dialog):
             estatus = False
             msg = _("{0} must have a minimum size of {1}.")\
             .format(formato, humanize(FSMIN[formato]))
-            UserMessage(msg, 'Información', gtk.MESSAGE_INFO, gtk.BUTTONS_OK)
+            UserMessage(msg, 'Información', Gtk.MessageType.INFO, Gtk.ButtonsType.OK)
             self.escala.set_value(self.inicio_part + FSMIN[formato])
 
         if not validate_maximun_fs_size(formato, tamano):
             estatus = False
             msg = _("{0} must have a maximum size of {1}.")\
             .format(formato, humanize(FSMAX[formato]))
-            UserMessage(msg, _('Information'), gtk.MESSAGE_INFO,
-                        gtk.BUTTONS_OK)
+            UserMessage(msg, _('Information'), Gtk.MessageType.INFO,
+                        Gtk.ButtonsType.OK)
             self.escala.set_value(self.inicio_part + FSMAX[formato])
 
         return estatus

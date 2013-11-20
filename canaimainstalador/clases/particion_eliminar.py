@@ -30,8 +30,7 @@ from canaimainstalador.clases.common import get_row_index, TblCol, \
     has_next_row, is_primary, is_logic, humanize, PStatus, is_free, UserMessage
 from canaimainstalador.translator import msj, gettext_install
 from copy import copy
-#import gtk
-from gi.repository import Gtk as gtk
+from gi.repository import Gtk
 
 
 gettext_install()
@@ -53,8 +52,8 @@ class Main():
                 if is_logic(partition) and not is_free(partition):
                     message = _("You must first delete the logical \
 partitions.")
-                    UserMessage(message, 'ERROR', gtk.MESSAGE_ERROR,
-                                gtk.BUTTONS_OK)
+                    UserMessage(message, 'ERROR', Gtk.MessageType.ERROR,
+                                Gtk.ButtonsType.OK)
                     is_clean = False
                     break
             if is_clean:

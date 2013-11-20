@@ -32,14 +32,13 @@ from canaimainstalador.clases.frame_fs import frame_fs, MSG_ENTER_MANUAL, \
     MSG_NONE
 from canaimainstalador.config import FSMIN, FSMAX
 from canaimainstalador.translator import msj, gettext_install
-#import gtk
-from gi.repository import Gtk as gtk
+from gi.repository import Gtk
 
 
 gettext_install()
 
 
-class Main(gtk.Dialog):
+class Main(Gtk.Dialog):
 
     def __init__(self, lista, fila_selec, acciones):
         self.lista = lista
@@ -47,19 +46,19 @@ class Main(gtk.Dialog):
         self.acciones = acciones
         self.disco = fila_selec[TblCol.DISPOSITIVO]
 
-        gtk.Window.__init__(self, gtk.WINDOW_TOPLEVEL)
-        self.set_position(gtk.WIN_POS_CENTER_ALWAYS)
+        Gtk.Window.__init__(self, Gtk.WindowType.TOPLEVEL)
+        self.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
         self.set_title(_("Edit existing partition"))
         self.set_resizable(0)
 
-        self.add_button(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL)
-        self.add_button(gtk.STOCK_OK, gtk.RESPONSE_OK)
-        self.set_default_response(gtk.RESPONSE_CANCEL)
+        self.add_button(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL)
+        self.add_button(Gtk.STOCK_OK, Gtk.ResponseType.OK)
+        self.set_default_response(Gtk.ResponseType.CANCEL)
 
         self.fs_box = frame_fs(self, self.lista, self.particion_act)
         self.fill_fields()
 
-        self.vbox.pack_start(self.fs_box)
+        self.vbox.pack_start(self.fs_box, True, True, 0)
 
         response = self.run()
         self.process_response(response)
@@ -98,7 +97,7 @@ class Main(gtk.Dialog):
             item = 'ext4'
 
         for row in combo.get_model():
-            index = row.path[0]
+            index = row.path.get_indices()[0]
             text = row[0]
             if item == text:
                 combo.set_active(index)
@@ -108,7 +107,7 @@ class Main(gtk.Dialog):
 
     def process_response(self, response):
 
-        if response == gtk.RESPONSE_OK:
+        if response == Gtk.ResponseType.OK:
             i = get_row_index(self.lista, self.particion_act)
             tmp = self.lista[i]
             filesystem = self.fs_box.cmb_fs.get_active_text()
@@ -183,13 +182,13 @@ class Main(gtk.Dialog):
             estatus = False
             msg = _("{0} must have a minimum size of {1}.")\
             .format(formato, humanize(FSMIN[formato]))
-            UserMessage(msg, 'Información', gtk.MESSAGE_INFO, gtk.BUTTONS_OK)
+            UserMessage(msg, 'Información', Gtk.MessageType.INFO, Gtk.ButtonsType.OK)
 
         if not validate_maximun_fs_size(formato, tamano):
             estatus = False
             msg = _("{0} must have a maximum size of {1}.")\
             .format(formato, humanize(FSMAX[formato]))
-            UserMessage(msg, _('Information'), gtk.MESSAGE_INFO,
-                        gtk.BUTTONS_OK)
+            UserMessage(msg, _('Information'), Gtk.MessageType.INFO,
+                        Gtk.ButtonsType.OK)
 
         return estatus

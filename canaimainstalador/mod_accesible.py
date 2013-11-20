@@ -22,7 +22,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
 
 '''
 
-import atk
+from gi.repository import Atk
 
 
 def atk_acc(objeto, etiqueta):
@@ -33,8 +33,11 @@ def atk_acc(objeto, etiqueta):
     atk_obj = objeto.get_accessible()
     atk_l = etiqueta.get_accessible()
 
+    # TODO: El bloque de codigo de abajo no esta funcionando correctamente
+    return
+
     relation_set = atk_l.ref_relation_set()
-    relation = atk.Relation((atk_obj,), atk.RELATION_LABEL_FOR)
+    relation = Atk.Relation.new((atk_obj,) 1, Atk.RelationType.LABEL_FOR)
     relation_set.add(relation)
 
 

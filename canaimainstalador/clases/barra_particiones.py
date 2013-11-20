@@ -28,21 +28,19 @@
 
 from canaimainstalador.clases.common import draw_rounded, set_color
 from canaimainstalador.translator import gettext_install
-#import gtk
-from gi.repository import Gtk as gtk
+from gi.repository import Gtk, Gdk
 
 
 gettext_install()
 
 
-class BarraParticiones(gtk.DrawingArea):
+class BarraParticiones(Gtk.DrawingArea):
     def __init__(self, parent):
         super(BarraParticiones, self).__init__()
-        self.set_events(
-            gtk.gdk.POINTER_MOTION_MASK | gtk.gdk.POINTER_MOTION_HINT_MASK |
-            gtk.gdk.BUTTON_PRESS_MASK | gtk.gdk.BUTTON_RELEASE_MASK
+        self.set_events(Gdk.EventMask.POINTER_MOTION_MASK | Gdk.EventMask.POINTER_MOTION_HINT_MASK |
+            Gdk.EventMask.BUTTON_PRESS_MASK | Gdk.EventMask.BUTTON_RELEASE_MASK
             )
-        self.connect("expose-event", self.expose)
+        self.connect("draw", self.expose)
         self.p = parent
 
     def expose(self, widget=None, event=None):
@@ -53,6 +51,7 @@ class BarraParticiones(gtk.DrawingArea):
         if len(self.p.particiones) > 0:
             self.total = self.p.particiones[0][9]
 
+        self.window = self.get_window()
         cr = self.window.cairo_create()
         cr.set_source_rgb(0.925490196, 0.91372549, 0.847058824)
         cr.rectangle(0, 0, self.ancho, self.alto)

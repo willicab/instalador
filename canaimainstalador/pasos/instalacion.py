@@ -36,16 +36,10 @@ from canaimainstalador.clases.common import UserMessage, ProcessGenerator, \
 from canaimainstalador.clases.particiones import Particiones
 from canaimainstalador.config import INSTALL_SLIDES, BAR_ICON, SHAREDIR
 import Queue
-#import gobject
-from gi.repository import GObject as gobject
-#import gtk
-from gi.repository import Gtk as gtk
+from gi.repository import Gtk, GObject, WebKit, Pango
 import os
-import pango
 import sys
 import threading
-#import webkit
-from gi.repository import WebKit as webkit
 from canaimainstalador.clases import keyboard, i18n
 from canaimainstalador.clases.i18n import install_language_pack
 from canaimainstalador.translator import gettext_install
@@ -53,7 +47,7 @@ from canaimainstalador.mod_accesible import atk_acc_vd
 
 
 gettext_install()
-gobject.threads_init()
+GObject.threads_init()
 
 
 class PasoInstalacion():
@@ -100,65 +94,65 @@ class install_window(object):
     def __init__(self, title, q_button_a, q_button_b, q_view, q_label, q_win,
                  event):
 
-        window = gtk.Window()
+        window = Gtk.Window()
         window.set_border_width(0)
         window.set_title(title)
-        window.set_position(gtk.WIN_POS_CENTER_ALWAYS)
+        window.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
         window.set_size_request(700, 470)
         window.set_resizable(False)
         window.set_icon_from_file(BAR_ICON)
         window.connect("destroy", self.disable_close)
         window.connect("delete-event", self.disable_close)
 
-        box = gtk.Fixed()
+        box = Gtk.Fixed()
         window.add(box)
 
-        attr = pango.AttrList()
-        size = pango.AttrSize(20000, 0, -1)
-        attr.insert(size)
+        # attr = Pango.AttrList()
+        # size = Pango.AttrSize(20000, 0, -1)
+        # attr.insert(size)
 
         str_message = _('Canaima installation has been completed')
-        message = gtk.Label(str_message)
+        message = Gtk.Label(str_message)
         message.set_size_request(640, 40)
         message.set_alignment(0, 0)
         message.set_line_wrap(True)
-        message.set_attributes(attr)
+        # message.set_attributes(attr)
         box.put(message, 50, 200)
 
         str_intro = _('You can keep trying Canaima pressing "Restart Later" \
 or enjoy your installed operating system by pressing "Restart Now".')
-        intro = gtk.Label(str_intro)
+        intro = Gtk.Label(str_intro)
         intro.set_size_request(640, 40)
         intro.set_alignment(0, 0)
         intro.set_line_wrap(True)
         box.put(intro, 50, 250)
 
-        view = webkit.WebView()
+        view = WebKit.WebView()
         view.set_size_request(700, 430)
         box.put(view, 0, 0)
 
-        linea = gtk.HSeparator()
+        linea = Gtk.HSeparator()
         linea.set_size_request(700, 5)
         box.put(linea, 0, 435)
 
-        label = gtk.Label()
-        label.set_justify(gtk.JUSTIFY_CENTER)
+        label = Gtk.Label()
+        label.set_justify(Gtk.Justification.CENTER)
         label.set_size_request(700, 20)
         box.put(label, 0, 440)
 
-        button_a = gtk.Button()
+        button_a = Gtk.Button()
         button_a.set_size_request(150, 30)
         button_a.set_label(_('Restart Later'))
         button_a.connect('clicked', self.close)
         box.put(button_a, 390, 440)
 
-        button_b = gtk.Button()
+        button_b = Gtk.Button()
         button_b.set_size_request(150, 30)
         button_b.set_label(_('Restart Now'))
         button_b.connect('clicked', self.reboot)
         box.put(button_b, 540, 440)
 
-        box.set_flags(gtk.CAN_FOCUS)
+        box.set_can_focus(True)
         atk_acc_vd(box, str_message + ". " + str_intro)
 
         window.show_all()
@@ -176,13 +170,13 @@ or enjoy your installed operating system by pressing "Restart Now".')
         self.view = view
 
     def close(self, widget=None, data=None):
-        gtk.main_quit()
+        Gtk.main_quit()
 
     def reboot(self, widget=None, data=None):
         ProcessGenerator('reboot')
 
     def show_html(self):
-        gobject.idle_add(
+        GObject.idle_add(
             self.view.load_uri, 'file://' + os.path.realpath(INSTALL_SLIDES)
             )
 
@@ -198,12 +192,12 @@ def UserMessageError(message, window, bindlist, mountlist):
     UserMessage(
         message,
         title='ERROR',
-        mtype=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
-        c_1=gtk.RESPONSE_OK, f_1=assisted_umount, p_1=(True, bindlist),
-        c_2=gtk.RESPONSE_OK, f_2=assisted_umount, p_2=(True, mountlist),
-        c_3=gtk.RESPONSE_OK, f_3=window.destroy, p_3=(),
-        c_4=gtk.RESPONSE_OK, f_4=gtk.main_quit, p_4=(),
-        c_5=gtk.RESPONSE_OK, f_5=sys.exit, p_5=()
+        mtype=Gtk.MessageType.ERROR, buttons=Gtk.ButtonsType.OK,
+        c_1=Gtk.ResponseType.OK, f_1=assisted_umount, p_1=(True, bindlist),
+        c_2=Gtk.ResponseType.OK, f_2=assisted_umount, p_2=(True, mountlist),
+        c_3=Gtk.ResponseType.OK, f_3=window.destroy, p_3=(),
+        c_4=Gtk.ResponseType.OK, f_4=Gtk.main_quit, p_4=(),
+        c_5=Gtk.ResponseType.OK, f_5=sys.exit, p_5=()
     )
 
 
@@ -287,7 +281,7 @@ def install_process(CFG, q_button_a, q_button_b, q_view, q_label, q_win):
         'burg-pc burg/linux_cmdline_default string quiet splash vga=791',
         'burg-pc burg-pc/install_devices multiselect {0}'.format(
                                                 ', '.join(p.lista_discos())),
-        #TODO: Automatizar la configuración del teclado de las TTY
+        # TODO: Automatizar la configuración del teclado de las TTY
         "console-data console-data/keymap/qwerty/layout select Latin American",
         "console-data console-data/keymap/family select qwerty",
         "console-common console-data/keymap/family select qwerty",
@@ -319,7 +313,7 @@ arch list"
     if not os.path.isdir(mountpoint):
         os.makedirs(mountpoint)
 
-    #TODO: Esta validación deberia hacerse al inicio de la aplicación y no
+    # TODO: Esta validación deberia hacerse al inicio de la aplicación y no
     # esperar hasta este punto
     if not os.path.exists(squashfs):
         UserMessageError(_('Not found squashfs image.'),

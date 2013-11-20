@@ -31,17 +31,16 @@ from canaimainstalador.clases.common import humanize, UserMessage
 from canaimainstalador.clases.particiones import Particiones
 from canaimainstalador.config import ESPACIO_TOTAL, CFG, FSPROGS
 from canaimainstalador.translator import gettext_install
-#import gtk
-from gi.repository import Gtk as gtk
+from gi.repository import Gtk
 from canaimainstalador.mod_accesible import atk_acc, atk_label
 
 
 gettext_install()
 
 
-class PasoMetodo(gtk.Fixed):
+class PasoMetodo(Gtk.Fixed):
     def __init__(self, CFG):
-        gtk.Fixed.__init__(self)
+        Gtk.Fixed.__init__(self)
 
         self.metodos = []
         self.minimo = ESPACIO_TOTAL
@@ -50,14 +49,13 @@ class PasoMetodo(gtk.Fixed):
         print 'Se han encontrado los siguientes discos: {0}' \
         .format(self.discos)
 
-        self.lbl1 = gtk.Label(_("Select the disk where you want to install \
+        self.lbl1 = Gtk.Label(_("Select the disk where you want to install \
 Canaima:"))
         self.lbl1.set_size_request(690, 20)
         self.lbl1.set_alignment(0, 0)
         self.put(self.lbl1, 0, 0)
 
-        #self.cmb_discos = gtk.combo_box_new_text()
-        self.cmb_discos = gtk.ComboBoxText()
+        self.cmb_discos = Gtk.ComboBoxText()
         self.cmb_discos.set_size_request(690, 30)
         self.put(self.cmb_discos, 0, 25)
         atk_acc(self.cmb_discos, self.lbl1)
@@ -70,17 +68,17 @@ Canaima:"))
         self.barra_part.set_size_request(690, 100)
         self.put(self.barra_part, 0, 60)
 
-        self.lbl2 = gtk.Label(_("Slelect the installation method:"))
+        self.lbl2 = Gtk.Label(_("Slelect the installation method:"))
         self.lbl2.set_size_request(690, 20)
         self.lbl2.set_alignment(0, 0)
         self.put(self.lbl2, 0, 165)
 
-        self.cmb_metodo = gtk.combo_box_new_text()
+        self.cmb_metodo = Gtk.ComboBoxText()
         self.cmb_metodo.set_size_request(690, 30)
         self.cmb_metodo.connect('changed', self.establecer_metodo)
         self.put(self.cmb_metodo, 0, 190)
 
-        self.lbl4 = gtk.Label()
+        self.lbl4 = Gtk.Label()
         self.lbl4.set_size_request(690, 90)
         self.lbl4.set_alignment(0, 0)
         self.lbl4.set_line_wrap(True)
@@ -118,9 +116,9 @@ continue the installation. Do you want to create a partition table now?
 If you press Cancel you can not use that disk to install Canaima.""")\
                     .format(self.disco),
                     title=_("Partition table not found."),
-                    mtype=gtk.MESSAGE_INFO, buttons=gtk.BUTTONS_OK_CANCEL,
-                    c_1=gtk.RESPONSE_OK, f_1=self.part.nueva_tabla_particiones,
-                    p_1=(self.disco, 'msdos'), c_2=gtk.RESPONSE_OK,
+                    mtype=Gtk.MessageType.INFO, buttons=Gtk.ButtonsType.OK_CANCEL,
+                    c_1=Gtk.ResponseType.OK, f_1=self.part.nueva_tabla_particiones,
+                    p_1=(self.disco, 'msdos'), c_2=Gtk.ResponseType.OK,
                     f_2=self.seleccionar_disco, p_2=()
                     )
         else:

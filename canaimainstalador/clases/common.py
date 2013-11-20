@@ -34,8 +34,7 @@ import re
 import subprocess
 import math
 import cairo
-#import gtk
-from gi.repository import Gtk as gtk
+from gi.repository import Gtk, GdkPixbuf
 import hashlib
 import random
 import string
@@ -66,9 +65,9 @@ def get_live_path():
 
 
 def AboutWindow(widget=None):
-    about = gtk.AboutDialog()
-    about.set_position(gtk.WIN_POS_CENTER_ON_PARENT)
-    about.set_logo(gtk.gdk.pixbuf_new_from_file(ABOUT_IMAGE))
+    about = Gtk.AboutDialog()
+    about.set_position(Gtk.WindowPosition.CENTER_ON_PARENT)
+    about.set_logo(GdkPixbuf.Pixbuf.new_from_file(ABOUT_IMAGE))
     about.set_name(APP_NAME)
     about.set_copyright(APP_COPYRIGHT)
     about.set_comments(APP_DESCRIPTION)
@@ -786,7 +785,7 @@ def UserMessage(
     c_2=False, f_2=False, p_2='', c_3=False, f_3=False, p_3='',
     c_4=False, f_4=False, p_4='', c_5=False, f_5=False, p_5=''
     ):
-    dialog = gtk.MessageDialog(
+    dialog = Gtk.MessageDialog(
         parent=None, flags=0, type=mtype,
         buttons=buttons, message_format=message
         )
@@ -852,10 +851,10 @@ def ProcessGenerator(command):
 class ThreadGenerator(threading.Thread):
     def __init__(
         self, reference, function, params,
-        gtk=False, window=False, event=False
+        Gtk=False, window=False, event=False
         ):
         threading.Thread.__init__(self)
-        self._gtk = gtk
+        self._gtk = Gtk
         self._window = window
         self._function = function
         self._params = params
@@ -864,7 +863,7 @@ class ThreadGenerator(threading.Thread):
 
     def run(self):
         if self._gtk:
-            gtk.gdk.threads_enter()
+            Gtk.gdk.threads_enter()
 
         if self._event:
             self._event.wait()
@@ -872,7 +871,7 @@ class ThreadGenerator(threading.Thread):
         self._function(**self._params)
 
         if self._gtk:
-            gtk.gdk.threads_leave()
+            Gtk.gdk.threads_leave()
 
         if self._window:
             self._window.hide_all()

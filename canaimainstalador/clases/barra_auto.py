@@ -29,18 +29,18 @@
 from canaimainstalador.clases.common import draw_rounded, set_color
 from canaimainstalador.config import ESPACIO_TOTAL, ESPACIO_SWAP, \
     ESPACIO_ROOT, ESPACIO_BOOT, ESPACIO_VAR, ESPACIO_USR
-#import gtk
-from gi.repository import Gtk as gtk
+# import Gtk
+from gi.repository import Gtk, Gdk
 
 
-class BarraAuto(gtk.DrawingArea):
+class BarraAuto(Gtk.DrawingArea):
     def __init__(self, parent):
         super(BarraAuto, self).__init__()
         self.set_events(
-            gtk.gdk.POINTER_MOTION_MASK | gtk.gdk.POINTER_MOTION_HINT_MASK |
-            gtk.gdk.BUTTON_PRESS_MASK | gtk.gdk.BUTTON_RELEASE_MASK
+            Gdk.EventMask.POINTER_MOTION_MASK | Gdk.EventMask.POINTER_MOTION_HINT_MASK |
+            Gdk.EventMask.BUTTON_PRESS_MASK | Gdk.EventMask.BUTTON_RELEASE_MASK
             )
-        self.connect("expose-event", self.expose)
+        self.connect("draw", self.expose)
         self.connect("button-press-event", self.press)
         self.connect("button-release-event", self.release)
         self.connect("motion-notify-event", self.draw_cursor)
@@ -67,6 +67,7 @@ class BarraAuto(gtk.DrawingArea):
         self.ancho = self.get_size_request()[0]
         self.alto = self.get_size_request()[1]
 
+        self.window = self.get_window()
         if self.window:
             cr = self.window.cairo_create()
             cr.set_source_rgb(0.925490196, 0.91372549, 0.847058824)
@@ -296,10 +297,10 @@ class BarraAuto(gtk.DrawingArea):
         event.x <= self.pos[2] and \
         event.y >= self.pos[1] and \
         event.y <= self.pos[3]:
-            cursor = gtk.gdk.Cursor(gtk.gdk.HAND2)
+            cursor = Gdk.Cursor(Gdk.CursorType.HAND2)
             self.window.set_cursor(cursor)
         else:
-            cursor = gtk.gdk.Cursor(gtk.gdk.LEFT_PTR)
+            cursor = Gdk.Cursor(Gdk.CursorType.LEFT_PTR)
             self.window.set_cursor(cursor)
 
         if self.presionado == True:

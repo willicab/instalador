@@ -33,34 +33,33 @@ from canaimainstalador.clases.common import floatify, humanize, TblCol, \
 from canaimainstalador.clases.tabla_particiones import TablaParticiones
 from canaimainstalador.config import ESPACIO_TOTAL
 from canaimainstalador.translator import msj
-#import gtk
-from gi.repository import Gtk as gtk
+from gi.repository import Gtk
 
 
-class PasoPartManual(gtk.VBox):
+class PasoPartManual(Gtk.VBox):
 
     def __init__(self, data):
-        gtk.VBox.__init__(self)
+        Gtk.VBox.__init__(self)
 
         self.data = data
         self.disco = self.data['metodo']['disco'][0]
 
         self.tabla = TablaParticiones()
-        #self.tabla.set_doble_click(self.activar_tabla);
+        # self.tabla.set_doble_click(self.activar_tabla);
         self.tabla.set_seleccionar(self.table_row_selected)
 
-        label = gtk.Label(_("""Use the following table to modify disk \
+        label = Gtk.Label(_("""Use the following table to modify disk \
 partitions to your liking. We recommend:
 - Establish a minimum of {0} for the root partition (/).
 - Create a swap space.""").format(humanize(ESPACIO_TOTAL)))
         label.set_line_wrap(False)
-        label.set_justify(gtk.JUSTIFY_LEFT)
+        label.set_justify(Gtk.Justification.LEFT)
         label.set_alignment(0, 0)
         label.show()
         self.pack_start(label, False, False, 0)
 
-        self.scroll = gtk.ScrolledWindow()
-        self.scroll.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
+        self.scroll = Gtk.ScrolledWindow()
+        self.scroll.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.ALWAYS)
         self.scroll.set_size_request(0, 150)
         self.scroll.add(self.tabla)
         self.tabla.show()
@@ -68,47 +67,47 @@ partitions to your liking. We recommend:
         self.pack_start(self.scroll, True, True, 10)
 
         # btn_nueva
-        self.btn_nueva = gtk.Button(_("New..."))
-        image = gtk.Image()
-        image.set_from_stock(gtk.STOCK_ADD, gtk.ICON_SIZE_SMALL_TOOLBAR)
+        self.btn_nueva = Gtk.Button(_("New..."))
+        image = Gtk.Image()
+        image.set_from_stock(Gtk.STOCK_ADD, Gtk.IconSize.SMALL_TOOLBAR)
         self.btn_nueva.set_image(image)
         self.btn_nueva.show()
         self.btn_nueva.connect("clicked", self.new_partition)
 
         # btn_editar
-        self.btn_editar = gtk.Button(_("Edit..."))
-        image = gtk.Image()
-        image.set_from_stock(gtk.STOCK_EDIT, gtk.ICON_SIZE_SMALL_TOOLBAR)
+        self.btn_editar = Gtk.Button(_("Edit..."))
+        image = Gtk.Image()
+        image.set_from_stock(Gtk.STOCK_EDIT, Gtk.IconSize.SMALL_TOOLBAR)
         self.btn_editar.set_image(image)
         self.btn_editar.show()
         self.btn_editar.connect("clicked", self.edit_partition)
 
         # btn_eliminar
-        self.btn_eliminar = gtk.Button(_("Delete"))
-        image = gtk.Image()
-        image.set_from_stock(gtk.STOCK_REMOVE, gtk.ICON_SIZE_SMALL_TOOLBAR)
+        self.btn_eliminar = Gtk.Button(_("Delete"))
+        image = Gtk.Image()
+        image.set_from_stock(Gtk.STOCK_REMOVE, Gtk.IconSize.SMALL_TOOLBAR)
         self.btn_eliminar.set_image(image)
         self.btn_eliminar.show()
         self.btn_eliminar.connect("clicked", self.delete_partition)
 
         # btn_redimension
-        self.btn_redimension = gtk.Button(_("Resize..."))
-        image = gtk.Image()
-        image.set_from_stock(gtk.STOCK_INDENT, gtk.ICON_SIZE_SMALL_TOOLBAR)
+        self.btn_redimension = Gtk.Button(_("Resize..."))
+        image = Gtk.Image()
+        image.set_from_stock(Gtk.STOCK_INDENT, Gtk.IconSize.SMALL_TOOLBAR)
         self.btn_redimension.set_image(image)
         self.btn_redimension.show()
         self.btn_redimension.connect("clicked", self.resize_partition)
 
         # btn_deshacer
-        self.btn_deshacer = gtk.Button(_("Undo all"))
-        image = gtk.Image()
-        image.set_from_stock(gtk.STOCK_UNDO, gtk.ICON_SIZE_SMALL_TOOLBAR)
+        self.btn_deshacer = Gtk.Button(_("Undo all"))
+        image = Gtk.Image()
+        image.set_from_stock(Gtk.STOCK_UNDO, Gtk.IconSize.SMALL_TOOLBAR)
         self.btn_deshacer.set_image(image)
         self.btn_deshacer.show()
         self.btn_deshacer.connect("clicked", self.undo_all_actions)
 
-        self.botonera1 = gtk.HButtonBox()
-        self.botonera1.set_layout(gtk.BUTTONBOX_START)
+        self.botonera1 = Gtk.HButtonBox()
+        self.botonera1.set_layout(Gtk.ButtonBoxStyle.START)
         self.botonera1.set_homogeneous(False)
         self.botonera1.add(self.btn_nueva)
         self.botonera1.add(self.btn_editar)
@@ -133,7 +132,7 @@ partitions to your liking. We recommend:
         # Llenar la tabla con el contenido actual del disco
         if self.tabla != None:
 
-            #l_part = Particiones().lista_particiones(self.disco)
+            # l_part = Particiones().lista_particiones(self.disco)
             for particion in self.data['particiones']:
                 p_disp = particion[0]
                 p_ini = particion[1]
@@ -199,7 +198,7 @@ partitions to your liking. We recommend:
         else:
             self.btn_editar.set_sensitive(False)
 
-        #BTN_REDIMENSION
+        # BTN_REDIMENSION
         # Si la particion NO es libre
         # si el filesystem tiene redimensionador
         # y no se ha marcado la aprticion para usarla
@@ -214,7 +213,7 @@ partitions to your liking. We recommend:
 
         # BTN_ELIMINAR
         # Solo se pueden eliminar particiones, no los espacios libres
-        #TODO: Eliminar part. extendidas (necesita verificar part. logicas)
+        # TODO: Eliminar part. extendidas (necesita verificar part. logicas)
         if not is_free(fila):
             self.btn_eliminar.set_sensitive(True)
         else:

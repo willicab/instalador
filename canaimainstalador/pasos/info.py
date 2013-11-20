@@ -26,9 +26,7 @@
 #
 # CODE IS POETRY
 
-#import gtk
-from gi.repository import Gtk as gtk
-import pango
+from gi.repository import Gtk, Pango
 from canaimainstalador.translator import gettext_install
 from canaimainstalador.mod_accesible import atk_acc_vd
 
@@ -36,7 +34,7 @@ from canaimainstalador.mod_accesible import atk_acc_vd
 gettext_install()
 
 
-class PasoInfo(gtk.Fixed):
+class PasoInfo(Gtk.Fixed):
 
     msg_titulo = None
     msg_nombre = None
@@ -48,7 +46,7 @@ class PasoInfo(gtk.Fixed):
     msg_final = None
 
     def __init__(self, CFG):
-        gtk.Fixed.__init__(self)
+        Gtk.Fixed.__init__(self)
 
         if CFG['oem'] == False:
             msg_nombre = _('- Your full name will be set to "{0}".') \
@@ -126,22 +124,22 @@ correct.')
         # Limpiamos texto de las varaiables vacias.
         msg_confirm.replace("\nNone", "")
 
-        attr = pango.AttrList()
-        size = pango.AttrSize(20000, 0, -1)
-        attr.insert(size)
+#         attr = Pango.AttrList()
+#         size = Pango.AttrSize(20000, 0, -1)
+#         attr.insert(size)
 
-        self.lbltitulo = gtk.Label(msg_titulo)
+        self.lbltitulo = Gtk.Label(msg_titulo)
         self.lbltitulo.set_size_request(640, 40)
         self.lbltitulo.set_alignment(0, 0)
-        self.lbltitulo.set_attributes(attr)
+#         self.lbltitulo.set_attributes(attr)
         self.lbltitulo.set_line_wrap(True)
         self.put(self.lbltitulo, 20, 60)
 
-        self.lblusuario = gtk.Label()
+        self.lblusuario = Gtk.Label()
         self.lblusuario.set_markup(msg_confirm)
         self.lblusuario.set_size_request(640, -1)
         self.lblusuario.set_line_wrap(True)
         self.put(self.lblusuario, 20, 100)
 
-        self.set_flags(gtk.CAN_FOCUS)
+        self.set_can_focus(True)
         atk_acc_vd(self, msg_titulo + ". " + msg_confirm)

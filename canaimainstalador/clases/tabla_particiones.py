@@ -28,14 +28,13 @@
 
 from canaimainstalador.clases.common import TblCol
 from canaimainstalador.translator import gettext_install
-#import gtk
-from gi.repository import Gtk as gtk
+from gi.repository import Gtk, Gdk
 
 
 gettext_install()
 
 
-class TablaParticiones (gtk.TreeView):
+class TablaParticiones (Gtk.TreeView):
 
     liststore = None
     columnas = {}
@@ -44,12 +43,12 @@ class TablaParticiones (gtk.TreeView):
     def __init__(self):
 
         # Tipos de valores a mostrar en la tabla
-        self.liststore = gtk.ListStore(str, str, str, str, str, str, str, \
+        self.liststore = Gtk.ListStore(str, str, str, str, str, str, str, \
                                        float, float, bool, str)
 
-        gtk.TreeView.__init__(self, model=self.liststore)
+        Gtk.TreeView.__init__(self, model=self.liststore)
         self.set_headers_clickable(False)
-        #self.connect("row-activated", self._accion_doble_click)
+        # self.connect("row-activated", self._accion_doble_click)
         self.connect("cursor-changed", self._accion_seleccionar)
 
         self.armar_tabla()
@@ -135,9 +134,9 @@ class TablaParticiones (gtk.TreeView):
     def nueva_columna_color(self, title, index):
         'Crea nueva columna de color en el TreeView'
 
-        celda = gtk.CellRendererText()
+        celda = Gtk.CellRendererText()
 
-        self.columnas[index] = gtk.TreeViewColumn(title, celda, text=index)
+        self.columnas[index] = Gtk.TreeViewColumn(title, celda, text=index)
         self.columnas[index].set_reorderable(False)
         self.columnas[index].set_min_width(40)
         self.columnas[index].set_cell_data_func(celda, self.colorear_celda)
@@ -147,22 +146,22 @@ class TablaParticiones (gtk.TreeView):
     def nueva_columna_texto(self, title, index):
         'Crea nueva columna de texto en el TreeView'
 
-        celda = gtk.CellRendererText()
-        celda.set_property('cell-background-gdk', gtk.gdk.color_parse("#FFF"))
+        celda = Gtk.CellRendererText()
+        celda.set_property('cell-background-gdk', Gdk.color_parse("#FFF"))
 
-        self.columnas[index] = gtk.TreeViewColumn(title, celda, text=index)
+        self.columnas[index] = Gtk.TreeViewColumn(title, celda, text=index)
         self.columnas[index].set_resizable(True)
         self.columnas[index].set_reorderable(False)
 
-        #columna.connect("clicked", self.on_column_clicked, index)
+        # columna.connect("clicked", self.on_column_clicked, index)
         self.insert_column(self.columnas[index], index)
 
     def nueva_columna_check(self, title, index):
         'Crea nueva columna de seleccion en el TreeView'
 
-        celda = gtk.CellRendererToggle()
+        celda = Gtk.CellRendererToggle()
 
-        self.columnas[index] = gtk.TreeViewColumn(title, celda, active=index)
+        self.columnas[index] = Gtk.TreeViewColumn(title, celda, active=index)
         self.columnas[index].set_resizable(False)
         self.columnas[index].set_reorderable(False)
 

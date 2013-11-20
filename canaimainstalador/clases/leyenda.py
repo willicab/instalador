@@ -28,8 +28,7 @@
 
 from canaimainstalador.clases.common import humanize
 from canaimainstalador.translator import gettext_install
-#import gtk
-from gi.repository import Gtk as gtk
+from gi.repository import Gtk
 
 
 gettext_install()
@@ -44,43 +43,43 @@ MSG_FREE_SPC = _("Free space:")
 MSG_RESIZE_SPC = _("Resized space:")
 
 
-class Leyenda(gtk.Fixed):
+class Leyenda(Gtk.Fixed):
     def __init__(self, parent):
-        gtk.Fixed.__init__(self)
+        Gtk.Fixed.__init__(self)
         self.p = parent
 
         label = ''
-        self.lbl_1 = gtk.Label(label)
+        self.lbl_1 = Gtk.Label(label)
         self.lbl_1.set_size_request(300, 20)
         self.lbl_1.set_alignment(0, 0)
         self.put(self.lbl_1, 0, 0)
 
-        self.lbl_2 = gtk.Label(label)
+        self.lbl_2 = Gtk.Label(label)
         self.lbl_2.set_size_request(300, 20)
         self.lbl_2.set_alignment(0, 0)
         self.put(self.lbl_2, 0, 20)
 
-        self.lbl_3 = gtk.Label(label)
+        self.lbl_3 = Gtk.Label(label)
         self.lbl_3.set_size_request(300, 20)
         self.lbl_3.set_alignment(0, 0)
         self.put(self.lbl_3, 0, 40)
 
-        self.lbl_4 = gtk.Label(label)
+        self.lbl_4 = Gtk.Label(label)
         self.lbl_4.set_size_request(300, 20)
         self.lbl_4.set_alignment(0, 0)
         self.put(self.lbl_4, 0, 60)
 
-        self.lbl_5 = gtk.Label(label)
+        self.lbl_5 = Gtk.Label(label)
         self.lbl_5.set_size_request(300, 20)
         self.lbl_5.set_alignment(0, 0)
         self.put(self.lbl_5, 0, 80)
 
-        self.lbl_6 = gtk.Label(label)
+        self.lbl_6 = Gtk.Label(label)
         self.lbl_6.set_size_request(300, 20)
         self.lbl_6.set_alignment(0, 0)
         self.put(self.lbl_6, 0, 100)
 
-        self.lbl_7 = gtk.Label(label)
+        self.lbl_7 = Gtk.Label(label)
         self.lbl_7.set_size_request(300, 20)
         self.lbl_7.set_alignment(0, 0)
         self.put(self.lbl_7, 0, 120)

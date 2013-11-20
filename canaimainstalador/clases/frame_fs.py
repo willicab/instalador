@@ -26,8 +26,7 @@
 #
 # CODE IS POETRY
 
-#import gtk
-from gi.repository import Gtk as gtk
+from gi.repository import Gtk
 from canaimainstalador.clases.common import is_logic, has_extended, TblCol, \
     is_usable
 from canaimainstalador.translator import msj
@@ -38,7 +37,7 @@ MSG_ENTER_MANUAL = _("Enter manually...")
 MSG_NONE = _("None")
 
 
-class frame_fs(gtk.Table):
+class frame_fs(Gtk.Table):
     '''
     Este marco será insertado tanto en la ventana de particiones nuevas como en
     la de usar particion existente, permite seleccionar el punto de montaje, el
@@ -49,19 +48,19 @@ class frame_fs(gtk.Table):
         '''
         Constructor
         '''
-        gtk.Table.__init__(self, 6, 6)
+        Gtk.Table.__init__(self, 6, 6)
 
         self.lista = lista
         self.part_act = part_act
         self.parent_diag = parent_diag
 
-        #Tipo de partición
-        self.lbl1 = gtk.Label(_("Partition type:"))
+        # Tipo de partición
+        self.lbl1 = Gtk.Label(_("Partition type:"))
         self.lbl1.set_alignment(0, 0.5)
         self.attach(self.lbl1, 0, 1, 0, 1)
         self.lbl1.show()
 
-        self.cmb_tipo = gtk.combo_box_new_text()
+        self.cmb_tipo = Gtk.ComboBoxText()
         if is_logic(self.part_act):
             self.cmb_tipo.append_text(msj.particion.logica)
             self.cmb_tipo.set_sensitive(False)
@@ -75,37 +74,37 @@ class frame_fs(gtk.Table):
         self.cmb_tipo.connect("changed", self.cmb_tipo_on_changed)
         self.cmb_tipo.show()
 
-        #Sistema de Archivos
-        self.lbl2 = gtk.Label(_("File system:"))
+        # Sistema de Archivos
+        self.lbl2 = Gtk.Label(_("File system:"))
         self.lbl2.set_alignment(0, 0.5)
         self.attach(self.lbl2, 0, 1, 1, 2)
         self.lbl2.show()
 
-        self.cmb_fs = gtk.combo_box_new_text()
+        self.cmb_fs = Gtk.ComboBoxText()
         self.cmb_fs_fill()
         self.cmb_fs.connect("changed", self.cmb_fs_on_changed)
         self.attach(self.cmb_fs, 1, 2, 1, 2)
         self.cmb_fs.show()
 
         # Punto de Montaje
-        self.lbl3 = gtk.Label(_("Mount point:"))
+        self.lbl3 = Gtk.Label(_("Mount point:"))
         self.lbl3.set_alignment(0, 0.5)
         self.lbl3.set_size_request(200, 30)
         self.attach(self.lbl3, 0, 1, 2, 3)
         self.lbl3.show()
 
-        self.cmb_montaje = gtk.combo_box_new_text()
+        self.cmb_montaje = Gtk.ComboBoxText()
         self.cmb_montaje_fill()
         self.attach(self.cmb_montaje, 1, 2, 2, 3)
         self.cmb_montaje.connect("changed", self.cmb_montaje_on_changed)
         self.cmb_montaje.show()
 
-        self.entrada = gtk.Entry()
+        self.entrada = Gtk.Entry()
         self.entrada.set_text('/')
         self.attach(self.entrada, 1, 2, 2, 3)
         self.entrada.connect("changed", self.validate_m_point)
 
-        self.formatear = gtk.CheckButton(_("Format this partition"))
+        self.formatear = Gtk.CheckButton(_("Format this partition"))
         self.attach(self.formatear, 1, 2, 3, 4)
         self.formatear.set_visible(is_usable(self.part_act))
         self.formatear.connect("toggled", self.cmb_fs_on_changed)
@@ -172,7 +171,7 @@ class frame_fs(gtk.Table):
             self.validate_m_point(self.entrada)
         else:
             self.entrada.hide()
-            self.parent_diag.set_response_sensitive(gtk.RESPONSE_OK, True)
+            self.parent_diag.set_response_sensitive(Gtk.ResponseType.OK, True)
 
     def validate_m_point(self, widget=None):
         '''Valida que el punto de montaje no esté ya asignado a otra
@@ -182,6 +181,6 @@ class frame_fs(gtk.Table):
             if fila[TblCol.MONTAJE] == widget.get_text().strip():
                 aparece = True
         if aparece == False:
-            self.parent_diag.set_response_sensitive(gtk.RESPONSE_OK, True)
+            self.parent_diag.set_response_sensitive(Gtk.ResponseType.OK, True)
         else:
-            self.parent_diag.set_response_sensitive(gtk.RESPONSE_OK, False)
+            self.parent_diag.set_response_sensitive(Gtk.ResponseType.OK, False)
