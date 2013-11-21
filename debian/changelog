@@ -1,3 +1,12 @@
+canaima-instalador (2.0.9-1) kerepakupai; urgency=low
+
+  * [92b3dda] Seleccionado usar particion entera como predeterminado.
+    En el metodo de particion se ha cambiado la opcion de separar
+    /home y / por usar todo en una misma partición.
+  * [d58dcb5] Cambiando la etiqueta "(recomendado)" a la primera opcion
+
+ -- Erick Birbe <erickcion@gmail.com>  Thu, 21 Nov 2013 10:45:47 -0430
+
 canaima-instalador (2.0.8-1) kerepakupai; urgency=low
 
   * [ece9a0d] Removiendo preseed para 'burg/linux_cmdline' (tkt #792)
