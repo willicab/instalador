@@ -1,3 +1,8 @@
+DEVELOPMENT SNAPSHOT v2.0.9+dev20131121104227 (11/21/13)
+Cambiando la etiqueta "(recomendado)" a la primera opcion
+Seleccionado usar particion entera como predeterminado.
+dummy
+
 DEVELOPMENT SNAPSHOT v2.0.8+dev20131025093930 (10/25/13)
 dummy
 Removiendo preseed para 'burg/linux_cmdline' (tkt #792)
