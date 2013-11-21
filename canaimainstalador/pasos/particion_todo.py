@@ -79,13 +79,13 @@ space for the Canaima installation")
         self.barra.set_size_request(690, 100)
         self.put(self.barra, 0, 70)
 
-        msg_1 = _("Install everything in a single partition.")
+        msg_1 = _("Install everything in a single partition. (recommended)")
         self.option_1 = gtk.RadioButton(None, msg_1)
         self.option_1.connect("toggled", self.change_option, "ROOT:SWAP:LIBRE")
         self.option_1.set_size_request(350, 20)
         self.put(self.option_1, 0, 185)
 
-        msg_2 = _("Separate /home partition (recommended).")
+        msg_2 = _("Separate /home partition.")
         self.option_2 = gtk.RadioButton(self.option_1, msg_2)
         self.option_2.connect("toggled", self.change_option,
                               "ROOT:HOME:SWAP:LIBRE")
