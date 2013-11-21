@@ -44,7 +44,7 @@ class PasoPartAuto(gtk.Fixed):
         self.particiones = CFG['particiones']
         self.current = self.metodo['part'][7] + ESPACIO_USADO_EXTRA
         self.usado = self.metodo['part'][7] + ESPACIO_USADO_EXTRA
-        self.forma = 'PART:ROOT:HOME:SWAP'
+        self.forma = 'PART:ROOT:SWAP'
         self.minimo = ESPACIO_TOTAL
         self.nuevas = []
         self.acciones = []
@@ -112,7 +112,7 @@ space for the Canaima installation")
         self.leyenda.set_size_request(270, 150)
         self.put(self.leyenda, 390, 185)
 
-        self.option_2.set_active(True)
+        self.option_1.toggled()
 
         if self.metodo['disco'][4] > 0:
             if self.metodo['part'][5] == 'primary':
@@ -122,7 +122,6 @@ space for the Canaima installation")
                     self.option_4.set_sensitive(False)
                 elif self.metodo['disco'][3] == 1:
                     # Disponibles: root+swap
-                    self.option_1.set_active(True)
                     self.option_2.set_sensitive(False)
                     self.option_3.set_sensitive(False)
                     self.option_4.set_sensitive(False)
@@ -141,7 +140,6 @@ space for the Canaima installation")
                     self.option_4.set_sensitive(False)
                 elif self.metodo['disco'][5] == 9:
                     # Disponibles: root+swap
-                    self.option_1.set_active(True)
                     self.option_2.set_sensitive(False)
                     self.option_3.set_sensitive(False)
                     self.option_4.set_sensitive(False)
