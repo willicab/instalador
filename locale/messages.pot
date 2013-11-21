@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: canaima-instalador\n"
 "Report-Msgid-Bugs-To: desarrolladores@canaima.softwarelibre.gob.ve\n"
-"POT-Creation-Date: 2013-07-31 09:23-0430\n"
+"POT-Creation-Date: 2013-11-21 10:01-0430\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -324,170 +324,170 @@ msgstr ""
 msgid "Restart Now"
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:312
+#: canaimainstalador/pasos/instalacion.py:321
 msgid "Not found squashfs image."
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:316
-#: canaimainstalador/pasos/instalacion.py:321
+#: canaimainstalador/pasos/instalacion.py:325
+#: canaimainstalador/pasos/instalacion.py:330
 msgid "An error occurred unmounting the partitions."
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:324
+#: canaimainstalador/pasos/instalacion.py:333
 msgid "Creating partitions in the disk ..."
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:340
+#: canaimainstalador/pasos/instalacion.py:349
 msgid "An error occurred creating a partition."
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:352
+#: canaimainstalador/pasos/instalacion.py:361
 msgid "An error occurred removing a partition."
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:363
+#: canaimainstalador/pasos/instalacion.py:372
 msgid "An error occurred resizing a partition."
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:369
+#: canaimainstalador/pasos/instalacion.py:378
 msgid "An error occurred formatting a partition."
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:407
-#: canaimainstalador/pasos/instalacion.py:414
+#: canaimainstalador/pasos/instalacion.py:416
 #: canaimainstalador/pasos/instalacion.py:423
-#: canaimainstalador/pasos/instalacion.py:435
+#: canaimainstalador/pasos/instalacion.py:432
+#: canaimainstalador/pasos/instalacion.py:444
 msgid "An error occurred mounting the filesystem"
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:418
+#: canaimainstalador/pasos/instalacion.py:427
 msgid "An error occurred activating the swap partition"
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:421
-#: canaimainstalador/pasos/instalacion.py:433
+#: canaimainstalador/pasos/instalacion.py:430
+#: canaimainstalador/pasos/instalacion.py:442
 msgid "Mounting the filesystem ..."
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:426
+#: canaimainstalador/pasos/instalacion.py:435
 msgid "Copying files to disk ..."
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:430
+#: canaimainstalador/pasos/instalacion.py:439
 msgid "An error occurred copying files to disk."
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:439
+#: canaimainstalador/pasos/instalacion.py:448
 msgid "Configuring system files ..."
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:441
-#: canaimainstalador/pasos/instalacion.py:444
+#: canaimainstalador/pasos/instalacion.py:450
+#: canaimainstalador/pasos/instalacion.py:453
 msgid "An error occurred configuring the system files"
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:447
+#: canaimainstalador/pasos/instalacion.py:456
 msgid "Configuring network interfaces ..."
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:450
+#: canaimainstalador/pasos/instalacion.py:459
 msgid "An error occurred creating file /etc/hostname"
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:453
+#: canaimainstalador/pasos/instalacion.py:462
 msgid "An error occurred creating file /etc/hosts"
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:457
+#: canaimainstalador/pasos/instalacion.py:466
 msgid "An error occurred creating file /etc/network/interfaces"
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:460
+#: canaimainstalador/pasos/instalacion.py:469
 msgid "Registering partitions in the system ..."
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:463
+#: canaimainstalador/pasos/instalacion.py:472
 msgid "An error occurred creating file /etc/fstab"
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:468
+#: canaimainstalador/pasos/instalacion.py:477
 msgid "Installing accessibility components in GDM ..."
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:470
+#: canaimainstalador/pasos/instalacion.py:479
 msgid "An error occurred activating accesibility."
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:474
+#: canaimainstalador/pasos/instalacion.py:483
 msgid "Configuring additional details on the system ..."
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:476
+#: canaimainstalador/pasos/instalacion.py:485
 msgid "An error occurred reconfiguring a package."
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:480
+#: canaimainstalador/pasos/instalacion.py:489
 msgid "Configuring additional language packages ..."
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:493
+#: canaimainstalador/pasos/instalacion.py:502
 msgid "Installing OEM characteristics ..."
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:496
+#: canaimainstalador/pasos/instalacion.py:505
 msgid "An error occurred installing a package"
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:505
+#: canaimainstalador/pasos/instalacion.py:514
 msgid "Creating system users ..."
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:509
+#: canaimainstalador/pasos/instalacion.py:518
 msgid "An error occurred creating system user"
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:512
+#: canaimainstalador/pasos/instalacion.py:521
 msgid "Removing temporary data of installation ..."
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:514
+#: canaimainstalador/pasos/instalacion.py:523
 msgid "An error occurred removing a package"
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:517
+#: canaimainstalador/pasos/instalacion.py:526
 msgid "Installing Bootloader ..."
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:519
+#: canaimainstalador/pasos/instalacion.py:528
 msgid "An error occurred preseeding answers in debconf."
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:522
+#: canaimainstalador/pasos/instalacion.py:531
 msgid "An error occurred installing a package."
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:526
+#: canaimainstalador/pasos/instalacion.py:535
 msgid "An error occurred updating BURG."
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:529
+#: canaimainstalador/pasos/instalacion.py:538
 msgid "Configuring system boot ..."
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:535
+#: canaimainstalador/pasos/instalacion.py:544
 msgid "An error occurred generating boot image"
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:540
+#: canaimainstalador/pasos/instalacion.py:549
 msgid "An error occurred updating the boot image."
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:544
+#: canaimainstalador/pasos/instalacion.py:553
 msgid "Umounting filesistems ..."
 msgstr ""
 
-#: canaimainstalador/pasos/instalacion.py:546
-#: canaimainstalador/pasos/instalacion.py:549
+#: canaimainstalador/pasos/instalacion.py:555
+#: canaimainstalador/pasos/instalacion.py:558
 msgid "An error occurred umounting partitions."
 msgstr ""
 
@@ -581,12 +581,10 @@ msgid ""
 msgstr ""
 
 #: canaimainstalador/pasos/particion_auto.py:84
-#: canaimainstalador/pasos/particion_todo.py:82
 msgid "Install everything in a single partition."
 msgstr ""
 
 #: canaimainstalador/pasos/particion_auto.py:90
-#: canaimainstalador/pasos/particion_todo.py:88
 msgid "Separate /home partition (recommended)."
 msgstr ""
 
@@ -634,6 +632,14 @@ msgstr ""
 
 #: canaimainstalador/pasos/particion_todo.py:72
 msgid "Maximum"
+msgstr ""
+
+#: canaimainstalador/pasos/particion_todo.py:82
+msgid "Install everything in a single partition. (recommended)"
+msgstr ""
+
+#: canaimainstalador/pasos/particion_todo.py:88
+msgid "Separate /home partition."
 msgstr ""
 
 #: canaimainstalador/pasos/teclado.py:71
