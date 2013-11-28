@@ -1,14 +1,12 @@
-- Migrar a Gtk3
+- Implementar encriptado de particiones
 - Mejorar mensajes de error de la instalación.
 - Agregar soporte para LVM y RAID.
 - Agregar funcionalidad para instalar desde red y hacia la red (FAI).
 - Agregar selector python-cairo al particionador manual (pantalla ppal, nueva partición y redimensionar).
-- Agregar manual de usuario y manual para el desarrollador.
 - Hacer instalador con python-setuptools.
 - Agregar opción para mover partición o redimensionar desde el principio al particionador manual.
 - Configuración de parámetros a partir de archivos .conf
 - Implementar alineaciones óptimas de particiones.
-- Hacer instalador accesible (personas con discapacidad visual y motora).
 - Identificar los sistemas operativos presentes en las particiones.
 - Identificar en el gráfico de cairo las particiones.
 - El instalador debe escribir los siguientes archivos de configuración:
@@ -30,6 +28,9 @@
 
 ###
 
+[ LISTO ] - Migrar a Gtk3
+[ LISTO ] - Agregar manual de usuario y manual para el desarrollador.
+[ LISTO ] - Hacer instalador accesible (personas con discapacidad visual y motora).
 [ LISTO ] - Agregar pantalla para selección de zona horaria y escribir el archivo /etc/localetime adecuadamente.
 [ LISTO ] - Ampliar opciones de selección de idioma y distribuciones de teclado, configurando el idioma de Canaima adecuadamente.
 [ LISTO ] - Particionado Manual
