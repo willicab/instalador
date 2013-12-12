@@ -54,7 +54,7 @@ class frame_fs(gtk.Table):
         self.part_act = part_act
         self.parent_diag = parent_diag
 
-        #Tipo de partición
+        # Tipo de partición
         self.lbl1 = gtk.Label(_("Partition type:"))
         self.lbl1.set_alignment(0, 0.5)
         self.attach(self.lbl1, 0, 1, 0, 1)
@@ -74,7 +74,7 @@ class frame_fs(gtk.Table):
         self.cmb_tipo.connect("changed", self.cmb_tipo_on_changed)
         self.cmb_tipo.show()
 
-        #Sistema de Archivos
+        # Sistema de Archivos
         self.lbl2 = gtk.Label(_("File system:"))
         self.lbl2.set_alignment(0, 0.5)
         self.attach(self.lbl2, 0, 1, 1, 2)
@@ -137,6 +137,8 @@ class frame_fs(gtk.Table):
         else:
             self.cmb_montaje.set_sensitive(True)
             self.cmb_montaje.get_model().clear()
+            # FIXME: cuando se edita una particion esta sentencia resetea el
+            # combo_montaje y selecciona root (/) sin que el usuario lo pida.
             self.cmb_montaje_fill()
 
     def cmb_montaje_fill(self):
