@@ -34,11 +34,14 @@ from canaimainstalador.translator import MAIN_ROOT_ERROR_MSG, \
 import gtk
 import os
 import sys
+import logging
+from canaimainstalador import logs
 
 
 gettext_install()
 
 if __name__ == "__main__":
+
     if os.geteuid() != 0:
         dialog = UserMessage(
             message=MAIN_ROOT_ERROR_MSG, title=MAIN_ROOT_ERROR_TITLE,
@@ -46,10 +49,16 @@ if __name__ == "__main__":
             c_1=gtk.RESPONSE_OK, f_1=sys.exit, p_1=(1,)
             )
     else:
+
+        logs.config()
+        logging.info("--- Starting new session ---")
+
         CFG['w'] = Wizard(700, 470, _('Canaima Installation'), BANNER_IMAGE)
         b = Bienvenida(CFG)
         a = b.init(CFG)
 
         gtk.main()
+
+        logging.info("--- End of session ---")
         sys.exit()
 
