@@ -61,4 +61,3 @@ if __name__ == "__main__":
 
         logging.info("--- End of session ---")
         sys.exit()
-
