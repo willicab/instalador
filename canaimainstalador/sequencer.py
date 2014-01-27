@@ -23,6 +23,8 @@ import operator
 
 
 class Step:
+    """This class represents a step in the sequence of steps that is
+    passed tothe sequencer."""
 
     __internal_package = "canaimainstalador.steps"
     __external_package = "canaimainstalador.plugins.steps"
@@ -69,7 +71,7 @@ class Step:
         self.__import_name = iname
 
     def get_package(self, external=False):
-        """Get the package name
+        """Get the package name.
 
         Returns the package where to find the callable object.
         """
@@ -94,8 +96,8 @@ class Step:
 def start(sequence):
     """Starts the installation process.
 
-    This function starts the instalation process that consists in a sequence of
-    steps.
+    This function starts the instalation process that consists in a
+    sequence of steps.
     """
     for steps in sequence:
         s = Step(steps)
