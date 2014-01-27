@@ -20,6 +20,7 @@ Created on 12/12/2013
 '''
 import importlib
 import operator
+import logging
 
 
 class Step:
@@ -87,9 +88,16 @@ class Step:
 
     def run(self):
         """Execute the Step callback"""
-        callback = importlib.import_module(self.get_package())
-        caller = operator.methodcaller(self.get_import_name(),
-                                       *self.get_arguments())
+        pname = self.get_package()
+        iname = self.get_import_name()
+        args = self.get_arguments()
+
+        logging.debug("Running step {0} from {1} with args {2}".format(iname,
+            pname, args))
+
+        callback = importlib.import_module(pname)
+        caller = operator.methodcaller(iname, *args)
+
         caller(callback)
 
 
@@ -99,6 +107,9 @@ def start(sequence):
     This function starts the instalation process that consists in a
     sequence of steps.
     """
+    logging.debug("Sequence to be processed:\n{0}".format(sequence))
+    logging.info("Steps sequence started.")
     for steps in sequence:
         s = Step(steps)
         s.run()
+    logging.info("Steps sequence finished.")

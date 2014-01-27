@@ -11,11 +11,8 @@ class Test(unittest.TestCase):
 
     def setUp(self):
         self.sequence = [
-            {"disc.umount_devices":
-             (["/dev/sdc1"],)
-             },
-            {"disc.mount_devices":
-             ([("/dev/sdc1", "/montando/", "ext4")],)},
+                {"disc.umount_devices":(["/dev/sdc1"],)},
+                {"disc.mount_devices":([("/dev/sdc1", "/montando/", "ext4")],)},
             ]
 
     def testSequencer(self):
