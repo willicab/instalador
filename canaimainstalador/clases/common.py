@@ -223,6 +223,10 @@ def assisted_mount(sync, bind, plist):
         return False
 
 
+# TODO: El argumento 'plist' recibe un valor del formato:
+# [['', '/mnt', '']]
+# Esto no es necesario ya que que en esta función sólo se utiliza el valor del
+# punto de montaje (part[1]) todos los demas valores se obvian.
 def assisted_umount(sync, plist):
     i = 0
     n = len(plist)
@@ -1025,7 +1029,7 @@ if __name__ == "__main__":
 #    print debug_list("la casa")
 #    print debug_list(12.0)
 #    print debug_list(gtk)
-# 
+#
 #    print package_path('burg-pc')
 #    print is_package_in_pool('burg-pc')
 #    print package_path('aspell-es')
