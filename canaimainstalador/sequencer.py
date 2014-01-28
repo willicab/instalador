@@ -21,6 +21,10 @@ Created on 12/12/2013
 import importlib
 import operator
 import logging
+import os
+from canaimainstalador.config import SHAREDIR
+
+SEQUENCE_DIR = SHAREDIR + "/sequences/"
 
 
 class Step:
@@ -31,10 +35,10 @@ class Step:
     __external_package = "canaimainstalador.plugins.steps"
 
     def __init__(self, data):
-        self.__name = None
-        self.__import_name = None
-        self.__package = None
-        self.__arguments = None
+        self.__name = None  # Identificator name of the step
+        self.__import_name = None  # from some.place import [import_name]
+        self.__package = None  # from [package] import some_object
+        self.__arguments = None  # arguments tha will receive the function
 
         self.__set_arguments(data)
         self.__set_import_data(data)
@@ -101,12 +105,48 @@ class Step:
         caller(callback)
 
 
-def start(sequence):
+def append_steps(original, other):
+    """Walk a list of steps and add each one to the original list."""
+    for step in other:
+        original.append(step)
+    return original
+
+
+def read_dir():
+    """Read all .stp files in the 'sequences' directory and build the
+    complete list of steps that will be performed during the
+    installation process.
+    """
+    result = []
+    # Read the sequences directory
+    for walker in os.walk(SEQUENCE_DIR):
+        files = walker[2]
+        files.sort()
+        # Search for '*.stp' files
+        for seq_file in files:
+            if seq_file[-4:] == ".stp":
+                f_path = os.path.join(walker[0], seq_file)
+                logging.debug("Reading sequence file: {}".format(f_path))
+                with open(f_path) as f:
+                    # Appends the new steps to the result list
+                    append_steps(result, eval(f.read()))
+    return result
+
+
+# TODO
+def write():
+    pass
+
+
+def start(sequence=None):
     """Starts the installation process.
 
     This function starts the instalation process that consists in a
     sequence of steps.
     """
+    if not sequence:
+        sequence = read_dir()
+
     logging.debug("Sequence to be processed:\n{0}".format(sequence))
     logging.info("Steps sequence started.")
     for steps in sequence:

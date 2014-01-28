@@ -1,0 +1,46 @@
+####
+#
+# Default Sequence File
+#
+####
+#
+# This file is an example of how sould look like a ".stp" file.
+# It's a python list of dictionaries.
+#
+# The sequence is a python list:
+#
+#    [step0, step1, step2, step3, ...]
+#
+# Each step is a python dictionary. The dictionary entries are composed of
+# module and method name as the key, and a tuple of parameters for that method
+# as the value of the dictionary.
+#
+#    {"method": parameters}
+#
+# The "method" name must contain the path to the object we are specting to use,
+# for example, if we need "import method from package.module" we call it in the
+# sequence like this:
+#
+#    "package.module.method"
+#
+# The parameters is simply a tuple of the parameters that the called method
+# receives. Here is an example:
+#
+#    ("A", 'B', [], (), 1, 2.0, True)
+#
+# If we want to call the above method and pass it that parameter, we must write
+# a step in the sequence like this:
+#
+#    {"package.module.method": ("A", 'B', [], (), 1, 2.0, True)}
+#
+####
+
+[
+	{"disc.umount_devices":
+		(["/dev/sdc1"],)
+	},
+
+	{"disc.mount_devices":
+		([("/dev/sdc1","/montando/","ext4")],)
+	},
+]

@@ -1,0 +1,18 @@
+# Default Sequence File
+#
+# This file is an example of how sould look like a ".stp" file.
+# It's a python list of dictionaries.
+#
+# The dictionary entries are composed of module and function/method name as
+# the key, and a list of parameters for that function/method as the value of
+# the dictionary.
+
+[
+	{"disc.umount_devices":
+		(["/dev/sdc1"],)
+	},
+
+	{"disc.mount_devices":
+		([("/dev/sdc1","/montando/","ext4")],)
+	},
+]
