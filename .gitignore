@@ -1,5 +1,5 @@
 *.pyc
-canaimainstalador/data/img/*.png
-canaimainstalador/data/slides/*.png
-canaimainstalador/data/slides/*.jpg
+instalador/data/img/*.png
+instalador/data/slides/*.png
+instalador/data/slides/*.jpg
 locale/*/

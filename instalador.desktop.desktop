@@ -1,0 +1,15 @@
+[Desktop Entry]
+Name=Canaima Installer
+Name[es]=Instalador
+GenericName=Installer
+GenericName[es]=Instalador
+Comment=Installs GNU/Linux in your computer
+Comment[es]=Instala GNU/Linux en tu computador
+TryExec=instalador
+Exec=su-to-root -X -c instalador
+Terminal=false
+Type=Application
+StartupNotify=true
+Icon=software-properties
+Categories=GNOME;GTK;System;Settings;Utility;
+Name[es_VE]=instalador.desktop
