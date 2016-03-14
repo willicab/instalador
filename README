@@ -1,4 +1,4 @@
-Instalador Vivo para el proyecto canaima GNU/Linux <http://canaima.softwarelibre.gob.ve>
+Instalador Vivo para distribuciones basadas en Debian
 
 Realizado por William Cabrera <william@linux.es>
 
@@ -7,7 +7,9 @@ Realizado por William Cabrera <william@linux.es>
 	- lshw
 	- parted
 	- reiserfsprogs
-    aptitude install python-imaging lshw parted reiserfsprogs
+	- python-parted
+	- python-webkit
+    aptitude install python-imaging lshw parted reiserfsprogs python-parted python-webkit
 
-- Este programa está distribuido bajo la GPL3 o superior
-- no es necesario instalarlo, solo hay que ejecutar el archivo canaima-instalador.py como root
+- Este programa está distribuido bajo la licencia GPLv2
+- No es necesario instalarlo, solo hay que ejecutar el archivo instalador.py como root

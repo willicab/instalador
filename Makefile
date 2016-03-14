@@ -2,8 +2,8 @@
 
 SHELL := sh -e
 PYCS = $(shell find . -type f -iname "*.pyc")
-IMAGES = $(shell ls -1 canaimainstalador/data/img/ | grep "\.svg" | sed 's/\.svg//g')
-SLIDES = $(shell ls -1 canaimainstalador/data/slides/ | grep "\.svg" | sed 's/\.svg//g')
+IMAGES = $(shell ls -1 instalador/data/img/ | grep "\.svg" | sed 's/\.svg//g')
+SLIDES = $(shell ls -1 instalador/data/slides/ | grep "\.svg" | sed 's/\.svg//g')
 CONVERT = $(shell which convert)
 SHELLBIN = $(shell which sh)
 PYTHON = $(shell which python)
@@ -22,8 +22,8 @@ TAR = $(shell which tar)
 BASHISMS = $(shell which checkbashisms)
 LC_DIRS = $(shell ls locale)
 
-# Variables de tradicciones
-DOMAIN_NAME = canaimainstalador
+# Variables de traducciones
+DOMAIN_NAME = instalador
 
 all: build
 
@@ -33,12 +33,12 @@ gen-img: clean-img
 
 	@printf "Generando imágenes desde las fuentes [SVG > JPG,PNG] ["
 	@for IMAGE in $(IMAGES); do \
-		$(CONVERT) -background None canaimainstalador/data/img/$${IMAGE}.svg canaimainstalador/data/img/$${IMAGE}.png; \
+		$(CONVERT) -background None instalador/data/img/$${IMAGE}.svg instalador/data/img/$${IMAGE}.png; \
 		printf "."; \
 	done;
 	@for SLIDE in $(SLIDES); do \
-		$(CONVERT) -background None canaimainstalador/data/slides/$${SLIDE}.svg canaimainstalador/data/slides/$${SLIDE}.png; \
-		$(CONVERT) -background None canaimainstalador/data/slides/$${SLIDE}.png canaimainstalador/data/slides/$${SLIDE}.jpg; \
+		$(CONVERT) -background None instalador/data/slides/$${SLIDE}.svg instalador/data/slides/$${SLIDE}.png; \
+		$(CONVERT) -background None instalador/data/slides/$${SLIDE}.png instalador/data/slides/$${SLIDE}.jpg; \
 		printf "."; \
 	done;
 	@printf "]\n"
@@ -47,12 +47,12 @@ clean-img:
 
 	@printf "Cleaning generated images [JPG,PNG] ["
 	@for IMAGE in $(IMAGES); do \
-		rm -rf canaimainstalador/data/img/$${IMAGE}.png; \
+		rm -rf instalador/data/img/$${IMAGE}.png; \
 		printf "."; \
 	done;
 	@for SLIDE in $(SLIDES); do \
-		rm -rf canaimainstalador/data/slides/$${SLIDE}.png; \
-		rm -rf canaimainstalador/data/slides/$${SLIDE}.jpg; \
+		rm -rf instalador/data/slides/$${SLIDE}.png; \
+		rm -rf instalador/data/slides/$${SLIDE}.jpg; \
 		printf "."; \
 	done;
 	@printf "]\n"
@@ -70,18 +70,18 @@ install:
 
 	mkdir -p $(DESTDIR)/usr/bin
 	mkdir -p $(DESTDIR)/usr/share/pyshared
-	mkdir -p $(DESTDIR)/usr/share/canaima-instalador
+	mkdir -p $(DESTDIR)/usr/share/instalador
 	mkdir -p $(DESTDIR)/etc/skel/Escritorio
 	mkdir -p $(DESTDIR)/etc/xdg/autostart/
 	mkdir -p $(DESTDIR)/usr/share/applications/
 
-	cp -r canaimainstalador $(DESTDIR)/usr/share/pyshared/
+	cp -r instalador $(DESTDIR)/usr/share/pyshared/
 	cp VERSION AUTHORS LICENSE TRANSLATORS \
-		$(DESTDIR)/usr/share/canaima-instalador/
-	cp -r templates/ $(DESTDIR)/usr/share/canaima-instalador/
+		$(DESTDIR)/usr/share/instalador/
+	cp -r templates/ $(DESTDIR)/usr/share/instalador/
 
-	cp canaima-instalador.py $(DESTDIR)/usr/bin/canaima-instalador
-	chmod +x $(DESTDIR)/usr/bin/canaima-instalador
+	cp instalador.py $(DESTDIR)/usr/bin/instalador
+	chmod +x $(DESTDIR)/usr/bin/instalador
 
 	# Instalar traducciones
 	mkdir -p $(DESTDIR)/usr/share/locale/
@@ -93,31 +93,31 @@ install:
 	done
 
 	# Removiendo archivos de imagenes innecesarios
-	rm -rf $(DESTDIR)/usr/share/pyshared/canaimainstalador/data/slides/*.png
-	rm -rf $(DESTDIR)/usr/share/pyshared/canaimainstalador/data/slides/*.svg
-	rm -rf $(DESTDIR)/usr/share/pyshared/canaimainstalador/data/img/*.svg
+	rm -rf $(DESTDIR)/usr/share/pyshared/instalador/data/slides/*.png
+	rm -rf $(DESTDIR)/usr/share/pyshared/instalador/data/slides/*.svg
+	rm -rf $(DESTDIR)/usr/share/pyshared/instalador/data/img/*.svg
 
 	# Accesos directos
-	cp canaima-instalador.desktop $(DESTDIR)/etc/skel/Escritorio/
-	cp canaima-instalador.desktop $(DESTDIR)/etc/xdg/autostart/
-	cp canaima-instalador.desktop $(DESTDIR)/usr/share/applications/
+	cp instalador.desktop $(DESTDIR)/etc/skel/Escritorio/
+	cp instalador.desktop $(DESTDIR)/etc/xdg/autostart/
+	cp instalador.desktop $(DESTDIR)/usr/share/applications/
 
 uninstall:
 
-	rm -f $(DESTDIR)/usr/bin/canaima-instalador
-	rm -rf $(DESTDIR)/usr/share/pyshared/canaimainstalador/
+	rm -f $(DESTDIR)/usr/bin/instalador
+	rm -rf $(DESTDIR)/usr/share/pyshared/instalador/
 
 	# Remover accesos directos
-	rm -f $(DESTDIR)/etc/skel/Escritorio/canaima-instalador.desktop
-	rm -f $(DESTDIR)/etc/xdg/autostart/canaima-instalador.desktop
-	rm -f $(DESTDIR)/usr/share/applications/canaima-instalador.desktop
+	rm -f $(DESTDIR)/etc/skel/Escritorio/instalador.desktop
+	rm -f $(DESTDIR)/etc/xdg/autostart/instalador.desktop
+	rm -f $(DESTDIR)/usr/share/applications/instalador.desktop
 
 	# Desinstalar traducciones
 	rm -f $(DESTDIR)/usr/share/locale/*/LC_MESSAGES/$(DOMAIN_NAME).mo
 	# Removiendo accesos directos
-	rm -f $(DESTDIR)/usr/share/applications/canaima-instalador.desktop \
-	  $(DESTDIR)/etc/xdg/autostart/canaima-instalador.desktop \
-	  $(DESTDIR)/etc/skel/Escritorio/canaima-instalador.desktop
+	rm -f $(DESTDIR)/usr/share/applications/instalador.desktop \
+	  $(DESTDIR)/etc/xdg/autostart/instalador.desktop \
+	  $(DESTDIR)/etc/skel/Escritorio/instalador.desktop
 
 clean: clean-img clean-pyc clean-mo-files
 
@@ -241,8 +241,8 @@ check-maintdep:
 gen-pot-template:
 
 	find . -type f -name \*.py | xgettext --language=Python --copyright-holder \
-	"Erick Birbe <erickcion@gmail.com>" --package-name "canaima-instalador" \
-	--msgid-bugs-address "desarrolladores@canaima.softwarelibre.gob.ve" -F \
+	"William Cabrera <william@linux.es>" --package-name "instalador" \
+	--msgid-bugs-address "william@linux.es" -F \
 	-o locale/messages.pot -f -
 
 update-po-files: gen-pot-template

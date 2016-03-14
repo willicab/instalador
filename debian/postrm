@@ -8,16 +8,16 @@
 #              como estaba antes de su instalación.
 # COPYRIGHT:
 #  (C) 2011 William Abrahan Cabrera Reyes <william@linux.es>
-# LICENCIA: GPL3
+# LICENCIA: GPL2
 # ==============================================================================
 #
 # Este programa es software libre. Puede redistribuirlo y/o modificarlo bajo los
-# términos de la Licencia Pública General de GNU (versión 3).
+# términos de la Licencia Pública General de GNU (versión 2).
 
 case ${1} in
 
 	purge|remove|upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
-		DESKTOP_FILE='canaima-instalador.desktop'
+		DESKTOP_FILE='instalador.desktop'
 		# Para cada usuario en /home/ ...
 		for USERNAME in $( ls -1 "/home/" ); do
 			RUTA="/home/${USERNAME}/Escritorio/${DESKTOP_FILE}"
