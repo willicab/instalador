@@ -32,6 +32,8 @@ gettext_install()
 
 curdir = os.path.normpath(os.path.join(os.path.realpath(__file__), '..', '..'))
 
+DISTRIBUTION = 'canaima'
+
 if curdir[:5] == '/usr/':
     GUIDIR = '/usr/share/pyshared/instalador'
     SHAREDIR = '/usr/share/instalador'
@@ -39,12 +41,12 @@ else:
     GUIDIR = curdir + '/instalador'
     SHAREDIR = curdir
 
-BAR_ICON = GUIDIR + '/data/img/icon.png'
-ABOUT_IMAGE = GUIDIR + '/data/img/logo.png'
-BANNER_IMAGE = GUIDIR + '/data/img/banner.png'
-WELCOME_IMAGE = GUIDIR + '/data/img/welcome.png'
-KEY_IMAGE_TMPL = GUIDIR + '/data/img/key_{0}.png'
-INSTALL_SLIDES = GUIDIR + '/data/install.html'
+BAR_ICON = GUIDIR + '/data/' + DISTRIBUTION + '/img/icon.png'
+ABOUT_IMAGE = GUIDIR + '/data/' + DISTRIBUTION + '/img/logo.png'
+BANNER_IMAGE = GUIDIR + '/data/' + DISTRIBUTION + '/img/banner.png'
+WELCOME_IMAGE = GUIDIR + '/data/' + DISTRIBUTION + '/img/welcome.png'
+KEY_IMAGE_TMPL = GUIDIR + '/data/' + DISTRIBUTION + '/img/key_{0}.png'
+INSTALL_SLIDES = GUIDIR + '/data/' + DISTRIBUTION + '/slider/install.html'
 
 VERSION_FILE = SHAREDIR + '/VERSION'
 AUTHORS_FILE = SHAREDIR + '/AUTHORS'
